@@ -1,0 +1,89 @@
+import React from 'react';
+import { projectLogger } from '@/lib/logger';
+import styles from './{{name}}.module.css';
+
+export interface {{name}}Props {
+  /** Primary content */
+  children?: React.ReactNode;
+  /** Optional CSS class */
+  className?: string;
+  /** Click handler */
+  onClick?: () => void;
+  /** Disabled state */
+  disabled?: boolean;
+  /** Loading state */
+  loading?: boolean;
+  /** Size variant */
+  size?: 'small' | 'medium' | 'large';
+  /** Visual variant */
+  variant?: 'default' | 'primary' | 'secondary' | 'accent';
+}
+
+/**
+ * {{name}} component
+ * 
+ * @example
+ * ```tsx
+ * <{{name}} onClick={() => console.log('clicked')}>
+ *   Content here
+ * </{{name}}>
+ * ```
+ */
+export const {{name}}: React.FC<{{name}}Props> = ({
+  children,
+  className = '',
+  onClick,
+  disabled = false,
+  loading = false,
+  size = 'medium',
+  variant = 'default',
+}) => {
+  projectLogger.debug('{{name}} rendered', { 
+    disabled, 
+    loading, 
+    size, 
+    variant,
+    hasChildren: Boolean(children),
+    hasOnClick: Boolean(onClick),
+  });
+
+  const handleClick = () => {
+    if (disabled || loading) return;
+    onClick?.();
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (disabled || loading) return;
+    if (onClick && (e.key === 'Enter' || e.key === ' ')) {
+      e.preventDefault();
+      onClick();
+    }
+  };
+
+  const containerClassName = [
+    styles.container,
+    styles[size],
+    styles[`theme-${variant}`],
+    onClick && styles.interactive,
+    disabled && styles.disabled,
+    loading && styles.loading,
+    className,
+  ].filter(Boolean).join(' ');
+
+  return (
+    <div 
+      className={containerClassName}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick && !disabled ? 0 : undefined}
+      aria-disabled={disabled}
+      aria-busy={loading}
+      data-testid="{{kebabCase name}}"
+    >
+      {children}
+    </div>
+  );
+};
+
+{{name}}.displayName = '{{name}}';

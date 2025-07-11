@@ -1,0 +1,202 @@
+import { projectLogger } from '@/lib/logger';
+import { {{name}}Repository } from '@/repositories/{{kebabCase name}}.repository';
+import { {{name}}, Create{{name}}Input, Update{{name}}Input, {{name}}Filters } from '@/types/{{kebabCase name}}.types';
+import { PaginatedResult } from '@/types/api.types';
+import { ApiError } from '@/lib/errors';
+
+/**
+ * {{name}} Service
+ * Business logic for {{name}} operations
+ */
+export class {{name}}Service {
+  constructor(private {{camelCase name}}Repository: {{name}}Repository) {}
+
+  /**
+   * Find multiple {{name}}s with pagination and filtering
+   */
+  async findMany(filters: {{name}}Filters): Promise<PaginatedResult<{{name}}>> {
+    try {
+      projectLogger.debug('Finding {{name}}s', { filters });
+      
+      const result = await this.{{camelCase name}}Repository.findMany(filters);
+      
+      projectLogger.debug('Found {{name}}s', { 
+        count: result.data.length, 
+        total: result.total 
+      });
+      
+      return result;
+    } catch (error) {
+      projectLogger.error('Failed to find {{name}}s', { error, filters });
+      throw new ApiError('FIND_FAILED', 'Failed to retrieve {{name}}s', 500);
+    }
+  }
+
+  /**
+   * Find {{name}} by ID
+   */
+  async findById(id: string): Promise<{{name}} | null> {
+    try {
+      projectLogger.debug('Finding {{name}} by ID', { id });
+      
+      const {{camelCase name}} = await this.{{camelCase name}}Repository.findById(id);
+      
+      if (!{{camelCase name}}) {
+        projectLogger.debug('{{name}} not found', { id });
+        return null;
+      }
+      
+      projectLogger.debug('Found {{name}}', { id, {{camelCase name}} });
+      return {{camelCase name}};
+    } catch (error) {
+      projectLogger.error('Failed to find {{name}} by ID', { error, id });
+      throw new ApiError('FIND_FAILED', 'Failed to retrieve {{name}}', 500);
+    }
+  }
+
+  /**
+   * Create new {{name}}
+   */
+  async create(input: Create{{name}}Input): Promise<{{name}}> {
+    try {
+      projectLogger.debug('Creating {{name}}', { input });
+      
+      // Business logic validations
+      await this.validateCreate{{name}}(input);
+      
+      const {{camelCase name}} = await this.{{camelCase name}}Repository.create(input);
+      
+      projectLogger.info('{{name}} created successfully', { 
+        id: {{camelCase name}}.id,
+        input 
+      });
+      
+      return {{camelCase name}};
+    } catch (error) {
+      if (error instanceof ApiError) {
+        throw error;
+      }
+      
+      projectLogger.error('Failed to create {{name}}', { error, input });
+      throw new ApiError('CREATE_FAILED', 'Failed to create {{name}}', 500);
+    }
+  }
+
+  /**
+   * Update {{name}} by ID
+   */
+  async update(id: string, input: Update{{name}}Input): Promise<{{name}} | null> {
+    try {
+      projectLogger.debug('Updating {{name}}', { id, input });
+      
+      // Check if {{name}} exists
+      const existing = await this.{{camelCase name}}Repository.findById(id);
+      if (!existing) {
+        projectLogger.debug('{{name}} not found for update', { id });
+        return null;
+      }
+      
+      // Business logic validations
+      await this.validateUpdate{{name}}(existing, input);
+      
+      const {{camelCase name}} = await this.{{camelCase name}}Repository.update(id, input);
+      
+      projectLogger.info('{{name}} updated successfully', { 
+        id,
+        input,
+        updated: {{camelCase name}}
+      });
+      
+      return {{camelCase name}};
+    } catch (error) {
+      if (error instanceof ApiError) {
+        throw error;
+      }
+      
+      projectLogger.error('Failed to update {{name}}', { error, id, input });
+      throw new ApiError('UPDATE_FAILED', 'Failed to update {{name}}', 500);
+    }
+  }
+
+  /**
+   * Delete {{name}} by ID
+   */
+  async delete(id: string): Promise<boolean> {
+    try {
+      projectLogger.debug('Deleting {{name}}', { id });
+      
+      // Check if {{name}} exists
+      const existing = await this.{{camelCase name}}Repository.findById(id);
+      if (!existing) {
+        projectLogger.debug('{{name}} not found for deletion', { id });
+        return false;
+      }
+      
+      // Business logic validations
+      await this.validateDelete{{name}}(existing);
+      
+      const deleted = await this.{{camelCase name}}Repository.delete(id);
+      
+      projectLogger.info('{{name}} deleted successfully', { id });
+      
+      return deleted;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        throw error;
+      }
+      
+      projectLogger.error('Failed to delete {{name}}', { error, id });
+      throw new ApiError('DELETE_FAILED', 'Failed to delete {{name}}', 500);
+    }
+  }
+
+  /**
+   * Validate {{name}} creation
+   */
+  private async validateCreate{{name}}(input: Create{{name}}Input): Promise<void> {
+    // TODO: Add business logic validations
+    // Examples:
+    // - Check for unique constraints
+    // - Validate relationships
+    // - Check permissions
+    
+    // Example unique check:
+    // const existing = await this.{{camelCase name}}Repository.findByEmail(input.email);
+    // if (existing) {
+    //   throw new ApiError('DUPLICATE_EMAIL', 'Email already exists', 400);
+    // }
+  }
+
+  /**
+   * Validate {{name}} update
+   */
+  private async validateUpdate{{name}}(existing: {{name}}, input: Update{{name}}Input): Promise<void> {
+    // TODO: Add business logic validations
+    // Examples:
+    // - Check for unique constraints (excluding current record)
+    // - Validate state transitions
+    // - Check permissions
+    
+    // Example state validation:
+    // if (existing.status === 'archived' && input.status === 'active') {
+    //   throw new ApiError('INVALID_STATE', 'Cannot activate archived {{name}}', 400);
+    // }
+  }
+
+  /**
+   * Validate {{name}} deletion
+   */
+  private async validateDelete{{name}}(existing: {{name}}): Promise<void> {
+    // TODO: Add business logic validations
+    // Examples:
+    // - Check for dependent records
+    // - Validate permissions
+    // - Check business rules
+    
+    // Example dependency check:
+    // const hasRelatedRecords = await this.{{camelCase name}}Repository.hasRelatedRecords(existing.id);
+    // if (hasRelatedRecords) {
+    //   throw new ApiError('HAS_DEPENDENCIES', 'Cannot delete {{name}} with related records', 400);
+    // }
+  }
+}

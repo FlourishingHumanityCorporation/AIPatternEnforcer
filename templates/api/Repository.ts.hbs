@@ -1,0 +1,247 @@
+import { projectLogger } from '@/lib/logger';
+import { db } from '@/lib/database';
+import { {{name}}, Create{{name}}Input, Update{{name}}Input, {{name}}Filters } from '@/types/{{kebabCase name}}.types';
+import { PaginatedResult } from '@/types/api.types';
+
+/**
+ * {{name}} Repository
+ * Data access layer for {{name}} operations
+ */
+export class {{name}}Repository {
+  private readonly tableName = '{{snakeCase name}}s';
+
+  /**
+   * Find multiple {{name}}s with pagination and filtering
+   */
+  async findMany(filters: {{name}}Filters): Promise<PaginatedResult<{{name}}>> {
+    try {
+      const { page = 1, limit = 50, search, sortBy = 'createdAt', sortOrder = 'desc' } = filters;
+      const offset = (page - 1) * limit;
+
+      let query = db.select().from(this.tableName);
+
+      // Apply search filter
+      if (search) {
+        query = query.where(sql`
+          ${this.tableName}.name ILIKE ${'%' + search + '%'} OR
+          ${this.tableName}.description ILIKE ${'%' + search + '%'}
+        `);
+      }
+
+      // Apply sorting
+      const orderClause = sortOrder === 'desc' ? sql`DESC` : sql`ASC`;
+      query = query.orderBy(sql`${this.tableName}.${sortBy} ${orderClause}`);
+
+      // Get total count
+      const countQuery = db.select({ count: sql<number>`count(*)` }).from(this.tableName);
+      if (search) {
+        countQuery.where(sql`
+          ${this.tableName}.name ILIKE ${'%' + search + '%'} OR
+          ${this.tableName}.description ILIKE ${'%' + search + '%'}
+        `);
+      }
+
+      const [data, totalResult] = await Promise.all([
+        query.limit(limit).offset(offset),
+        countQuery
+      ]);
+
+      const total = totalResult[0]?.count || 0;
+
+      return {
+        data: data as {{name}}[],
+        page,
+        limit,
+        total,
+      };
+    } catch (error) {
+      projectLogger.error('Failed to find {{name}}s in repository', { error, filters });
+      throw error;
+    }
+  }
+
+  /**
+   * Find {{name}} by ID
+   */
+  async findById(id: string): Promise<{{name}} | null> {
+    try {
+      const result = await db
+        .select()
+        .from(this.tableName)
+        .where(sql`${this.tableName}.id = ${id}`)
+        .limit(1);
+
+      return result[0] as {{name}} || null;
+    } catch (error) {
+      projectLogger.error('Failed to find {{name}} by ID in repository', { error, id });
+      throw error;
+    }
+  }
+
+  /**
+   * Create new {{name}}
+   */
+  async create(input: Create{{name}}Input): Promise<{{name}}> {
+    try {
+      const now = new Date();
+      const {{camelCase name}}Data = {
+        ...input,
+        id: crypto.randomUUID(),
+        createdAt: now,
+        updatedAt: now,
+      };
+
+      const result = await db
+        .insert(this.tableName)
+        .values({{camelCase name}}Data)
+        .returning();
+
+      return result[0] as {{name}};
+    } catch (error) {
+      projectLogger.error('Failed to create {{name}} in repository', { error, input });
+      throw error;
+    }
+  }
+
+  /**
+   * Update {{name}} by ID
+   */
+  async update(id: string, input: Update{{name}}Input): Promise<{{name}} | null> {
+    try {
+      const updateData = {
+        ...input,
+        updatedAt: new Date(),
+      };
+
+      const result = await db
+        .update(this.tableName)
+        .set(updateData)
+        .where(sql`${this.tableName}.id = ${id}`)
+        .returning();
+
+      return result[0] as {{name}} || null;
+    } catch (error) {
+      projectLogger.error('Failed to update {{name}} in repository', { error, id, input });
+      throw error;
+    }
+  }
+
+  /**
+   * Delete {{name}} by ID
+   */
+  async delete(id: string): Promise<boolean> {
+    try {
+      const result = await db
+        .delete(this.tableName)
+        .where(sql`${this.tableName}.id = ${id}`)
+        .returning({ id: sql`${this.tableName}.id` });
+
+      return result.length > 0;
+    } catch (error) {
+      projectLogger.error('Failed to delete {{name}} in repository', { error, id });
+      throw error;
+    }
+  }
+
+  /**
+   * Check if {{name}} exists by ID
+   */
+  async exists(id: string): Promise<boolean> {
+    try {
+      const result = await db
+        .select({ id: sql`${this.tableName}.id` })
+        .from(this.tableName)
+        .where(sql`${this.tableName}.id = ${id}`)
+        .limit(1);
+
+      return result.length > 0;
+    } catch (error) {
+      projectLogger.error('Failed to check {{name}} existence in repository', { error, id });
+      throw error;
+    }
+  }
+
+  /**
+   * Find {{name}} by specific field
+   * Example: findByEmail, findBySlug, etc.
+   */
+  async findByField(field: string, value: any): Promise<{{name}} | null> {
+    try {
+      const result = await db
+        .select()
+        .from(this.tableName)
+        .where(sql`${this.tableName}.${field} = ${value}`)
+        .limit(1);
+
+      return result[0] as {{name}} || null;
+    } catch (error) {
+      projectLogger.error('Failed to find {{name}} by field in repository', { 
+        error, 
+        field, 
+        value 
+      });
+      throw error;
+    }
+  }
+
+  /**
+   * Count {{name}}s with optional filters
+   */
+  async count(filters?: Partial<{{name}}Filters>): Promise<number> {
+    try {
+      let query = db.select({ count: sql<number>`count(*)` }).from(this.tableName);
+
+      if (filters?.search) {
+        query = query.where(sql`
+          ${this.tableName}.name ILIKE ${'%' + filters.search + '%'} OR
+          ${this.tableName}.description ILIKE ${'%' + filters.search + '%'}
+        `);
+      }
+
+      const result = await query;
+      return result[0]?.count || 0;
+    } catch (error) {
+      projectLogger.error('Failed to count {{name}}s in repository', { error, filters });
+      throw error;
+    }
+  }
+
+  /**
+   * Bulk operations
+   */
+  async bulkCreate(inputs: Create{{name}}Input[]): Promise<{{name}}[]> {
+    try {
+      const now = new Date();
+      const {{camelCase name}}Data = inputs.map(input => ({
+        ...input,
+        id: crypto.randomUUID(),
+        createdAt: now,
+        updatedAt: now,
+      }));
+
+      const result = await db
+        .insert(this.tableName)
+        .values({{camelCase name}}Data)
+        .returning();
+
+      return result as {{name}}[];
+    } catch (error) {
+      projectLogger.error('Failed to bulk create {{name}}s in repository', { error, inputs });
+      throw error;
+    }
+  }
+
+  async bulkDelete(ids: string[]): Promise<number> {
+    try {
+      const result = await db
+        .delete(this.tableName)
+        .where(sql`${this.tableName}.id = ANY(${ids})`)
+        .returning({ id: sql`${this.tableName}.id` });
+
+      return result.length;
+    } catch (error) {
+      projectLogger.error('Failed to bulk delete {{name}}s in repository', { error, ids });
+      throw error;
+    }
+  }
+}

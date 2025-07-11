@@ -1,0 +1,25 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "🔍 Running pre-commit checks..."
+
+# Run critical file naming check - prevents _improved, _v2 files
+npm run check:no-improved-files
+
+# Only proceed if naming check passes
+if [ $? -eq 0 ]; then
+  # Run lint-staged for formatting and linting
+  npx lint-staged
+  
+  if [ $? -eq 0 ]; then
+    echo "✅ Pre-commit checks passed!"
+    
+    # Optional: Show available manual checks
+    echo "💡 Additional checks available:"
+    echo "   npm run check:imports         # Validate import patterns"
+    echo "   npm run check:documentation-style  # Check doc quality"
+    echo "   npm run check:all            # Run all checks"
+  fi
+else
+  exit 1
+fi

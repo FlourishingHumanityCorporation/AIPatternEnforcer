@@ -1,0 +1,140 @@
+import type { Meta, StoryObj } from '@storybook/react';
+import { {{name}} } from './{{name}}';
+import React from 'react';
+
+const meta = {
+  title: 'Components/Forms/{{name}}',
+  component: {{name}},
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        component: 'Form field component with built-in validation, error handling, and accessibility features.'
+      }
+    }
+  },
+  tags: ['autodocs'],
+  argTypes: {
+    value: {
+      control: 'text',
+      description: 'Current field value'
+    },
+    error: {
+      control: 'text',
+      description: 'Error message to display'
+    },
+    required: {
+      control: 'boolean',
+      description: 'Whether the field is required'
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Whether the field is disabled'
+    },
+    isLoading: {
+      control: 'boolean',
+      description: 'Whether the field is in loading state'
+    }
+  },
+} satisfies Meta<typeof {{name}}>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+// Controlled component wrapper for stories
+const ControlledTemplate = (args: any) => {
+  const [value, setValue] = React.useState(args.value || '');
+  
+  return (
+    <{{name}}
+      {...args}
+      value={value}
+      onChange={setValue}
+    />
+  );
+};
+
+export const Default: Story = {
+  render: ControlledTemplate,
+  args: {
+    name: 'email',
+    children: 'Email Address',
+  },
+};
+
+export const Required: Story = {
+  render: ControlledTemplate,
+  args: {
+    name: 'username',
+    children: 'Username',
+    required: true,
+  },
+};
+
+export const WithError: Story = {
+  render: ControlledTemplate,
+  args: {
+    name: 'password',
+    children: 'Password',
+    error: 'Password must be at least 8 characters',
+    value: '123',
+  },
+};
+
+export const Disabled: Story = {
+  args: {
+    name: 'disabled-field',
+    children: 'Disabled Field',
+    value: 'Cannot edit this',
+    disabled: true,
+  },
+};
+
+export const Loading: Story = {
+  args: {
+    name: 'loading-field',
+    children: 'Loading Field',
+    isLoading: true,
+  },
+};
+
+export const PreFilled: Story = {
+  render: ControlledTemplate,
+  args: {
+    name: 'prefilled',
+    children: 'Pre-filled Field',
+    value: 'Initial value',
+  },
+};
+
+export const LongLabel: Story = {
+  render: ControlledTemplate,
+  args: {
+    name: 'description',
+    children: 'This is a very long label that might wrap to multiple lines in narrow containers',
+    required: true,
+  },
+};
+
+export const WithPlaceholder: Story = {
+  render: (args) => {
+    const [value, setValue] = React.useState('');
+    
+    return (
+      <div style={\{ width: '300px' \}}>
+        <{{name}}
+          {...args}
+          value={value}
+          onChange={setValue}
+        />
+        <p style={\{ marginTop: '8px', fontSize: '14px', color: '#666' \}}>
+          Note: Add placeholder support by extending the component
+        </p>
+      </div>
+    );
+  },
+  args: {
+    name: 'search',
+    children: 'Search',
+  },
+};

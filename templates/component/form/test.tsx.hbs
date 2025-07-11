@@ -1,0 +1,79 @@
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { {{name}} } from './{{name}}';
+
+describe('{{name}}', () => {
+  const defaultProps = {
+    name: 'test-field',
+    children: 'Test Label'
+  };
+
+  it('renders label and input correctly', () => {
+    render(<{{name}} {...defaultProps} />);
+    
+    expect(screen.getByText('Test Label')).toBeInTheDocument();
+    expect(screen.getByRole('textbox')).toBeInTheDocument();
+  });
+
+  it('displays required indicator when required', () => {
+    render(<{{name}} {...defaultProps} required />);
+    
+    expect(screen.getByLabelText('required')).toBeInTheDocument();
+    expect(screen.getByLabelText('required')).toHaveTextContent('*');
+  });
+
+  it('handles value changes', () => {
+    const handleChange = jest.fn();
+    render(<{{name}} {...defaultProps} value="initial" onChange={handleChange} />);
+    
+    const input = screen.getByRole('textbox');
+    fireEvent.change(input, { target: { value: 'new value' } });
+    
+    expect(handleChange).toHaveBeenCalledWith('new value');
+  });
+
+  it('displays error message when error is provided', () => {
+    const errorMessage = 'This field is required';
+    render(<{{name}} {...defaultProps} error={errorMessage} />);
+    
+    expect(screen.getByRole('alert')).toBeInTheDocument();
+    expect(screen.getByRole('alert')).toHaveTextContent(errorMessage);
+    expect(screen.getByRole('textbox')).toHaveAttribute('aria-invalid', 'true');
+  });
+
+  it('disables input when disabled prop is true', () => {
+    render(<{{name}} {...defaultProps} disabled />);
+    
+    expect(screen.getByRole('textbox')).toBeDisabled();
+  });
+
+  it('shows loading state', () => {
+    render(<{{name}} {...defaultProps} isLoading />);
+    
+    expect(screen.getByLabelText('Loading...')).toBeInTheDocument();
+    expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+  });
+
+  it('applies custom test ID', () => {
+    render(<{{name}} {...defaultProps} testId="custom-field" />);
+    
+    expect(screen.getByTestId('custom-field')).toBeInTheDocument();
+  });
+
+  it('links label to input correctly', () => {
+    render(<{{name}} {...defaultProps} />);
+    
+    const input = screen.getByRole('textbox');
+    const label = screen.getByText('Test Label');
+    
+    expect(input).toHaveAttribute('id', 'test-field');
+    expect(label).toHaveAttribute('for', 'test-field');
+  });
+
+  it('sets aria-describedby when error exists', () => {
+    render(<{{name}} {...defaultProps} error="Error message" />);
+    
+    const input = screen.getByRole('textbox');
+    expect(input).toHaveAttribute('aria-describedby', 'test-field-error');
+  });
+});

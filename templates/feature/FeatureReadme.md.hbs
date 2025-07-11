@@ -1,0 +1,359 @@
+# {{name}} Feature
+
+## Overview
+
+The {{name}} feature provides complete CRUD (Create, Read, Update, Delete) operations for {{name}} entities. This feature follows the established patterns and conventions of the ProjectTemplate.
+
+## Structure
+
+```
+{{kebabCase name}}/
+├── components/           # UI components
+│   ├── {{name}}List/    # List display component
+│   ├── {{name}}Form/    # Create/edit form component
+│   └── {{name}}Card/    # Individual item display component
+├── hooks/               # React hooks for data management
+│   ├── use{{name}}.ts          # Main entity hook
+│   ├── use{{name}}List.ts      # List management hook
+│   └── use{{name}}Form.ts      # Form state hook
+├── services/            # API integration
+│   └── {{kebabCase name}}.service.ts
+├── types/               # TypeScript definitions
+│   └── {{kebabCase name}}.types.ts
+├── utils/               # Utility functions
+│   └── {{kebabCase name}}.utils.ts
+├── store/               # State management (Zustand)
+│   └── {{kebabCase name}}.store.ts
+├── pages/               # Page components
+│   ├── {{name}}ListPage.tsx
+│   ├── {{name}}DetailPage.tsx
+│   ├── {{name}}CreatePage.tsx
+│   └── {{name}}EditPage.tsx
+├── constants/           # Feature constants
+│   └── {{kebabCase name}}.constants.ts
+└── index.ts            # Main exports
+```
+
+## Usage
+
+### Basic Usage
+
+```tsx
+import { {{name}}List, use{{name}}List } from '@/features/{{kebabCase name}}';
+
+function MyComponent() {
+  const { {{camelCase name}}s, loading, error } = use{{name}}List();
+  
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+  
+  return <{{name}}List {{camelCase name}}s={{{camelCase name}}s} />;
+}
+```
+
+### Creating a {{name}}
+
+```tsx
+import { {{name}}Form, use{{name}} } from '@/features/{{kebabCase name}}';
+
+function Create{{name}}Page() {
+  const { create{{name}} } = use{{name}}();
+  
+  const handleSubmit = async (data) => {
+    try {
+      await create{{name}}(data);
+      // Handle success (e.g., redirect, show toast)
+    } catch (error) {
+      // Handle error
+    }
+  };
+  
+  return <{{name}}Form onSubmit={handleSubmit} />;
+}
+```
+
+### Updating a {{name}}
+
+```tsx
+import { {{name}}Form, use{{name}} } from '@/features/{{kebabCase name}}';
+
+function Edit{{name}}Page({ {{camelCase name}}Id }) {
+  const { {{camelCase name}}, update{{name}}, loading } = use{{name}}({{camelCase name}}Id);
+  
+  const handleSubmit = async (data) => {
+    try {
+      await update{{name}}({{camelCase name}}Id, data);
+      // Handle success
+    } catch (error) {
+      // Handle error
+    }
+  };
+  
+  if (loading) return <div>Loading...</div>;
+  
+  return (
+    <{{name}}Form 
+      initialData={{{camelCase name}}} 
+      onSubmit={handleSubmit}
+      mode="edit"
+    />
+  );
+}
+```
+
+## Components
+
+### {{name}}List
+
+Displays a list of {{name}} entities with pagination, filtering, and sorting capabilities.
+
+**Props:**
+- `{{camelCase name}}s`: Array of {{name}} objects
+- `loading`: Boolean indicating loading state
+- `error`: Error object if any
+- `onItemClick`: Callback for item selection
+- `onItemEdit`: Callback for item editing
+- `onItemDelete`: Callback for item deletion
+
+### {{name}}Form
+
+Form component for creating or editing {{name}} entities.
+
+**Props:**
+- `initialData`: Initial form data (for editing)
+- `onSubmit`: Form submission callback
+- `mode`: 'create' or 'edit'
+- `loading`: Boolean indicating submission state
+
+### {{name}}Card
+
+Individual {{name}} item display component.
+
+**Props:**
+- `{{camelCase name}}`: {{name}} object to display
+- `onEdit`: Edit callback
+- `onDelete`: Delete callback
+- `onClick`: Click callback
+
+## Hooks
+
+### use{{name}}(id?)
+
+Main hook for {{name}} operations.
+
+**Returns:**
+- `{{camelCase name}}`: Single {{name}} object (if ID provided)
+- `loading`: Loading state
+- `error`: Error state
+- `create{{name}}`: Function to create new {{name}}
+- `update{{name}}`: Function to update existing {{name}}
+- `delete{{name}}`: Function to delete {{name}}
+
+### use{{name}}List(filters?)
+
+Hook for managing lists of {{name}} entities.
+
+**Parameters:**
+- `filters`: Optional filtering parameters
+
+**Returns:**
+- `{{camelCase name}}s`: Array of {{name}} objects
+- `loading`: Loading state
+- `error`: Error state
+- `refresh`: Function to refresh the list
+- `loadMore`: Function for pagination
+
+### use{{name}}Form(initialData?)
+
+Hook for form state management.
+
+**Parameters:**
+- `initialData`: Initial form values
+
+**Returns:**
+- `formData`: Current form state
+- `errors`: Form validation errors
+- `handleChange`: Input change handler
+- `handleSubmit`: Form submission handler
+- `reset`: Reset form function
+
+## Services
+
+### {{camelCase name}}Service
+
+API service for {{name}} operations.
+
+**Methods:**
+- `getAll(filters?)`: Get all {{name}}s with optional filtering
+- `getById(id)`: Get single {{name}} by ID
+- `create(data)`: Create new {{name}}
+- `update(id, data)`: Update existing {{name}}
+- `delete(id)`: Delete {{name}}
+
+## Types
+
+### {{name}}
+
+Main entity interface.
+
+```typescript
+interface {{name}} {
+  id: string;
+  name: string;
+  description?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+```
+
+### Create{{name}}Input
+
+Input type for creating {{name}}.
+
+```typescript
+interface Create{{name}}Input {
+  name: string;
+  description?: string;
+}
+```
+
+### Update{{name}}Input
+
+Input type for updating {{name}}.
+
+```typescript
+interface Update{{name}}Input {
+  name?: string;
+  description?: string;
+}
+```
+
+## Store
+
+The {{name}} store uses Zustand for state management.
+
+**State:**
+- `{{camelCase name}}s`: Array of {{name}} objects
+- `current{{name}}`: Currently selected {{name}}
+- `loading`: Loading state
+- `error`: Error state
+
+**Actions:**
+- `set{{name}}s`: Set {{name}} list
+- `add{{name}}`: Add new {{name}}
+- `update{{name}}`: Update existing {{name}}
+- `remove{{name}}`: Remove {{name}}
+- `setCurrent{{name}}`: Set current {{name}}
+
+## Constants
+
+Feature-specific constants are defined in `constants/{{kebabCase name}}.constants.ts`.
+
+## Testing
+
+All components, hooks, and services include comprehensive tests:
+
+```bash
+# Run all {{name}} feature tests
+npm test -- --testPathPattern={{kebabCase name}}
+
+# Run specific test file
+npm test -- {{name}}List.test.tsx
+```
+
+## API Endpoints
+
+If using the backend template, the following endpoints are available:
+
+- `GET /api/{{kebabCase name}}s` - Get all {{name}}s
+- `GET /api/{{kebabCase name}}s/:id` - Get {{name}} by ID
+- `POST /api/{{kebabCase name}}s` - Create new {{name}}
+- `PUT /api/{{kebabCase name}}s/:id` - Update {{name}}
+- `DELETE /api/{{kebabCase name}}s/:id` - Delete {{name}}
+
+## Customization
+
+### Adding New Fields
+
+1. Update the `{{name}}` interface in `types/{{kebabCase name}}.types.ts`
+2. Update the form component in `components/{{name}}Form/{{name}}Form.tsx`
+3. Update the display components as needed
+4. Update the API service if backend changes are required
+
+### Custom Validation
+
+Add custom validation rules in the form component:
+
+```tsx
+const validationSchema = {
+  name: {
+    required: true,
+    minLength: 3,
+    maxLength: 50,
+  },
+  // Add custom rules
+};
+```
+
+### Custom Styling
+
+Override component styles by importing and extending the CSS modules:
+
+```css
+/* In your custom CSS file */
+.customList {
+  composes: container from './{{name}}List.module.css';
+  /* Add your custom styles */
+}
+```
+
+## Performance Considerations
+
+- List components use virtualization for large datasets
+- Form components use debounced validation
+- API calls are automatically cached for 5 minutes
+- Images are lazy-loaded where applicable
+
+## Troubleshooting
+
+### Common Issues
+
+1. **{{name}} not loading**: Check network requests in browser dev tools
+2. **Form validation errors**: Ensure all required fields are provided
+3. **State not updating**: Check if store actions are being called correctly
+
+### Debug Mode
+
+Enable debug mode by setting the environment variable:
+
+```bash
+DEBUG={{kebabCase name}}=true npm start
+```
+
+This will log detailed information about {{name}} operations to the console.
+
+## Contributing
+
+When extending this feature:
+
+1. Follow the existing patterns and conventions
+2. Add tests for new functionality
+3. Update this README with new features
+4. Follow the project's coding standards
+5. Consider backwards compatibility
+
+## Related Features
+
+- If this feature depends on other features, list them here
+- If other features depend on this one, list them here
+
+## External Dependencies
+
+- React Hook Form for form management
+- Zustand for state management
+- Axios for API calls
+- React Query for server state (if enabled)
+
+## License
+
+This feature is part of the ProjectTemplate and follows the same license.

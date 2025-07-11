@@ -1,0 +1,144 @@
+import { useState, useEffect, useCallback } from 'react';
+import { projectLogger } from '@/lib/logger';
+
+/**
+ * {{name}} Hook
+ * 
+ * Custom React hook for {{description || 'managing state and side effects'}}
+ * 
+ * @example
+ * ```tsx
+ * function MyComponent() {
+ *   const { 
+ *     {{camelCase name}}, 
+ *     loading, 
+ *     error, 
+ *     {{camelCase action}}
+ *   } = use{{name}}();
+ *   
+ *   return (
+ *     <div>
+ *       {loading && <div>Loading...</div>}
+ *       {error && <div>Error: {error.message}</div>}
+ *       {{{camelCase name}} && <div>{{{camelCase name}}}</div>}
+ *       <button onClick={{{camelCase action}}}>{{action}}</button>
+ *     </div>
+ *   );
+ * }
+ * ```
+ */
+
+// Types
+interface {{name}}State {
+  {{camelCase name}}: {{valueType || 'any'}} | null;
+  loading: boolean;
+  error: Error | null;
+}
+
+interface {{name}}Actions {
+  {{camelCase action}}: () => void;
+  reset: () => void;
+  set{{name}}: (value: {{valueType || 'any'}}) => void;
+}
+
+interface {{name}}Options {
+  initialValue?: {{valueType || 'any'}};
+  autoFetch?: boolean;
+  onSuccess?: (data: {{valueType || 'any'}}) => void;
+  onError?: (error: Error) => void;
+}
+
+type {{name}}Return = {{name}}State & {{name}}Actions;
+
+/**
+ * {{name}} Hook Implementation
+ */
+export function use{{name}}(options: {{name}}Options = {}): {{name}}Return {
+  const {
+    initialValue = null,
+    autoFetch = true,
+    onSuccess,
+    onError,
+  } = options;
+
+  // State
+  const [{{camelCase name}}, set{{name}}Internal] = useState<{{valueType || 'any'}} | null>(initialValue);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  // Actions
+  const {{camelCase action}} = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      projectLogger.debug('{{name}} hook: Starting {{action}}');
+      
+      // TODO: Implement your logic here
+      // Example: const result = await someAsyncOperation();
+      const result = await new Promise<{{valueType || 'any'}}>(resolve => {
+        setTimeout(() => resolve({{mockValue || '"mock value"'}}), 1000);
+      });
+      
+      set{{name}}Internal(result);
+      
+      if (onSuccess) {
+        onSuccess(result);
+      }
+      
+      projectLogger.debug('{{name}} hook: {{action}} completed successfully', { result });
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error('Unknown error');
+      setError(error);
+      
+      if (onError) {
+        onError(error);
+      }
+      
+      projectLogger.error('{{name}} hook: {{action}} failed', { error });
+    } finally {
+      setLoading(false);
+    }
+  }, [onSuccess, onError]);
+
+  const reset = useCallback(() => {
+    set{{name}}Internal(initialValue);
+    setError(null);
+    setLoading(false);
+    projectLogger.debug('{{name}} hook: Reset to initial state');
+  }, [initialValue]);
+
+  const set{{name}} = useCallback((value: {{valueType || 'any'}}) => {
+    set{{name}}Internal(value);
+    projectLogger.debug('{{name}} hook: Value set', { value });
+  }, []);
+
+  // Effects
+  useEffect(() => {
+    if (autoFetch) {
+      {{camelCase action}}();
+    }
+  }, [autoFetch, {{camelCase action}}]);
+
+  // Cleanup effect
+  useEffect(() => {
+    return () => {
+      projectLogger.debug('{{name}} hook: Cleanup');
+    };
+  }, []);
+
+  return {
+    {{camelCase name}},
+    loading,
+    error,
+    {{camelCase action}},
+    reset,
+    set{{name}},
+  };
+}
+
+// Export types for external use
+export type { {{name}}State, {{name}}Actions, {{name}}Options, {{name}}Return };
+
+// Default export for convenience
+export default use{{name}};

@@ -1,0 +1,17 @@
+{
+  "ErrorResponseFormat": {
+    "prefix": "errorresponseformat",
+    "body": [
+      "```typescript",
+      "interface ApiError {",
+      "  code: string;",
+      "  message: string;",
+      "  details?: Record<string, any>;",
+      "  timestamp: string;",
+      "}",
+      "```",
+      ""
+    ],
+    "description": "This document defines our API patterns and rules"
+  }
+}

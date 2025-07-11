@@ -1,0 +1,147 @@
+# Claude AI Assistant Configuration
+# This file is automatically loaded by Claude Desktop/API integrations
+
+## Project Context
+You are working on {{PROJECT_NAME}}, a {{PROJECT_TYPE}} application.
+This project prioritizes local development, rapid iteration, and AI-assisted workflows.
+
+## Core Principles
+1. **Local-First Development** - Optimize for developer machines, not cloud
+2. **Test-First Development** - Always write tests before implementation
+3. **Explicit Context** - Never rely on file reading, require pasted code
+4. **Security by Default** - Validate inputs, sanitize outputs, no hardcoded secrets
+5. **Simple Solutions** - Prefer clarity over cleverness
+
+## Technology Stack
+- **Runtime**: {{BACKEND_RUNTIME}} # e.g., Node.js, Python, Go, Rust
+- **Framework**: {{FRAMEWORK}} # e.g., Express, FastAPI, Gin
+- **Database**: {{DATABASE}} # e.g., SQLite, PostgreSQL
+- **Frontend**: {{FRONTEND}} # e.g., React, Vue, Svelte
+- **Testing**: {{TEST_FRAMEWORK}} # e.g., Jest, Pytest, Go testing
+
+## Code Style Requirements
+- Use TypeScript/Python type hints (strict mode)
+- Prefer functional programming patterns
+- Maximum function length: 50 lines
+- Maximum file length: 300 lines
+- Use early returns to reduce nesting
+- Extract magic numbers to named constants
+
+## Import Conventions
+- Use absolute imports from `@/` for src directory
+- Group imports: external → internal → relative
+- Sort imports alphabetically within groups
+- No circular dependencies
+
+## File Organization
+```
+src/
+├── features/       # Feature-based modules
+├── shared/         # Shared utilities
+├── lib/           # External integrations
+└── types/         # TypeScript types
+```
+
+## Testing Requirements
+- Minimum 80% code coverage
+- Test file naming: `*.test.ts` or `*.spec.ts`
+- Use AAA pattern: Arrange, Act, Assert
+- Mock external dependencies
+- Include edge cases and error scenarios
+
+## Local Model Integration
+- Prefer Ollama for local LLM needs
+- Use model-specific prompts in `ai/prompts/local-models/`
+- Implement fallback for when models are unavailable
+- Cache model responses when appropriate
+
+## Security Patterns
+- Input validation using Zod/Pydantic schemas
+- SQL injection prevention via parameterized queries
+- XSS prevention through proper escaping
+- Rate limiting on all endpoints
+- Audit logging for sensitive operations
+
+## Performance Guidelines
+- Lazy load heavy dependencies
+- Implement request caching where appropriate
+- Use database indexes on queried fields
+- Profile before optimizing
+- Set up performance budgets
+
+## Error Handling
+- Use custom error classes
+- Include error codes for client handling
+- Log errors with context
+- Never expose internal errors to users
+- Implement proper error boundaries
+
+## Git Workflow
+- Feature branches from main
+- Conventional commits (feat:, fix:, docs:)
+- PR descriptions must include testing steps
+- Squash merge to main
+- No direct commits to main
+
+## Documentation Standards
+- README must include local setup steps
+- API endpoints need OpenAPI documentation
+- Complex functions require JSDoc/docstrings
+- Architecture decisions in ADR format
+- Keep docs next to code when possible
+
+## Debugging Helpers
+- Use debug namespace for logging
+- Implement health check endpoints
+- Add request ID tracking
+- Include timing metrics
+- Create reproducible test cases
+
+## AI Assistant Behaviors
+1. **Always request current code** - Don't assume file contents
+2. **Provide complete context** - Include all imports and types
+3. **Test incrementally** - Verify each change works
+4. **Explain architectural impact** - How changes affect the system
+5. **Suggest simpler alternatives** - When complexity grows
+
+## Common Commands
+```bash
+# Development
+npm run dev          # Start with hot reload
+npm run test:watch   # Run tests in watch mode
+npm run lint:fix     # Auto-fix linting issues
+
+# Generators
+npm run g:component  # Generate component
+npm run g:feature    # Generate feature module
+npm run g:test      # Generate test file
+
+# Debugging
+npm run debug:snapshot  # Capture debug context
+npm run analyze:bundle  # Check bundle size
+npm run audit:security  # Security scan
+```
+
+## Project-Specific Rules
+<!-- Add your project-specific rules here -->
+- 
+- 
+- 
+
+## Anti-Patterns to Avoid
+1. Creating `*_v2`, `*_improved` files
+2. Implementing without tests
+3. Using `any` type in TypeScript
+4. Hardcoding configuration values
+5. Skipping error handling
+6. Creating files in root directory
+7. Using synchronous file operations
+8. Making assumptions about file contents
+
+## References
+- Architecture: @docs/architecture/
+- Patterns: @ai/examples/good-patterns/
+- Security: @docs/guides/security/
+- Testing: @docs/guides/testing/
+
+Remember: When in doubt, ask for clarification rather than making assumptions.

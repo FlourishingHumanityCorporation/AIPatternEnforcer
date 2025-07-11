@@ -1,0 +1,129 @@
+# Project Rules for AI Assistant
+
+## Context
+You are working on a TypeScript-based project that follows strict architectural patterns and coding standards. This project emphasizes security, maintainability, and developer experience.
+
+## You MUST follow these rules:
+
+### Code Style
+1. Always use TypeScript with strict mode enabled
+2. Use `projectLogger` from '@/lib/logger' instead of console.log
+3. Include comprehensive error handling in every async function
+4. Follow patterns defined in @docs/architecture/patterns/
+5. Use specific imports: `import { SpecificClass } from 'module'`
+6. Prefer functional components and hooks in React code
+7. Use proper TypeScript types - avoid `any` unless absolutely necessary
+
+### Architecture
+1. Follow repository pattern for data access (@docs/architecture/patterns/data-fetching.md)
+2. Use proper error boundaries and error handling (@docs/architecture/patterns/error-handling.md)
+3. Implement proper state management (@docs/architecture/patterns/state-management.md)
+4. Separate business logic from UI components
+5. Use dependency injection where appropriate
+
+### Security
+1. Never hardcode secrets, API keys, or passwords
+2. Always validate and sanitize user inputs
+3. Use parameterized queries for database operations
+4. Implement proper authentication and authorization checks
+5. Follow OWASP security guidelines
+
+### Testing
+1. Write tests for all new functionality
+2. Follow AAA pattern: Arrange, Act, Assert
+3. Use descriptive test names that explain what is being tested
+4. Mock external dependencies appropriately
+5. Aim for high test coverage but focus on critical paths
+
+## You must NEVER:
+
+### Code Quality
+1. Use `var` keyword - always use `const` or `let`
+2. Use `==` or `!=` - always use `===` or `!==`
+3. Leave `TODO` comments without a ticket reference
+4. Use magic numbers or strings - extract to named constants
+5. Write functions longer than 50 lines - break them down
+6. Ignore null/undefined checks
+7. Use synchronous file operations in production code
+
+### Anti-Patterns
+1. Create `*_improved.py`, `*_enhanced.py`, `*_v2.py` files - edit the original
+2. Use `require()` in TypeScript files - use ES modules
+3. Mutate state directly - always create new objects/arrays
+4. Use index as key in React lists with dynamic items
+5. Make API calls directly from components - use service layers
+
+### Security Issues
+1. Use eval() or Function() constructor with user input
+2. Store sensitive data in localStorage
+3. Trust client-side validation alone
+4. Use innerHTML with user content - use textContent
+5. Commit .env files or secrets to version control
+
+## When in doubt:
+
+1. Check @ai/examples/good-patterns/ for correct implementation examples
+2. Check @ai/examples/anti-patterns/ for what to avoid
+3. Refer to @docs/architecture/decisions/ for architectural choices
+4. Ask for clarification rather than making assumptions
+5. Prioritize readability and maintainability over cleverness
+
+## Project-Specific Patterns:
+
+### API Response Format
+```typescript
+interface ApiResponse<T> {
+  success: boolean;
+  data?: T;
+  error?: {
+    code: string;
+    message: string;
+    details?: any;
+  };
+  metadata?: {
+    timestamp: string;
+    version: string;
+  };
+}
+```
+
+### Component Structure
+```typescript
+// 1. Imports
+// 2. Types/Interfaces
+// 3. Component
+// 4. Styles (if applicable)
+// 5. Export
+```
+
+### File Naming
+- Components: PascalCase (UserProfile.tsx)
+- Utilities: camelCase (formatDate.ts)
+- Types: PascalCase with .types.ts (User.types.ts)
+- Tests: Same as file with .test.ts (formatDate.test.ts)
+- Styles: Same as component with .module.css (UserProfile.module.css)
+
+## Remember:
+- Quality over speed
+- When you see repeated code, extract it
+- If something feels wrong, it probably is
+- Always consider the next developer (it might be you)
+
+# Cursor IDE Rules
+
+## Context Loading
+Always load these files when working on features:
+- @docs/architecture/patterns/*.md
+- @ai/examples/good-patterns/
+- Current file's test file
+
+## Auto-completions
+- Prefer Zustand stores over useState for shared state
+- Import from '@/lib' not relative paths
+- Use 'projectLogger' for any logging needs
+
+## Code Generation
+When generating new files:
+1. Check @templates/ for existing templates
+2. Follow patterns in @ai/examples/good-patterns/
+3. Include tests in the same commit

@@ -1,0 +1,16 @@
+# AI Context for: test-feature
+# Generated: Thu Jul 10 22:05:37 PDT 2025
+# Files included based on relevance scoring
+
+# Core Files (Always Included)
+!CLAUDE.md
+!.cursorrules
+!package.json
+!.env.example
+
+# Feature-Specific Files
+
+# Related Test Files
+!./.ai-context/test-feature.context
+
+# Related Documentation

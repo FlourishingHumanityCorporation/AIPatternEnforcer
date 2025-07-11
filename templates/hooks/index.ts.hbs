@@ -1,0 +1,118 @@
+/**
+ * {{name}} Hook
+ * 
+ * Custom React hook for {{description || 'managing state and side effects'}}
+ * 
+ * @example
+ * ```tsx
+ * import { use{{name}} } from './hooks/use{{name}}';
+ * 
+ * function MyComponent() {
+ *   const { {{camelCase name}}, loading, error } = use{{name}}();
+ *   
+ *   return (
+ *     <div>
+ *       {loading && <span>Loading...</span>}
+ *       {error && <span>Error: {error.message}</span>}
+ *       {{{camelCase name}} && <span>{{{camelCase name}}}</span>}
+ *     </div>
+ *   );
+ * }
+ * ```
+ */
+
+export { use{{name}}, type {{name}}State, type {{name}}Actions, type {{name}}Options, type {{name}}Return } from './use{{name}}';
+export { default } from './use{{name}}';
+
+// Hook metadata for documentation and tooling
+export const {{name}}HookMetadata = {
+  name: 'use{{name}}',
+  description: '{{description || 'Custom React hook for managing state and side effects'}}',
+  version: '1.0.0',
+  parameters: {
+    options: {
+      type: '{{name}}Options',
+      optional: true,
+      description: 'Configuration options for the hook',
+    },
+  },
+  returns: {
+    type: '{{name}}Return',
+    description: 'Hook state and actions',
+  },
+  examples: [
+    {
+      title: 'Basic Usage',
+      code: `
+const { {{camelCase name}}, loading, error } = use{{name}}();
+      `,
+    },
+    {
+      title: 'With Options',
+      code: `
+const { {{camelCase name}}, loading, error } = use{{name}}({
+  initialValue: {{mockValue || '"default"'}},
+  autoFetch: false,
+  onSuccess: (data) => console.log('Success:', data),
+  onError: (error) => console.error('Error:', error),
+});
+      `,
+    },
+    {
+      title: 'Manual Actions',
+      code: `
+const { {{camelCase name}}, {{camelCase action}}, reset, set{{name}} } = use{{name}}({ autoFetch: false });
+
+// Trigger action manually
+const handleClick = () => {{camelCase action}}();
+
+// Reset to initial state
+const handleReset = () => reset();
+
+// Set value directly
+const handleSet = (value) => set{{name}}(value);
+      `,
+    },
+  ],
+  bestPractices: [
+    'Use autoFetch: false for hooks that should only trigger on user interaction',
+    'Provide meaningful onSuccess and onError callbacks for better UX',
+    'Consider using the reset function to clear state when needed',
+    'Always handle loading and error states in your components',
+  ],
+  commonPatterns: [
+    {
+      name: 'Conditional Rendering',
+      description: 'Render different UI based on hook state',
+      code: `
+if (loading) return <LoadingSpinner />;
+if (error) return <ErrorMessage error={error} />;
+if (!{{camelCase name}}) return <EmptyState />;
+return <DataDisplay data={{{camelCase name}}} />;
+      `,
+    },
+    {
+      name: 'Effect Dependencies',
+      description: 'Use hook values in other effects',
+      code: `
+useEffect(() => {
+  if ({{camelCase name}}) {
+    // Do something with the data
+  }
+}, [{{camelCase name}}]);
+      `,
+    },
+    {
+      name: 'Error Handling',
+      description: 'Centralized error handling',
+      code: `
+const { {{camelCase name}}, error, {{camelCase action}} } = use{{name}}({
+  onError: (error) => {
+    toast.error(error.message);
+    analytics.track('hook_error', { error: error.message });
+  },
+});
+      `,
+    },
+  ],
+} as const;

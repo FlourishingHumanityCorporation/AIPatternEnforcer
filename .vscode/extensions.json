@@ -1,0 +1,95 @@
+{
+  "recommendations": [
+    // Essential Extensions
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "ms-vscode.vscode-typescript-next",
+
+    // AI Development
+    "GitHub.copilot",
+    "GitHub.copilot-chat",
+    "continue.continue",
+
+    // Code Quality
+    "usernamehw.errorlens",
+    "streetsidesoftware.code-spell-checker",
+    "SonarSource.sonarlint-vscode",
+    "wix.vscode-import-cost",
+
+    // Developer Experience
+    "aaron-bond.better-comments",
+    "Gruntfuggly.todo-tree",
+    "alefragnani.Bookmarks",
+    "wayou.vscode-todo-highlight",
+
+    // Git Integration
+    "eamodio.gitlens",
+    "mhutchie.git-graph",
+    "donjayamanne.githistory",
+
+    // Testing
+    "Orta.vscode-jest",
+    "firsttris.vscode-jest-runner",
+    "kavod-io.vscode-jest-test-adapter",
+
+    // Formatting & Linting
+    "stylelint.vscode-stylelint",
+    "bradlc.vscode-tailwindcss",
+
+    // Documentation
+    "yzhang.markdown-all-in-one",
+    "DavidAnson.vscode-markdownlint",
+    "bierner.markdown-mermaid",
+
+    // Environment
+    "mikestead.dotenv",
+    "Prisma.prisma",
+
+    // Productivity
+    "christian-kohler.path-intellisense",
+    "christian-kohler.npm-intellisense",
+    "formulahendry.auto-rename-tag",
+    "formulahendry.auto-close-tag",
+    "naumovs.color-highlight",
+
+    // Icons & Themes
+    "PKief.material-icon-theme",
+    "zhuangtongfa.material-theme",
+
+    // React Specific
+    "dsznajder.es7-react-js-snippets",
+    "burkeholland.simple-react-snippets",
+    "styled-components.vscode-styled-components",
+
+    // Debugging
+    "ms-vscode.js-debug-nightly",
+    "msjsdiag.debugger-for-chrome",
+
+    // API Development
+    "humao.rest-client",
+    "rangav.vscode-thunder-client",
+    "42Crunch.vscode-openapi",
+
+    // Container Support
+    "ms-azuretools.vscode-docker",
+    "ms-vscode-remote.remote-containers",
+
+    // Database
+    "cweijan.vscode-postgresql-client2",
+    "mongodb.mongodb-vscode",
+
+    // Optional but Recommended
+    "johnpapa.vscode-peacock",
+    "mechatroner.rainbow-csv",
+    "redhat.vscode-yaml",
+    "ms-vsliveshare.vsliveshare"
+  ],
+
+  "unwantedRecommendations": [
+    // Extensions that conflict with our setup
+    "hookyqr.beautify",
+    "HookyQR.beautify",
+    "ms-vscode.vscode-typescript-tslint-plugin",
+    "eg2.tslint"
+  ]
+}

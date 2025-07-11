@@ -1,0 +1,339 @@
+{
+  // Editor Settings
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.organizeImports": true
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.trimAutoWhitespace": true,
+  "editor.wordWrap": "on",
+  "editor.minimap.enabled": false,
+  "editor.renderWhitespace": "trailing",
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": "active",
+  "editor.stickyScroll.enabled": true,
+
+  // TypeScript Settings
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "typescript.preferences.includePackageJsonAutoImports": "auto",
+  "typescript.preferences.importModuleSpecifier": "shortest",
+  "typescript.suggest.autoImports": true,
+  "typescript.inlayHints.parameterNames.enabled": "all",
+  "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
+
+  // JavaScript Settings
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "javascript.suggest.autoImports": true,
+
+  // ESLint Settings
+  "eslint.enable": true,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "eslint.run": "onType",
+  "eslint.codeAction.showDocumentation": {
+    "enable": true
+  },
+
+  // Prettier Settings
+  "prettier.enable": true,
+  "prettier.requireConfig": true,
+  "prettier.ignorePath": ".prettierignore",
+
+  // AI Assistant Settings
+  "github.copilot.enable": {
+    "*": true,
+    "yaml": false,
+    "plaintext": false,
+    "markdown": true,
+    "scminput": false
+  },
+
+  // AI Context Optimization
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/.next": true,
+    "**/coverage": true,
+    "**/*.log": true
+  },
+
+  // Search Exclusions (helps AI tools focus)
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/.next": true,
+    "**/coverage": true,
+    "**/*.log": true,
+    "**/.git": true
+  },
+
+  // File Associations
+  "files.associations": {
+    "*.ts": "typescript",
+    "*.tsx": "typescriptreact",
+    "*.js": "javascript",
+    "*.jsx": "javascriptreact",
+    "*.json": "jsonc",
+    ".env*": "dotenv",
+    "*.mdx": "markdown",
+    ".cursorrules": "markdown",
+    "CLAUDE.md": "markdown"
+  },
+
+  // Terminal Settings
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "terminal.integrated.defaultProfile.windows": "powershell",
+  "terminal.integrated.fontFamily": "MesloLGS NF, Menlo, Monaco, 'Courier New', monospace",
+
+  // Git Settings
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "git.enableSmartCommit": true,
+  "git.postCommitCommand": "none",
+
+  // Workspace Settings
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.trimTrailingWhitespace": true,
+
+  // Extension Recommendations
+  "extensions.ignoreRecommendations": false,
+
+  // Spell Checker
+  "cSpell.words": [
+    "autofetch",
+    "autodocs",
+    "camelcase",
+    "chakra",
+    "clsx",
+    "codegen",
+    "commitlint",
+    "datasource",
+    "datetime",
+    "dotenv",
+    "dto",
+    "fastify",
+    "formik",
+    "framer",
+    "graphql",
+    "grpc",
+    "headlessui",
+    "heroicons",
+    "husky",
+    "jsonc",
+    "kebabcase",
+    "keydown",
+    "lifecycle",
+    "lucide",
+    "middlewares",
+    "monaco",
+    "nextjs",
+    "nocheck",
+    "nuxt",
+    "nvmrc",
+    "onboarding",
+    "openapi",
+    "parameterized",
+    "pascalcase",
+    "pnpm",
+    "postgresql",
+    "preact",
+    "prebuild",
+    "prefetch",
+    "prerender",
+    "prisma",
+    "radix",
+    "reduxjs",
+    "rehype",
+    "remark",
+    "remixicon",
+    "revalidate",
+    "shadcn",
+    "signin",
+    "signup",
+    "slugify",
+    "storybook",
+    "stylelint",
+    "supabase",
+    "tailwindcss",
+    "tanstack",
+    "testid",
+    "trpc",
+    "tsconfig",
+    "tsup",
+    "turborepo",
+    "typecheck",
+    "typeof",
+    "unocss",
+    "unplugin",
+    "upsert",
+    "vite",
+    "vitest",
+    "websocket",
+    "zustand"
+  ],
+
+  // Language-specific Settings
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    }
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    }
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.wordWrap": "on"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+
+  // Peacock Colors (for multi-root workspaces)
+  "peacock.favoriteColors": [
+    {
+      "name": "ProjectTemplate",
+      "value": "#007ACC"
+    }
+  ],
+
+  // Error Lens Settings (if installed)
+  "errorLens.enabled": true,
+  "errorLens.fontStyle": "italic",
+  "errorLens.excludeBySource": ["eslint(react/prop-types)"],
+
+  // Import Cost Settings (if installed)
+  "importCost.showCalculatingDecoration": true,
+  "importCost.largePackageColor": "#d44e40",
+  "importCost.mediumPackageColor": "#7cc36e",
+  "importCost.smallPackageColor": "#7cc36e",
+
+  // Better Comments Settings (if installed)
+  "better-comments.tags": [
+    {
+      "tag": "!",
+      "color": "#FF2D00",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "tag": "?",
+      "color": "#3498DB",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "tag": "//",
+      "color": "#474747",
+      "strikethrough": true,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "tag": "todo",
+      "color": "#FF8C00",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    },
+    {
+      "tag": "*",
+      "color": "#98C379",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    }
+  ],
+
+  // Todo Tree Settings (if installed)
+  "todo-tree.general.tags": [
+    "BUG",
+    "HACK",
+    "FIXME",
+    "TODO",
+    "XXX",
+    "[ ]",
+    "[x]",
+    "FEATURE",
+    "OPTIMIZE",
+    "REFACTOR",
+    "NOTE"
+  ],
+  "todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)",
+
+  // Custom Task Runner
+  "task.autoDetect": "on",
+  "task.quickOpen.detail": true,
+
+  // Experimental Features
+  "workbench.editor.empty.hint": "hidden",
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "*.ts": "${capture}.test.ts,${capture}.test.tsx,${capture}.spec.ts,${capture}.spec.tsx",
+    "*.tsx": "${capture}.test.tsx,${capture}.test.ts,${capture}.spec.tsx,${capture}.spec.ts,${capture}.module.css,${capture}.module.scss",
+    "*.js": "${capture}.test.js,${capture}.test.jsx,${capture}.spec.js,${capture}.spec.jsx",
+    "*.jsx": "${capture}.test.jsx,${capture}.test.js,${capture}.spec.jsx,${capture}.spec.js",
+    "package.json": "package-lock.json,yarn.lock,pnpm-lock.yaml,.npmrc,.nvmrc",
+    "tsconfig.json": "tsconfig.*.json",
+    ".env": ".env.*",
+    "README.md": "CHANGELOG.md,CONTRIBUTING.md,LICENSE,CODE_OF_CONDUCT.md,SECURITY.md"
+  }
+}

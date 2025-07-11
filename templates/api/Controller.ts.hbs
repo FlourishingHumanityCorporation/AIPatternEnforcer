@@ -1,0 +1,184 @@
+import { Request, Response } from 'express';
+import { projectLogger } from '@/lib/logger';
+import { {{camelCase name}}Service } from '@/services/{{kebabCase name}}.service';
+import { validate{{name}}Input, {{name}}Schema } from '@/schemas/{{kebabCase name}}.schema';
+import { ApiError } from '@/types/api.types';
+
+/**
+ * {{name}} API Controller
+ * Handles HTTP requests for {{name}} operations
+ */
+export class {{name}}Controller {
+  constructor(private {{camelCase name}}Service: {{name}}Service) {}
+
+  /**
+   * Get all {{name}}s
+   * GET /api/{{kebabCase name}}s
+   */
+  async getAll(req: Request, res: Response): Promise<void> {
+    try {
+      const { page = 1, limit = 50, search } = req.query;
+      
+      const result = await this.{{camelCase name}}Service.findMany({
+        page: Number(page),
+        limit: Number(limit),
+        search: search as string,
+      });
+
+      res.json({
+        data: result.data,
+        pagination: {
+          page: result.page,
+          limit: result.limit,
+          total: result.total,
+          pages: Math.ceil(result.total / result.limit),
+        },
+      });
+    } catch (error) {
+      projectLogger.error('Failed to get {{name}}s', { error });
+      this.handleError(res, error);
+    }
+  }
+
+  /**
+   * Get {{name}} by ID
+   * GET /api/{{kebabCase name}}s/:id
+   */
+  async getById(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      
+      const {{camelCase name}} = await this.{{camelCase name}}Service.findById(id);
+      
+      if (!{{camelCase name}}) {
+        res.status(404).json({
+          error: 'NOT_FOUND',
+          message: '{{name}} not found',
+          timestamp: new Date().toISOString(),
+        });
+        return;
+      }
+
+      res.json({ data: {{camelCase name}} });
+    } catch (error) {
+      projectLogger.error('Failed to get {{name}} by ID', { error, id: req.params.id });
+      this.handleError(res, error);
+    }
+  }
+
+  /**
+   * Create new {{name}}
+   * POST /api/{{kebabCase name}}s
+   */
+  async create(req: Request, res: Response): Promise<void> {
+    try {
+      const validation = validate{{name}}Input(req.body);
+      
+      if (!validation.success) {
+        res.status(400).json({
+          error: 'VALIDATION_ERROR',
+          message: 'Invalid input data',
+          details: validation.errors,
+          timestamp: new Date().toISOString(),
+        });
+        return;
+      }
+
+      const {{camelCase name}} = await this.{{camelCase name}}Service.create(validation.data);
+      
+      res.status(201).json({ 
+        data: {{camelCase name}},
+        message: '{{name}} created successfully',
+      });
+    } catch (error) {
+      projectLogger.error('Failed to create {{name}}', { error, body: req.body });
+      this.handleError(res, error);
+    }
+  }
+
+  /**
+   * Update {{name}} by ID
+   * PUT /api/{{kebabCase name}}s/:id
+   */
+  async update(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      const validation = validate{{name}}Input(req.body);
+      
+      if (!validation.success) {
+        res.status(400).json({
+          error: 'VALIDATION_ERROR',
+          message: 'Invalid input data',
+          details: validation.errors,
+          timestamp: new Date().toISOString(),
+        });
+        return;
+      }
+
+      const {{camelCase name}} = await this.{{camelCase name}}Service.update(id, validation.data);
+      
+      if (!{{camelCase name}}) {
+        res.status(404).json({
+          error: 'NOT_FOUND',
+          message: '{{name}} not found',
+          timestamp: new Date().toISOString(),
+        });
+        return;
+      }
+
+      res.json({ 
+        data: {{camelCase name}},
+        message: '{{name}} updated successfully',
+      });
+    } catch (error) {
+      projectLogger.error('Failed to update {{name}}', { error, id: req.params.id });
+      this.handleError(res, error);
+    }
+  }
+
+  /**
+   * Delete {{name}} by ID
+   * DELETE /api/{{kebabCase name}}s/:id
+   */
+  async delete(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      
+      const deleted = await this.{{camelCase name}}Service.delete(id);
+      
+      if (!deleted) {
+        res.status(404).json({
+          error: 'NOT_FOUND',
+          message: '{{name}} not found',
+          timestamp: new Date().toISOString(),
+        });
+        return;
+      }
+
+      res.json({ message: '{{name}} deleted successfully' });
+    } catch (error) {
+      projectLogger.error('Failed to delete {{name}}', { error, id: req.params.id });
+      this.handleError(res, error);
+    }
+  }
+
+  /**
+   * Handle API errors consistently
+   */
+  private handleError(res: Response, error: any): void {
+    if (error instanceof ApiError) {
+      res.status(error.statusCode).json({
+        error: error.code,
+        message: error.message,
+        details: error.details,
+        timestamp: new Date().toISOString(),
+      });
+    } else {
+      res.status(500).json({
+        error: 'INTERNAL_SERVER_ERROR',
+        message: 'An unexpected error occurred',
+        timestamp: new Date().toISOString(),
+      });
+    }
+  }
+}

@@ -1,0 +1,272 @@
+# ProjectTemplate Rules for AI Assistants
+
+## 🎯 PROJECT CONTEXT
+You are working on ProjectTemplate - a reusable project template that solves common friction points when developing software with AI tools like Cursor and Claude. This is a META project that provides structure, documentation, and tooling for creating new projects.
+
+## 🛑 CRITICAL RULES - NEVER VIOLATE THESE
+
+### File Management
+1. **NEVER create `*_improved.*`, `*_enhanced.*`, `*_v2.*` files** - ALWAYS edit the original
+2. **NEVER create files in root directory** - Use proper subdirectories per project structure
+3. **NEVER create announcement/completion docs** - No "COMPLETE.md", "FIXED.md", "SUMMARY.md"
+4. **ALWAYS check for existing functionality** before creating new files
+5. **ALWAYS update imports** when moving/renaming files
+
+### Code Quality
+1. **NEVER use bare except clauses** - Always specify exception types
+2. **NEVER use `print()` in production** - Use proper logging
+3. **NEVER leave TODO without context** - Include ticket reference or detailed explanation
+4. **NEVER use magic numbers/strings** - Extract to named constants
+5. **NEVER ignore TypeScript errors** - Fix them properly
+
+### Documentation
+1. **NEVER use announcement language** - No "We're excited to announce!"
+2. **NEVER use superlatives** - No "perfect", "amazing", "best" in technical contexts
+3. **NEVER create process documentation** - No migration guides, cleanup notes
+4. **ALWAYS use timeless language** - Avoid date references
+5. **ALWAYS be concise** - Technical accuracy over marketing speak
+
+## ✅ ALWAYS FOLLOW THESE PATTERNS
+
+### Project Structure
+```
+project-root/
+├── src/                # Source code
+│   ├── api/           # API routes/controllers
+│   ├── components/    # React components
+│   ├── features/      # Feature modules
+│   ├── hooks/         # Custom React hooks
+│   ├── services/      # Business logic
+│   ├── models/        # Data models
+│   └── utils/         # Utilities
+├── tests/             # Test files
+├── scripts/           # Dev & deployment scripts
+├── docs/              # Documentation
+├── ai/                # AI-specific resources
+│   ├── config/        # AI tool configs
+│   ├── prompts/       # Prompt templates
+│   └── examples/      # Code examples
+└── tools/             # Development tools
+    └── generators/    # Code generators
+```
+
+### Import Patterns
+```typescript
+// ✅ GOOD - Specific imports
+import { UserService } from '@/services/user.service';
+import { Button } from '@/components/Button';
+
+// ❌ BAD - Barrel imports, relative paths
+import * as Services from '../services';
+import Button from '../../components/Button';
+```
+
+### Component Pattern
+```typescript
+// 1. Imports (specific, organized)
+import React from 'react';
+import { useUser } from '@/hooks/useUser';
+import styles from './Component.module.css';
+
+// 2. Types (exported for reuse)
+export interface ComponentProps {
+  title: string;
+  onAction?: () => void;
+}
+
+// 3. Component (functional, typed)
+export const Component: React.FC<ComponentProps> = ({ title, onAction }) => {
+  // Hooks at top
+  const { user } = useUser();
+  
+  // Event handlers
+  const handleClick = () => {
+    onAction?.();
+  };
+  
+  // Render
+  return (
+    <div className={styles.container}>
+      <h2>{title}</h2>
+      <button onClick={handleClick}>Action</button>
+    </div>
+  );
+};
+
+// 4. Display name for debugging
+Component.displayName = 'Component';
+```
+
+### API Pattern
+```typescript
+// Consistent error handling
+try {
+  const data = await fetchData();
+  return { success: true, data };
+} catch (error) {
+  logger.error('Failed to fetch data', { error });
+  return { 
+    success: false, 
+    error: {
+      code: 'FETCH_ERROR',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    }
+  };
+}
+```
+
+### Test Pattern
+```typescript
+describe('Component', () => {
+  // Group related tests
+  describe('rendering', () => {
+    it('should render with required props', () => {
+      // Arrange
+      const props = { title: 'Test' };
+      
+      // Act
+      render(<Component {...props} />);
+      
+      // Assert
+      expect(screen.getByText('Test')).toBeInTheDocument();
+    });
+  });
+  
+  // Test edge cases
+  it('should handle missing optional props', () => {
+    render(<Component title="Test" />);
+    expect(screen.getByText('Test')).toBeInTheDocument();
+  });
+});
+```
+
+## 🎯 MANDATORY WORKFLOWS
+
+### 1. Before Creating Any File
+- [ ] Check if similar functionality exists
+- [ ] Use appropriate generator if available
+- [ ] Follow established patterns
+- [ ] Plan the file location per structure
+
+### 2. When Debugging (Arrow-Chain RCA)
+- [ ] Document the symptom
+- [ ] Trace data flow step by step
+- [ ] Identify first divergence point
+- [ ] Fix root cause, not symptoms
+- [ ] Add regression test
+
+### 3. When Writing Tests
+- [ ] Write tests FIRST (TDD)
+- [ ] Include edge cases
+- [ ] Test error scenarios
+- [ ] Use descriptive test names
+- [ ] Follow AAA pattern
+
+### 4. Before Committing
+- [ ] Run all tests
+- [ ] Check linting
+- [ ] Verify types
+- [ ] Update documentation
+- [ ] No console.logs
+
+## 🚀 PROJECT-SPECIFIC FEATURES
+
+### Available Generators
+```bash
+npm run g:component MyComponent    # Generate component with tests
+npm run g:feature UserProfile      # Generate feature module
+npm run g:api users               # Generate API endpoint
+npm run g:hook useData            # Generate custom hook
+```
+
+### AI Context Management
+```bash
+npm run ai:context               # Dump relevant context
+npm run context:optimize         # Optimize for AI tools
+npm run ai:focus <feature>       # Focus on specific feature
+```
+
+### Debug Tools
+```bash
+npm run debug:snapshot           # Capture system state
+npm run analyze:bundle           # Check bundle size
+```
+
+## 📋 COMMON SCENARIOS
+
+### Creating New Feature
+1. Use feature generator: `npm run g:feature FeatureName`
+2. Customize generated types
+3. Implement business logic
+4. Add comprehensive tests
+5. Update feature documentation
+
+### Adding API Endpoint
+1. Use API generator: `npm run g:api resource`
+2. Define data model/schema
+3. Implement service layer
+4. Add validation
+5. Write integration tests
+
+### Debugging Issue
+1. Capture debug snapshot
+2. Use Arrow-Chain RCA method
+3. Trace data flow
+4. Fix root cause
+5. Add regression test
+
+## ⚠️ COMMON PITFALLS TO AVOID
+
+### Anti-Patterns
+- Creating "improved" versions instead of editing
+- Scattered configuration across files
+- Inline styles in components
+- Direct API calls from components
+- Nested ternary operators
+- Functions > 50 lines
+
+### Performance Issues
+- Not memoizing expensive computations
+- Missing React.memo for list items
+- Importing entire libraries
+- Synchronous operations in async code
+- Unbounded data fetching
+
+## 🔧 TOOL-SPECIFIC RULES
+
+### For Cursor
+- Load context from `ai/examples/` for patterns
+- Use `@docs` references for documentation
+- Follow templates in `templates/` directory
+
+### For Claude
+- Provide explicit file paths
+- Include relevant imports
+- Show before/after for changes
+- Reference existing patterns
+
+### For Copilot
+- Use descriptive function names
+- Add JSDoc comments
+- Provide usage examples
+- Keep functions focused
+
+## 💡 REMEMBER
+
+1. **Quality > Speed**: Better to do it right than do it twice
+2. **Patterns > Creativity**: Follow established patterns
+3. **Explicit > Implicit**: Clear code over clever code
+4. **Tests > Features**: No feature without tests
+5. **Docs > Memory**: Document decisions and patterns
+
+## 🆘 WHEN STUCK
+
+1. Check `ai/examples/good-patterns/`
+2. Review `docs/architecture/patterns/`
+3. Look for similar code in codebase
+4. Use generators for boilerplate
+5. Ask for clarification
+
+---
+
+**FINAL RULE**: If you're about to create a new pattern, STOP. Check if it exists first. If it doesn't, document why the new pattern is needed.

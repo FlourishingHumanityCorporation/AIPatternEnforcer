@@ -1,0 +1,209 @@
+/**
+ * {{name}} Types
+ * TypeScript interfaces and types for {{name}} operations
+ */
+
+// Base {{name}} interface
+export interface {{name}} {
+  id: string;
+  name: string;
+  description?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// Input types for creating {{name}}
+export interface Create{{name}}Input {
+  name: string;
+  description?: string;
+}
+
+// Input types for updating {{name}}
+export interface Update{{name}}Input {
+  name?: string;
+  description?: string;
+}
+
+// Filtering and search options
+export interface {{name}}Filters {
+  page?: number;
+  limit?: number;
+  search?: string;
+  sortBy?: keyof {{name}};
+  sortOrder?: 'asc' | 'desc';
+}
+
+// API response types
+export interface {{name}}Response {
+  data: {{name}};
+  message?: string;
+}
+
+export interface {{name}}ListResponse {
+  data: {{name}}[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    pages: number;
+  };
+}
+
+// Database entity (if using ORM)
+export interface {{name}}Entity extends {{name}} {
+  // Additional database-specific fields
+  // createdBy?: string;
+  // modifiedBy?: string;
+  // deletedAt?: Date;
+}
+
+// Validation schemas (if using zod or joi)
+export const {{name}}ValidationSchema = {
+  create: {
+    name: 'required|string|max:255',
+    description: 'optional|string|max:1000',
+  },
+  update: {
+    name: 'optional|string|max:255',
+    description: 'optional|string|max:1000',
+  },
+};
+
+// Query builder types
+export interface {{name}}QueryBuilder {
+  findMany(filters: {{name}}Filters): Promise<{{name}}ListResponse>;
+  findById(id: string): Promise<{{name}} | null>;
+  create(input: Create{{name}}Input): Promise<{{name}}>;
+  update(id: string, input: Update{{name}}Input): Promise<{{name}} | null>;
+  delete(id: string): Promise<boolean>;
+}
+
+// Service layer types
+export interface {{name}}ServiceInterface {
+  findMany(filters: {{name}}Filters): Promise<{{name}}ListResponse>;
+  findById(id: string): Promise<{{name}} | null>;
+  create(input: Create{{name}}Input): Promise<{{name}}>;
+  update(id: string, input: Update{{name}}Input): Promise<{{name}} | null>;
+  delete(id: string): Promise<boolean>;
+}
+
+// Repository layer types
+export interface {{name}}RepositoryInterface {
+  findMany(filters: {{name}}Filters): Promise<{{name}}ListResponse>;
+  findById(id: string): Promise<{{name}} | null>;
+  create(input: Create{{name}}Input): Promise<{{name}}>;
+  update(id: string, input: Update{{name}}Input): Promise<{{name}} | null>;
+  delete(id: string): Promise<boolean>;
+  exists(id: string): Promise<boolean>;
+  count(filters?: Partial<{{name}}Filters>): Promise<number>;
+}
+
+// Events (if using event-driven architecture)
+export interface {{name}}Events {
+  '{{kebabCase name}}.created': {
+    {{camelCase name}}: {{name}};
+    userId?: string;
+  };
+  
+  '{{kebabCase name}}.updated': {
+    {{camelCase name}}: {{name}};
+    previousData: Partial<{{name}}>;
+    userId?: string;
+  };
+  
+  '{{kebabCase name}}.deleted': {
+    {{camelCase name}}Id: string;
+    userId?: string;
+  };
+}
+
+// Error types
+export interface {{name}}Error {
+  code: string;
+  message: string;
+  details?: any;
+}
+
+export const {{name}}ErrorCodes = {
+  NOT_FOUND: 'NOT_FOUND',
+  VALIDATION_ERROR: 'VALIDATION_ERROR',
+  DUPLICATE_NAME: 'DUPLICATE_NAME',
+  UNAUTHORIZED: 'UNAUTHORIZED',
+  FORBIDDEN: 'FORBIDDEN',
+  INTERNAL_ERROR: 'INTERNAL_ERROR',
+} as const;
+
+export type {{name}}ErrorCode = keyof typeof {{name}}ErrorCodes;
+
+// Utility types
+export type Partial{{name}} = Partial<{{name}}>;
+export type {{name}}Keys = keyof {{name}};
+export type {{name}}Values = {{name}}[{{name}}Keys];
+
+// Sorting options
+export type {{name}}SortField = 'createdAt' | 'updatedAt' | 'name';
+export type SortOrder = 'asc' | 'desc';
+
+// Status types (if applicable)
+export type {{name}}Status = 'active' | 'inactive' | 'archived';
+
+// Permission types (if using RBAC)
+export type {{name}}Permission = 
+  | 'read'
+  | 'create'
+  | 'update'
+  | 'delete'
+  | 'admin';
+
+// Audit log types
+export interface {{name}}AuditLog {
+  id: string;
+  {{camelCase name}}Id: string;
+  action: 'create' | 'update' | 'delete';
+  changes: Record<string, any>;
+  userId?: string;
+  timestamp: Date;
+}
+
+// Bulk operations
+export interface Bulk{{name}}Operation {
+  operation: 'create' | 'update' | 'delete';
+  data: Create{{name}}Input[] | Update{{name}}Input[] | string[];
+}
+
+export interface Bulk{{name}}Result {
+  success: number;
+  failed: number;
+  errors: {{name}}Error[];
+}
+
+// Search and filtering
+export interface {{name}}SearchOptions {
+  query: string;
+  fields: (keyof {{name}})[];
+  fuzzy?: boolean;
+  highlight?: boolean;
+}
+
+// Cache types
+export interface {{name}}Cache {
+  key: string;
+  data: {{name}} | {{name}}[];
+  ttl: number;
+  tags: string[];
+}
+
+// Analytics types
+export interface {{name}}Analytics {
+  total: number;
+  created: {
+    today: number;
+    thisWeek: number;
+    thisMonth: number;
+  };
+  popular: {{name}}[];
+  trends: {
+    period: string;
+    count: number;
+  }[];
+}

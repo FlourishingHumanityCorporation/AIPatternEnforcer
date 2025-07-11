@@ -1,0 +1,20 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "🚀 Running pre-push checks..."
+
+# Run tests
+echo "Running tests..."
+npm test
+
+# Check for console.log statements
+if git diff --name-only HEAD origin/$(git branch --show-current) | xargs grep -l "console\.log" 2>/dev/null; then
+    echo "⚠️  Warning: console.log statements found in changed files"
+    read -p "Continue with push? (y/n) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        exit 1
+    fi
+fi
+
+echo "✅ Pre-push checks passed!"

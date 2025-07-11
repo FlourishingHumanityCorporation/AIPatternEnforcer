@@ -1,0 +1,221 @@
+import { z } from 'zod';
+
+/**
+ * {{name}} Validation Schemas
+ * Zod schemas for validating {{name}} data
+ */
+
+// Base {{name}} schema
+export const {{name}}Schema = z.object({
+  id: z.string().uuid('Invalid {{name}} ID format'),
+  name: z.string()
+    .min(1, 'Name is required')
+    .max(255, 'Name must be less than 255 characters')
+    .trim(),
+  description: z.string()
+    .max(1000, 'Description must be less than 1000 characters')
+    .optional()
+    .nullable(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+// Create {{name}} schema
+export const Create{{name}}Schema = z.object({
+  name: z.string()
+    .min(1, 'Name is required')
+    .max(255, 'Name must be less than 255 characters')
+    .trim(),
+  description: z.string()
+    .max(1000, 'Description must be less than 1000 characters')
+    .optional()
+    .nullable(),
+});
+
+// Update {{name}} schema
+export const Update{{name}}Schema = z.object({
+  name: z.string()
+    .min(1, 'Name is required')
+    .max(255, 'Name must be less than 255 characters')
+    .trim()
+    .optional(),
+  description: z.string()
+    .max(1000, 'Description must be less than 1000 characters')
+    .optional()
+    .nullable(),
+});
+
+// Query parameters schema
+export const {{name}}QuerySchema = z.object({
+  page: z.coerce.number()
+    .int()
+    .min(1, 'Page must be at least 1')
+    .default(1),
+  limit: z.coerce.number()
+    .int()
+    .min(1, 'Limit must be at least 1')
+    .max(100, 'Limit must be at most 100')
+    .default(50),
+  search: z.string()
+    .max(255, 'Search term must be less than 255 characters')
+    .optional(),
+  sortBy: z.enum(['createdAt', 'updatedAt', 'name'])
+    .default('createdAt'),
+  sortOrder: z.enum(['asc', 'desc'])
+    .default('desc'),
+});
+
+// Bulk operations schema
+export const Bulk{{name}}Schema = z.object({
+  operation: z.enum(['create', 'update', 'delete']),
+  data: z.array(z.union([
+    Create{{name}}Schema,
+    Update{{name}}Schema,
+    z.string().uuid()
+  ])).min(1, 'At least one item is required'),
+});
+
+// Search schema
+export const {{name}}SearchSchema = z.object({
+  query: z.string()
+    .min(1, 'Search query is required')
+    .max(255, 'Search query must be less than 255 characters'),
+  fields: z.array(z.enum(['name', 'description']))
+    .min(1, 'At least one field is required')
+    .default(['name', 'description']),
+  fuzzy: z.boolean().default(false),
+  highlight: z.boolean().default(false),
+});
+
+// Export combined schemas for convenience
+export const {{name}}Schemas = {
+  base: {{name}}Schema,
+  create: Create{{name}}Schema,
+  update: Update{{name}}Schema,
+  query: {{name}}QuerySchema,
+  bulk: Bulk{{name}}Schema,
+  search: {{name}}SearchSchema,
+};
+
+// Validation functions
+export function validate{{name}}(data: unknown) {
+  return {{name}}Schema.safeParse(data);
+}
+
+export function validateCreate{{name}}(data: unknown) {
+  return Create{{name}}Schema.safeParse(data);
+}
+
+export function validateUpdate{{name}}(data: unknown) {
+  return Update{{name}}Schema.safeParse(data);
+}
+
+export function validate{{name}}Query(data: unknown) {
+  return {{name}}QuerySchema.safeParse(data);
+}
+
+export function validateBulk{{name}}(data: unknown) {
+  return Bulk{{name}}Schema.safeParse(data);
+}
+
+export function validate{{name}}Search(data: unknown) {
+  return {{name}}SearchSchema.safeParse(data);
+}
+
+// Type inference from schemas
+export type {{name}}Type = z.infer<typeof {{name}}Schema>;
+export type Create{{name}}Type = z.infer<typeof Create{{name}}Schema>;
+export type Update{{name}}Type = z.infer<typeof Update{{name}}Schema>;
+export type {{name}}QueryType = z.infer<typeof {{name}}QuerySchema>;
+export type Bulk{{name}}Type = z.infer<typeof Bulk{{name}}Schema>;
+export type {{name}}SearchType = z.infer<typeof {{name}}SearchSchema>;
+
+// Custom validation rules
+export const {{name}}ValidationRules = {
+  // Custom name validation
+  name: {
+    required: true,
+    minLength: 1,
+    maxLength: 255,
+    pattern: /^[a-zA-Z0-9\s\-_.]+$/,
+    message: 'Name can only contain letters, numbers, spaces, hyphens, underscores, and dots',
+  },
+  
+  // Custom description validation
+  description: {
+    required: false,
+    maxLength: 1000,
+    allowEmpty: true,
+  },
+  
+  // Custom ID validation
+  id: {
+    format: 'uuid',
+    message: 'ID must be a valid UUID',
+  },
+};
+
+// Error messages
+export const {{name}}ValidationMessages = {
+  name: {
+    required: 'Name is required',
+    minLength: 'Name must be at least 1 character long',
+    maxLength: 'Name must be less than 255 characters',
+    pattern: 'Name contains invalid characters',
+  },
+  description: {
+    maxLength: 'Description must be less than 1000 characters',
+  },
+  id: {
+    format: 'Invalid {{name}} ID format',
+  },
+  general: {
+    required: 'This field is required',
+    invalid: 'Invalid value provided',
+  },
+};
+
+// Validation middleware helpers
+export const {{name}}ValidationMiddleware = {
+  create: (req: any, res: any, next: any) => {
+    const result = validateCreate{{name}}(req.body);
+    if (!result.success) {
+      return res.status(400).json({
+        error: 'VALIDATION_ERROR',
+        message: 'Invalid input data',
+        details: result.error.issues,
+        timestamp: new Date().toISOString(),
+      });
+    }
+    req.validatedData = result.data;
+    next();
+  },
+  
+  update: (req: any, res: any, next: any) => {
+    const result = validateUpdate{{name}}(req.body);
+    if (!result.success) {
+      return res.status(400).json({
+        error: 'VALIDATION_ERROR',
+        message: 'Invalid input data',
+        details: result.error.issues,
+        timestamp: new Date().toISOString(),
+      });
+    }
+    req.validatedData = result.data;
+    next();
+  },
+  
+  query: (req: any, res: any, next: any) => {
+    const result = validate{{name}}Query(req.query);
+    if (!result.success) {
+      return res.status(400).json({
+        error: 'VALIDATION_ERROR',
+        message: 'Invalid query parameters',
+        details: result.error.issues,
+        timestamp: new Date().toISOString(),
+      });
+    }
+    req.validatedQuery = result.data;
+    next();
+  },
+};

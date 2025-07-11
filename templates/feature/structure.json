@@ -1,0 +1,318 @@
+{
+  "name": "Feature Structure Template",
+  "description": "Template for creating feature-based directory structures",
+  "version": "1.0.0",
+  "structure": {
+    "{{kebabCase name}}/": {
+      "type": "directory",
+      "description": "Root feature directory"
+    },
+    "{{kebabCase name}}/components/": {
+      "type": "directory",
+      "description": "Feature-specific React components"
+    },
+    "{{kebabCase name}}/components/{{name}}List/": {
+      "type": "directory",
+      "description": "List component for displaying multiple items"
+    },
+    "{{kebabCase name}}/components/{{name}}List/{{name}}List.tsx": {
+      "type": "file",
+      "template": "FeatureListComponent.tsx.hbs",
+      "description": "List component implementation"
+    },
+    "{{kebabCase name}}/components/{{name}}List/{{name}}List.test.tsx": {
+      "type": "file",
+      "template": "FeatureListComponent.test.tsx.hbs",
+      "description": "List component tests"
+    },
+    "{{kebabCase name}}/components/{{name}}List/{{name}}List.module.css": {
+      "type": "file",
+      "template": "FeatureListComponent.module.css.hbs",
+      "description": "List component styles"
+    },
+    "{{kebabCase name}}/components/{{name}}List/index.ts": {
+      "type": "file",
+      "template": "FeatureListComponent.index.ts.hbs",
+      "description": "List component export"
+    },
+    "{{kebabCase name}}/components/{{name}}Form/": {
+      "type": "directory",
+      "description": "Form component for creating/editing items"
+    },
+    "{{kebabCase name}}/components/{{name}}Form/{{name}}Form.tsx": {
+      "type": "file",
+      "template": "FeatureFormComponent.tsx.hbs",
+      "description": "Form component implementation"
+    },
+    "{{kebabCase name}}/components/{{name}}Form/{{name}}Form.test.tsx": {
+      "type": "file",
+      "template": "FeatureFormComponent.test.tsx.hbs",
+      "description": "Form component tests"
+    },
+    "{{kebabCase name}}/components/{{name}}Form/{{name}}Form.module.css": {
+      "type": "file",
+      "template": "FeatureFormComponent.module.css.hbs",
+      "description": "Form component styles"
+    },
+    "{{kebabCase name}}/components/{{name}}Form/index.ts": {
+      "type": "file",
+      "template": "FeatureFormComponent.index.ts.hbs",
+      "description": "Form component export"
+    },
+    "{{kebabCase name}}/components/{{name}}Card/": {
+      "type": "directory",
+      "description": "Card component for displaying individual items"
+    },
+    "{{kebabCase name}}/components/{{name}}Card/{{name}}Card.tsx": {
+      "type": "file",
+      "template": "FeatureCardComponent.tsx.hbs",
+      "description": "Card component implementation"
+    },
+    "{{kebabCase name}}/components/{{name}}Card/{{name}}Card.test.tsx": {
+      "type": "file",
+      "template": "FeatureCardComponent.test.tsx.hbs",
+      "description": "Card component tests"
+    },
+    "{{kebabCase name}}/components/{{name}}Card/{{name}}Card.module.css": {
+      "type": "file",
+      "template": "FeatureCardComponent.module.css.hbs",
+      "description": "Card component styles"
+    },
+    "{{kebabCase name}}/components/{{name}}Card/index.ts": {
+      "type": "file",
+      "template": "FeatureCardComponent.index.ts.hbs",
+      "description": "Card component export"
+    },
+    "{{kebabCase name}}/components/index.ts": {
+      "type": "file",
+      "template": "FeatureComponents.index.ts.hbs",
+      "description": "Components barrel export"
+    },
+    "{{kebabCase name}}/hooks/": {
+      "type": "directory",
+      "description": "Feature-specific React hooks"
+    },
+    "{{kebabCase name}}/hooks/use{{name}}.ts": {
+      "type": "file",
+      "template": "FeatureHook.ts.hbs",
+      "description": "Main feature hook for data management"
+    },
+    "{{kebabCase name}}/hooks/use{{name}}.test.ts": {
+      "type": "file",
+      "template": "FeatureHook.test.ts.hbs",
+      "description": "Feature hook tests"
+    },
+    "{{kebabCase name}}/hooks/use{{name}}List.ts": {
+      "type": "file",
+      "template": "FeatureListHook.ts.hbs",
+      "description": "Hook for managing lists of items"
+    },
+    "{{kebabCase name}}/hooks/use{{name}}List.test.ts": {
+      "type": "file",
+      "template": "FeatureListHook.test.ts.hbs",
+      "description": "List hook tests"
+    },
+    "{{kebabCase name}}/hooks/use{{name}}Form.ts": {
+      "type": "file",
+      "template": "FeatureFormHook.ts.hbs",
+      "description": "Hook for form state management"
+    },
+    "{{kebabCase name}}/hooks/use{{name}}Form.test.ts": {
+      "type": "file",
+      "template": "FeatureFormHook.test.ts.hbs",
+      "description": "Form hook tests"
+    },
+    "{{kebabCase name}}/hooks/index.ts": {
+      "type": "file",
+      "template": "FeatureHooks.index.ts.hbs",
+      "description": "Hooks barrel export"
+    },
+    "{{kebabCase name}}/services/": {
+      "type": "directory",
+      "description": "Feature-specific API services"
+    },
+    "{{kebabCase name}}/services/{{kebabCase name}}.service.ts": {
+      "type": "file",
+      "template": "FeatureService.ts.hbs",
+      "description": "API service for feature operations"
+    },
+    "{{kebabCase name}}/services/{{kebabCase name}}.service.test.ts": {
+      "type": "file",
+      "template": "FeatureService.test.ts.hbs",
+      "description": "Service tests"
+    },
+    "{{kebabCase name}}/services/index.ts": {
+      "type": "file",
+      "template": "FeatureServices.index.ts.hbs",
+      "description": "Services barrel export"
+    },
+    "{{kebabCase name}}/types/": {
+      "type": "directory",
+      "description": "Feature-specific TypeScript types"
+    },
+    "{{kebabCase name}}/types/{{kebabCase name}}.types.ts": {
+      "type": "file",
+      "template": "FeatureTypes.ts.hbs",
+      "description": "TypeScript interfaces and types"
+    },
+    "{{kebabCase name}}/types/index.ts": {
+      "type": "file",
+      "template": "FeatureTypes.index.ts.hbs",
+      "description": "Types barrel export"
+    },
+    "{{kebabCase name}}/utils/": {
+      "type": "directory",
+      "description": "Feature-specific utility functions"
+    },
+    "{{kebabCase name}}/utils/{{kebabCase name}}.utils.ts": {
+      "type": "file",
+      "template": "FeatureUtils.ts.hbs",
+      "description": "Utility functions for feature operations"
+    },
+    "{{kebabCase name}}/utils/{{kebabCase name}}.utils.test.ts": {
+      "type": "file",
+      "template": "FeatureUtils.test.ts.hbs",
+      "description": "Utility function tests"
+    },
+    "{{kebabCase name}}/utils/index.ts": {
+      "type": "file",
+      "template": "FeatureUtils.index.ts.hbs",
+      "description": "Utils barrel export"
+    },
+    "{{kebabCase name}}/store/": {
+      "type": "directory",
+      "description": "Feature-specific state management"
+    },
+    "{{kebabCase name}}/store/{{kebabCase name}}.store.ts": {
+      "type": "file",
+      "template": "FeatureStore.ts.hbs",
+      "description": "Feature state store (Zustand)"
+    },
+    "{{kebabCase name}}/store/{{kebabCase name}}.store.test.ts": {
+      "type": "file",
+      "template": "FeatureStore.test.ts.hbs",
+      "description": "Store tests"
+    },
+    "{{kebabCase name}}/store/index.ts": {
+      "type": "file",
+      "template": "FeatureStore.index.ts.hbs",
+      "description": "Store barrel export"
+    },
+    "{{kebabCase name}}/pages/": {
+      "type": "directory",
+      "description": "Feature-specific page components"
+    },
+    "{{kebabCase name}}/pages/{{name}}ListPage.tsx": {
+      "type": "file",
+      "template": "FeatureListPage.tsx.hbs",
+      "description": "List page component"
+    },
+    "{{kebabCase name}}/pages/{{name}}DetailPage.tsx": {
+      "type": "file",
+      "template": "FeatureDetailPage.tsx.hbs",
+      "description": "Detail page component"
+    },
+    "{{kebabCase name}}/pages/{{name}}CreatePage.tsx": {
+      "type": "file",
+      "template": "FeatureCreatePage.tsx.hbs",
+      "description": "Create page component"
+    },
+    "{{kebabCase name}}/pages/{{name}}EditPage.tsx": {
+      "type": "file",
+      "template": "FeatureEditPage.tsx.hbs",
+      "description": "Edit page component"
+    },
+    "{{kebabCase name}}/pages/index.ts": {
+      "type": "file",
+      "template": "FeaturePages.index.ts.hbs",
+      "description": "Pages barrel export"
+    },
+    "{{kebabCase name}}/constants/": {
+      "type": "directory",
+      "description": "Feature-specific constants"
+    },
+    "{{kebabCase name}}/constants/{{kebabCase name}}.constants.ts": {
+      "type": "file",
+      "template": "FeatureConstants.ts.hbs",
+      "description": "Feature constants and enums"
+    },
+    "{{kebabCase name}}/constants/index.ts": {
+      "type": "file",
+      "template": "FeatureConstants.index.ts.hbs",
+      "description": "Constants barrel export"
+    },
+    "{{kebabCase name}}/README.md": {
+      "type": "file",
+      "template": "FeatureReadme.md.hbs",
+      "description": "Feature documentation"
+    },
+    "{{kebabCase name}}/index.ts": {
+      "type": "file",
+      "template": "FeatureIndex.ts.hbs",
+      "description": "Main feature barrel export"
+    }
+  },
+  "templates": {
+    "FeatureListComponent.tsx.hbs": "Component for displaying a list of items",
+    "FeatureFormComponent.tsx.hbs": "Component for creating/editing items",
+    "FeatureCardComponent.tsx.hbs": "Component for displaying individual items",
+    "FeatureHook.ts.hbs": "Main feature hook for data management",
+    "FeatureListHook.ts.hbs": "Hook for managing lists of items",
+    "FeatureFormHook.ts.hbs": "Hook for form state management",
+    "FeatureService.ts.hbs": "API service for feature operations",
+    "FeatureTypes.ts.hbs": "TypeScript interfaces and types",
+    "FeatureUtils.ts.hbs": "Utility functions for feature operations",
+    "FeatureStore.ts.hbs": "Feature state store (Zustand)",
+    "FeatureListPage.tsx.hbs": "List page component",
+    "FeatureDetailPage.tsx.hbs": "Detail page component",
+    "FeatureCreatePage.tsx.hbs": "Create page component",
+    "FeatureEditPage.tsx.hbs": "Edit page component",
+    "FeatureConstants.ts.hbs": "Feature constants and enums",
+    "FeatureReadme.md.hbs": "Feature documentation"
+  },
+  "dependencies": {
+    "react": "^18.0.0",
+    "react-hook-form": "^7.0.0",
+    "zustand": "^4.0.0",
+    "axios": "^1.0.0"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/react-hooks": "^8.0.0",
+    "vitest": "^1.0.0"
+  },
+  "options": {
+    "includePages": {
+      "type": "boolean",
+      "default": true,
+      "description": "Generate page components"
+    },
+    "includeStore": {
+      "type": "boolean",
+      "default": true,
+      "description": "Generate state management store"
+    },
+    "includeService": {
+      "type": "boolean",
+      "default": true,
+      "description": "Generate API service"
+    },
+    "includeTests": {
+      "type": "boolean",
+      "default": true,
+      "description": "Generate test files"
+    },
+    "stateManagement": {
+      "type": "string",
+      "enum": ["zustand", "redux", "context"],
+      "default": "zustand",
+      "description": "State management library to use"
+    },
+    "apiClient": {
+      "type": "string",
+      "enum": ["axios", "fetch", "react-query"],
+      "default": "axios",
+      "description": "API client library to use"
+    }
+  }
+}

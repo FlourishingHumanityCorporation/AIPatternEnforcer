@@ -1,0 +1,77 @@
+# GitHub Copilot Configuration
+
+## Project Context
+Working on {{PROJECT_NAME}} - {{PROJECT_DESCRIPTION}}
+
+## Code Style Preferences
+- Prefer TypeScript with strict type checking
+- Use functional components and hooks in React
+- Follow ESLint and Prettier configurations
+- Use early returns to reduce nesting
+- Prefer async/await over promises
+- Use descriptive variable names
+
+## Import Preferences
+- Use absolute imports from @/ for src directory
+- Group imports: external → internal → relative
+- Prefer named imports over default imports
+- Sort imports alphabetically
+
+## Completion Preferences
+- Complete full function implementations
+- Include error handling in suggestions
+- Add TypeScript types to all parameters
+- Include JSDoc comments for public APIs
+- Suggest tests alongside implementations
+
+## Security Requirements
+- Never suggest hardcoded credentials
+- Always validate user inputs
+- Use parameterized queries for databases
+- Sanitize HTML content
+- Include authentication checks
+
+## Performance Patterns
+- Suggest memoization where appropriate
+- Use lazy loading for heavy imports
+- Prefer streaming over buffering
+- Include performance comments
+
+## Anti-patterns to Avoid
+- No var declarations (use const/let)
+- No any types without justification
+- No synchronous file operations
+- No direct DOM manipulation in React
+- No console.log in production code
+
+## Framework Specific
+
+### React
+- Prefer function components
+- Use custom hooks for logic
+- Implement proper cleanup in useEffect
+- Use React.memo for expensive components
+
+### Node.js
+- Use native ES modules
+- Implement graceful shutdown
+- Add health check endpoints
+- Use dependency injection
+
+### Testing
+- Write tests first (TDD)
+- Include edge cases
+- Mock external dependencies
+- Use descriptive test names
+
+## Local Development
+- Optimize for developer experience
+- Include helpful error messages
+- Add development utilities
+- Support hot reloading
+
+## Documentation
+- Include usage examples
+- Document complex logic
+- Add inline comments for clarity
+- Keep README files updated

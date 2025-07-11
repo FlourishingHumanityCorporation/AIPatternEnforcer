@@ -1,0 +1,390 @@
+import type { Meta, StoryObj } from '@storybook/react';
+import { {{name}} } from './{{name}}';
+
+/**
+ * {{name}} Component Stories
+ * 
+ * Stories for the {{name}} component demonstrating various use cases and props.
+ */
+
+const meta = {
+  title: 'Components/{{name}}',
+  component: {{name}},
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        component: '{{description || 'A reusable component built with React and TypeScript.'}}',
+      },
+    },
+  },
+  tags: ['autodocs'],
+  argTypes: {
+    children: {
+      control: 'text',
+      description: 'Content to display inside the component',
+      table: {
+        type: { summary: 'React.ReactNode' },
+      },
+    },
+    className: {
+      control: 'text',
+      description: 'Additional CSS classes to apply',
+      table: {
+        type: { summary: 'string' },
+      },
+    },
+    onClick: {
+      action: 'clicked',
+      description: 'Click event handler',
+      table: {
+        type: { summary: '() => void' },
+      },
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Whether the component is disabled',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    loading: {
+      control: 'boolean',
+      description: 'Whether the component is in a loading state',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
+    size: {
+      control: 'select',
+      options: ['small', 'medium', 'large'],
+      description: 'Size variant of the component',
+      table: {
+        type: { summary: "'small' | 'medium' | 'large'" },
+        defaultValue: { summary: "'medium'" },
+      },
+    },
+    variant: {
+      control: 'select',
+      options: ['default', 'primary', 'secondary', 'accent'],
+      description: 'Visual variant of the component',
+      table: {
+        type: { summary: "'default' | 'primary' | 'secondary' | 'accent'" },
+        defaultValue: { summary: "'default'" },
+      },
+    },
+  },
+} satisfies Meta<typeof {{name}}>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+// Default story
+export const Default: Story = {
+  args: {
+    children: 'Default {{name}}',
+  },
+};
+
+// Interactive story
+export const Interactive: Story = {
+  args: {
+    children: 'Click me!',
+    onClick: () => alert('{{name}} clicked!'),
+  },
+};
+
+// Size variants
+export const Small: Story = {
+  args: {
+    children: 'Small {{name}}',
+    size: 'small',
+  },
+};
+
+export const Medium: Story = {
+  args: {
+    children: 'Medium {{name}}',
+    size: 'medium',
+  },
+};
+
+export const Large: Story = {
+  args: {
+    children: 'Large {{name}}',
+    size: 'large',
+  },
+};
+
+// Visual variants
+export const Primary: Story = {
+  args: {
+    children: 'Primary {{name}}',
+    variant: 'primary',
+  },
+};
+
+export const Secondary: Story = {
+  args: {
+    children: 'Secondary {{name}}',
+    variant: 'secondary',
+  },
+};
+
+export const Accent: Story = {
+  args: {
+    children: 'Accent {{name}}',
+    variant: 'accent',
+  },
+};
+
+// State variations
+export const Loading: Story = {
+  args: {
+    children: 'Loading {{name}}',
+    loading: true,
+  },
+};
+
+export const Disabled: Story = {
+  args: {
+    children: 'Disabled {{name}}',
+    disabled: true,
+  },
+};
+
+export const DisabledInteractive: Story = {
+  args: {
+    children: 'Disabled Interactive {{name}}',
+    disabled: true,
+    onClick: () => alert('This should not fire'),
+  },
+};
+
+// Complex content
+export const WithComplexContent: Story = {
+  args: {
+    children: (
+      <div>
+        <h3>Complex Content</h3>
+        <p>This {{name}} contains multiple elements including text, images, and other components.</p>
+        <button>Nested Button</button>
+      </div>
+    ),
+  },
+};
+
+// Custom styling
+export const WithCustomClass: Story = {
+  args: {
+    children: 'Custom Styled {{name}}',
+    className: 'custom-{{kebabCase name}}',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Example of applying custom CSS classes to the component.',
+      },
+    },
+  },
+};
+
+// Empty state
+export const Empty: Story = {
+  args: {},
+  parameters: {
+    docs: {
+      description: {
+        story: 'Component with no content or minimal props.',
+      },
+    },
+  },
+};
+
+// All props combined
+export const AllProps: Story = {
+  args: {
+    children: 'All Props {{name}}',
+    className: 'example-class',
+    onClick: () => console.log('All props {{name}} clicked'),
+    disabled: false,
+    loading: false,
+    size: 'large',
+    variant: 'primary',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Example showing all available props in combination.',
+      },
+    },
+  },
+};
+
+// Responsive behavior
+export const ResponsiveExample: Story = {
+  args: {
+    children: 'Responsive {{name}}',
+    size: 'medium',
+  },
+  parameters: {
+    viewport: {
+      defaultViewport: 'mobile1',
+    },
+    docs: {
+      description: {
+        story: 'Example demonstrating responsive behavior on different screen sizes.',
+      },
+    },
+  },
+};
+
+// Accessibility example
+export const AccessibilityExample: Story = {
+  args: {
+    children: 'Accessible {{name}}',
+    onClick: () => console.log('Accessible interaction'),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Example demonstrating accessibility features like keyboard navigation and screen reader support.',
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    // Example of interaction testing
+    const canvas = canvasElement;
+    const {{camelCase name}} = canvas.querySelector('[role="button"]') || canvas.querySelector('button');
+    
+    if ({{camelCase name}}) {
+      // Test keyboard navigation
+      {{camelCase name}}.focus();
+      
+      // Test ARIA attributes
+      console.log('ARIA attributes:', {
+        role: {{camelCase name}}.getAttribute('role'),
+        tabIndex: {{camelCase name}}.getAttribute('tabindex'),
+        'aria-label': {{camelCase name}}.getAttribute('aria-label'),
+      });
+    }
+  },
+};
+
+// Performance example
+export const PerformanceExample: Story = {
+  args: {
+    children: 'Performance {{name}}',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Example demonstrating performance optimizations and best practices.',
+      },
+    },
+  },
+};
+
+// Error state
+export const ErrorState: Story = {
+  args: {
+    children: 'Error {{name}}',
+    // Add error-specific props if your component supports them
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Example of component in an error state.',
+      },
+    },
+  },
+};
+
+// Success state
+export const SuccessState: Story = {
+  args: {
+    children: 'Success {{name}}',
+    // Add success-specific props if your component supports them
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Example of component in a success state.',
+      },
+    },
+  },
+};
+
+// Dark mode
+export const DarkMode: Story = {
+  args: {
+    children: 'Dark Mode {{name}}',
+    variant: 'primary',
+  },
+  parameters: {
+    backgrounds: {
+      default: 'dark',
+    },
+    docs: {
+      description: {
+        story: 'Example of component appearance in dark mode.',
+      },
+    },
+  },
+};
+
+// High contrast
+export const HighContrast: Story = {
+  args: {
+    children: 'High Contrast {{name}}',
+    variant: 'primary',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Example of component with high contrast styling for accessibility.',
+      },
+    },
+  },
+};
+
+// Multiple instances
+export const MultipleInstances: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+      <{{name}} size="small">Small</{{name}}>
+      <{{name}} size="medium">Medium</{{name}}>
+      <{{name}} size="large">Large</{{name}}>
+      <{{name}} variant="primary">Primary</{{name}}>
+      <{{name}} variant="secondary">Secondary</{{name}}>
+      <{{name}} variant="accent">Accent</{{name}}>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Example showing multiple instances of the component with different configurations.',
+      },
+    },
+  },
+};
+
+// Playground story for interactive testing
+export const Playground: Story = {
+  args: {
+    children: 'Playground {{name}}',
+    size: 'medium',
+    variant: 'default',
+    disabled: false,
+    loading: false,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Interactive playground to test different prop combinations.',
+      },
+    },
+  },
+};

@@ -1,0 +1,60 @@
+{
+  "headers": {
+    "Strict-Transport-Security": {
+      "value": "max-age=63072000; includeSubDomains; preload",
+      "description": "Forces HTTPS connections for 2 years"
+    },
+    "X-Content-Type-Options": {
+      "value": "nosniff",
+      "description": "Prevents MIME type sniffing"
+    },
+    "X-Frame-Options": {
+      "value": "DENY",
+      "description": "Prevents clickjacking by denying iframe embedding"
+    },
+    "X-XSS-Protection": {
+      "value": "1; mode=block",
+      "description": "Enables XSS filtering in older browsers"
+    },
+    "Referrer-Policy": {
+      "value": "strict-origin-when-cross-origin",
+      "description": "Controls referrer information sent with requests"
+    },
+    "Permissions-Policy": {
+      "value": "camera=(), microphone=(), geolocation=()",
+      "description": "Restricts browser features"
+    },
+    "Content-Security-Policy": {
+      "value": "See csp-policy.json for detailed policy",
+      "description": "Controls resources the browser can load"
+    }
+  },
+  "implementation": {
+    "nextjs": {
+      "file": "next.config.js",
+      "example": "async headers() { return [{ source: '/(.*)', headers: [...] }] }"
+    },
+    "express": {
+      "package": "helmet",
+      "example": "app.use(helmet({ contentSecurityPolicy: false }));"
+    },
+    "nginx": {
+      "file": "nginx.conf",
+      "example": "add_header X-Frame-Options \"DENY\" always;"
+    }
+  },
+  "testing": {
+    "tools": ["securityheaders.com", "Mozilla Observatory", "SSL Labs"],
+    "command": "npm run test:security:headers"
+  },
+  "exceptions": {
+    "development": {
+      "Strict-Transport-Security": "Disabled in development",
+      "Content-Security-Policy": "Relaxed for hot reload"
+    },
+    "embed": {
+      "X-Frame-Options": "SAMEORIGIN for embed routes",
+      "routes": ["/embed/*", "/widget/*"]
+    }
+  }
+}

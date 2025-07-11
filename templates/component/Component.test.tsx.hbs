@@ -1,0 +1,35 @@
+import { render, screen } from '@testing-library/react';
+import { {{pascalCase name}} } from './{{name}}';
+
+describe('{{pascalCase name}}', () => {
+  const defaultProps = {
+    // TODO: Add default props
+  };
+
+  beforeEach(() => {
+    // Setup before each test
+  });
+
+  it('should render successfully', () => {
+    render(<{{pascalCase name}} {...defaultProps} />);
+    
+    // TODO: Add assertions
+    expect(screen.getByRole('region')).toBeInTheDocument();
+  });
+
+  it('should handle props correctly', () => {
+    // TODO: Test prop handling
+  });
+
+  describe('interactions', () => {
+    it('should handle user interactions', () => {
+      // TODO: Test user interactions
+    });
+  });
+
+  describe('edge cases', () => {
+    it('should handle edge cases gracefully', () => {
+      // TODO: Test edge cases
+    });
+  });
+});

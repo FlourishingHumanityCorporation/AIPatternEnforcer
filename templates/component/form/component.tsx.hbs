@@ -1,0 +1,81 @@
+import React from 'react';
+import styles from './{{name}}.module.css';
+
+export interface {{name}}Props {
+  /** Primary content */
+  children?: React.ReactNode;
+  /** Optional CSS class */
+  className?: string;
+  /** Field name */
+  name: string;
+  /** Field value */
+  value?: string;
+  /** Validation error */
+  error?: string;
+  /** Required field */
+  required?: boolean;
+  /** Change handler */
+  onChange?: (value: string) => void;
+  /** Loading state */
+  isLoading?: boolean;
+  /** Disabled state */
+  disabled?: boolean;
+  /** Test ID for testing */
+  testId?: string;
+}
+
+/**
+ * {{name}} component - Form fields with built-in validation and error handling
+ * 
+ * @example
+ * <{{name}} name="email" value={email} onChange={setEmail} error={errors.email}>
+ *   Email Address
+ * </{{name}}>
+ */
+export const {{name}}: React.FC<{{name}}Props> = ({
+  children,
+  className = '',
+  name,
+  value = '',
+  error,
+  required = false,
+  onChange,
+  isLoading = false,
+  disabled = false,
+  testId = '{{kebabCase name}}'
+}) => {
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className={`${styles.container} ${styles.loading} ${className}`} data-testid={`${testId}-loading`}>
+        <span className={styles.spinner} aria-label="Loading..." />
+      </div>
+    );
+  }
+
+  return (
+    <div className={`${styles.fieldContainer} ${className}`}>
+      <label htmlFor={name} className={styles.label}>
+        {children}
+        {required && <span className={styles.required} aria-label="required">*</span>}
+      </label>
+      <input
+        id={name}
+        name={name}
+        value={value}
+        onChange={(e) => onChange?.(e.target.value)}
+        disabled={disabled}
+        required={required}
+        aria-invalid={!!error}
+        aria-describedby={error ? `${name}-error` : undefined}
+        className={styles.input}
+        data-testid={testId}
+      />
+      {error && (
+        <span id={`${name}-error`} className={styles.errorMessage} role="alert">
+          {error}
+        </span>
+      )}
+    </div>
+  );
+};

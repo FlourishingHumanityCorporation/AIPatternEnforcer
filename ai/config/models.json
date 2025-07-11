@@ -1,0 +1,79 @@
+{
+  "default": "codellama:13b",
+  "tasks": {
+    "code_completion": {
+      "model": "codellama:13b",
+      "temperature": 0.7,
+      "max_tokens": 2048
+    },
+    "code_explanation": {
+      "model": "llama3:8b",
+      "temperature": 0.5,
+      "max_tokens": 1000
+    },
+    "documentation": {
+      "model": "llama3:8b",
+      "temperature": 0.7,
+      "max_tokens": 1500
+    },
+    "refactoring": {
+      "model": "codellama:13b",
+      "temperature": 0.3,
+      "max_tokens": 3000
+    },
+    "test_generation": {
+      "model": "codellama:13b",
+      "temperature": 0.5,
+      "max_tokens": 2500
+    },
+    "bug_fixing": {
+      "model": "mixtral:8x7b",
+      "temperature": 0.3,
+      "max_tokens": 2000
+    },
+    "quick_fix": {
+      "model": "mistral:7b",
+      "temperature": 0.5,
+      "max_tokens": 500
+    },
+    "security_review": {
+      "model": "llama3:8b",
+      "temperature": 0.2,
+      "max_tokens": 1500
+    }
+  },
+  "endpoints": {
+    "ollama": {
+      "url": "http://localhost:11434",
+      "timeout": 30000,
+      "retry": 3
+    },
+    "localai": {
+      "url": "http://localhost:8080",
+      "timeout": 30000,
+      "retry": 2
+    },
+    "lmstudio": {
+      "url": "http://localhost:1234",
+      "timeout": 45000,
+      "retry": 2
+    }
+  },
+  "performance": {
+    "cache_responses": true,
+    "cache_ttl_minutes": 60,
+    "stream_responses": true,
+    "batch_requests": false
+  },
+  "fallback": {
+    "enabled": true,
+    "order": ["ollama", "localai", "lmstudio"],
+    "cloud_fallback": false
+  },
+  "hardware": {
+    "prefer_gpu": true,
+    "gpu_layers": 35,
+    "thread_count": 8,
+    "batch_size": 512
+  }
+}

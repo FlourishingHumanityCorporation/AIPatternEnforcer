@@ -1,0 +1,157 @@
+# GitHub Copilot Instructions
+
+You are working on a TypeScript project that follows strict architectural patterns and coding standards.
+
+## Code Style Requirements
+
+- Use TypeScript with strict mode - no `any` types
+- Prefer functional components with hooks in React
+- Use named exports, not default exports
+- Follow existing patterns in the codebase
+- Include comprehensive error handling in all async functions
+
+## Import Convention
+
+Always use absolute imports with the @ alias:
+```typescript
+// Correct
+import { Button } from '@/components/ui/Button';
+import { useAuth } from '@/hooks/auth';
+
+// Incorrect
+import { Button } from '../../../components/ui/Button';
+```
+
+## Logging
+
+Never use console.log. Always use the project logger:
+```typescript
+import { projectLogger } from '@/lib/logger';
+
+projectLogger.info('User action', { userId, action });
+projectLogger.error('Operation failed', { error, context });
+```
+
+## Error Handling Pattern
+
+Always wrap async operations:
+```typescript
+try {
+  setLoading(true);
+  const result = await apiCall();
+  setData(result);
+} catch (error) {
+  projectLogger.error('Operation failed', { error });
+  setError(error);
+} finally {
+  setLoading(false);
+}
+```
+
+## State Management
+
+Use Zustand for global state, not Redux or Context API:
+```typescript
+import { create } from 'zustand';
+
+export const useStore = create((set) => ({
+  data: null,
+  loading: false,
+  fetchData: async () => {
+    set({ loading: true });
+    // Implementation
+  }
+}));
+```
+
+## Testing
+
+Include tests with every new function or component:
+```typescript
+describe('ComponentName', () => {
+  it('should handle the happy path', () => {
+    // Test implementation
+  });
+  
+  it('should handle errors gracefully', () => {
+    // Error case testing
+  });
+});
+```
+
+## API Patterns
+
+Always use the typed API client:
+```typescript
+import { apiClient } from '@/lib/api';
+
+// Never use fetch() directly
+const data = await apiClient.users.getAll();
+```
+
+## Security
+
+- Never hardcode secrets or API keys
+- Always validate user input with Zod schemas
+- Use parameterized queries for database operations
+- Sanitize any user-generated content before display
+
+## Component Structure
+
+Follow this exact pattern for React components:
+```typescript
+import { FC } from 'react';
+import { projectLogger } from '@/lib/logger';
+
+interface ComponentNameProps {
+  // Props definition
+}
+
+export const ComponentName: FC<ComponentNameProps> = ({ prop1, prop2 }) => {
+  // Hooks at the top
+  const [state, setState] = useState();
+  
+  // Event handlers
+  const handleClick = () => {
+    projectLogger.debug('Component clicked', { prop1 });
+  };
+  
+  // Early returns for edge cases
+  if (!prop1) return null;
+  
+  // Main render
+  return (
+    <div>
+      {/* Component JSX */}
+    </div>
+  );
+};
+```
+
+## Performance
+
+- Memoize expensive computations with useMemo
+- Use React.memo for components that re-render often
+- Implement pagination for lists over 50 items
+- Use dynamic imports for code splitting
+
+## Forbidden Patterns
+
+Never generate code with these patterns:
+- Direct DOM manipulation
+- Inline styles (use CSS modules or Tailwind)
+- Synchronous file operations
+- Unhandled promise rejections
+- Global variables
+- String concatenation for SQL queries
+
+## When Suggesting Code
+
+1. Check if similar functionality already exists
+2. Follow the patterns in @docs/architecture/patterns/
+3. Include proper TypeScript types
+4. Add error handling
+5. Consider edge cases
+6. Make it testable
+
+Remember: Consistency with the existing codebase is more important than perfection.

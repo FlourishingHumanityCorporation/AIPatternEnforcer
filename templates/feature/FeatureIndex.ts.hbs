@@ -1,0 +1,88 @@
+/**
+ * {{name}} Feature
+ * 
+ * This feature provides complete CRUD operations for {{name}} entities.
+ * 
+ * @example
+ * ```tsx
+ * import { {{name}}List, {{name}}Form, use{{name}} } from '@/features/{{kebabCase name}}';
+ * 
+ * function MyComponent() {
+ *   const { {{camelCase name}}s, loading, error } = use{{name}}List();
+ *   
+ *   return (
+ *     <div>
+ *       <{{name}}List {{camelCase name}}s={{{camelCase name}}s} loading={loading} />
+ *       <{{name}}Form onSubmit={handleSubmit} />
+ *     </div>
+ *   );
+ * }
+ * ```
+ */
+
+// Components
+export * from './components';
+
+// Hooks
+export * from './hooks';
+
+// Services
+export * from './services';
+
+// Types
+export * from './types';
+
+// Utils
+export * from './utils';
+
+// Store
+export * from './store';
+
+// Pages
+export * from './pages';
+
+// Constants
+export * from './constants';
+
+// Default exports for convenience
+export { {{name}}List as default } from './components/{{name}}List';
+export { use{{name}} } from './hooks/use{{name}}';
+export { {{camelCase name}}Service } from './services/{{kebabCase name}}.service';
+export { {{camelCase name}}Store } from './store/{{kebabCase name}}.store';
+
+// Re-export main types for easier imports
+export type { 
+  {{name}}, 
+  Create{{name}}Input, 
+  Update{{name}}Input,
+  {{name}}Filters 
+} from './types/{{kebabCase name}}.types';
+
+// Feature metadata
+export const {{name}}Feature = {
+  name: '{{name}}',
+  version: '1.0.0',
+  description: '{{name}} feature with complete CRUD operations',
+  components: [
+    '{{name}}List',
+    '{{name}}Form',
+    '{{name}}Card',
+  ],
+  hooks: [
+    'use{{name}}',
+    'use{{name}}List',
+    'use{{name}}Form',
+  ],
+  pages: [
+    '{{name}}ListPage',
+    '{{name}}DetailPage',
+    '{{name}}CreatePage',
+    '{{name}}EditPage',
+  ],
+  services: [
+    '{{camelCase name}}Service',
+  ],
+  stores: [
+    '{{camelCase name}}Store',
+  ],
+} as const;

@@ -1,0 +1,22 @@
+# Project Rules for AI Assistant
+
+## Context
+This document defines our API patterns and rules
+
+## You MUST follow these rules:
+
+1. Always use RESTful naming conventions: GET /users, POST /users, GET /users/:id
+2. Return consistent error responses with code, message, and details fields
+
+## Project-Specific Patterns:
+
+### Error Response Format
+```typescript
+interface ApiError {
+  code: string;
+  message: string;
+  details?: Record<string, any>;
+  timestamp: string;
+}
+```
+

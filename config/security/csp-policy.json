@@ -1,0 +1,85 @@
+{
+  "policy": {
+    "default-src": ["'self'"],
+    "script-src": [
+      "'self'",
+      "'unsafe-inline'",
+      "'unsafe-eval'",
+      "https://www.google-analytics.com",
+      "https://www.googletagmanager.com",
+      "https://plausible.io"
+    ],
+    "style-src": ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+    "img-src": [
+      "'self'",
+      "data:",
+      "blob:",
+      "https:",
+      "https://www.google-analytics.com",
+      "https://www.gravatar.com"
+    ],
+    "font-src": ["'self'", "https://fonts.gstatic.com"],
+    "connect-src": [
+      "'self'",
+      "https://api.example.com",
+      "wss://api.example.com",
+      "https://www.google-analytics.com",
+      "https://vitals.vercel-insights.com"
+    ],
+    "media-src": ["'self'", "blob:"],
+    "object-src": ["'none'"],
+    "child-src": ["'self'"],
+    "frame-src": [
+      "'self'",
+      "https://www.youtube.com",
+      "https://player.vimeo.com"
+    ],
+    "frame-ancestors": ["'none'"],
+    "form-action": ["'self'"],
+    "base-uri": ["'self'"],
+    "manifest-src": ["'self'"],
+    "worker-src": ["'self'", "blob:"]
+  },
+  "environments": {
+    "development": {
+      "script-src": ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+      "connect-src": ["'self'", "ws://localhost:*", "http://localhost:*"],
+      "report-uri": null
+    },
+    "staging": {
+      "report-uri": "https://staging.example.com/api/csp-report"
+    },
+    "production": {
+      "script-src": ["'self'", "'strict-dynamic'", "nonce-{NONCE}"],
+      "report-uri": "https://api.example.com/api/csp-report",
+      "report-to": "csp-endpoint"
+    }
+  },
+  "directives": {
+    "upgrade-insecure-requests": true,
+    "block-all-mixed-content": true
+  },
+  "report-only": {
+    "enabled": false,
+    "percentage": 10,
+    "description": "Use report-only mode to test policy changes"
+  },
+  "nonce": {
+    "enabled": true,
+    "description": "Generate per-request nonce for inline scripts",
+    "implementation": "crypto.randomBytes(16).toString('base64')"
+  },
+  "violations": {
+    "endpoint": "/api/csp-report",
+    "logLevel": "warn",
+    "alerts": {
+      "threshold": 100,
+      "window": "1h",
+      "channel": "#security-alerts"
+    }
+  },
+  "testing": {
+    "tools": ["CSP Evaluator", "Report URI CSP Wizard"],
+    "command": "npm run test:security:csp"
+  }
+}

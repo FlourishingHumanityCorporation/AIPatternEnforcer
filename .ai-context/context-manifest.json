@@ -1,0 +1,29 @@
+{
+  "files": [
+    {
+      "file": "./src/components/TestButton/index.ts",
+      "relevance": 40,
+      "tokens": 23
+    },
+    {
+      "file": "./config/eslint/.eslintrc.base.js",
+      "relevance": 30,
+      "tokens": 833
+    },
+    {
+      "file": "./src/components/TestButton/TestButton.stories.tsx",
+      "relevance": 30,
+      "tokens": 259
+    },
+    {
+      "file": "./src/components/TestButton/TestButton.tsx",
+      "relevance": 30,
+      "tokens": 234
+    },
+    {
+      "file": "./tools/generators/component-generator.js",
+      "relevance": 30,
+      "tokens": 2102
+    }
+  ]
+}

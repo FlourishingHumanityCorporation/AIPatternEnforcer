@@ -1,0 +1,288 @@
+import { renderHook, act } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { use{{name}} } from './use{{name}}';
+
+/**
+ * Tests for use{{name}} hook
+ */
+
+describe('use{{name}}', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  describe('Initial State', () => {
+    it('should initialize with default values', () => {
+      const { result } = renderHook(() => use{{name}}());
+
+      expect(result.current.{{camelCase name}}).toBeNull();
+      expect(result.current.loading).toBe(false);
+      expect(result.current.error).toBeNull();
+    });
+
+    it('should initialize with provided initial value', () => {
+      const initialValue = {{mockValue || '"test value"'}};
+      const { result } = renderHook(() => use{{name}}({ initialValue }));
+
+      expect(result.current.{{camelCase name}}).toBe(initialValue);
+    });
+
+    it('should not auto-fetch when autoFetch is false', () => {
+      const { result } = renderHook(() => use{{name}}({ autoFetch: false }));
+
+      expect(result.current.loading).toBe(false);
+      expect(result.current.{{camelCase name}}).toBeNull();
+    });
+  });
+
+  describe('Actions', () => {
+    it('should handle {{camelCase action}} successfully', async () => {
+      const { result } = renderHook(() => use{{name}}({ autoFetch: false }));
+
+      await act(async () => {
+        await result.current.{{camelCase action}}();
+      });
+
+      expect(result.current.{{camelCase name}}).toBe({{mockValue || '"mock value"'}});
+      expect(result.current.loading).toBe(false);
+      expect(result.current.error).toBeNull();
+    });
+
+    it('should handle loading state during {{camelCase action}}', async () => {
+      const { result } = renderHook(() => use{{name}}({ autoFetch: false }));
+
+      const {{camelCase action}}Promise = act(async () => {
+        const promise = result.current.{{camelCase action}}();
+        // Check loading state immediately
+        expect(result.current.loading).toBe(true);
+        await promise;
+      });
+
+      await {{camelCase action}}Promise;
+      expect(result.current.loading).toBe(false);
+    });
+
+    it('should handle errors during {{camelCase action}}', async () => {
+      // Mock console.error to avoid test output pollution
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      
+      // Mock an error scenario
+      const originalPromise = global.Promise;
+      global.Promise = class extends originalPromise {
+        constructor(executor) {
+          super((resolve, reject) => {
+            executor(
+              () => reject(new Error('Test error')),
+              reject
+            );
+          });
+        }
+      } as any;
+
+      const { result } = renderHook(() => use{{name}}({ autoFetch: false }));
+
+      await act(async () => {
+        await result.current.{{camelCase action}}();
+      });
+
+      expect(result.current.error).toBeInstanceOf(Error);
+      expect(result.current.error?.message).toBe('Test error');
+      expect(result.current.loading).toBe(false);
+
+      // Restore
+      global.Promise = originalPromise;
+      consoleSpy.mockRestore();
+    });
+
+    it('should call onSuccess callback on successful {{camelCase action}}', async () => {
+      const onSuccess = vi.fn();
+      const { result } = renderHook(() => use{{name}}({ autoFetch: false, onSuccess }));
+
+      await act(async () => {
+        await result.current.{{camelCase action}}();
+      });
+
+      expect(onSuccess).toHaveBeenCalledWith({{mockValue || '"mock value"'}});
+    });
+
+    it('should call onError callback on failed {{camelCase action}}', async () => {
+      const onError = vi.fn();
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      
+      // Mock an error scenario
+      const originalPromise = global.Promise;
+      global.Promise = class extends originalPromise {
+        constructor(executor) {
+          super((resolve, reject) => {
+            executor(
+              () => reject(new Error('Test error')),
+              reject
+            );
+          });
+        }
+      } as any;
+
+      const { result } = renderHook(() => use{{name}}({ autoFetch: false, onError }));
+
+      await act(async () => {
+        await result.current.{{camelCase action}}();
+      });
+
+      expect(onError).toHaveBeenCalledWith(expect.any(Error));
+      
+      // Restore
+      global.Promise = originalPromise;
+      consoleSpy.mockRestore();
+    });
+
+    it('should reset state correctly', () => {
+      const initialValue = {{mockValue || '"initial value"'}};
+      const { result } = renderHook(() => use{{name}}({ initialValue, autoFetch: false }));
+
+      // Change state
+      act(() => {
+        result.current.set{{name}}({{altMockValue || '"changed value"'}});
+      });
+
+      expect(result.current.{{camelCase name}}).toBe({{altMockValue || '"changed value"'}});
+
+      // Reset
+      act(() => {
+        result.current.reset();
+      });
+
+      expect(result.current.{{camelCase name}}).toBe(initialValue);
+      expect(result.current.error).toBeNull();
+      expect(result.current.loading).toBe(false);
+    });
+
+    it('should set value correctly', () => {
+      const { result } = renderHook(() => use{{name}}({ autoFetch: false }));
+
+      const newValue = {{altMockValue || '"new value"'}};
+      act(() => {
+        result.current.set{{name}}(newValue);
+      });
+
+      expect(result.current.{{camelCase name}}).toBe(newValue);
+    });
+  });
+
+  describe('Auto-fetch behavior', () => {
+    it('should auto-fetch on mount when autoFetch is true', async () => {
+      const { result } = renderHook(() => use{{name}}({ autoFetch: true }));
+
+      // Wait for async operation to complete
+      await act(async () => {
+        await new Promise(resolve => setTimeout(resolve, 1100));
+      });
+
+      expect(result.current.{{camelCase name}}).toBe({{mockValue || '"mock value"'}});
+    });
+
+    it('should not auto-fetch when autoFetch is false', () => {
+      const { result } = renderHook(() => use{{name}}({ autoFetch: false }));
+
+      expect(result.current.{{camelCase name}}).toBeNull();
+      expect(result.current.loading).toBe(false);
+    });
+  });
+
+  describe('Edge Cases', () => {
+    it('should handle rapid successive calls', async () => {
+      const { result } = renderHook(() => use{{name}}({ autoFetch: false }));
+
+      await act(async () => {
+        // Make multiple rapid calls
+        const promises = [
+          result.current.{{camelCase action}}(),
+          result.current.{{camelCase action}}(),
+          result.current.{{camelCase action}}(),
+        ];
+        
+        await Promise.all(promises);
+      });
+
+      expect(result.current.{{camelCase name}}).toBe({{mockValue || '"mock value"'}});
+      expect(result.current.loading).toBe(false);
+    });
+
+    it('should handle component unmount gracefully', () => {
+      const { result, unmount } = renderHook(() => use{{name}}({ autoFetch: false }));
+
+      expect(() => {
+        unmount();
+      }).not.toThrow();
+    });
+
+    it('should handle null/undefined values', () => {
+      const { result } = renderHook(() => use{{name}}({ autoFetch: false }));
+
+      act(() => {
+        result.current.set{{name}}(null);
+      });
+
+      expect(result.current.{{camelCase name}}).toBeNull();
+    });
+  });
+
+  describe('Type Safety', () => {
+    it('should maintain type safety with TypeScript', () => {
+      const { result } = renderHook(() => use{{name}}({ autoFetch: false }));
+
+      // These assertions help ensure TypeScript types are working correctly
+      expect(typeof result.current.{{camelCase action}}).toBe('function');
+      expect(typeof result.current.reset).toBe('function');
+      expect(typeof result.current.set{{name}}).toBe('function');
+      expect(typeof result.current.loading).toBe('boolean');
+    });
+  });
+
+  describe('Performance', () => {
+    it('should not cause unnecessary re-renders', () => {
+      let renderCount = 0;
+      
+      const { result, rerender } = renderHook(() => {
+        renderCount++;
+        return use{{name}}({ autoFetch: false });
+      });
+
+      const initialRenderCount = renderCount;
+      
+      // These actions shouldn't cause re-renders
+      const {{camelCase action}}Fn = result.current.{{camelCase action}};
+      const resetFn = result.current.reset;
+      const set{{name}}Fn = result.current.set{{name}};
+      
+      rerender();
+      
+      expect(result.current.{{camelCase action}}).toBe({{camelCase action}}Fn);
+      expect(result.current.reset).toBe(resetFn);
+      expect(result.current.set{{name}}).toBe(set{{name}}Fn);
+    });
+  });
+
+  describe('Custom Options', () => {
+    it('should work with all custom options', async () => {
+      const initialValue = {{mockValue || '"custom initial"'}};
+      const onSuccess = vi.fn();
+      const onError = vi.fn();
+
+      const { result } = renderHook(() => use{{name}}({
+        initialValue,
+        autoFetch: false,
+        onSuccess,
+        onError,
+      }));
+
+      expect(result.current.{{camelCase name}}).toBe(initialValue);
+
+      await act(async () => {
+        await result.current.{{camelCase action}}();
+      });
+
+      expect(onSuccess).toHaveBeenCalled();
+      expect(onError).not.toHaveBeenCalled();
+    });
+  });
+});
