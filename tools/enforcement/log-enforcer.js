@@ -10,6 +10,7 @@ const path = require('path');
 const LogEnforcer = require('./log-enforcer/index');
 const PythonLogFixer = require('./log-enforcer/python_fixer');
 const JavaScriptLogFixer = require('./log-enforcer/javascript_fixer');
+const AdvancedJavaScriptLogFixer = require('./log-enforcer/advanced_javascript_fixer');
 
 class LogEnforcementSystem {
   constructor() {
