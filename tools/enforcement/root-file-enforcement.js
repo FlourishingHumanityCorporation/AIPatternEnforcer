@@ -69,6 +69,7 @@ const ROOT_FILE_ALLOWLIST = {
     'svelte.config.js',
     '.enforcement-config.json',
     '.enforcement-metrics.json',
+    '.log-enforcer.json',
     
     // CI/CD
     'Dockerfile',
@@ -111,6 +112,8 @@ const ROOT_FILE_ALLOWLIST = {
     '.ai-context',   // AI context management
     '.claude',       // Claude configuration
     '.context-cache', // Context caching
+    '.config-enforcer-cache', // Config enforcer cache
+    '.config-enforcer-backups', // Config enforcer backups
     'src',
     'docs',
     'tests',

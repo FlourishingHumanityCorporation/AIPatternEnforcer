@@ -82,11 +82,15 @@
     "check:banned-docs:quiet": "node tools/enforcement/banned-document-types.js --quiet",
     "check:logs": "node tools/enforcement/log-enforcer.js check",
     "check:logs:status": "node tools/enforcement/log-enforcer.js status",
-    "check:all": "npm run check:no-improved-files && npm run check:imports && npm run check:documentation-style && npm run check:root && npm run check:banned-docs && npm run check:logs && npm run validate:docs && npm run docs:check",
+    "check:config": "node tools/enforcement/config-enforcer.js check",
+    "check:config:quiet": "node tools/enforcement/config-enforcer.js check --quiet",
+    "check:all": "npm run check:no-improved-files && npm run check:imports && npm run check:documentation-style && npm run check:root && npm run check:banned-docs && npm run check:logs && npm run check:config && npm run validate:docs && npm run docs:check",
     "fix:docs": "node tools/enforcement/fix-docs.js",
     "fix:docs:dry-run": "node tools/enforcement/fix-docs.js --dry-run",
     "fix:logs": "node tools/enforcement/log-enforcer.js fix",
     "fix:logs:dry-run": "node tools/enforcement/log-enforcer.js fix --dry-run",
+    "fix:config": "node tools/enforcement/config-enforcer.js fix",
+    "fix:config:dry-run": "node tools/enforcement/config-enforcer.js fix --dry-run",
     "enforcement:config": "node tools/enforcement/enforcement-config.js",
     "enforcement:status": "node tools/enforcement/enforcement-config.js status",
     "enforcement:metrics": "node tools/enforcement/enforcement-config.js metrics",
@@ -183,7 +187,6 @@
   "dependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "vite": "^6.0.0",
-    "@vitejs/plugin-react": "^4.0.0"
+    "vite": "^6.0.0"
   }
 }

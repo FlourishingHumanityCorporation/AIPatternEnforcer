@@ -1,5 +1,7 @@
 {
-  "extends": ["eslint:recommended"],
+  "extends": [
+    "eslint:recommended"
+  ],
   "env": {
     "node": true,
     "es2021": true,
@@ -18,13 +20,23 @@
   },
   "overrides": [
     {
-      "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@typescript-eslint/recommended"],
+      "files": [
+        "*.ts",
+        "*.tsx"
+      ],
+      "extends": [
+        "plugin:@typescript-eslint/recommended"
+      ],
       "parser": "@typescript-eslint/parser",
-      "plugins": ["@typescript-eslint"]
+      "plugins": [
+        "@typescript-eslint"
+      ]
     },
     {
-      "files": ["tools/**/*.js", "scripts/**/*.js"],
+      "files": [
+        "tools/**/*.js",
+        "scripts/**/*.js"
+      ],
       "rules": {
         "no-console": "off"
       }
