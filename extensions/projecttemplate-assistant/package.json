@@ -30,7 +30,9 @@
     "onLanguage:markdown",
     "onCommand:projecttemplate.loadContext",
     "onCommand:projecttemplate.refreshContext",
-    "onCommand:projecttemplate.showDashboard"
+    "onCommand:projecttemplate.showDashboard",
+    "onCommand:projecttemplate.validateClaude",
+    "onCommand:projecttemplate.validateClaudeFromClipboard"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -53,6 +55,21 @@
       {
         "command": "projecttemplate.checkNaming",
         "title": "Check File Naming",
+        "category": "ProjectTemplate"
+      },
+      {
+        "command": "projecttemplate.validateClaude",
+        "title": "Validate Claude Response",
+        "category": "ProjectTemplate"
+      },
+      {
+        "command": "projecttemplate.validateClaudeFromClipboard",
+        "title": "Validate Claude Response from Clipboard",
+        "category": "ProjectTemplate"
+      },
+      {
+        "command": "projecttemplate.claudeConfig",
+        "title": "Open Claude Validation Config",
         "category": "ProjectTemplate"
       }
     ],
@@ -87,6 +104,22 @@
           "type": "boolean",
           "default": true,
           "description": "Show warnings for files that violate naming rules"
+        },
+        "projecttemplate.enableClaudeValidation": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Claude validation integration"
+        },
+        "projecttemplate.claudeValidationAutoRun": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically validate when text is copied to clipboard"
+        },
+        "projecttemplate.claudeValidationSeverity": {
+          "type": "string",
+          "default": "WARNING",
+          "enum": ["CRITICAL", "WARNING", "INFO", "DISABLED"],
+          "description": "Minimum severity level for Claude validation"
         }
       }
     },
@@ -101,6 +134,12 @@
         "command": "projecttemplate.refreshContext",
         "key": "ctrl+shift+r",
         "mac": "cmd+shift+r",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "projecttemplate.validateClaudeFromClipboard",
+        "key": "ctrl+shift+v",
+        "mac": "cmd+shift+v",
         "when": "editorTextFocus"
       }
     ]

@@ -28,7 +28,8 @@ Read this ENTIRE file before making ANY changes to the codebase.
   9. [By Development Phase](#by-development-phase)
   10. [Common Scenarios](#common-scenarios)
 11. [🛑 CRITICAL RULES](#-critical-rules)
-  12. [NEVER DO THESE (WILL BREAK THE PROJECT): ☐ Must all remain unchecked before commit](#never-do-these-will-break-the-project-must-all-remain-unchecked-before-commit)
+12. [NEVER DO THESE (WILL BREAK THE PROJECT): ☐ Must all remain unchecked before
+commit](#never-do-these-will-break-the-project-must-all-remain-unchecked-before-commit)
   13. [ALWAYS DO THESE: ☐ All boxes must be ticked](#always-do-these-all-boxes-must-be-ticked)
   14. [📁 ROOT DIRECTORY ALLOWLIST](#-root-directory-allowlist)
     15. [Allowed Root Files:](#allowed-root-files)
@@ -41,7 +42,8 @@ Read this ENTIRE file before making ANY changes to the codebase.
   22. [Port Allocation:](#port-allocation)
   23. [Database Architecture:](#database-architecture)
   24. [Database Configuration:](#database-configuration)
-  25. [Technical Stack Decision Resources (Local Development Optimized):](#technical-stack-decision-resources-local-development-optimized)
+25. [Technical Stack Decision Resources (Local Development
+Optimized):](#technical-stack-decision-resources-local-development-optimized)
   26. [Development Documentation (New):](#development-documentation-new)
   27. [⚖️ ARCHITECTURAL DECISION FRAMEWORK](#-architectural-decision-framework)
 28. [🎨 FRONTEND DEVELOPMENT RULES](#-frontend-development-rules)

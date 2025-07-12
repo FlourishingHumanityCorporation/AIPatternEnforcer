@@ -65,7 +65,8 @@
 ### Common Transition Challenges
 
 **Challenge**: "Too many options, don't know where to start"
-**Solution**: Follow the Intermediate Path step-by-step in [USER-JOURNEY.md](../../USER-JOURNEY.md#-intermediate-path-ai-workflow-optimizer)
+**Solution**: Follow the Intermediate Path step-by-step in
+[USER-JOURNEY.md](../../USER-JOURNEY.md#-intermediate-path-ai-workflow-optimizer)
 
 **Challenge**: "AI setup feels complex"
 **Solution**: Use verification: `npm run setup:verify-ai` to confirm each step
@@ -211,4 +212,5 @@
 
 ---
 
-**Remember**: Skill transitions are not linear. You might be Expert in one area and Beginner in another. Use the level that matches your current context and needs.
+**Remember**: Skill transitions are not linear. You might be Expert in one area and Beginner in another. Use the level
+that matches your current context and needs.

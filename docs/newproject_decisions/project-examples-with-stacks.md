@@ -674,7 +674,8 @@ Before choosing a stack, consider:
 
 ## 🎯 Summary
 
-The optimal technology stack depends on your specific requirements, but these examples provide proven patterns for common
+The optimal technology stack depends on your specific requirements, but these examples provide proven patterns for
+common
 project types. Use the decision wizard (`npm run choose-stack`) for personalized recommendations based on your specific
 needs.
 

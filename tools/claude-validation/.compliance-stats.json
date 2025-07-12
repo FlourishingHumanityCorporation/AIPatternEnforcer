@@ -1,7 +1,6 @@
 {
   "totalValidations": 1,
   "violations": {
-    "promptImprovement": 1,
     "noImprovedFiles": 1
   },
   "passedValidations": 0

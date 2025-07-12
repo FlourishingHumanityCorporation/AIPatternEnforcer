@@ -2,7 +2,8 @@
 
 **Stop writing boilerplate. Start building features.**
 
-Generate complete components, APIs, and features with comprehensive tests in seconds. Built for developers using AI tools like Cursor, Claude, and Copilot.
+Generate complete components, APIs, and features with comprehensive tests in seconds. Built for developers using AI
+tools like Cursor, Claude, and Copilot.
 
 ```bash
 npm run g:c UserProfile    # Complete React component with tests + stories
@@ -12,7 +13,8 @@ npm run g:feature auth     # Feature module with hooks + state management
 # Each saves 15-45 minutes of manual coding
 ```
 
-> **🚀 Get productive in 2 minutes:** [QUICK-START.md](QUICK-START.md) | **🎮 Try generators:** `npm run demo:generators`
+> **🚀 Get productive in 2 minutes:** [QUICK-START.md](QUICK-START.md) | **🎮 Try generators:** `npm run
+demo:generators`
 
 ## Table of Contents
 
@@ -41,7 +43,8 @@ npm run g:c MyButton
 # ✅ You now have a complete component with tests!
 ```
 
-**Generate production-ready code in seconds. Each generator creates comprehensive files with tests, documentation, and best practices built-in.**
+**Generate production-ready code in seconds. Each generator creates comprehensive files with tests, documentation, and
+optimal practices built-in.**
 
 ### 🎨 Component Generator
 ```bash
@@ -105,7 +108,7 @@ npm run demo:generators
 - 📊 Productivity impact analysis (save 4-8 hours per week!)
 - 🎯 Live demo mode (optional file creation)
 
-Perfect for understanding how generators boost your productivity before adding them to your project.
+Complete for understanding how generators boost your productivity before adding them to your project.
 
 ## 📦 What's Included
 
@@ -367,7 +370,7 @@ The context loader intelligently combines:
 
 - **[Stack Selection Guide](docs/newproject_decisions/)** - Choose with confidence
 - **[API Design Standards](docs/architecture/patterns/api-design-standards.md)** - Build better APIs
-- **[Security Optimal Practices](docs/guides/security/security-best-practices.md)** - Secure by default
+- **[Security Optimal Practices](docs/guides/security/security-optimal-practices.md)** - Secure by default
 
 ### Using the Tools
 

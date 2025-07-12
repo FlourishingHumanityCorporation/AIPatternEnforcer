@@ -129,7 +129,7 @@ export class ContextManager {
 
     // Extract critical rules section
     const criticalMatch = content.match(
-      /## [🛑🚨]*\s*CRITICAL RULES[\s\S]*?(?=\n##|$)/i,
+      /## [🛑🚨]*\s*CRITICAL RULES[\s\S]*?(?=\n##|$)/iu,
     );
     if (criticalMatch) {
       sections.push(criticalMatch[0]);
@@ -137,7 +137,7 @@ export class ContextManager {
 
     // Extract quick reference
     const quickRefMatch = content.match(
-      /## [🎯]*\s*QUICK REFERENCE[\s\S]*?(?=\n##|$)/i,
+      /## [🎯]*\s*QUICK REFERENCE[\s\S]*?(?=\n##|$)/iu,
     );
     if (quickRefMatch) {
       sections.push(quickRefMatch[0]);
@@ -458,7 +458,7 @@ export class ContextManager {
     this.context.workspaceState.update("recentFiles", this.recentFiles);
 
     // Clear relevant cache entries
-    for (const [key, _] of this.contextCache) {
+    for (const [key] of this.contextCache) {
       if (key.includes(filePath)) {
         this.contextCache.delete(key);
       }

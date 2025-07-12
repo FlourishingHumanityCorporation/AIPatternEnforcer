@@ -4,6 +4,7 @@ const readline = require("readline");
 const chalk = require("chalk");
 const fs = require("fs");
 const path = require("path");
+const { execSync } = require("child_process");
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -309,7 +310,7 @@ class StackDecisionWizard {
     }
   }
 
-  displayRecommendation() {
+  async displayRecommendation() {
     console.log(chalk.green.bold("\n🎯 RECOMMENDED STACK\n"));
     console.log(chalk.blue.bold(`Project Type: ${this.recommendation.name}`));
     console.log(chalk.yellow(`Backend:    ${this.recommendation.backend}`));
@@ -324,6 +325,16 @@ class StackDecisionWizard {
 
     console.log(chalk.blue.bold("\n🔗 HELPFUL RESOURCES\n"));
     this.displayHelpfulResources();
+
+    // Ask if they want to set up the template
+    const setupChoice = await this.askChoice(
+      "\nWould you like to set up this template now?",
+      ["Yes, set it up", "No, just show recommendations"]
+    );
+
+    if (setupChoice.includes("Yes")) {
+      await this.setupTemplate();
+    }
   }
 
   displayQuickStartSteps() {
@@ -428,6 +439,36 @@ class StackDecisionWizard {
       console.log(chalk.green(`✅ Decision saved to ${decisionPath}`));
     } catch (error) {
       console.log(chalk.red(`❌ Could not save decision: ${error.message}`));
+    }
+  }
+
+  async setupTemplate() {
+    console.log(chalk.blue.bold("\n🚀 Setting up your template...\n"));
+
+    // Determine which template to use based on recommendation
+    let framework = 'react'; // default
+    
+    if (this.recommendation.frontend.includes('Next.js')) {
+      framework = 'nextjs';
+    } else if (this.recommendation.backend.includes('Express') && !this.recommendation.frontend.includes('React')) {
+      framework = 'express';
+    }
+
+    try {
+      // Run the template customizer
+      console.log(chalk.gray(`Running template customization for ${framework}...`));
+      execSync(`node ${path.join(__dirname, 'template-customizer.js')} --framework ${framework}`, {
+        stdio: 'inherit'
+      });
+
+      console.log(chalk.green.bold("\n✅ Template setup complete!\n"));
+      console.log(chalk.white("Next steps:"));
+      console.log(chalk.gray("  npm install"));
+      console.log(chalk.gray("  npm run dev"));
+    } catch (error) {
+      console.error(chalk.red("\n❌ Error setting up template:"), error.message);
+      console.log(chalk.yellow("\nYou can manually run:"));
+      console.log(chalk.gray(`  npm run template:${framework}`));
     }
   }
 }

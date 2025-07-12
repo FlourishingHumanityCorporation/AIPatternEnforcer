@@ -49,7 +49,7 @@ Quality assurance guides:
 
 Security implementation guides:
 
-- **[Security Optimal Practices](security/security-best-practices.md)** - Authentication, authorization, and more
+- **[Security Optimal Practices](security/security-optimal-practices.md)** - Authentication, authorization, and more
 
 ### ⚡ Performance
 
@@ -71,7 +71,7 @@ Development workflow guides:
 
 - **Setting up a new project** → [Project Setup](onboarding/project-setup.md)
 - **Writing tests** → [Comprehensive Testing Guide](testing/comprehensive-testing-guide.md)
-- **Implementing auth** → [Security Optimal Practices](security/security-best-practices.md)
+- **Implementing auth** → [Security Optimal Practices](security/security-optimal-practices.md)
 - **Optimizing performance** → [Performance Optimization](performance/optimization-playbook.md)
 - **Using AI tools** → [AI Development guides](ai-development/)
 

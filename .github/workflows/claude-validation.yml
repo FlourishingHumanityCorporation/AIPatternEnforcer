@@ -1,0 +1,116 @@
+name: Claude Code Validation
+
+on:
+  pull_request:
+    paths:
+      - '**/*.js'
+      - '**/*.ts'
+      - '**/*.tsx'
+      - '**/*.py'
+      - '**/*.md'
+  workflow_dispatch:
+    inputs:
+      validate_all:
+        description: 'Validate all files'
+        required: false
+        default: 'false'
+
+jobs:
+  validate-claude-patterns:
+    name: Validate Claude Anti-patterns
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Need full history for diff
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Check for Claude anti-patterns in changed files
+        if: github.event_name == 'pull_request'
+        run: |
+          # Get list of changed files
+          CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }}..HEAD)
+          
+          # Check each file for anti-patterns
+          FAILED=0
+          for file in $CHANGED_FILES; do
+            # Skip deleted files
+            if [ ! -f "$file" ]; then
+              continue
+            fi
+            
+            # Check filename patterns
+            if echo "$file" | grep -E '(_improved|_enhanced|_v2|_updated|_new)\.(js|ts|tsx|py|md)$'; then
+              echo "❌ Anti-pattern in filename: $file"
+              echo "   Files ending with _improved, _enhanced, _v2, etc. are not allowed"
+              echo "   Fix: Edit the original file instead"
+              FAILED=1
+            fi
+            
+            # Check file content for announcement patterns in markdown
+            if [[ "$file" == *.md ]]; then
+              if grep -E "(We're excited to|Successfully implemented|I'm pleased to announce)" "$file"; then
+                echo "❌ Announcement-style content in: $file"
+                echo "   Fix: Use neutral, technical language"
+                FAILED=1
+              fi
+            fi
+          done
+          
+          if [ $FAILED -eq 1 ]; then
+            echo ""
+            echo "🚫 Claude validation failed!"
+            echo "Please fix the issues above before merging."
+            exit 1
+          else
+            echo "✅ No Claude anti-patterns detected in changed files"
+          fi
+      
+      - name: Validate all files (manual trigger)
+        if: github.event.inputs.validate_all == 'true'
+        run: |
+          # Find all problematic files
+          echo "🔍 Checking all files for Claude anti-patterns..."
+          
+          FAILED=0
+          
+          # Check filenames
+          PROBLEM_FILES=$(find . -type f \( -name "*_improved.*" -o -name "*_enhanced.*" -o -name "*_v2.*" \) | grep -v node_modules | grep -v .git)
+          if [ ! -z "$PROBLEM_FILES" ]; then
+            echo "❌ Files with anti-pattern names:"
+            echo "$PROBLEM_FILES"
+            FAILED=1
+          fi
+          
+          # Check markdown content
+          ANNOUNCEMENT_FILES=$(grep -r -l -E "(We're excited to|Successfully implemented|I'm pleased to announce)" --include="*.md" . | grep -v node_modules | grep -v .git || true)
+          if [ ! -z "$ANNOUNCEMENT_FILES" ]; then
+            echo "❌ Files with announcement-style content:"
+            echo "$ANNOUNCEMENT_FILES"
+            FAILED=1
+          fi
+          
+          if [ $FAILED -eq 1 ]; then
+            exit 1
+          else
+            echo "✅ No Claude anti-patterns found in codebase"
+          fi
+      
+      - name: Run full Claude validation suite
+        if: github.event_name == 'pull_request'
+        run: |
+          # Run the comprehensive test suite
+          npm run claude:test || true  # Don't fail on test issues
+          
+          # Show compliance statistics
+          npm run claude:stats

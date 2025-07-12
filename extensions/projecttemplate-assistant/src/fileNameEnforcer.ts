@@ -1,5 +1,5 @@
 import * as path from "path";
-const glob = require("glob");
+import * as glob from "glob";
 
 export interface FileViolation {
   file: string;

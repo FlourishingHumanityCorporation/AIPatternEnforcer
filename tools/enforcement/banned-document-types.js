@@ -69,9 +69,14 @@ const SKIP_DIRS = [
   '.turbo'
 ];
 
-function isBannedFilename(filename) {
+function isBannedFilename(filename, fullPath = '') {
   const basename = path.basename(filename);
   const upperBase = basename.toUpperCase();
+  
+  // Allow legitimate reports in docs/reports/ directory
+  if (fullPath.includes('docs/reports/') && upperBase.endsWith('REPORT.MD')) {
+    return { banned: false };
+  }
   
   // Check exact endings
   for (const ending of BANNED_PATTERNS.endings) {
@@ -137,7 +142,7 @@ function findBannedDocuments(dir = '.', violations = []) {
         }
       } else if (item.endsWith('.md')) {
         // Check filename
-        const filenameCheck = isBannedFilename(item);
+        const filenameCheck = isBannedFilename(item, fullPath);
         if (filenameCheck.banned) {
           violations.push({
             file: fullPath,

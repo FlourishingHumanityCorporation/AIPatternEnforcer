@@ -245,7 +245,7 @@ GET /api/users/john-doe
 ### Supporting Documentation
 
 - **[Data Modeling Guide](data-modeling-guide.md)** - Database schema patterns for APIs
-- **[Security Optimal Practices](../../guides/security/security-best-practices.md)** - API authentication and authorization
+- **[Security Optimal Practices](../../guides/security/security-optimal-practices.md)** - API authentication and authorization
 - **[Error Handling Patterns](error-handling.md)** - Consistent error responses
 - **[Performance Optimization](../../guides/performance/optimization-playbook.md)** - API performance tuning
 - **[Testing Guide](../../guides/testing/comprehensive-testing-guide.md)** - API testing patterns
@@ -259,5 +259,5 @@ GET /api/users/john-doe
 ### Project Examples
 
 - **[API Implementation Examples](../../guides/testing/comprehensive-testing-guide.md)** - Testing patterns
-- **[Authentication Patterns](../../guides/security/security-best-practices.md)** - Auth implementation
+- **[Authentication Patterns](../../guides/security/security-optimal-practices.md)** - Auth implementation
 - **[Testing Examples](../../guides/testing/comprehensive-testing-guide.md)** - Complete testing guide

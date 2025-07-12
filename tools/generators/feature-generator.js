@@ -187,7 +187,7 @@ export function {{pascalCase name}}Provider({ children }: { children: ReactNode 
   const [state, dispatch] = useReducer({{camelCase name}}Reducer, initialState);
 
   return (
-    <{{pascalCase name}}Context.Provider value={{ state, dispatch }}>
+    <{{pascalCase name}}Context.Provider value={{"{{"}} state, dispatch }}>
       {children}
     </{{pascalCase name}}Context.Provider>
   );

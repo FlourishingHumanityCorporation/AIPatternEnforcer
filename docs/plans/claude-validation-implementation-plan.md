@@ -15,11 +15,15 @@
 11. [Phase 4: Production Deployment (Days 19-21)](#phase-4-production-deployment-days-19-21)
   12. [Production Readiness](#production-readiness)
 13. [Pre-Mortem Analysis](#pre-mortem-analysis)
-  14. [Failure Mode 1: Tool Performance Degrades Development Speed](#failure-mode-1-tool-performance-degrades-development-speed)
-  15. [Failure Mode 2: High False Positive Rate Causes Tool Abandonment](#failure-mode-2-high-false-positive-rate-causes-tool-abandonment)
-  16. [Failure Mode 3: Claude Code Behavior Evolution Breaks Patterns](#failure-mode-3-claude-code-behavior-evolution-breaks-patterns)
-  17. [Failure Mode 4: Integration Conflicts with Existing Tools](#failure-mode-4-integration-conflicts-with-existing-tools)
-  18. [Failure Mode 5: Maintenance Burden Becomes Unsustainable](#failure-mode-5-maintenance-burden-becomes-unsustainable)
+14. [Failure Mode 1: Tool Performance Degrades Development
+Speed](#failure-mode-1-tool-performance-degrades-development-speed)
+15. [Failure Mode 2: High False Positive Rate Causes Tool
+Abandonment](#failure-mode-2-high-false-positive-rate-causes-tool-abandonment)
+16. [Failure Mode 3: Claude Code Behavior Evolution Breaks
+Patterns](#failure-mode-3-claude-code-behavior-evolution-breaks-patterns)
+17. [Failure Mode 4: Integration Conflicts with Existing
+Tools](#failure-mode-4-integration-conflicts-with-existing-tools)
+18. [Failure Mode 5: Maintenance Burden Becomes Unsustainable](#failure-mode-5-maintenance-burden-becomes-unsustainable)
   19. [Failure Mode 6: Team Adoption Resistance](#failure-mode-6-team-adoption-resistance)
 20. [Success Metrics and Validation Checkpoints](#success-metrics-and-validation-checkpoints)
   21. [Phase 1 Success Criteria](#phase-1-success-criteria)

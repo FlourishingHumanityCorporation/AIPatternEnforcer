@@ -345,5 +345,6 @@ Track documentation effectiveness:
 
 ---
 
-Remember: The optimal documentation is the one that gets used. Keep it practical, keep it current, and keep it accessible.
+Remember: The optimal documentation is the one that gets used. Keep it practical, keep it current, and keep it
+accessible.
 ```

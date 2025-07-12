@@ -532,7 +532,8 @@ npm run dev
 # You're coding in < 2 minutes!
 ```
 
-Remember: The optimal local development stack is the one that gets out of your way and lets you build. Don't overthink it -
+Remember: The optimal local development stack is the one that gets out of your way and lets you build. Don't overthink
+it -
 pick something and start creating!
 
 ## See Also
@@ -548,7 +549,7 @@ pick something and start creating!
 - [API Design Standards](../architecture/patterns/api-design-standards.md) - RESTful API patterns
 - [Data Modeling Guide](../architecture/patterns/data-modeling-guide.md) - Database schema design
 - [Testing Guide](../guides/testing/comprehensive-testing-guide.md) - Test-first development
-- [Security Optimal Practices](../guides/security/security-best-practices.md) - Authentication patterns
+- [Security Optimal Practices](../guides/security/security-optimal-practices.md) - Authentication patterns
 
 ### Related Topics
 - [AI Integration Patterns](ai-integration-patterns.md) - Using AI in local development

@@ -37,7 +37,7 @@ Essential guides for daily development:
 - **[Comprehensive Testing Guide](guides/testing/comprehensive-testing-guide.md)** - Test-first development patterns
 - **[API Design Standards](architecture/patterns/api-design-standards.md)** - RESTful API optimal practices
 - **[Data Modeling Guide](architecture/patterns/data-modeling-guide.md)** - Database schema design
-- **[Security Optimal Practices](guides/security/security-best-practices.md)** - Authentication and authorization
+- **[Security Optimal Practices](guides/security/security-optimal-practices.md)** - Authentication and authorization
 - **[Performance Optimization](guides/performance/optimization-playbook.md)** - Frontend and backend optimization
 - **[Debugging Workflows](../CLAUDE.md#arrow-chain-root-cause-analysis)** - Systematic debugging methodology
 

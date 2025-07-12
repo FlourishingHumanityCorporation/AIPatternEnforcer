@@ -67,7 +67,7 @@ function validateFilePath(filePath) {
     'README.md', 'LICENSE', 'CLAUDE.md', 'CONTRIBUTING.md', 'SETUP.md', 'FRICTION-MAPPING.md',
     'QUICK-START.md', 'USER-JOURNEY.md', 'FULL-GUIDE.md', 'DOCS_INDEX.md', // Progressive documentation
     'package.json', 'package-lock.json', 'requirements.txt', 'go.mod', 'cargo.toml',
-    'tsconfig.json', 'vite.config.js', 'webpack.config.js', '.eslintrc.json', '.prettierrc',
+    'tsconfig.json', 'vite.config.js', 'webpack.config.js', '.eslintrc.json', '.eslintrc.js', '.eslintignore', '.prettierrc',
     '.env.example', 'Dockerfile', 'docker-compose.yml'
   ];
 

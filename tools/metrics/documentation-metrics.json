@@ -1,0 +1,181 @@
+{
+  "timestamp": "2025-07-12T05:13:03.054Z",
+  "version": "1.0.0",
+  "project": {
+    "name": "project-template",
+    "lastCommit": "f108c1a",
+    "branch": "feature/integration-enhancement-initiative"
+  },
+  "coverage": {
+    "overall": {
+      "total": 260,
+      "documented": 67,
+      "undocumented": 75,
+      "percentage": 26
+    },
+    "byType": {
+      "components": {
+        "pattern": {},
+        "total": 9,
+        "documented": 0,
+        "percentage": 0
+      },
+      "api": {
+        "pattern": {},
+        "total": 0,
+        "documented": 0,
+        "percentage": 0
+      },
+      "tools": {
+        "pattern": {},
+        "total": 28,
+        "documented": 1,
+        "percentage": 4
+      },
+      "scripts": {
+        "pattern": {},
+        "total": 14,
+        "documented": 0,
+        "percentage": 0
+      },
+      "configs": {
+        "pattern": {},
+        "total": 4,
+        "documented": 1,
+        "percentage": 25
+      },
+      "other": {
+        "pattern": {},
+        "total": 111,
+        "documented": 65,
+        "percentage": 59
+      }
+    },
+    "byPriority": {
+      "critical": {
+        "total": 0,
+        "documented": 0,
+        "percentage": 0
+      },
+      "high": {
+        "total": 5,
+        "documented": 0,
+        "percentage": 0
+      },
+      "medium": {
+        "total": 34,
+        "documented": 0,
+        "percentage": 0
+      },
+      "low": {
+        "total": 36,
+        "documented": 0,
+        "percentage": 0
+      }
+    },
+    "targets": {
+      "minimum": 80,
+      "target": 90,
+      "excellent": 95
+    },
+    "status": "poor"
+  },
+  "debt": {
+    "total": 75,
+    "byPriority": {
+      "critical": 0,
+      "high": 5,
+      "medium": 34,
+      "low": 36
+    },
+    "newFiles": 0,
+    "modifiedFiles": 75,
+    "estimatedHours": 31,
+    "trends": {
+      "weekly": 0,
+      "monthly": 0,
+      "direction": "stable"
+    },
+    "changeAnalysis": {
+      "significantChanges": 209,
+      "breakingChanges": 8,
+      "requiresImmediate": 217
+    }
+  },
+  "quality": {
+    "standards": {
+      "hasTemplates": true,
+      "hasStyleGuide": true,
+      "hasEnforcement": true,
+      "score": 100
+    },
+    "consistency": {
+      "fileNaming": false,
+      "structureConsistency": true,
+      "score": 50
+    },
+    "completeness": {
+      "hasExamples": true,
+      "hasAPIDoc": false,
+      "hasSetupGuides": true,
+      "score": 67
+    },
+    "overall": 72
+  },
+  "trends": {
+    "available": true,
+    "coverage": {
+      "trend": "improving",
+      "change": 18,
+      "current": 13,
+      "previous": 11,
+      "values": [
+        11,
+        13
+      ]
+    },
+    "debt": {
+      "trend": "improving",
+      "change": 64,
+      "current": 23,
+      "previous": 14,
+      "values": [
+        14,
+        23
+      ]
+    },
+    "quality": {
+      "trend": "stable",
+      "change": 0,
+      "current": 72,
+      "previous": 72,
+      "values": [
+        72,
+        72
+      ]
+    },
+    "period": {
+      "from": "2025-07-12T01:28:44.880Z",
+      "to": "2025-07-12T05:07:15.786Z",
+      "entries": 2
+    }
+  },
+  "recommendations": [
+    {
+      "type": "coverage_critical",
+      "priority": "critical",
+      "title": "Documentation coverage below minimum threshold",
+      "description": "Current coverage: 26%, minimum: 80%",
+      "action": "Immediate documentation effort required",
+      "impact": "high"
+    },
+    {
+      "type": "effort_planning",
+      "priority": "medium",
+      "title": "Significant documentation effort required",
+      "description": "Estimated 31 hours of documentation work",
+      "action": "Plan dedicated documentation sprint",
+      "impact": "medium"
+    }
+  ]
+}

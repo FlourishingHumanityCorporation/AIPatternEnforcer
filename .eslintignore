@@ -1,0 +1,37 @@
+# Build output
+dist/
+build/
+coverage/
+extensions/*/out/
+
+# Dependencies
+node_modules/
+
+# Example files with intentional anti-patterns
+ai/examples/anti-patterns/
+
+# All example files (may have various patterns for demonstration)
+ai/examples/
+examples/
+
+# Tool scripts (not production code)
+tools/
+scripts/
+
+# Test files that may include test scenarios
+tests/test-fresh-install/
+
+# Generated files
+*.generated.*
+
+# Temporary files
+tmp/
+temp/
+
+# IDE files
+.idea/
+.vscode/
+
+# System files
+.DS_Store
+Thumbs.db

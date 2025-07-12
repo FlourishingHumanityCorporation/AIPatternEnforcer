@@ -1,0 +1,35 @@
+{
+  "sessionId": "1752297103",
+  "startTime": "2025-07-11T22:11:43-07:00",
+  "phases": {
+    "load": {
+      "completed": true,
+      "duration": "0s"
+    },
+    "explore": {
+      "completed": false,
+      "duration": null
+    },
+    "assess": {
+      "completed": false,
+      "duration": null
+    },
+    "reinforce": {
+      "completed": false,
+      "duration": null
+    },
+    "navigate": {
+      "completed": false,
+      "duration": null
+    }
+  },
+  "capabilities": {
+    "fileAccess": true,
+    "toolIntegration": false,
+    "patternRecognition": false,
+    "validationSystem": false,
+    "contextLoading": false
+  },
+  "level": 0,
+  "completionStatus": "in_progress"
+}

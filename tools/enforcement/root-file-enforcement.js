@@ -127,6 +127,7 @@ const ROOT_FILE_ALLOWLIST = {
     'ai',
     'dist',          // Build output
     'build',         // Build output
+    'coverage',      // Test coverage reports
     '.next',         // Next.js build
     'out',           // Static export
     'node_modules',  // Dependencies

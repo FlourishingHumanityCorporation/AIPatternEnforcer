@@ -1,5 +1,12 @@
 import * as vscode from "vscode";
 
+interface DashboardStats {
+  filesProcessed: number;
+  contextLoads: number;
+  violations: number;
+  recentFiles: number;
+}
+
 export class DashboardProvider {
   public static currentPanel: DashboardProvider | undefined;
   private readonly _panel: vscode.WebviewPanel;
@@ -43,7 +50,7 @@ export class DashboardProvider {
 
     // Update the content based on view changes
     this._panel.onDidChangeViewState(
-      (e) => {
+      () => {
         if (this._panel.visible) {
           this._update();
         }
@@ -90,12 +97,11 @@ export class DashboardProvider {
   }
 
   private async _update() {
-    const webview = this._panel.webview;
     this._panel.title = "ProjectTemplate Dashboard";
-    this._panel.webview.html = await this._getHtmlForWebview(webview);
+    this._panel.webview.html = await this._getHtmlForWebview();
   }
 
-  private async _getHtmlForWebview(webview: vscode.Webview) {
+  private async _getHtmlForWebview() {
     // Get configuration
     const config = vscode.workspace.getConfiguration("projecttemplate");
     const stats = await this._gatherStats();
@@ -364,7 +370,7 @@ export class DashboardProvider {
 </html>`;
   }
 
-  private async _gatherStats(): Promise<any> {
+  private async _gatherStats(): Promise<DashboardStats> {
     // Gather statistics (in a real implementation, these would come from actual tracking)
     const workspaceState = this.context?.workspaceState;
 

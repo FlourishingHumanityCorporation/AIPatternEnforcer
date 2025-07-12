@@ -1,5 +1,26 @@
 # Claude Validation Quick Reference
 
+## Table of Contents
+
+1. [Essential Commands](#essential-commands)
+2. [Validation Flags](#validation-flags)
+3. [Key Patterns](#key-patterns)
+  4. [✅ What Claude Should Do](#-what-claude-should-do)
+  5. [❌ What Claude Should Avoid](#-what-claude-should-avoid)
+6. [Severity Levels](#severity-levels)
+7. [Common Issues & Fixes](#common-issues-fixes)
+8. [Configuration Patterns](#configuration-patterns)
+  9. [Strict Mode (Production)](#strict-mode-production)
+  10. [Development Mode (Relaxed)](#development-mode-relaxed)
+  11. [Team Onboarding (Learning)](#team-onboarding-learning)
+12. [File Locations](#file-locations)
+13. [Integration Examples](#integration-examples)
+  14. [VS Code Task](#vs-code-task)
+  15. [Git Hook (Pre-commit)](#git-hook-pre-commit)
+  16. [CI/CD Pipeline](#cicd-pipeline)
+17. [Keyboard Shortcuts](#keyboard-shortcuts)
+18. [Help Commands](#help-commands)
+
 ## Essential Commands
 
 ```bash
@@ -34,7 +55,7 @@ npm run claude:stats
 ### ✅ What Claude Should Do
 
 **Complex Requests (promptImprovement + todoWriteUsage + generatorUsage):**
-```
+```text
 **Improved Prompt**: Create a login component with validation.
 
 I'll create a secure login component. Using TodoWrite to track progress:
@@ -46,27 +67,27 @@ Let me edit the original LoginForm.tsx file...
 ```
 
 **Simple Queries (conciseResponse):**
-```
+```text
 Use useState for local state:
 const [count, setCount] = useState(0);
 ```
 
 **File Editing (originalFileEditing):**
-```
+```text
 Let me edit the existing AuthService.ts file to add the new functionality...
 ```
 
 ### ❌ What Claude Should Avoid
 
 **Never create improved files:**
-```
+```text
 ❌ Let me create auth_improved.js
 ❌ I'll make a Component_v2.tsx
 ❌ Here's a better_login.tsx
 ```
 
 **Missing prompt improvement for complex tasks:**
-```
+```text
 ❌ I'll create a login component... (should start with **Improved Prompt**)
 ```
 

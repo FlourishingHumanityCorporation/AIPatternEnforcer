@@ -109,3 +109,7 @@ examples/*/node_modules/
 examples/*/.next/
 examples/*/dist/
 examples/*/build/
+# User analytics (local only)
+.user-id
+.user-metrics.json
+.user-feedback.json

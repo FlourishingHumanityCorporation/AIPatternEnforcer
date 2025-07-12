@@ -379,7 +379,8 @@ It is a widely reported issue that the longer a conversation goes, the more the 
 begin to forget earlier instructions, contradict itself, or "hallucinate" non-existent functions.13 This is a direct
 result of the context window becoming bloated and noisy.
 Solutions:
-Clear Context Often: A universally cited optimal practice is to clear the context frequently using /clear or /compact and
+Clear Context Often: A universally cited optimal practice is to clear the context frequently using /clear or /compact
+and
 start the next task in a fresh environment.13
 Rely on Persistent Memory: Use the workflows described in Sections 3 and 4. Instead of relying on the volatile chat
 history, reload necessary context from persistent files like CLAUDE.md or a plan.md into the new, clean session.

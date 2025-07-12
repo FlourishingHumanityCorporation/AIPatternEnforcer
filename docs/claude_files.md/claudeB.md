@@ -9,7 +9,8 @@ Read this ENTIRE file before making ANY changes to the codebase.
 
 1. [📋 TABLE OF CONTENTS](#-table-of-contents)
 2. [🛑 CRITICAL RULES](#-critical-rules)
-  3. [NEVER DO THESE (WILL BREAK THE PROJECT): ☐ Must all remain unchecked before commit](#never-do-these-will-break-the-project-must-all-remain-unchecked-before-commit)
+3. [NEVER DO THESE (WILL BREAK THE PROJECT): ☐ Must all remain unchecked before
+commit](#never-do-these-will-break-the-project-must-all-remain-unchecked-before-commit)
   4. [ALWAYS DO THESE: ☐ All boxes must be ticked](#always-do-these-all-boxes-must-be-ticked)
 5. [📁 PROJECT OVERVIEW](#-project-overview)
   6. [Core Features:](#core-features)
@@ -19,7 +20,8 @@ Read this ENTIRE file before making ANY changes to the codebase.
   10. [Port Allocation :](#port-allocation-)
   11. [Database Architecture:](#database-architecture)
   12. [Database Configuration:](#database-configuration)
-  13. [Technical Stack Decision Resources (Local Development Optimized):](#technical-stack-decision-resources-local-development-optimized)
+13. [Technical Stack Decision Resources (Local Development
+Optimized):](#technical-stack-decision-resources-local-development-optimized)
   14. [Development Documentation (New):](#development-documentation-new)
   15. [⚖️ ARCHITECTURAL DECISION FRAMEWORK](#-architectural-decision-framework)
 16. [🚀 QUICK START COMMANDS](#-quick-start-commands)

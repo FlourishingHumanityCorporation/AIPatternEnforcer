@@ -109,7 +109,8 @@ npm run context
 ```
 **Success check**: ✅ Understand this gives AI tools better context about your project
 
-**💡 If AI forgets project rules**: This solves [Context Decay](FRICTION-MAPPING.md#11-goldfish-memory-context-window-constraints)
+**💡 If AI forgets project rules**: This solves [Context
+Decay](FRICTION-MAPPING.md#11-goldfish-memory-context-window-constraints)
 
 #### Step 4: Verify Everything Works (2 minutes)
 ```bash
@@ -217,7 +218,8 @@ npm run debug:snapshot
 ```
 **Success check**: ✅ Understand systematic approach to debugging
 
-**💡 Why this matters**: Solves [Black-Box Debugging](FRICTION-MAPPING.md#51-black-box-debugging) where AI can't see runtime state
+**💡 Why this matters**: Solves [Black-Box Debugging](FRICTION-MAPPING.md#51-black-box-debugging) where AI can't see
+runtime state
 
 ### What You've Learned
 - AI tool configuration and optimization
@@ -405,6 +407,7 @@ cat CONTRIBUTING.md
 
 ---
 
-**🎯 Remember**: These paths are guides, not rigid requirements. Adapt based on your needs, skip steps that don't apply, and combine approaches as needed for your project.
+**🎯 Remember**: These paths are guides, not rigid requirements. Adapt based on your needs, skip steps that don't apply,
+and combine approaches as needed for your project.
 
 > 💡 **Lost?** Return to [QUICK-START.md](QUICK-START.md) to choose a different path or get oriented again.

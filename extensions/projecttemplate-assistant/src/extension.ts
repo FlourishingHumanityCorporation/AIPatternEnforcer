@@ -1,12 +1,13 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import * as fs from "fs";
 import { ContextManager } from "./contextManager";
-import { FileNameEnforcer } from "./fileNameEnforcer";
+import { FileNameEnforcer, FileViolation } from "./fileNameEnforcer";
 import { DashboardProvider } from "./dashboardProvider";
+import { ClaudeValidator } from "./claudeValidator";
 
 let contextManager: ContextManager;
 let fileNameEnforcer: FileNameEnforcer;
+let claudeValidator: ClaudeValidator;
 let statusBarItem: vscode.StatusBarItem;
 
 export function activate(context: vscode.ExtensionContext) {
@@ -15,6 +16,13 @@ export function activate(context: vscode.ExtensionContext) {
   // Initialize components
   contextManager = new ContextManager(context);
   fileNameEnforcer = new FileNameEnforcer();
+  
+  // Initialize Claude validator (with error handling for non-ProjectTemplate workspaces)
+  try {
+    claudeValidator = new ClaudeValidator();
+  } catch (error) {
+    console.log("Claude validator not available:", error);
+  }
 
   // Create status bar item
   statusBarItem = vscode.window.createStatusBarItem(
@@ -146,6 +154,67 @@ function registerCommands(context: vscode.ExtensionContext) {
       }
     }),
   );
+
+  // Claude validation commands
+  if (claudeValidator) {
+    // Validate Claude response from clipboard
+    context.subscriptions.push(
+      vscode.commands.registerCommand(
+        "projecttemplate.validateClaudeFromClipboard",
+        async () => {
+          try {
+            updateStatusBar("Validating...", 0);
+            const result = await claudeValidator.validateFromClipboard();
+            await claudeValidator.showValidationResult(result);
+            updateStatusBar(result.passed ? "✅ Validation Passed" : "❌ Validation Failed", 3000);
+          } catch (error) {
+            vscode.window.showErrorMessage(`Validation failed: ${error}`);
+            updateStatusBar("Validation Error", 2000);
+          }
+        }
+      )
+    );
+
+    // Validate Claude response from input
+    context.subscriptions.push(
+      vscode.commands.registerCommand(
+        "projecttemplate.validateClaude",
+        async () => {
+          try {
+            const input = await vscode.window.showInputBox({
+              prompt: "Enter Claude response to validate",
+              placeHolder: "Paste Claude response here...",
+              value: await vscode.env.clipboard.readText()
+            });
+
+            if (!input) return;
+
+            updateStatusBar("Validating...", 0);
+            const result = await claudeValidator.validateResponse(input);
+            await claudeValidator.showValidationResult(result);
+            updateStatusBar(result.passed ? "✅ Validation Passed" : "❌ Validation Failed", 3000);
+          } catch (error) {
+            vscode.window.showErrorMessage(`Validation failed: ${error}`);
+            updateStatusBar("Validation Error", 2000);
+          }
+        }
+      )
+    );
+
+    // Open Claude configuration
+    context.subscriptions.push(
+      vscode.commands.registerCommand(
+        "projecttemplate.claudeConfig",
+        async () => {
+          try {
+            await claudeValidator.openConfigurationFile();
+          } catch (error) {
+            vscode.window.showErrorMessage(`Failed to open config: ${error}`);
+          }
+        }
+      )
+    );
+  }
 }
 
 function setupAutoContext(context: vscode.ExtensionContext) {
@@ -212,7 +281,7 @@ function setupNamingEnforcement(context: vscode.ExtensionContext) {
   context.subscriptions.push(fileWatcher);
 }
 
-async function handleFileRename(violation: any) {
+async function handleFileRename(violation: FileViolation) {
   const oldUri = vscode.Uri.file(violation.file);
   const newUri = vscode.Uri.file(violation.suggestion);
 
@@ -367,7 +436,7 @@ function updateStatusBar(text: string, duration: number = 0) {
   }
 }
 
-function showWelcomeMessage(context: vscode.ExtensionContext) {
+function showWelcomeMessage() {
   vscode.window
     .showInformationMessage(
       "Welcome to ProjectTemplate Assistant! This extension helps with AI-assisted development.",

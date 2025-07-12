@@ -14,7 +14,7 @@ when developing with AI assistants.
     7. [Basic Usage](#basic-usage)
     8. [How It Works](#how-it-works)
     9. [Example Workflow](#example-workflow)
-  10. [2. Unified Documentation Compiler (`npm run docs:compile`)](#2-unified-documentation-compiler-npm-run-docscompile)
+10. [2. Unified Documentation Compiler (`npm run docs:compile`)](#2-unified-documentation-compiler-npm-run-docscompile)
     11. [Setup](#setup)
   12. [Error Response Format](#error-response-format)
   13. [Success Response](#success-response)

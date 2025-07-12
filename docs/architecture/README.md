@@ -100,6 +100,6 @@ When adding new patterns or decisions:
 ## See Also
 
 - [Comprehensive Testing Guide](../guides/testing/comprehensive-testing-guide.md) - Testing these patterns
-- [Security Optimal Practices](../guides/security/security-best-practices.md) - Security considerations
+- [Security Optimal Practices](../guides/security/security-optimal-practices.md) - Security considerations
 - [Performance Optimization](../guides/performance/optimization-playbook.md) - Performance patterns
 - [CLAUDE.md](../../CLAUDE.md) - Overall development standards

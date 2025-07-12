@@ -53,7 +53,7 @@ if check_exists "[ -d templates ] || [ -d src ]" "Project structure ready"; then
     BEGINNER_SCORE=$((BEGINNER_SCORE + 1))
 fi
 
-if check_exists "[ -f package.json ] && npm run --silent 2>/dev/null | grep -q test" "Test script available"; then
+if check_exists "[ -f package.json ] && npm run 2>/dev/null | grep -q test" "Test script available"; then
     BEGINNER_SCORE=$((BEGINNER_SCORE + 1))
 fi
 

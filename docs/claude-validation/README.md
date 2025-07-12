@@ -129,7 +129,7 @@ npm run claude:dashboard
 ## 🎯 Examples
 
 ### ✅ Good Complex Response
-```
+```text
 **Improved Prompt**: Create a React login component with form validation and API integration.
 
 I'll create a secure login component. Let me use TodoWrite to track our implementation:
@@ -142,14 +142,14 @@ Let me edit the original LoginForm.tsx file to add the functionality...
 ```
 
 ### ❌ Bad Complex Response
-```
+```text
 I'll create an improved version of your login component.
 
 Let me create login_improved.js with better validation...
 ```
 
 ### ✅ Good Simple Response
-```
+```text
 Use the useState hook for local component state:
 
 const [count, setCount] = useState(0);
@@ -222,7 +222,7 @@ npm run claude:stats
 npm run claude:validate:docs
 ```
 
-## 🎓 Best Practices
+## 🎓 Optimal Practices
 
 ### For Complex Requests
 1. Always start with `**Improved Prompt**:`
