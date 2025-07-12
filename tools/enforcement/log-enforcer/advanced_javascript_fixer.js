@@ -165,11 +165,30 @@ class AdvancedJavaScriptLogFixer {
       plugins.push('jsx');
     }
 
-    return parser.parse(content, {
-      sourceType: 'module',
-      plugins,
-      errorRecovery: true
-    });
+    try {
+      const ast = parser.parse(content, {
+        sourceType: 'module',
+        plugins,
+        errorRecovery: true
+      });
+      
+      if (!ast || !ast.body) {
+        throw new Error('Failed to parse file: invalid AST structure');
+      }
+      
+      return ast;
+    } catch (error) {
+      // Fallback to simpler parsing
+      try {
+        return parser.parse(content, {
+          sourceType: 'module',
+          plugins: ['jsx'],
+          errorRecovery: true
+        });
+      } catch (fallbackError) {
+        throw new Error(`Failed to parse ${filepath}: ${error.message}`);
+      }
+    }
   }
 
   /**
