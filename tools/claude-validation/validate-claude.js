@@ -86,7 +86,13 @@ ${colorize('MORE INFO:', 'bright')}
 async function main() {
   const args = process.argv.slice(2);
   
-  if (args.includes('--help') || args.length === 0) {
+  if (args.includes('--help')) {
+    printHelp();
+    process.exit(0);
+  }
+  
+  // Check if we have stdin data before showing help for no args
+  if (args.length === 0 && process.stdin.isTTY) {
     printHelp();
     process.exit(0);
   }
@@ -122,7 +128,7 @@ async function main() {
   let responseText;
   
   try {
-    if (inputFile === '-') {
+    if (inputFile === '-' || !inputFile) {
       // Read from stdin
       responseText = fs.readFileSync(0, 'utf-8');
     } else {

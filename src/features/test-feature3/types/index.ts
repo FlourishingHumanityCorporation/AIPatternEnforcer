@@ -1,1 +1,0 @@
-export * from './testFeature3.types';

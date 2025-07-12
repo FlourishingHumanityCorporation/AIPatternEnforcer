@@ -141,9 +141,11 @@ class JavaScriptLogDetector {
       const violations = [];
       const loggerImports = new Set();
       const loggerInstances = new Set();
+      const consoleMembers = this.consoleMembers;
+      const self = this;
       
       traverse(ast, {
-        // Detect console.* calls
+        // Detect console.* calls and CommonJS requires
         CallExpression(path) {
           const { node } = path;
           
@@ -153,7 +155,7 @@ class JavaScriptLogDetector {
             node.callee.object.type === 'Identifier' &&
             node.callee.object.name === 'console' &&
             node.callee.property.type === 'Identifier' &&
-            this.consoleMembers.includes(node.callee.property.name)
+            consoleMembers.includes(node.callee.property.name)
           ) {
             // Check if within a disable comment
             const line = node.loc.start.line;
@@ -173,25 +175,8 @@ class JavaScriptLogDetector {
               filepath
             });
           }
-        },
-        
-        // Detect logger imports
-        ImportDeclaration(path) {
-          const { node } = path;
-          const source = node.source.value;
           
-          // Common logging libraries
-          const loggingLibraries = ['winston', 'pino', 'bunyan', 'log4js', 'loglevel'];
-          
-          if (loggingLibraries.some(lib => source.includes(lib))) {
-            loggerImports.add(source);
-          }
-        },
-        
-        // Detect CommonJS requires
-        CallExpression(path) {
-          const { node } = path;
-          
+          // Detect CommonJS requires
           if (
             node.callee.type === 'Identifier' &&
             node.callee.name === 'require' &&
@@ -204,6 +189,19 @@ class JavaScriptLogDetector {
             if (loggingLibraries.some(lib => source.includes(lib))) {
               loggerImports.add(source);
             }
+          }
+        },
+        
+        // Detect logger imports
+        ImportDeclaration(path) {
+          const { node } = path;
+          const source = node.source.value;
+          
+          // Common logging libraries
+          const loggingLibraries = ['winston', 'pino', 'bunyan', 'log4js', 'loglevel'];
+          
+          if (loggingLibraries.some(lib => source.includes(lib))) {
+            loggerImports.add(source);
           }
         },
         

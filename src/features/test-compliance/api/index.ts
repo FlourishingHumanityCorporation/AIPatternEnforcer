@@ -1,0 +1,1 @@
+export { TestcomplianceApi } from './testCompliance.api';

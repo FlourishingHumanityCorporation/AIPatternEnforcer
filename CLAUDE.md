@@ -80,8 +80,12 @@ npm run setup:verify-ai     # Verify AI setup is working
 
 # Enforcement
 npm run check:all           # Check all enforcement rules
+npm run check:logs          # Check logging compliance
 npm run fix:docs            # Fix documentation violations
 npm run fix:docs:dry-run    # Preview documentation fixes
+npm run fix:logs            # Fix logging violations
+npm run fix:logs:dry-run    # Preview logging fixes
+npm run setup:log-enforcer  # Generate log enforcer config
 npm run enforcement:status  # Show current settings
 ```
 
@@ -104,9 +108,10 @@ npm run enforcement:status  # Show current settings
 1. **NEVER create `*_improved.py`, `*_enhanced.py`, `*_v2.py`** - ALWAYS edit the original file
 2. **NEVER create files in root directory** - Use proper subdirectories (see allowlist below)
 3. **NEVER use bare except clauses** - Always specify exception types
-4. **NEVER use `print()` in production** - Use `logging.getLogger(__name__)`
-5. **NEVER create announcement-style docs** - No "We're excited to announce!"
-6. **NEVER implement poor workarounds** - Use Arrow-Chain RCA methodology (see FULL-GUIDE.md)
+4. **NEVER use `print()` in production** - Use `logging.getLogger(__name__)` (enforced automatically)
+5. **NEVER use `console.log()` in production** - Use proper logging libraries (enforced automatically)
+6. **NEVER create announcement-style docs** - No "We're excited to announce!"
+7. **NEVER implement poor workarounds** - Use Arrow-Chain RCA methodology (see FULL-GUIDE.md)
 
 ### ALWAYS DO THESE
 

@@ -46,7 +46,7 @@ export interface {{name}}Props {
  * {{name}} component
  * 
  * @example
- * <{{name}} onClick={() => { /* handle click */ }}>
+ * <{{name}} onClick={() => alert('clicked')}>
  *   Content here
  * </{{name}}>
  */
@@ -77,6 +77,7 @@ export const {{name}}: React.FC<{{name}}Props> = ({
 
   test: `import * as React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
+import { vi } from 'vitest';
 import { {{name}} } from './{{name}}';
 
 describe('{{name}}', () => {
@@ -91,7 +92,7 @@ describe('{{name}}', () => {
   });
 
   it('handles click events', () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     render(<{{name}} onClick={handleClick}>Clickable</{{name}}>);
     
     fireEvent.click(screen.getByText('Clickable'));
@@ -99,7 +100,7 @@ describe('{{name}}', () => {
   });
 
   it('handles keyboard events when clickable', () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
     render(<{{name}} onClick={handleClick}>Clickable</{{name}}>);
     
     const element = screen.getByText('Clickable');

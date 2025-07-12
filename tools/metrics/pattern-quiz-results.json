@@ -229,5 +229,38 @@
     "startTime": "2025-07-12T05:11:37.318Z",
     "endTime": "2025-07-12T05:11:37.320Z",
     "duration": 2
+  },
+  {
+    "totalQuestions": 3,
+    "correctAnswers": 3,
+    "categories": {
+      "fileNaming": {
+        "total": 3,
+        "correct": 3,
+        "questions": [
+          {
+            "questionId": "fn1",
+            "correct": true,
+            "severity": "CRITICAL",
+            "explanation": "Always edit existing files directly. Creating versioned or \"improved\" files violates ProjectTemplate core rules and creates confusion."
+          },
+          {
+            "questionId": "fn2",
+            "correct": true,
+            "severity": "HIGH",
+            "explanation": "Root directory files must follow the allowlist in CLAUDE.md. Temporary files should go in appropriate subdirectories or be cleaned up immediately."
+          },
+          {
+            "questionId": "fn3",
+            "correct": true,
+            "severity": "HIGH",
+            "explanation": "Reports belong in docs/reports/ directory. Root directory files must follow the strict allowlist."
+          }
+        ]
+      }
+    },
+    "startTime": "2025-07-12T05:15:32.809Z",
+    "endTime": "2025-07-12T05:15:32.811Z",
+    "duration": 2
   }
 ]

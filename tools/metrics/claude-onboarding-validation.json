@@ -1,7 +1,7 @@
 {
-  "validationTime": "2025-07-11T22:09:29-07:00",
+  "validationTime": "2025-07-11T22:17:08-07:00",
   "onboardingLevel": 2,
-  "totalOnboardingDuration": "123s",
+  "totalOnboardingDuration": "63s",
   "validationResults": {
     "onboardingCompletion": true,
     "learnPhasesCompleted": true,

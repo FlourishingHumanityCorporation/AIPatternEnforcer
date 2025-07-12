@@ -1,1 +1,0 @@
-export { Testfeature2Api } from './testFeature2.api';

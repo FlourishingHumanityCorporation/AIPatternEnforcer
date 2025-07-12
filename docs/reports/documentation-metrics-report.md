@@ -1,52 +1,41 @@
 # Documentation Metrics Report
 
-**Generated**: 2025-07-12T01:28:44.880Z
+**Generated**: 2025-07-12T05:22:08.639Z
 **Project**: project-template
 **Branch**: feature/integration-enhancement-initiative
 
-## Table of Contents
-
-1. [Executive Summary](#executive-summary)
-2. [Coverage Analysis](#coverage-analysis)
-  3. [Overall Coverage: 11%](#overall-coverage-11)
-  4. [Coverage by File Type](#coverage-by-file-type)
-5. [Documentation Debt](#documentation-debt)
-  6. [Priority Breakdown](#priority-breakdown)
-  7. [Recent Changes](#recent-changes)
-8. [Quality Assessment](#quality-assessment)
-  9. [Overall Quality: 72%](#overall-quality-72)
-10. [Recommendations](#recommendations)
-  11. [Documentation coverage below minimum threshold](#documentation-coverage-below-minimum-threshold)
-
 ## Executive Summary
 
-- **Overall Coverage**: 11% (poor)
-- **Documentation Debt**: 14 items
+- **Overall Coverage**: 17% (poor)
+- **Documentation Debt**: 33 items
 - **Quality Score**: 72%
-- **Estimated Effort**: 4.8 hours
+- **Estimated Effort**: 15.5 hours
 
 ## Coverage Analysis
 
-### Overall Coverage: 11%
+### Overall Coverage: 17%
 - **Target**: 90%
 - **Status**: poor
-- **Files needing documentation**: 14
+- **Files needing documentation**: 33
 
 ### Coverage by File Type
-- **tools**: 0% (0/5)
-- **scripts**: 0% (0/7)
-- **other**: 44% (4/9)
+- **components**: 0% (0/2)
+- **tools**: 0% (0/6)
+- **scripts**: 0% (0/3)
+- **configs**: 0% (0/1)
+- **other**: 28% (11/40)
 
 ## Documentation Debt
 
 ### Priority Breakdown
-- **MEDIUM**: 5 items
-- **LOW**: 9 items
+- **HIGH**: 1 items
+- **MEDIUM**: 26 items
+- **LOW**: 6 items
 
 ### Recent Changes
-- **Significant Changes**: 9 files
-- **Breaking Changes**: 5 files
-- **Requires Immediate Attention**: 14 files
+- **Significant Changes**: 23 files
+- **Breaking Changes**: 29 files
+- **Requires Immediate Attention**: 57 files
 
 ## Quality Assessment
 
@@ -55,10 +44,22 @@
 - **Consistency**: 50%
 - **Completeness**: 67%
 
+## Trends
+
+- **Coverage Trend**: improving (+27%)
+- **Debt Trend**: declining (-29 items)
+- **Quality Trend**: stable (0%)
+
 ## Recommendations
 
 ### Documentation coverage below minimum threshold
 **Priority**: CRITICAL
-**Description**: Current coverage: 11%, minimum: 80%
+**Description**: Current coverage: 17%, minimum: 80%
 **Action**: Immediate documentation effort required
 **Impact**: high
+
+### Significant documentation effort required
+**Priority**: MEDIUM
+**Description**: Estimated 15.5 hours of documentation work
+**Action**: Plan dedicated documentation sprint
+**Impact**: medium

@@ -1,22 +1,22 @@
 {
-  "timestamp": "2025-07-12T05:13:03.054Z",
+  "timestamp": "2025-07-12T05:22:08.639Z",
   "version": "1.0.0",
   "project": {
     "name": "project-template",
-    "lastCommit": "f108c1a",
+    "lastCommit": "51fbdcc",
     "branch": "feature/integration-enhancement-initiative"
   },
   "coverage": {
     "overall": {
-      "total": 260,
-      "documented": 67,
-      "undocumented": 75,
-      "percentage": 26
+      "total": 66,
+      "documented": 11,
+      "undocumented": 33,
+      "percentage": 17
     },
     "byType": {
       "components": {
         "pattern": {},
-        "total": 9,
+        "total": 2,
         "documented": 0,
         "percentage": 0
       },
@@ -28,27 +28,27 @@
       },
       "tools": {
         "pattern": {},
-        "total": 28,
-        "documented": 1,
-        "percentage": 4
+        "total": 6,
+        "documented": 0,
+        "percentage": 0
       },
       "scripts": {
         "pattern": {},
-        "total": 14,
+        "total": 3,
         "documented": 0,
         "percentage": 0
       },
       "configs": {
         "pattern": {},
-        "total": 4,
-        "documented": 1,
-        "percentage": 25
+        "total": 1,
+        "documented": 0,
+        "percentage": 0
       },
       "other": {
         "pattern": {},
-        "total": 111,
-        "documented": 65,
-        "percentage": 59
+        "total": 40,
+        "documented": 11,
+        "percentage": 28
       }
     },
     "byPriority": {
@@ -58,17 +58,17 @@
         "percentage": 0
       },
       "high": {
-        "total": 5,
+        "total": 1,
         "documented": 0,
         "percentage": 0
       },
       "medium": {
-        "total": 34,
+        "total": 26,
         "documented": 0,
         "percentage": 0
       },
       "low": {
-        "total": 36,
+        "total": 6,
         "documented": 0,
         "percentage": 0
       }
@@ -81,25 +81,25 @@
     "status": "poor"
   },
   "debt": {
-    "total": 75,
+    "total": 33,
     "byPriority": {
       "critical": 0,
-      "high": 5,
-      "medium": 34,
-      "low": 36
+      "high": 1,
+      "medium": 26,
+      "low": 6
     },
-    "newFiles": 0,
-    "modifiedFiles": 75,
-    "estimatedHours": 31,
+    "newFiles": 2,
+    "modifiedFiles": 31,
+    "estimatedHours": 15.5,
     "trends": {
       "weekly": 0,
       "monthly": 0,
       "direction": "stable"
     },
     "changeAnalysis": {
-      "significantChanges": 209,
-      "breakingChanges": 8,
-      "requiresImmediate": 217
+      "significantChanges": 23,
+      "breakingChanges": 29,
+      "requiresImmediate": 57
     }
   },
   "quality": {
@@ -126,22 +126,28 @@
     "available": true,
     "coverage": {
       "trend": "improving",
-      "change": 18,
-      "current": 13,
+      "change": 27,
+      "current": 14,
       "previous": 11,
       "values": [
         11,
-        13
+        13,
+        26,
+        8,
+        14
       ]
     },
     "debt": {
-      "trend": "improving",
-      "change": 64,
-      "current": 23,
+      "trend": "declining",
+      "change": -29,
+      "current": 10,
       "previous": 14,
       "values": [
         14,
-        23
+        23,
+        75,
+        8,
+        10
       ]
     },
     "quality": {
@@ -151,13 +157,16 @@
       "previous": 72,
       "values": [
         72,
+        72,
+        72,
+        72,
         72
       ]
     },
     "period": {
       "from": "2025-07-12T01:28:44.880Z",
-      "to": "2025-07-12T05:07:15.786Z",
-      "entries": 2
+      "to": "2025-07-12T05:20:18.687Z",
+      "entries": 5
     }
   },
   "recommendations": [
@@ -165,7 +174,7 @@
       "type": "coverage_critical",
       "priority": "critical",
       "title": "Documentation coverage below minimum threshold",
-      "description": "Current coverage: 26%, minimum: 80%",
+      "description": "Current coverage: 17%, minimum: 80%",
       "action": "Immediate documentation effort required",
       "impact": "high"
     },
@@ -173,7 +182,7 @@
       "type": "effort_planning",
       "priority": "medium",
       "title": "Significant documentation effort required",
-      "description": "Estimated 31 hours of documentation work",
+      "description": "Estimated 15.5 hours of documentation work",
       "action": "Plan dedicated documentation sprint",
       "impact": "medium"
     }

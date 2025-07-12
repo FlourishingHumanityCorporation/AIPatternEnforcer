@@ -201,7 +201,7 @@ export default function App() {
 }`,
     },
     nextjs: {
-      'next.config.js': `/** @type {import('next').NextConfig} */
+      'next-config': `/** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   typescript: {
@@ -213,7 +213,7 @@ const nextConfig = {
 };
 
 module.exports = nextConfig;`,
-      'next-layout.tsx': `export default function RootLayout({
+      'next-layout': `export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -224,7 +224,7 @@ module.exports = nextConfig;`,
     </html>
   );
 }`,
-      'next-page.tsx': `export default function HomePage() {
+      'next-page': `export default function HomePage() {
   return (
     <main>
       <h1>Welcome to ProjectTemplate with Next.js</h1>
@@ -234,7 +234,7 @@ module.exports = nextConfig;`,
 }`,
     },
     express: {
-      'express-server.ts': `import express from 'express';
+      'express-server': `import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
@@ -267,7 +267,7 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 app.listen(PORT, () => {
   console.log(\`Server running on http://localhost:\${PORT}\`);
 });`,
-      'express-routes.ts': `import { Router } from 'express';
+      'express-routes': `import { Router } from 'express';
 
 const router = Router();
 

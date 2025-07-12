@@ -50,7 +50,7 @@ Brief description of what this API does and its primary use cases.
 // Basic usage example
 import { apiClient } from './api-client';
 
-const result = await apiClient.[methodName]([parameters]);
+const result = await apiClient.getExample('exampleId');
 ```
 
 ## Endpoints

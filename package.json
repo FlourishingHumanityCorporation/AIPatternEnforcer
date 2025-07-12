@@ -55,6 +55,7 @@
     "test:enforcement": "node tests/enforcement/test-enforcement-system.js",
     "test:user-journey": "./scripts/testing/user-journey-validator.sh",
     "test:user-program": "./scripts/testing/user-testing-program.sh",
+    "test:validation-suite": "./scripts/testing/run-validation-suite.sh",
     "validate": "./scripts/testing/run-all-tests.sh --verbose",
     "validate:docs": "./scripts/validate-docs.sh --ignore-external",
     "validate:docs:all": "./scripts/validate-docs.sh",
@@ -79,14 +80,19 @@
     "check:root:quiet": "node tools/enforcement/root-file-enforcement.js --quiet",
     "check:banned-docs": "node tools/enforcement/banned-document-types.js",
     "check:banned-docs:quiet": "node tools/enforcement/banned-document-types.js --quiet",
-    "check:all": "npm run check:no-improved-files && npm run check:imports && npm run check:documentation-style && npm run check:root && npm run check:banned-docs && npm run validate:docs && npm run docs:check",
+    "check:logs": "node tools/enforcement/log-enforcer.js check",
+    "check:logs:status": "node tools/enforcement/log-enforcer.js status",
+    "check:all": "npm run check:no-improved-files && npm run check:imports && npm run check:documentation-style && npm run check:root && npm run check:banned-docs && npm run check:logs && npm run validate:docs && npm run docs:check",
     "fix:docs": "node tools/enforcement/fix-docs.js",
     "fix:docs:dry-run": "node tools/enforcement/fix-docs.js --dry-run",
+    "fix:logs": "node tools/enforcement/log-enforcer.js fix",
+    "fix:logs:dry-run": "node tools/enforcement/log-enforcer.js fix --dry-run",
     "enforcement:config": "node tools/enforcement/enforcement-config.js",
     "enforcement:status": "node tools/enforcement/enforcement-config.js status",
     "enforcement:metrics": "node tools/enforcement/enforcement-config.js metrics",
     "prepare": "husky install",
     "setup:enforcement": "node scripts/setup/create-enforcement-scripts.js",
+    "setup:log-enforcer": "node tools/enforcement/log-enforcer.js config",
     "setup:hooks": "./scripts/setup/setup-hooks.sh",
     "setup:validate": "node scripts/setup/validate-setup.js",
     "context:load": "node scripts/dev/context-loader.js",
@@ -161,15 +167,23 @@
     "plop": "^4.0.0",
     "prettier": "^3.0.0",
     "typescript": "^5.0.0",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@babel/parser": "^7.0.0",
+    "@babel/traverse": "^7.0.0",
+    "@babel/generator": "^7.0.0",
+    "@babel/types": "^7.0.0",
+    "glob": "^10.0.0"
   },
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=9.0.0"
   },
   "dependencies": {
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "vite": "^6.3.5"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "vite": "^6.0.0",
+    "@vitejs/plugin-react": "^4.0.0"
   }
 }

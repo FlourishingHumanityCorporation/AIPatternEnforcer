@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { SamplefeatureProvider } from '../store';
 import { useSamplefeature } from '../hooks';
 import styles from './Samplefeature.module.css';

@@ -5,42 +5,12 @@ import path from 'path';
 export default defineConfig({
   plugins: [react()],
   root: path.resolve(__dirname, '..'),
-  publicDir: 'public',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, '../src'),
-      '@components': path.resolve(__dirname, '../src/components'),
-      '@features': path.resolve(__dirname, '../src/features'),
-      '@hooks': path.resolve(__dirname, '../src/hooks'),
-      '@utils': path.resolve(__dirname, '../src/utils'),
-      '@types': path.resolve(__dirname, '../src/types'),
-      '@assets': path.resolve(__dirname, '../src/assets'),
     },
   },
   server: {
     port: 3000,
-    open: true,
-    cors: true,
-  },
-  build: {
-    outDir: 'dist',
-    sourcemap: true,
-    minify: 'terser',
-    target: 'es2020',
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom'],
-        },
-      },
-    },
-  },
-  css: {
-    modules: {
-      localsConvention: 'camelCaseOnly',
-    },
-  },
-  optimizeDeps: {
-    include: ['react', 'react-dom'],
   },
 });

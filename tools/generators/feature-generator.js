@@ -288,7 +288,7 @@ export function use{{pascalCase name}}List() {
 }`,
 
   // Main component
-  component: `import React from 'react';
+  component: `import * as React from 'react';
 import { {{pascalCase name}}Provider } from '../store';
 import { use{{pascalCase name}} } from '../hooks';
 import styles from './{{pascalCase name}}.module.css';
@@ -383,7 +383,7 @@ export function {{pascalCase name}}View(props: {{pascalCase name}}ViewProps) {
   typesIndex: `export * from './{{camelCase name}}.types';`,
 
   // Feature test
-  test: `import React from 'react';
+  test: `import * as React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { {{pascalCase name}}View } from '../components/{{pascalCase name}}View';
 import { {{pascalCase name}}Api } from '../api';

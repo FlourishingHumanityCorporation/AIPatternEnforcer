@@ -1,0 +1,1 @@
+export { TestcomplianceView } from './TestcomplianceView';

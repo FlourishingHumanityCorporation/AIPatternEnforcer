@@ -172,8 +172,8 @@ Your pilot coordinator is @[Coordinator Name].
 ## Quick Links
 - 📚 [ProjectTemplate Docs](../README.md)
 - 🚀 [Quick Start Guide](../../QUICK-START.md)
-- 🎥 [Video Tutorials](link)
-- 📊 [Metrics Dashboard](link)
+- 🎥 [Video Tutorials](../../docs/guides/ai-development/ai-assistant-setup.md)
+- 📊 [Metrics Dashboard](../../tools/metrics/README.md)
 
 ## Key Commands
 \`\`\`bash
