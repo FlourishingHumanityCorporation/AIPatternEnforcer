@@ -1,5 +1,50 @@
 # AI Integration Patterns Decision Guide
 
+## Table of Contents
+
+1. [Quick Decision Flow](#quick-decision-flow)
+2. [Requirements Gathering](#requirements-gathering)
+  3. [Project Requirements](#project-requirements)
+  4. [Technical Requirements](#technical-requirements)
+5. [Options Evaluation Matrix](#options-evaluation-matrix)
+  6. [IDE AI Assistants](#ide-ai-assistants)
+  7. [LLM API Providers](#llm-api-providers)
+8. [Detailed Comparison](#detailed-comparison)
+  9. [Option A: Cursor IDE](#option-a-cursor-ide)
+  10. [Option B: Continue (Open Source)](#option-b-continue-open-source)
+  11. [Option C: Local Models with Ollama](#option-c-local-models-with-ollama)
+12. [Context Management Patterns](#context-management-patterns)
+  13. [Pattern 1: Persistent Context Files](#pattern-1-persistent-context-files)
+14. [Project Overview](#project-overview)
+15. [Current Focus](#current-focus)
+16. [Architecture Rules](#architecture-rules)
+  17. [Pattern 2: Selective Context Loading](#pattern-2-selective-context-loading)
+  18. [Pattern 3: Prompt Versioning](#pattern-3-prompt-versioning)
+19. [AI Code Review Integration](#ai-code-review-integration)
+  20. [Automated Review Setup](#automated-review-setup)
+  21. [Review Prompt Template](#review-prompt-template)
+22. [Context](#context)
+23. [Specific Checks](#specific-checks)
+24. [Output Format](#output-format)
+25. [Prompt Library Organization](#prompt-library-organization)
+  26. [Directory Structure](#directory-structure)
+  27. [Prompt Composition Tool](#prompt-composition-tool)
+28. [Model-Specific Optimizations](#model-specific-optimizations)
+  29. [Context Window Management](#context-window-management)
+  30. [Temperature Settings by Task](#temperature-settings-by-task)
+31. [Cost Optimization Strategies](#cost-optimization-strategies)
+  32. [Token Usage Tracking](#token-usage-tracking)
+  33. [Smart Model Selection](#smart-model-selection)
+34. [Decision Template](#decision-template)
+35. [Real-World Examples](#real-world-examples)
+  36. [Example 1: Startup Building SaaS](#example-1-startup-building-saas)
+  37. [Example 2: Enterprise Internal Tool](#example-2-enterprise-internal-tool)
+  38. [Example 3: Open Source Project](#example-3-open-source-project)
+39. [AI Assistant Integration](#ai-assistant-integration)
+  40. [For Cursor Users](#for-cursor-users)
+  41. [For Continue Users](#for-continue-users)
+  42. [For Generic AI Assistants](#for-generic-ai-assistants)
+
 ## Quick Decision Flow
 
 ```mermaid
@@ -300,7 +345,7 @@ Provide feedback as GitHub PR comments with:
 
 ### Directory Structure
 
-```
+```text
 ai/prompts/
 ├── library/
 │   ├── crud/
@@ -447,7 +492,7 @@ function selectModel(task) {
 **Rationale:**
 
 - Continue provides maximum flexibility and local model support
-- Claude models offer best code understanding
+- Claude models offer optimal code understanding
 - Local backup ensures offline capability
 - Selective context prevents token waste
 

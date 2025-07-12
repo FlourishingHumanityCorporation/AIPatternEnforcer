@@ -1,5 +1,22 @@
 # Error Analysis Prompt Template
 
+## Table of Contents
+
+1. [Context](#context)
+2. [Error Information](#error-information)
+  3. [Error Message](#error-message)
+  4. [When It Occurs](#when-it-occurs)
+  5. [Reproduction Steps](#reproduction-steps)
+  6. [Expected Behavior](#expected-behavior)
+7. [Environment Context](#environment-context)
+8. [Code Context](#code-context)
+  9. [Relevant Files](#relevant-files)
+  10. [Recent Changes](#recent-changes)
+11. [What I've Tried](#what-ive-tried)
+12. [Analysis Request](#analysis-request)
+13. [Additional Information](#additional-information)
+14. [Output Format](#output-format)
+
 ## Context
 
 I'm debugging an issue in [PROJECT/FEATURE NAME]. Here's the comprehensive context:
@@ -8,7 +25,7 @@ I'm debugging an issue in [PROJECT/FEATURE NAME]. Here's the comprehensive conte
 
 ### Error Message
 
-```
+```text
 [Paste the complete error message/stack trace]
 ```
 
@@ -32,7 +49,7 @@ I'm debugging an issue in [PROJECT/FEATURE NAME]. Here's the comprehensive conte
 
 ## Environment Context
 
-```
+```bash
 [Paste output from npm run ai:context]
 ```
 

@@ -1,0 +1,67 @@
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { {{name}} } from './{{name}}';
+
+describe('{{name}}', () => {
+  it('renders children correctly', () => {
+    render(
+      <{{name}} isOpen onClose={jest.fn()}>
+        Test Content
+      </{{name}}>
+    );
+    expect(screen.getByText('Test Content')).toBeInTheDocument();
+  });
+
+  it('renders when open', () => {
+    render(
+      <{{name}} isOpen onClose={jest.fn()}>
+        Modal Content
+      </{{name}}>
+    );
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByText('Modal Content')).toBeInTheDocument();
+  });
+
+  it('does not render when closed', () => {
+    render(
+      <{{name}} isOpen={false} onClose={jest.fn()}>
+        Modal Content
+      </{{name}}>
+    );
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('calls onClose when clicking backdrop', () => {
+    const handleClose = jest.fn();
+    const { container } = render(
+      <{{name}} isOpen onClose={handleClose}>
+        Content
+      </{{name}}>
+    );
+    
+    const backdrop = container.querySelector('.backdrop');
+    fireEvent.click(backdrop!);
+    expect(handleClose).toHaveBeenCalled();
+  });
+
+  it('calls onClose when pressing Escape', () => {
+    const handleClose = jest.fn();
+    render(
+      <{{name}} isOpen onClose={handleClose}>
+        Content
+      </{{name}}>
+    );
+    
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(handleClose).toHaveBeenCalled();
+  });
+
+  it('applies custom test ID', () => {
+    render(
+      <{{name}} isOpen onClose={jest.fn()} testId="custom-test-id">
+        Content
+      </{{name}}>
+    );
+    expect(screen.getByTestId('custom-test-id')).toBeInTheDocument();
+  });
+});

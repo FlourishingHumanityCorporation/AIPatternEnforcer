@@ -2,7 +2,28 @@
 
 **Lightweight reference for building AI-powered Next.js applications**
 
-This is a **reference implementation** - not a full starter. It contains the essential patterns, configurations, and components needed to build AI applications without the bloat.
+This is a **reference implementation** - not a full starter. It contains the essential patterns, configurations, and
+components needed to build AI applications without the bloat.
+
+## Table of Contents
+
+1. [📁 What's Included](#-whats-included)
+2. [🚀 Quick Setup](#-quick-setup)
+3. [🏗️ Architecture Patterns](#-architecture-patterns)
+  4. [1. Local-First AI Service](#1-local-first-ai-service)
+  5. [2. Streaming Components](#2-streaming-components)
+  6. [3. Vector Database Integration](#3-vector-database-integration)
+7. [🔧 Key Features](#-key-features)
+8. [📊 Dependencies](#-dependencies)
+  9. [Core AI Stack](#core-ai-stack)
+  10. [Database & Vectors](#database-vectors)
+  11. [UI Components](#ui-components)
+12. [💡 Implementation Guide](#-implementation-guide)
+  13. [1. Start with Chat](#1-start-with-chat)
+  14. [2. Add Document Processing](#2-add-document-processing)
+  15. [3. Enable Vision Analysis](#3-enable-vision-analysis)
+16. [🎯 Next Steps](#-next-steps)
+17. [📚 Resources](#-resources)
 
 ## 📁 What's Included
 

@@ -3,6 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const chalk = require("chalk");
 const glob = require("glob");
+const { loadConfig, shouldBlock, logMetrics } = require('./enforcement-config');
 
 // Banned phrases and patterns
 const bannedPhrases = [
@@ -242,17 +243,26 @@ function extractCodeBlocks(content) {
 
 // Main function
 async function checkDocumentationStyle(specificFiles = []) {
+  const config = loadConfig();
+  
+  // Get ignore patterns from config
+  const baseIgnorePatterns = [
+    "node_modules/**",
+    "dist/**", 
+    "build/**",
+    ".next/**",
+    "coverage/**",
+  ];
+  
+  const ignorePatterns = config.checks.documentation.enabled 
+    ? [...baseIgnorePatterns, ...config.checks.documentation.ignorePatterns]
+    : baseIgnorePatterns;
+
   const filesToCheck =
     specificFiles.length > 0
       ? specificFiles.filter((f) => f.endsWith(".md"))
       : glob.sync("**/*.md", {
-          ignore: [
-            "node_modules/**",
-            "dist/**",
-            "build/**",
-            ".next/**",
-            "coverage/**",
-          ],
+          ignore: ignorePatterns,
         });
 
   let allViolations = [];
@@ -268,10 +278,14 @@ async function checkDocumentationStyle(specificFiles = []) {
     }
   }
 
+  // Log metrics regardless of blocking behavior
+  logMetrics('documentation', allViolations, config);
+  
+  const shouldBlockCommit = shouldBlock('documentation', config);
+  
   if (allViolations.length > 0) {
-    console.error(
-      chalk.red.bold("\n❌ Found documentation style violations:\n"),
-    );
+    const messageType = shouldBlockCommit ? "❌ Found documentation style violations:" : "⚠️  Documentation style warnings:";
+    console.error(chalk.red.bold(`\n${messageType}\n`));
 
     // Group by file
     const byFile = allViolations.reduce((acc, v) => {
@@ -308,7 +322,15 @@ async function checkDocumentationStyle(specificFiles = []) {
       chalk.white("  - Add table of contents for long documents\n"),
     );
 
-    process.exit(1);
+    if (shouldBlockCommit) {
+      console.error(chalk.red.bold("🚫 Commit blocked due to documentation violations."));
+      console.error(chalk.yellow("💡 To change enforcement level: npm run enforcement:config set-level WARNING"));
+      process.exit(1);
+    } else {
+      console.error(chalk.yellow.bold("⏩ Commit proceeding with warnings."));
+      console.error(chalk.cyan("💡 To fix issues: Follow suggestions above"));
+      console.error(chalk.cyan("💡 To block on violations: npm run enforcement:config set-level FULL"));
+    }
   } else {
     if (!specificFiles || specificFiles.length === 0) {
       console.log(

@@ -1,0 +1,36 @@
+import React from 'react';
+import styles from './{{name}}.module.css';
+
+export interface {{name}}Props {
+  /** Primary content */
+  children?: React.ReactNode;
+  /** Optional CSS class */
+  className?: string;
+  /** Test ID for testing */
+  testId?: string;
+}
+
+/**
+ * {{name}} component - Cards, lists, badges - components that display information
+ * 
+ * @example
+ * <{{name}}>
+ *   Content here
+ * </{{name}}>
+ */
+export const {{name}}: React.FC<{{name}}Props> = ({
+  children,
+  className = '',
+  testId = '{{kebabCase name}}'
+}) => {
+  return (
+    <div 
+      className={`${styles.container} ${className}`}
+      data-testid={testId}
+    >
+      {children}
+    </div>
+  );
+};
+
+{{name}}.displayName = '{{name}}';

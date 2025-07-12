@@ -1,8 +1,45 @@
 # API Architecture Pattern Decision Matrix
 
+## Table of Contents
+
+1. [Quick Decision Flow](#quick-decision-flow)
+2. [Requirements Checklist](#requirements-checklist)
+  3. [Client Requirements](#client-requirements)
+  4. [Data Requirements](#data-requirements)
+  5. [Development Requirements](#development-requirements)
+  6. [Performance Requirements](#performance-requirements)
+7. [Comprehensive Comparison Matrix](#comprehensive-comparison-matrix)
+8. [Detailed Architecture Analysis](#detailed-architecture-analysis)
+  9. [REST (Representational State Transfer)](#rest-representational-state-transfer)
+  10. [GraphQL](#graphql)
+  11. [gRPC](#grpc)
+  12. [tRPC](#trpc)
+  13. [WebSockets / Server-Sent Events](#websockets-server-sent-events)
+14. [Hybrid Architecture Patterns](#hybrid-architecture-patterns)
+  15. [Pattern 1: REST + WebSockets](#pattern-1-rest-websockets)
+  16. [Pattern 2: GraphQL + Subscriptions](#pattern-2-graphql-subscriptions)
+  17. [Pattern 3: BFF (Backend for Frontend)](#pattern-3-bff-backend-for-frontend)
+18. [Decision Factors by Industry](#decision-factors-by-industry)
+  19. [E-commerce](#e-commerce)
+  20. [Social Media](#social-media)
+  21. [Banking/Finance](#bankingfinance)
+  22. [SaaS B2B](#saas-b2b)
+  23. [Gaming](#gaming)
+24. [Migration Strategies](#migration-strategies)
+  25. [Incremental Migration](#incremental-migration)
+  26. [Parallel Running](#parallel-running)
+27. [AI Integration Considerations](#ai-integration-considerations)
+  28. [Optimal for AI Development](#optimal-for-ai-development)
+  29. [AI-Friendly Documentation](#ai-friendly-documentation)
+30. [Cost Analysis](#cost-analysis)
+  31. [Development Time (Relative)](#development-time-relative)
+  32. [Operational Costs](#operational-costs)
+33. [Decision Template](#decision-template)
+34. [Quick Reference](#quick-reference)
+
 ## Quick Decision Flow
 
-```
+```text
 Start → Multiple client types?
          ├─ Yes → Need real-time?
          │         ├─ Yes → GraphQL Subscriptions or WebSockets
@@ -78,7 +115,7 @@ Start → Multiple client types?
 
 ### REST (Representational State Transfer)
 
-**Best for:**
+**Optimal for:**
 
 - Public APIs
 - Simple CRUD operations
@@ -114,7 +151,7 @@ app.post("/api/users", validate(userSchema), async (req, res) => {
 
 ### GraphQL
 
-**Best for:**
+**Optimal for:**
 
 - Complex data requirements
 - Multiple client types
@@ -166,7 +203,7 @@ const resolvers = {
 
 ### gRPC
 
-**Best for:**
+**Optimal for:**
 
 - Microservices communication
 - High-performance requirements
@@ -217,7 +254,7 @@ func (s *server) GetUser(ctx context.Context, req *pb.GetUserRequest) (*pb.User,
 
 ### tRPC
 
-**Best for:**
+**Optimal for:**
 
 - TypeScript monorepos
 - Full-stack type safety
@@ -266,7 +303,7 @@ const newUser = await trpc.user.create.mutate({
 
 ### WebSockets / Server-Sent Events
 
-**Best for:**
+**Optimal for:**
 
 - Real-time updates
 - Live collaboration
@@ -308,7 +345,7 @@ app.get("/api/events", (req, res) => {
 
 ### Pattern 1: REST + WebSockets
 
-```
+```text
 ┌─────────────┐     REST      ┌──────────────┐
 │   Client    │──────────────▶│     API      │
 │             │◀──────────────│   Gateway    │
@@ -320,7 +357,7 @@ Use REST for CRUD, WebSockets for real-time updates
 
 ### Pattern 2: GraphQL + Subscriptions
 
-```
+```text
 ┌─────────────┐    GraphQL    ┌──────────────┐
 │   Client    │──────────────▶│   GraphQL    │
 │             │◀──────────────│   Server     │
@@ -332,7 +369,7 @@ Single endpoint for queries, mutations, and real-time
 
 ### Pattern 3: BFF (Backend for Frontend)
 
-```
+```text
 ┌────────┐  GraphQL  ┌─────┐  gRPC  ┌──────────┐
 │  Web   │──────────▶│     │───────▶│          │
 └────────┘           │ BFF │        │ Services │
@@ -384,7 +421,7 @@ Different API styles for different clients
 
 ### Incremental Migration
 
-```
+```text
 1. Identify boundaries
 2. Create API gateway
 3. Route legacy to old system
@@ -404,7 +441,7 @@ app.use("/graphql", apolloServer); // New GraphQL
 
 ## AI Integration Considerations
 
-### Best for AI Development
+### Optimal for AI Development
 
 1. **GraphQL** - Self-documenting schema
 2. **tRPC** - Type inference helps AI
@@ -439,7 +476,7 @@ endpoints:
 
 ### Operational Costs
 
-```
+```text
 # 1M requests/day cost estimate
 
 REST (with CDN):        $50/month

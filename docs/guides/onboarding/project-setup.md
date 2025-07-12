@@ -2,6 +2,69 @@
 
 This guide walks through setting up a new project using this template, from initial creation to first deployment.
 
+## Table of Contents
+
+1. [Prerequisites](#prerequisites)
+2. [Step 1: Create Your Project](#step-1-create-your-project)
+  3. [Using the Template](#using-the-template)
+  4. [Initial Configuration](#initial-configuration)
+5. [Step 2: Customize for Your Project](#step-2-customize-for-your-project)
+  6. [Update Project Metadata](#update-project-metadata)
+    7. [package.json](#packagejson)
+    8. [README.md](#readmemd)
+9. [Getting Started](#getting-started)
+10. [Tech Stack](#tech-stack)
+11. [Documentation](#documentation)
+  12. [Configure AI Assistance](#configure-ai-assistance)
+    13. [Update .cursorrules](#update-cursorrules)
+14. [Project-Specific Rules](#project-specific-rules)
+15. [Tech Stack](#tech-stack)
+    16. [Update AI Context](#update-ai-context)
+17. [Step 3: Set Up Development Environment](#step-3-set-up-development-environment)
+  18. [Environment Variables](#environment-variables)
+  19. [Database Setup](#database-setup)
+    20. [PostgreSQL](#postgresql)
+    21. [MongoDB](#mongodb)
+  22. [Install Additional Dependencies](#install-additional-dependencies)
+23. [Step 4: Configure External Services](#step-4-configure-external-services)
+  24. [GitHub Actions](#github-actions)
+    25. [.github/workflows/ci.yml](#githubworkflowsciyml)
+  26. [Error Tracking (Sentry)](#error-tracking-sentry)
+  27. [Analytics](#analytics)
+28. [Step 5: Develop Your First Feature](#step-5-develop-your-first-feature)
+  29. [Plan the Feature](#plan-the-feature)
+  30. [Implement with TDD](#implement-with-tdd)
+  31. [Follow the Workflow](#follow-the-workflow)
+32. [Step 6: Set Up Deployment](#step-6-set-up-deployment)
+  33. [Vercel Deployment](#vercel-deployment)
+  34. [Environment Configuration](#environment-configuration)
+  35. [Custom Domain](#custom-domain)
+36. [Step 7: Set Up Monitoring](#step-7-set-up-monitoring)
+  37. [Application Monitoring](#application-monitoring)
+  38. [Health Checks](#health-checks)
+  39. [Uptime Monitoring](#uptime-monitoring)
+40. [Step 8: Documentation](#step-8-documentation)
+  41. [Initial Documentation](#initial-documentation)
+    42. [docs/getting-started.md](#docsgetting-startedmd)
+    43. [docs/architecture/overview.md](#docsarchitectureoverviewmd)
+    44. [docs/api/README.md](#docsapireadmemd)
+  45. [API Documentation](#api-documentation)
+46. [Step 9: Team Setup](#step-9-team-setup)
+  47. [Access Control](#access-control)
+  48. [Communication](#communication)
+49. [Step 10: Go Live Checklist](#step-10-go-live-checklist)
+  50. [Security](#security)
+  51. [Performance](#performance)
+  52. [Monitoring](#monitoring)
+  53. [Legal](#legal)
+  54. [SEO](#seo)
+55. [Common Issues & Solutions](#common-issues-solutions)
+  56. [Issue: TypeScript errors](#issue-typescript-errors)
+  57. [Issue: Database connection fails](#issue-database-connection-fails)
+  58. [Issue: Build fails](#issue-build-fails)
+59. [Next Steps](#next-steps)
+60. [Maintenance](#maintenance)
+
 ## Prerequisites
 
 Before starting, ensure you have:
@@ -77,7 +140,7 @@ Brief description of what your project does.
 ```bash
 npm install
 npm run dev
-```
+```text
 ````
 
 ## Tech Stack
@@ -511,4 +574,5 @@ Regular maintenance tasks:
 - Optimize performance
 - Security audits
 
-Remember: This template is a starting point. Adapt it to your specific needs and keep evolving it as you learn what works best for your project.
+Remember: This template is a starting point. Adapt it to your specific needs and keep evolving it as you learn what
+works optimal for your project.

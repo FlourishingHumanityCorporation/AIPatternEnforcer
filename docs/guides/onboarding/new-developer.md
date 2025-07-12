@@ -1,6 +1,69 @@
+[← Back to Documentation](../../README.md) | [↑ Up to Guides](../README.md)
+
+---
+
 # New Developer Onboarding
 
 Welcome to the team! This guide will get you productive with our codebase in the shortest time possible.
+
+## Table of Contents
+
+1. [Day 1: Environment Setup](#day-1-environment-setup)
+  2. [1. Required Tools](#1-required-tools)
+  3. [2. IDE Setup](#2-ide-setup)
+  4. [3. Clone and Setup](#3-clone-and-setup)
+  5. [4. Verify Setup](#4-verify-setup)
+6. [Day 2: Codebase Orientation](#day-2-codebase-orientation)
+  7. [Project Structure](#project-structure)
+  8. [Key Concepts](#key-concepts)
+  9. [Essential Reading](#essential-reading)
+10. [Day 3: Development Workflow](#day-3-development-workflow)
+  11. [Your First Task](#your-first-task)
+  12. [Daily Workflow](#daily-workflow)
+  13. [Using AI Effectively](#using-ai-effectively)
+    14. [Setting Up AI Tools](#setting-up-ai-tools)
+    15. [AI Optimal Practices](#ai-optimal-practices)
+  16. [Code Review Process](#code-review-process)
+17. [Week 1: Deeper Dive](#week-1-deeper-dive)
+  18. [Understanding Our Stack](#understanding-our-stack)
+  19. [Common Patterns](#common-patterns)
+    20. [Component Pattern](#component-pattern)
+    21. [API Pattern](#api-pattern)
+  22. [Debugging Skills](#debugging-skills)
+23. [Week 2: Contributing](#week-2-contributing)
+  24. [Finding Work](#finding-work)
+  25. [Creating Quality PRs](#creating-quality-prs)
+26. [PR Title Format](#pr-title-format)
+27. [PR Description Template](#pr-description-template)
+  28. [What](#what)
+  29. [Why](#why)
+  30. [How](#how)
+  31. [Testing](#testing)
+  32. [Screenshots](#screenshots)
+  33. [Code Quality Standards](#code-quality-standards)
+34. [Month 1: Becoming Productive](#month-1-becoming-productive)
+  35. [Ownership Areas](#ownership-areas)
+  36. [Learning Resources](#learning-resources)
+  37. [Performance Expectations](#performance-expectations)
+    38. [Week 1](#week-1)
+    39. [Week 2](#week-2)
+    40. [Week 4](#week-4)
+41. [Getting Help](#getting-help)
+  42. [When Stuck](#when-stuck)
+  43. [Good Questions Include](#good-questions-include)
+  44. [Communication Channels](#communication-channels)
+45. [Tools and Access](#tools-and-access)
+  46. [Required Access](#required-access)
+  47. [Helpful Tools](#helpful-tools)
+48. [Cultural Fit](#cultural-fit)
+  49. [Our Values](#our-values)
+  50. [Meeting Rhythm](#meeting-rhythm)
+51. [First Month Checklist](#first-month-checklist)
+  52. [Week 1](#week-1)
+  53. [Week 2](#week-2)
+  54. [Week 3](#week-3)
+  55. [Week 4](#week-4)
+56. [Remember](#remember)
 
 ## Day 1: Environment Setup
 
@@ -60,7 +123,7 @@ npm run lint
 
 ### Project Structure
 
-```
+```text
 src/
 ├── features/       # Feature-based modules
 ├── components/     # Shared components
@@ -123,12 +186,13 @@ git commit -m "type: description"
    - Install extension
    - Sign in with GitHub
 
-#### AI Best Practices
+#### AI Optimal Practices
 
 ```markdown
 # Good prompt
 
-"Create a React component for user avatar following patterns in @components/ui/Button.tsx with TypeScript types and error handling"
+"Create a React component for user avatar following patterns in @components/ui/Button.tsx with TypeScript types and
+error handling"
 
 # Bad prompt
 
@@ -273,7 +337,7 @@ By the end of month 1, you should:
 - **External**:
   - TypeScript handbook
   - React documentation
-  - Testing best practices
+  - Testing optimal practices
   - Our tech stack docs
 
 ### Performance Expectations

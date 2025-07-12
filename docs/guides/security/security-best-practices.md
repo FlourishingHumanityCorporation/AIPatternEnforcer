@@ -1,8 +1,45 @@
-# Security Best Practices for Local Development
+[← Back to Documentation](../../README.md) | [↑ Up to Guides](../README.md)
+
+---
+
+# Security Optimal Practices for Local Development
+
+## Table of Contents
+
+1. [Purpose](#purpose)
+2. [Quick Start Security Checklist](#quick-start-security-checklist)
+3. [Authentication Implementation](#authentication-implementation)
+  4. [Password Hashing](#password-hashing)
+  5. [JWT Token Management](#jwt-token-management)
+  6. [Session Management](#session-management)
+7. [Authorization Strategies](#authorization-strategies)
+  8. [Role-Based Access Control (RBAC)](#role-based-access-control-rbac)
+  9. [Resource-Based Access Control](#resource-based-access-control)
+10. [Input Validation and Sanitization](#input-validation-and-sanitization)
+  11. [Schema Validation with Zod](#schema-validation-with-zod)
+  12. [SQL Injection Prevention](#sql-injection-prevention)
+  13. [XSS Prevention](#xss-prevention)
+14. [CSRF Protection](#csrf-protection)
+15. [Environment Variables and Secrets](#environment-variables-and-secrets)
+  16. [Secure Configuration](#secure-configuration)
+  17. [Secret Generation Script](#secret-generation-script)
+18. [Security Headers](#security-headers)
+19. [Rate Limiting](#rate-limiting)
+20. [File Upload Security](#file-upload-security)
+21. [Security Audit Commands](#security-audit-commands)
+  22. [Security ESLint Rules](#security-eslint-rules)
+23. [AI Security Prompt Templates](#ai-security-prompt-templates)
+  24. [Security Review Prompt](#security-review-prompt)
+  25. [Secure Implementation Prompt](#secure-implementation-prompt)
+26. [Security Checklist](#security-checklist)
+27. [Common Security Anti-Patterns](#common-security-anti-patterns)
+28. [Further Reading](#further-reading)
 
 ## Purpose
 
-This guide provides practical security patterns that should be implemented from day one, even in local development. Security vulnerabilities introduced during development often make it to production, so it's crucial to build secure habits early.
+This guide provides practical security patterns that should be implemented from day one, even in local development.
+Security vulnerabilities introduced during development often make it to production, so it's crucial to build secure
+habits early.
 
 ## Quick Start Security Checklist
 
@@ -710,7 +747,7 @@ Review this code for security vulnerabilities:
 
 ```typescript
 [paste code]
-```
+```text
 ````
 
 Check for:
@@ -793,5 +830,5 @@ Before deploying any code:
 
 - OWASP Top 10
 - Node.js Security Checklist
-- Express Security Best Practices
+- Express Security Optimal Practices
 - Project examples: `examples/security/`

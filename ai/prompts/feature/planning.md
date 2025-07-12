@@ -1,5 +1,17 @@
 # Feature Planning Prompt Template
 
+## Table of Contents
+
+1. [Context Setup](#context-setup)
+2. [Feature Requirements](#feature-requirements)
+  3. [Functional Requirements](#functional-requirements)
+  4. [Non-Functional Requirements](#non-functional-requirements)
+5. [Existing Code Context](#existing-code-context)
+6. [Constraints](#constraints)
+7. [Expected Deliverables](#expected-deliverables)
+8. [Additional Context](#additional-context)
+9. [Questions to Address](#questions-to-address)
+
 ## Context Setup
 
 I'm working on [PROJECT NAME] and need to implement [FEATURE NAME].

@@ -2,9 +2,21 @@
 
 This directory contains configuration files for various AI tools used in development.
 
+## Table of Contents
+
+1. [Structure](#structure)
+2. [Configuration Files](#configuration-files)
+  3. [`.claude`](#claude)
+  4. [`.cursorrules`](#cursorrules)
+  5. [`.copilot`](#copilot)
+  6. [`models.json`](#modelsjson)
+  7. [`context-rules.json`](#context-rulesjson)
+8. [Usage](#usage)
+9. [Optimal Practices](#optimal-practices)
+
 ## Structure
 
-```
+```text
 ai/config/
 ├── README.md           # This file
 ├── .claude            # Claude-specific configuration (moved from ai/.claude)
@@ -99,7 +111,7 @@ To customize for your project:
 2. Modify according to your project needs
 3. Commit to your repository
 
-## Best Practices
+## Optimal Practices
 
 1. **Keep configs in sync**: When updating one AI tool config, review others
 2. **Document changes**: Add comments explaining non-obvious settings

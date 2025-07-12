@@ -4,9 +4,33 @@
 - Deciders: [List team members]
 - Date: [YYYY-MM-DD]
 
+## Table of Contents
+
+1. [Context and Problem Statement](#context-and-problem-statement)
+2. [Decision Drivers](#decision-drivers)
+3. [Tool Categories and Options](#tool-categories-and-options)
+  4. [IDE / Code Editor](#ide-code-editor)
+  5. [AI Coding Assistants](#ai-coding-assistants)
+  6. [Version Control Platform](#version-control-platform)
+  7. [CI/CD Platform](#cicd-platform)
+  8. [Error Tracking](#error-tracking)
+  9. [Monitoring](#monitoring)
+10. [Decision Outcome](#decision-outcome)
+  11. [Development Environment](#development-environment)
+  12. [Infrastructure](#infrastructure)
+  13. [Observability](#observability)
+  14. [Example Selection:](#example-selection)
+  15. [Positive Consequences](#positive-consequences)
+  16. [Negative Consequences](#negative-consequences)
+17. [Implementation Plan](#implementation-plan)
+18. [Evaluation Criteria](#evaluation-criteria)
+19. [Budget Summary](#budget-summary)
+20. [Notes](#notes)
+
 ## Context and Problem Statement
 
-We need to standardize our development tooling to ensure consistency, quality, and productivity across the team. This includes:
+We need to standardize our development tooling to ensure consistency, quality, and productivity across the team. This
+includes:
 
 - Code editor/IDE
 - AI coding assistants
@@ -158,9 +182,9 @@ Chosen tools:
 
 ### Example Selection:
 
-```
+```text
 Development:
-- Cursor + Claude (best AI integration)
+- Cursor + Claude (optimal AI integration)
 - GitHub (team already knows it)
 
 Infrastructure:

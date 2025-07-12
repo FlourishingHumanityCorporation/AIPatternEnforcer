@@ -2,6 +2,22 @@
 
 This guide helps you customize the ProjectTemplate for your specific project.
 
+## Table of Contents
+
+1. [🚀 Quick Setup (5 minutes)](#-quick-setup-5-minutes)
+2. [📋 Full Setup (20 minutes)](#-full-setup-20-minutes)
+  3. [1. Complete All Placeholder Sections](#1-complete-all-placeholder-sections)
+  4. [2. Configure AI Development Tools](#2-configure-ai-development-tools)
+5. [Key Technologies](#key-technologies)
+6. [Project-Specific Rules](#project-specific-rules)
+7. [Never Do](#never-do)
+  8. [3. Customize for Your Workflow](#3-customize-for-your-workflow)
+  9. [4. Set Up Git Repository](#4-set-up-git-repository)
+  10. [5. Verify Setup](#5-verify-setup)
+11. [🔄 Keeping Template Updated](#-keeping-template-updated)
+12. [📚 Next Steps](#-next-steps)
+13. [❓ Common Questions](#-common-questions)
+
 ## 🚀 Quick Setup (5 minutes)
 
 1. **Clone and Rename**
@@ -87,7 +103,7 @@ You are working on [project description].
 
 **Create `.aiignore`**:
 
-```
+```text
 node_modules/
 dist/
 .env*
@@ -160,4 +176,5 @@ A: Fork the template, make improvements, and submit a PR with your learnings.
 
 ---
 
-Remember: This template is a living system. It improves with each project that uses it. Document your learnings and share them back!
+Remember: This template is a living system. It improves with each project that uses it. Document your learnings and
+share them back!

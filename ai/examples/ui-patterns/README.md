@@ -1,6 +1,39 @@
 # UI Patterns Library
 
-A comprehensive collection of production-ready UI patterns designed to solve common frontend development challenges when working with AI tools.
+A comprehensive collection of production-ready UI patterns designed to solve common frontend development challenges when
+working with AI tools.
+
+## Table of Contents
+
+1. [Why These Patterns?](#why-these-patterns)
+2. [Pattern Categories](#pattern-categories)
+  3. [📝 Forms (`/forms`)](#-forms-forms)
+    4. [Login Form](#login-form)
+    5. [Multi-Step Form](#multi-step-form)
+  6. [📊 Data Display (`/data-display`)](#-data-display-data-display)
+    7. [Data Table](#data-table)
+  8. [🎭 Overlays (`/overlays`)](#-overlays-overlays)
+    9. [Modal Dialog](#modal-dialog)
+  10. [📢 Feedback (`/feedback`)](#-feedback-feedback)
+    11. [Loading Skeletons](#loading-skeletons)
+12. [Usage with AI Tools](#usage-with-ai-tools)
+  13. [1. Reference in Prompts](#1-reference-in-prompts)
+  14. [2. Copy Patterns](#2-copy-patterns)
+  15. [3. Generate Similar Components](#3-generate-similar-components)
+16. [Pattern Standards](#pattern-standards)
+17. [Common Features](#common-features)
+  18. [State Management](#state-management)
+  19. [Styling](#styling)
+  20. [Testing Approach](#testing-approach)
+21. [Extending Patterns](#extending-patterns)
+  22. [Creating New Patterns](#creating-new-patterns)
+  23. [Pattern Checklist](#pattern-checklist)
+24. [Integration Tips](#integration-tips)
+  25. [With Enhanced Component Generator](#with-enhanced-component-generator)
+  26. [With Existing Projects](#with-existing-projects)
+  27. [With AI Assistants](#with-ai-assistants)
+28. [Future Patterns](#future-patterns)
+29. [Contributing](#contributing)
 
 ## Why These Patterns?
 
@@ -63,7 +96,7 @@ These patterns provide complete, tested implementations that AI can reference fo
 
 ### 1. Reference in Prompts
 
-```
+```text
 Create a user profile form following the pattern in
 ai/examples/ui-patterns/forms/multi-step-form.tsx
 with these fields: name, email, avatar, bio
@@ -168,7 +201,7 @@ npm run g:c MyForm --template form
 
 Always provide pattern reference:
 
-```
+```text
 Following the data table pattern in
 ai/examples/ui-patterns/data-display/data-table.tsx,
 create a product inventory table with inline editing

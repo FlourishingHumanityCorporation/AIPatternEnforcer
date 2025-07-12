@@ -2,6 +2,46 @@
 
 This runbook provides systematic approaches to debugging issues in production without causing additional problems.
 
+## Table of Contents
+
+1. [Golden Rules](#golden-rules)
+2. [Initial Assessment](#initial-assessment)
+  3. [1. Gather Symptoms](#1-gather-symptoms)
+  4. [2. Identify Scope](#2-identify-scope)
+  5. [3. Check Recent Changes](#3-check-recent-changes)
+6. [Debugging Techniques](#debugging-techniques)
+  7. [Log Analysis](#log-analysis)
+    8. [Centralized Logging](#centralized-logging)
+    9. [Local Log Inspection](#local-log-inspection)
+  10. [Distributed Tracing](#distributed-tracing)
+  11. [Database Debugging](#database-debugging)
+    12. [Query Performance](#query-performance)
+    13. [Connection Issues](#connection-issues)
+  14. [Memory Debugging](#memory-debugging)
+  15. [CPU Profiling](#cpu-profiling)
+16. [Live Debugging Techniques](#live-debugging-techniques)
+  17. [Feature Flags](#feature-flags)
+  18. [Circuit Breakers](#circuit-breakers)
+  19. [Rate Limiting](#rate-limiting)
+20. [Service-Specific Debugging](#service-specific-debugging)
+  21. [API Gateway](#api-gateway)
+  22. [Message Queue](#message-queue)
+  23. [Cache Layer](#cache-layer)
+24. [Safe Production Queries](#safe-production-queries)
+  25. [Read-Only Database Access](#read-only-database-access)
+  26. [Sampling Queries](#sampling-queries)
+27. [Emergency Debugging Tools](#emergency-debugging-tools)
+  28. [Debug Mode](#debug-mode)
+  29. [Canary Analysis](#canary-analysis)
+30. [Common Issues and Solutions](#common-issues-and-solutions)
+  31. [Issue: Slow API Responses](#issue-slow-api-responses)
+  32. [Issue: Memory Leaks](#issue-memory-leaks)
+  33. [Issue: Connection Errors](#issue-connection-errors)
+34. [Debug Information Collection](#debug-information-collection)
+  35. [Automated Collection Script](#automated-collection-script)
+36. [Post-Debug Cleanup](#post-debug-cleanup)
+37. [Remember](#remember)
+
 ## Golden Rules
 
 1. **Do No Harm**: Don't make things worse

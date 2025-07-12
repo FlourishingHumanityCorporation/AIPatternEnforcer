@@ -4,6 +4,10 @@
   "description": "Smart context loader and enforcement for AI-assisted development",
   "version": "0.1.0",
   "publisher": "projecttemplate",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/ProjectTemplate"
+  },
   "engines": {
     "vscode": "^1.74.0"
   },
@@ -18,7 +22,6 @@
     "cursor",
     "development"
   ],
-  "icon": "images/icon.png",
   "activationEvents": [
     "onLanguage:javascript",
     "onLanguage:typescript",

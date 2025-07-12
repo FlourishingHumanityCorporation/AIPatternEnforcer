@@ -1,5 +1,41 @@
 # Build Tool Selection Matrix
 
+## Table of Contents
+
+1. [Quick Decision Flow](#quick-decision-flow)
+2. [Requirements Gathering](#requirements-gathering)
+  3. [Project Requirements](#project-requirements)
+  4. [Technical Requirements](#technical-requirements)
+5. [Options Evaluation Matrix](#options-evaluation-matrix)
+  6. [Modern Build Tools Comparison](#modern-build-tools-comparison)
+  7. [Feature Comparison Matrix](#feature-comparison-matrix)
+8. [Detailed Comparison](#detailed-comparison)
+  9. [Option A: Vite (Modern Default)](#option-a-vite-modern-default)
+  10. [Option B: esbuild (Speed Champion)](#option-b-esbuild-speed-champion)
+  11. [Option C: Webpack 5 (Enterprise Standard)](#option-c-webpack-5-enterprise-standard)
+  12. [Option D: Parcel 2 (Zero Config)](#option-d-parcel-2-zero-config)
+13. [Performance Benchmarks](#performance-benchmarks)
+  14. [Build Time Comparison (Medium React App)](#build-time-comparison-medium-react-app)
+  15. [Bundle Size Comparison](#bundle-size-comparison)
+16. [Local Development Optimization](#local-development-optimization)
+  17. [Vite Optimization Tips](#vite-optimization-tips)
+  18. [esbuild Speed Tricks](#esbuild-speed-tricks)
+  19. [Development Workflow Integration](#development-workflow-integration)
+20. [Migration Guide](#migration-guide)
+  21. [From Create React App to Vite](#from-create-react-app-to-vite)
+  22. [Webpack to Vite Plugin Mapping](#webpack-to-vite-plugin-mapping)
+23. [Decision Template](#decision-template)
+24. [Common Issues & Solutions](#common-issues-solutions)
+25. [Tool Selection by Project Type](#tool-selection-by-project-type)
+  26. [SPA (React/Vue/Svelte)](#spa-reactvuesvelte)
+  27. [Static Site Generator](#static-site-generator)
+  28. [Component Library](#component-library)
+  29. [Node.js Application](#nodejs-application)
+  30. [Electron App](#electron-app)
+31. [AI Assistant Integration](#ai-assistant-integration)
+  32. [Build Tool Selection Prompt](#build-tool-selection-prompt)
+  33. [Configuration Generation](#configuration-generation)
+
 ## Quick Decision Flow
 
 ```mermaid
@@ -68,7 +104,7 @@ graph TD
 | TypeScript     | ✅ Native   | ✅ Loader | ✅ Native   | ✅ Native | ⚠️ Plugin | ✅ Native   |
 | CSS Modules    | ✅ Built-in | ✅ Loader | ✅ Built-in | ⚠️ Plugin | ⚠️ Plugin | ✅ Built-in |
 | Code Splitting | ✅ Auto     | ✅ Manual | ✅ Auto     | ⚠️ Basic  | ✅ Manual | ✅ Auto     |
-| Tree Shaking   | ✅ Yes      | ✅ Yes    | ✅ Yes      | ✅ Yes    | ✅ Best   | ✅ Yes      |
+| Tree Shaking   | ✅ Yes      | ✅ Yes    | ✅ Yes      | ✅ Yes    | ✅ Optimal   | ✅ Yes      |
 | Workers        | ✅ Native   | ✅ Loader | ✅ Native   | ⚠️ Manual | ⚠️ Plugin | ✅ Native   |
 | WASM           | ✅ Native   | ✅ Loader | ✅ Native   | ❌ No     | ⚠️ Plugin | ✅ Native   |
 
@@ -316,7 +352,7 @@ module.exports = (env, argv) => {
 
 ### Build Time Comparison (Medium React App)
 
-```
+```text
 | Tool       | Cold Start | Hot Reload | Production Build |
 |------------|------------|------------|------------------|
 | Vite       | 1.2s       | 50ms       | 8s               |
@@ -348,7 +384,7 @@ const bundleSizes = {
     gzip: "50kb",
   },
   rollup: {
-    js: "138kb", // Best tree-shaking
+    js: "138kb", // Optimal tree-shaking
     css: "23kb",
     gzip: "46kb",
   },
@@ -512,7 +548,7 @@ npm install -D vite @vitejs/plugin-react
 
 **Recommended:** Rollup + esbuild
 **Alternative:** Vite library mode
-**Why:** Best tree-shaking, multiple formats
+**Why:** Optimal tree-shaking, multiple formats
 
 ### Node.js Application
 

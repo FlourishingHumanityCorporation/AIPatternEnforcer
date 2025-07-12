@@ -30,7 +30,7 @@ const config = {
 
 // Template definitions
 const templates = {
-  component: `import React from 'react';
+  component: `import * as React from 'react';
 import styles from './{{name}}.module.css';
 
 export interface {{name}}Props {
@@ -46,7 +46,7 @@ export interface {{name}}Props {
  * {{name}} component
  * 
  * @example
- * <{{name}} onClick={() => console.log('clicked')}>
+ * <{{name}} onClick={() => { /* handle click */ }}>
  *   Content here
  * </{{name}}>
  */
@@ -75,7 +75,7 @@ export const {{name}}: React.FC<{{name}}Props> = ({
 
 {{name}}.displayName = '{{name}}';`,
 
-  test: `import React from 'react';
+  test: `import * as React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { {{name}} } from './{{name}}';
 
@@ -160,7 +160,7 @@ export const Default: Story = {
 export const Clickable: Story = {
   args: {
     children: 'Click me!',
-    onClick: () => console.log('{{name}} clicked'),
+    onClick: () => { /* Handle {{name}} click */ },
   },
 };
 

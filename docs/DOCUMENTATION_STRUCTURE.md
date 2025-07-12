@@ -2,6 +2,32 @@
 
 This document provides a complete overview of all markdown documentation in the ProjectTemplate docs/ directory.
 
+## Table of Contents
+
+1. [Complete Documentation Tree](#complete-documentation-tree)
+  2. [📐 Architecture Documentation](#-architecture-documentation)
+  3. [📚 Optimal Practices](#-optimal-practices)
+  4. [🤖 Claude/AI Instructions](#-claudeai-instructions)
+  5. [🎯 Decision Records](#-decision-records)
+  6. [📖 Guides](#-guides)
+    7. [AI Development](#ai-development)
+    8. [Onboarding](#onboarding)
+    9. [Performance](#performance)
+    10. [Security](#security)
+    11. [Testing](#testing)
+    12. [Workflows](#workflows)
+  13. [🚀 New Project Decisions](#-new-project-decisions)
+  14. [💬 Prompts](#-prompts)
+  15. [🔧 Runbooks](#-runbooks)
+  16. [📝 Templates](#-templates)
+  17. [📋 Root Documentation](#-root-documentation)
+18. [Documentation Categories Summary](#documentation-categories-summary)
+19. [Quick Navigation](#quick-navigation)
+  20. [For New Developers](#for-new-developers)
+  21. [For Technical Decisions](#for-technical-decisions)
+  22. [For Daily Development](#for-daily-development)
+  23. [For Production Support](#for-production-support)
+
 ## Complete Documentation Tree
 
 ### 📐 Architecture Documentation
@@ -11,14 +37,14 @@ This document provides a complete overview of all markdown documentation in the 
   - `template-adr.md` - Template for Architecture Decision Records
 - **patterns/**
   - `api-design-standards.md` - RESTful API design patterns and standards
-  - `data-fetching.md` - Data fetching strategies and best practices
+  - `data-fetching.md` - Data fetching strategies and optimal practices
   - `data-modeling-guide.md` - Database schema design and relationships
   - `error-handling.md` - Error handling patterns across the stack
   - `state-management.md` - Frontend and backend state management
 
-### 📚 Best Practices
+### 📚 Optimal Practices
 
-- `bestpractices/Claude.md_bespractices.md` - AI assistant best practices
+- `bestpractices/Claude.md_bespractices.md` - AI assistant optimal practices
 
 ### 🤖 Claude/AI Instructions
 
@@ -51,7 +77,7 @@ This document provides a complete overview of all markdown documentation in the 
 
 #### Security
 
-- `guides/security/security-best-practices.md` - Security implementation guide
+- `guides/security/security-optimal-practices.md` - Security implementation guide
 
 #### Testing
 
@@ -111,7 +137,7 @@ This document provides a complete overview of all markdown documentation in the 
    - Framework comparisons and technology selection matrices
 4. **Operational Docs** (7 files)
    - Runbooks, prompts, and templates
-5. **Best Practices & Standards** (3 files)
+5. **Optimal Practices & Standards** (3 files)
    - AI assistant guidelines and project standards
 
 **Total: 48 markdown documentation files**
@@ -147,5 +173,5 @@ Reference:
 Use:
 
 1. `runbooks/` directory for operational procedures
-2. `guides/security/security-best-practices.md`
+2. `guides/security/security-optimal-practices.md`
 3. `guides/performance/optimization-playbook.md`

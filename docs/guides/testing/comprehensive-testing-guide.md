@@ -1,8 +1,53 @@
+[← Back to Documentation](../../README.md) | [↑ Up to Guides](../README.md)
+
+---
+
 # Comprehensive Testing Guide
+
+## Table of Contents
+
+1. [Purpose](#purpose)
+2. [Quick Start](#quick-start)
+3. [Testing Philosophy for Local Development](#testing-philosophy-for-local-development)
+  4. [Core Principles](#core-principles)
+5. [Testing Pyramid for Local Projects](#testing-pyramid-for-local-projects)
+6. [Unit Testing Patterns](#unit-testing-patterns)
+  7. [Basic Unit Test Structure](#basic-unit-test-structure)
+  8. [Testing Patterns by Type](#testing-patterns-by-type)
+    9. [Pure Functions](#pure-functions)
+    10. [Async Functions](#async-functions)
+    11. [React Components](#react-components)
+12. [Integration Testing Patterns](#integration-testing-patterns)
+  13. [Database Integration Tests](#database-integration-tests)
+  14. [API Integration Tests](#api-integration-tests)
+15. [E2E Testing Patterns](#e2e-testing-patterns)
+  16. [Playwright Setup](#playwright-setup)
+  17. [E2E Optimal Practices](#e2e-optimal-practices)
+18. [Test Data Management](#test-data-management)
+  19. [Fixtures for Consistent Test Data](#fixtures-for-consistent-test-data)
+  20. [Database Seeding](#database-seeding)
+21. [Mocking Strategies](#mocking-strategies)
+  22. [Mock External Services](#mock-external-services)
+  23. [Mock Time and Dates](#mock-time-and-dates)
+24. [AI-Assisted Test Generation](#ai-assisted-test-generation)
+  25. [Prompt Templates](#prompt-templates)
+    26. [Unit Test Generation](#unit-test-generation)
+    27. [Integration Test Generation](#integration-test-generation)
+    28. [E2E Test Generation](#e2e-test-generation)
+29. [Coverage Goals and Measurement](#coverage-goals-and-measurement)
+  30. [Setting Coverage Goals](#setting-coverage-goals)
+  31. [What to Test vs What Not to Test](#what-to-test-vs-what-not-to-test)
+32. [Testing Checklist](#testing-checklist)
+33. [Common Testing Pitfalls](#common-testing-pitfalls)
+34. [See Also](#see-also)
+  35. [Internal Documentation](#internal-documentation)
+  36. [External Resources](#external-resources)
+  37. [Project Resources](#project-resources)
 
 ## Purpose
 
-This guide provides practical, battle-tested patterns for testing in local development environments. It focuses on fast feedback loops, maintainable test suites, and AI-assisted test generation.
+This guide provides practical, battle-tested patterns for testing in local development environments. It focuses on fast
+feedback loops, maintainable test suites, and AI-assisted test generation.
 
 ## Quick Start
 
@@ -33,7 +78,7 @@ npm run test:watch    # Watch mode
 
 ## Testing Pyramid for Local Projects
 
-```
+```text
          /\
         /E2E\        (5-10%) - Critical user journeys
        /------\
@@ -262,7 +307,7 @@ test.describe("Authentication Flow", () => {
 });
 ```
 
-### E2E Best Practices
+### E2E Optimal Practices
 
 ```typescript
 // tests/e2e/helpers/auth.ts
@@ -427,7 +472,7 @@ Generate unit tests for this function:
 
 ```typescript
 [paste function code]
-```
+```text
 ````
 
 Requirements:
@@ -583,10 +628,20 @@ Before committing code:
    it("should delete user");
    ```
 
-## Further Reading
+## See Also
 
+### Internal Documentation
+- [Test-First Development in CLAUDE.md](../../../CLAUDE.md#test-first-development) - Mandatory test-first workflow
+- [Template Validation Framework](../../testing/TEMPLATE_VALIDATION_FRAMEWORK.md) - Template testing methodology
+- [Arrow-Chain RCA](../../../CLAUDE.md#arrow-chain-root-cause-analysis) - Debugging test failures
+- [AI Test Generation Prompts](../../../ai/prompts/testing/) - AI-assisted test creation
+- [Performance Requirements](../../../CLAUDE.md#performance-requirements) - Performance test standards
+
+### External Resources
 - [Vitest Documentation](https://vitest.dev/)
 - [Testing Library](https://testing-library.com/)
 - [Playwright Documentation](https://playwright.dev/)
+
+### Project Resources
 - Project-specific patterns: `examples/testing/`
 - Test utilities: `tests/helpers/`

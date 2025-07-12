@@ -1,5 +1,18 @@
 # Data Fetching Patterns
 
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Frontend Patterns](#frontend-patterns)
+  3. [1. React Query Setup](#1-react-query-setup)
+  4. [2. Custom Hooks Pattern](#2-custom-hooks-pattern)
+  5. [3. Optimistic Updates](#3-optimistic-updates)
+6. [Backend Patterns](#backend-patterns)
+  7. [1. Repository Pattern](#1-repository-pattern)
+  8. [2. Data Loader Pattern](#2-data-loader-pattern)
+  9. [3. Pagination Pattern](#3-pagination-pattern)
+10. [Optimal Practices](#optimal-practices)
+
 ## Overview
 
 Patterns for efficient, consistent data fetching across the application.
@@ -162,7 +175,7 @@ export class PaginationService {
 }
 ```
 
-## Best Practices
+## Optimal Practices
 
 1. **Cache Aggressively** - But know when to invalidate
 2. **Handle Loading States** - Show skeletons, not spinners

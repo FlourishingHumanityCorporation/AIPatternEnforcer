@@ -1,8 +1,30 @@
 # Extract Common Code - DRY Refactoring Template
 
+## Table of Contents
+
+1. [Purpose](#purpose)
+2. [Analysis Phase](#analysis-phase)
+  3. [Step 1: Identify Duplication](#step-1-identify-duplication)
+  4. [Step 2: Current Code Inventory](#step-2-current-code-inventory)
+  5. [Step 3: Identify Variations](#step-3-identify-variations)
+6. [Refactoring Request](#refactoring-request)
+  7. [Extract to:](#extract-to)
+  8. [Requirements:](#requirements)
+  9. [Proposed API:](#proposed-api)
+10. [Implementation Checklist](#implementation-checklist)
+  11. [Phase 1: Create the Abstraction](#phase-1-create-the-abstraction)
+  12. [Phase 2: Add Tests](#phase-2-add-tests)
+  13. [Phase 3: Replace Usages](#phase-3-replace-usages)
+  14. [Phase 4: Cleanup](#phase-4-cleanup)
+15. [Example Transformation](#example-transformation)
+  16. [Before:](#before)
+  17. [After:](#after)
+18. [Quality Checks](#quality-checks)
+
 ## Purpose
 
-Use this template when you identify duplicate code that should be extracted into reusable utilities, hooks, or components.
+Use this template when you identify duplicate code that should be extracted into reusable utilities, hooks, or
+components.
 
 ## Analysis Phase
 

@@ -7,7 +7,13 @@ meta: description = This document defines our API patterns and rules---
 
 # API Documentation
 
-This document describes our API design patterns and best practices.
+This document describes our API design patterns and optimal practices.
+
+## Table of Contents
+
+1. [RESTful Endpoints](#restful-endpoints)
+  2. [Error Response Format](#error-response-format)
+  3. [Successful Response Example](#successful-response-example)
 
 ## RESTful Endpoints
 

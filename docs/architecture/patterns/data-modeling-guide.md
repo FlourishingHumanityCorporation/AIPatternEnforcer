@@ -1,8 +1,52 @@
+[← Back to Documentation](../../README.md) | [↑ Up to Patterns](../README.md)
+
+---
+
 # Data Modeling Guide for Local Development
+
+## Table of Contents
+
+1. [Purpose](#purpose)
+2. [Quick Start](#quick-start)
+3. [Schema Design Principles](#schema-design-principles)
+  4. [1. Choose the Right Primary Key](#1-choose-the-right-primary-key)
+  5. [2. Naming Conventions](#2-naming-conventions)
+  6. [3. Data Types for SQLite](#3-data-types-for-sqlite)
+7. [Relationship Patterns](#relationship-patterns)
+  8. [One-to-One Relationships](#one-to-one-relationships)
+  9. [One-to-Many Relationships](#one-to-many-relationships)
+  10. [Many-to-Many Relationships](#many-to-many-relationships)
+  11. [Self-Referential Relationships](#self-referential-relationships)
+12. [Common Patterns](#common-patterns)
+  13. [Soft Deletes](#soft-deletes)
+  14. [Audit Trails](#audit-trails)
+  15. [Versioning](#versioning)
+  16. [Slugs and URLs](#slugs-and-urls)
+17. [Migration Strategies](#migration-strategies)
+  18. [Schema Migrations with SQL](#schema-migrations-with-sql)
+  19. [Migration Runner](#migration-runner)
+20. [Seeding and Fixtures](#seeding-and-fixtures)
+  21. [Development Seeds](#development-seeds)
+  22. [Test Fixtures](#test-fixtures)
+23. [Index Optimization](#index-optimization)
+  24. [When to Add Indexes](#when-to-add-indexes)
+  25. [Index Anti-Patterns](#index-anti-patterns)
+26. [SQLite-Specific Optimal Practices](#sqlite-specific-optimal-practices)
+  27. [1. Enable Foreign Keys](#1-enable-foreign-keys)
+  28. [2. Use WAL Mode](#2-use-wal-mode)
+  29. [3. Configure for Performance](#3-configure-for-performance)
+  30. [4. Handle Date/Time](#4-handle-datetime)
+31. [AI Prompt Templates](#ai-prompt-templates)
+  32. [Generate Schema](#generate-schema)
+  33. [Generate Migration](#generate-migration)
+34. [Schema Design Checklist](#schema-design-checklist)
+35. [Common Anti-Patterns](#common-anti-patterns)
+36. [Further Reading](#further-reading)
 
 ## Purpose
 
-This guide provides practical patterns for designing database schemas in local development environments. It focuses on SQLite as the default choice while providing patterns that work across different databases.
+This guide provides practical patterns for designing database schemas in local development environments. It focuses on
+SQLite as the default choice while providing patterns that work across different databases.
 
 ## Quick Start
 
@@ -501,7 +545,7 @@ WHERE deleted_at IS NULL;
 -- ❌ Indexing columns that are rarely queried
 ```
 
-## SQLite-Specific Best Practices
+## SQLite-Specific Optimal Practices
 
 ### 1. Enable Foreign Keys
 
@@ -622,5 +666,5 @@ Before finalizing a schema:
 
 - SQLite Documentation
 - Database Design Patterns
-- Migration Best Practices
+- Migration Optimal Practices
 - Project examples: `examples/schemas/`

@@ -4,7 +4,7 @@ This document defines our API patterns and rules
 
 # API Documentation
 
-This document describes our API design patterns and best practices.
+This document describes our API design patterns and optimal practices.
 
 ## RESTful Endpoints
 

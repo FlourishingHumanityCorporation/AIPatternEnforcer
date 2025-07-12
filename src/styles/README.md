@@ -1,6 +1,25 @@
 # Design System
 
-This directory contains the design token system for ProjectTemplate. Design tokens are the visual design atoms of the design system — specifically, they are named entities that store visual design attributes.
+This directory contains the design token system for ProjectTemplate. Design tokens are the visual design atoms of the
+design system — specifically, they are named entities that store visual design attributes.
+
+## Table of Contents
+
+1. [Structure](#structure)
+2. [Usage](#usage)
+  3. [In Your Application](#in-your-application)
+  4. [In CSS Modules](#in-css-modules)
+5. [Token Categories](#token-categories)
+  6. [Colors](#colors)
+  7. [Typography](#typography)
+  8. [Spacing](#spacing)
+  9. [Border Radius](#border-radius)
+  10. [Shadows](#shadows)
+  11. [Animation](#animation)
+  12. [Z-Index](#z-index)
+13. [Dark Mode](#dark-mode)
+14. [Extending the System](#extending-the-system)
+15. [Optimal Practices](#optimal-practices)
 
 ## Structure
 
@@ -94,7 +113,7 @@ To add new tokens:
 3. Document the token in this README
 4. Update components to use the new token
 
-## Best Practices
+## Optimal Practices
 
 1. **Always use tokens** - Never hardcode values
 2. **Semantic naming** - Use `--color-primary` not `--color-blue`

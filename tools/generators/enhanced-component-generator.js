@@ -61,6 +61,40 @@ const TEMPLATE_TYPES = {
   },
 };
 
+// UI Pattern definitions (rich, complete examples)
+const UI_PATTERNS = {
+  "login-form": {
+    name: "Login Form",
+    description: "Complete login form with validation, error handling, and accessibility",
+    category: "forms",
+    file: "login-form.tsx",
+  },
+  "multi-step-form": {
+    name: "Multi-Step Form",
+    description: "Wizard-style form with progress tracking and step validation", 
+    category: "forms",
+    file: "multi-step-form.tsx",
+  },
+  "data-table": {
+    name: "Data Table",
+    description: "Feature-rich table with sorting, pagination, and search",
+    category: "data-display", 
+    file: "data-table.tsx",
+  },
+  "modal-dialog": {
+    name: "Modal Dialog",
+    description: "Accessible modal with focus trapping and escape handling",
+    category: "overlays",
+    file: "modal-dialog.tsx",
+  },
+  "loading-skeletons": {
+    name: "Loading Skeletons", 
+    description: "Smooth loading states with multiple variants",
+    category: "feedback",
+    file: "loading-skeletons.tsx",
+  },
+};
+
 // Load template content based on type
 async function loadTemplate(templateType, fileName) {
   const templatePath = path.join(
@@ -72,888 +106,158 @@ async function loadTemplate(templateType, fileName) {
   try {
     return await fs.readFile(templatePath, "utf-8");
   } catch (error) {
-    // Fall back to default template if specific one doesn't exist
-    console.warn(
-      chalk.yellow(`Template ${templatePath} not found, using default`),
+    console.error(
+      chalk.red(`❌ Template ${templatePath} not found. All templates must exist.`),
     );
-    return null;
+    throw error;
+  }
+}
+
+// Load UI pattern content
+async function loadUIPattern(patternKey) {
+  const pattern = UI_PATTERNS[patternKey];
+  if (!pattern) {
+    throw new Error(`UI pattern ${patternKey} not found`);
+  }
+
+  const componentPath = path.join(
+    __dirname,
+    "../../ai/examples/ui-patterns",
+    pattern.category,
+    pattern.file,
+  );
+  
+  const cssPath = path.join(
+    __dirname,
+    "../../ai/examples/ui-patterns", 
+    pattern.category,
+    pattern.file.replace('.tsx', '.module.css'),
+  );
+
+  try {
+    const componentContent = await fs.readFile(componentPath, "utf-8");
+    let cssContent = "";
+    
+    try {
+      cssContent = await fs.readFile(cssPath, "utf-8");
+    } catch {
+      // CSS file optional for patterns
+      console.warn(chalk.yellow(`⚠️ CSS file not found for pattern ${patternKey}`));
+    }
+
+    return { component: componentContent, css: cssContent, pattern };
+  } catch (error) {
+    console.error(
+      chalk.red(`❌ Pattern ${patternKey} not found at ${componentPath}`),
+    );
+    throw error;
   }
 }
 
 // Get templates for component type
 async function getTemplates(componentName, templateType) {
-  // Try to load type-specific templates first
-  let component = await loadTemplate(templateType, "component.tsx.hbs");
-  let test = await loadTemplate(templateType, "test.tsx.hbs");
-  let story = await loadTemplate(templateType, "stories.tsx.hbs");
-  let styles = await loadTemplate(templateType, "styles.css.hbs");
-  let index = await loadTemplate(templateType, "index.ts.hbs");
-
-  // Use default templates as fallback
-  if (!component) component = getDefaultComponentTemplate(templateType);
-  if (!test) test = getDefaultTestTemplate(templateType);
-  if (!story) story = getDefaultStoryTemplate(templateType);
-  if (!styles) styles = getDefaultStylesTemplate(templateType);
-  if (!index) index = getDefaultIndexTemplate();
+  // Load type-specific templates - all must exist
+  const component = await loadTemplate(templateType, "component.tsx.hbs");
+  const test = await loadTemplate(templateType, "test.tsx.hbs");
+  const story = await loadTemplate(templateType, "stories.tsx.hbs");
+  const styles = await loadTemplate(templateType, "styles.css.hbs");
+  const index = await loadTemplate(templateType, "index.ts.hbs");
 
   return { component, test, story, styles, index };
 }
 
-// Default component template with type-specific variations
-function getDefaultComponentTemplate(templateType) {
-  const baseImports = `import React from 'react';
-import styles from './{{name}}.module.css';`;
+// Adapt UI pattern to new component name
+function adaptPatternToComponent(patternContent, newComponentName, originalName) {
+  // Replace all instances of the original component name with the new one
+  const originalPattern = originalName.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+  const newPattern = newComponentName.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+  
+  let adapted = patternContent
+    // Replace component names in imports and exports
+    .replace(new RegExp(`export const ${originalName}`, 'g'), `export const ${newComponentName}`)
+    .replace(new RegExp(`${originalName}Props`, 'g'), `${newComponentName}Props`)
+    .replace(new RegExp(`interface ${originalName}Props`, 'g'), `interface ${newComponentName}Props`)
+    .replace(new RegExp(`${originalName}: React.FC`, 'g'), `${newComponentName}: React.FC`)
+    // Replace CSS module imports - USE CORRECT FILENAME FORMAT
+    .replace(new RegExp(`from "\\.\/${originalPattern}\\.module\\.css"`, 'g'), `from "./${newComponentName}.module.css"`)
+    .replace(new RegExp(`from '\\.\/${originalPattern}\\.module\\.css'`, 'g'), `from './${newComponentName}.module.css'`)
+    // Replace component displayName
+    .replace(new RegExp(`${originalName}\\.displayName`, 'g'), `${newComponentName}.displayName`)
+    // Replace story titles and component references
+    .replace(new RegExp(`title: ".*/${originalName}"`, 'g'), `title: "Generated/${newComponentName}"`)
+    .replace(new RegExp(`component: ${originalName}`, 'g'), `component: ${newComponentName}`)
+    .replace(new RegExp(`import { ${originalName} }`, 'g'), `import { ${newComponentName} }`)
+    .replace(new RegExp(`<${originalName}`, 'g'), `<${newComponentName}`)
+    .replace(new RegExp(`</${originalName}>`, 'g'), `</${newComponentName}>`)
+    // Replace CSS class references
+    .replace(new RegExp(`data-testid="${originalPattern}"`, 'g'), `data-testid="${newPattern}"`);
 
-  const loadingStates = ["form", "data", "interactive"].includes(templateType)
-    ? `
-  /** Loading state */
-  isLoading?: boolean;
-  /** Error state */
-  error?: string | null;
-  /** Disabled state */
-  disabled?: boolean;`
-    : "";
-
-  const ariaProps =
-    templateType === "interactive"
-      ? `
-  /** Accessible label */
-  ariaLabel?: string;
-  /** Aria described by ID */
-  ariaDescribedBy?: string;`
-      : "";
-
-  const dataProps =
-    templateType === "data"
-      ? `
-  /** Data to display */
-  data?: any[];
-  /** Empty state message */
-  emptyMessage?: string;`
-      : "";
-
-  const formProps =
-    templateType === "form"
-      ? `
-  /** Field name */
-  name: string;
-  /** Field value */
-  value?: string;
-  /** Validation error */
-  error?: string;
-  /** Required field */
-  required?: boolean;
-  /** Change handler */
-  onChange?: (value: string) => void;`
-      : "";
-
-  const overlayProps =
-    templateType === "overlay"
-      ? `
-  /** Open state */
-  isOpen: boolean;
-  /** Close handler */
-  onClose: () => void;
-  /** Click outside to close */
-  closeOnClickOutside?: boolean;`
-      : "";
-
-  return `${baseImports}
-
-export interface {{name}}Props {
-  /** Primary content */
-  children?: React.ReactNode;
-  /** Optional CSS class */
-  className?: string;${loadingStates}${ariaProps}${dataProps}${formProps}${overlayProps}
-  /** Test ID for testing */
-  testId?: string;
+  return adapted;
 }
 
-/**
- * {{name}} component - ${TEMPLATE_TYPES[templateType].description}
- * 
- * @example
- * <{{name}}${templateType === "form" ? ' name="field" value={value} onChange={setValue}' : ""}>
- *   ${templateType === "overlay" ? "Modal content" : "Content here"}
- * </{{name}}>
- */
-export const {{name}}: React.FC<{{name}}Props> = ({
-  children,
-  className = '',${
-    templateType === "form"
-      ? '\n  name,\n  value = "",\n  error,\n  required = false,\n  onChange,'
-      : ""
-  }${
-    templateType === "overlay"
-      ? "\n  isOpen,\n  onClose,\n  closeOnClickOutside = true,"
-      : ""
-  }${
-    ["data", "interactive"].includes(templateType)
-      ? "\n  isLoading = false,\n  error = null,\n  disabled = false,"
-      : ""
-  }${
-    templateType === "form" ? "\n  isLoading = false,\n  disabled = false," : ""
-  }${
-    templateType === "data"
-      ? '\n  data = [],\n  emptyMessage = "No data available",'
-      : ""
-  }
-  testId = '{{kebabCase name}}'
-}) => {
-  ${
-    templateType === "overlay"
-      ? `// Handle escape key
-  React.useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
-        onClose();
-      }
-    };
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [isOpen, onClose]);
-
-  if (!isOpen) return null;`
-      : ""
-  }
-
-  ${
-    ["form", "data", "interactive"].includes(templateType)
-      ? `// Loading state
-  if (isLoading) {
-    return (
-      <div className={\`\${styles.container} \${styles.loading} \${className}\`} data-testid={\`\${testId}-loading\`}>
-        <span className={styles.spinner} aria-label="Loading..." />
-      </div>
-    );
-  }
-
-  // Error state
-  if (error && templateType !== 'form') {
-    return (
-      <div className={\`\${styles.container} \${styles.error} \${className}\`} data-testid={\`\${testId}-error\`}>
-        <span role="alert">{error}</span>
-      </div>
-    );
-  }`
-      : ""
-  }
-
-  ${
-    templateType === "data"
-      ? `// Empty state
-  if (data.length === 0) {
-    return (
-      <div className={\`\${styles.container} \${styles.empty} \${className}\`} data-testid={\`\${testId}-empty\`}>
-        <p>{emptyMessage}</p>
-      </div>
-    );
-  }`
-      : ""
-  }
-
-  return (
-    ${
-      templateType === "overlay"
-        ? `<>
-      <div 
-        className={styles.backdrop}
-        onClick={closeOnClickOutside ? onClose : undefined}
-        aria-hidden="true"
-      />
-      <div 
-        className={\`\${styles.container} \${className}\`}
-        role="dialog"
-        aria-modal="true"
-        data-testid={testId}
-      >
-        <button
-          className={styles.closeButton}
-          onClick={onClose}
-          aria-label="Close"
-          type="button"
-        >
-          ×
-        </button>
-        {children}
-      </div>
-    </>`
-        : templateType === "form"
-          ? `<div className={\`\${styles.fieldContainer} \${className}\`}>
-      <label htmlFor={name} className={styles.label}>
-        {children}
-        {required && <span className={styles.required} aria-label="required">*</span>}
-      </label>
-      <input
-        id={name}
-        name={name}
-        value={value}
-        onChange={(e) => onChange?.(e.target.value)}
-        disabled={disabled}
-        required={required}
-        aria-invalid={!!error}
-        aria-describedby={error ? \`\${name}-error\` : undefined}
-        className={styles.input}
-        data-testid={testId}
-      />
-      {error && (
-        <span id={\`\${name}-error\`} className={styles.errorMessage} role="alert">
-          {error}
-        </span>
-      )}
-    </div>`
-          : `<div 
-      className={\`\${styles.container} \${className}\`}
-      data-testid={testId}${
-        templateType === "interactive"
-          ? `
-      role="button"
-      tabIndex={disabled ? -1 : 0}
-      aria-disabled={disabled}`
-          : ""
-      }
-    >
-      {children}
-    </div>`
-    }
+// Generate from UI pattern
+async function generateFromPattern(name, patternKey, options) {
+  console.log(
+    chalk.blue(`\n🎨 Generating component from pattern: ${UI_PATTERNS[patternKey].name}\n`),
   );
-};
 
-{{name}}.displayName = '{{name}}';`;
-}
+  const patternData = await loadUIPattern(patternKey);
+  const originalName = patternData.pattern.file.replace('.tsx', '').split('-').map(word => 
+    word.charAt(0).toUpperCase() + word.slice(1)
+  ).join('');
 
-// Default test template with type-specific tests
-function getDefaultTestTemplate(templateType) {
-  const typeSpecificTests = {
-    interactive: `
-  it('handles disabled state', () => {
-    const { container } = render(<{{name}} disabled>Disabled</{{name}}>);
-    expect(container.firstChild).toHaveAttribute('aria-disabled', 'true');
+  // Adapt pattern content to new component name
+  const adaptedComponent = adaptPatternToComponent(patternData.component, name, originalName);
+  const adaptedCss = adaptPatternToComponent(patternData.css, name, originalName);
+
+  // Generate basic test and story files for the pattern
+  const basicTest = `import React from 'react';
+import { render, screen } from '@testing-library/react';
+import { ${name} } from './${name}';
+
+describe('${name}', () => {
+  it('renders without crashing', () => {
+    render(<${name} />);
+    expect(screen.getByRole('main')).toBeInTheDocument();
   });
 
-  it('shows loading state', () => {
-    render(<{{name}} isLoading>Content</{{name}}>);
-    expect(screen.getByTestId('{{kebabCase name}}-loading')).toBeInTheDocument();
-    expect(screen.queryByText('Content')).not.toBeInTheDocument();
-  });`,
-
-    form: `
-  it('handles form input correctly', () => {
-    const handleChange = jest.fn();
-    render(
-      <{{name}} name="test-field" value="initial" onChange={handleChange}>
-        Test Field
-      </{{name}}>
-    );
-    
-    const input = screen.getByLabelText('Test Field');
-    fireEvent.change(input, { target: { value: 'new value' } });
-    expect(handleChange).toHaveBeenCalledWith('new value');
-  });
-
-  it('shows validation error', () => {
-    render(
-      <{{name}} name="test-field" error="Field is required">
-        Test Field
-      </{{name}}>
-    );
-    
-    expect(screen.getByRole('alert')).toHaveTextContent('Field is required');
-    expect(screen.getByLabelText('Test Field')).toHaveAttribute('aria-invalid', 'true');
-  });
-
-  it('marks required fields', () => {
-    render(
-      <{{name}} name="test-field" required>
-        Test Field
-      </{{name}}>
-    );
-    
-    expect(screen.getByLabelText('required')).toBeInTheDocument();
-  });`,
-
-    data: `
-  it('shows empty state when no data', () => {
-    render(<{{name}} data={[]} emptyMessage="No items" />);
-    expect(screen.getByText('No items')).toBeInTheDocument();
-  });
-
-  it('shows loading state', () => {
-    render(<{{name}} isLoading data={[1, 2, 3]} />);
-    expect(screen.getByTestId('{{kebabCase name}}-loading')).toBeInTheDocument();
-  });
-
-  it('renders data correctly', () => {
-    const testData = [{ id: 1, name: 'Item 1' }, { id: 2, name: 'Item 2' }];
-    render(<{{name}} data={testData}>Data content</{{name}}>);
-    expect(screen.getByText('Data content')).toBeInTheDocument();
-  });`,
-
-    overlay: `
-  it('renders when open', () => {
-    render(
-      <{{name}} isOpen onClose={jest.fn()}>
-        Modal Content
-      </{{name}}>
-    );
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
-    expect(screen.getByText('Modal Content')).toBeInTheDocument();
-  });
-
-  it('does not render when closed', () => {
-    render(
-      <{{name}} isOpen={false} onClose={jest.fn()}>
-        Modal Content
-      </{{name}}>
-    );
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-  });
-
-  it('calls onClose when clicking backdrop', () => {
-    const handleClose = jest.fn();
-    const { container } = render(
-      <{{name}} isOpen onClose={handleClose}>
-        Content
-      </{{name}}>
-    );
-    
-    const backdrop = container.querySelector('.backdrop');
-    fireEvent.click(backdrop!);
-    expect(handleClose).toHaveBeenCalled();
-  });
-
-  it('calls onClose when pressing Escape', () => {
-    const handleClose = jest.fn();
-    render(
-      <{{name}} isOpen onClose={handleClose}>
-        Content
-      </{{name}}>
-    );
-    
-    fireEvent.keyDown(document, { key: 'Escape' });
-    expect(handleClose).toHaveBeenCalled();
-  });`,
-
-    display: `
-  it('renders with custom className', () => {
-    const { container } = render(
-      <{{name}} className="custom-class">
-        Display Content
-      </{{name}}>
-    );
-    expect(container.firstChild).toHaveClass('custom-class');
-  });`,
-  };
-
-  return `import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { {{name}} } from './{{name}}';
-
-describe('{{name}}', () => {
-  it('renders children correctly', () => {
-    render(<{{name}}${templateType === "form" ? ' name="test"' : ""}${templateType === "overlay" ? " isOpen onClose={jest.fn()}" : ""}>Test Content</{{name}}>);
-    expect(screen.getByText('Test Content')).toBeInTheDocument();
-  });
-${typeSpecificTests[templateType] || typeSpecificTests.display}
-
-  it('applies custom test ID', () => {
-    render(
-      <{{name}} testId="custom-test-id"${templateType === "form" ? ' name="test"' : ""}${templateType === "overlay" ? " isOpen onClose={jest.fn()}" : ""}>
-        Content
-      </{{name}}>
-    );
-    expect(screen.getByTestId('custom-test-id')).toBeInTheDocument();
-  });
+  // TODO: Add specific tests for ${UI_PATTERNS[patternKey].name} functionality
+  // This component was generated from the ${patternKey} pattern
+  // See ai/examples/ui-patterns/${patternData.pattern.category}/${patternData.pattern.file} for the original
 });`;
-}
 
-// Default story template with type-specific stories
-function getDefaultStoryTemplate(templateType) {
-  const typeSpecificStories = {
-    interactive: `
-export const Loading: Story = {
-  args: {
-    children: 'Loading State',
-    isLoading: true,
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    children: 'Disabled State',
-    disabled: true,
-  },
-};
-
-export const WithError: Story = {
-  args: {
-    children: 'Error State',
-    error: 'Something went wrong',
-  },
-};`,
-
-    form: `
-export const Default: Story = {
-  args: {
-    name: 'username',
-    children: 'Username',
-    value: '',
-  },
-};
-
-export const WithValue: Story = {
-  args: {
-    name: 'username',
-    children: 'Username',
-    value: 'john.doe',
-  },
-};
-
-export const Required: Story = {
-  args: {
-    name: 'email',
-    children: 'Email',
-    required: true,
-  },
-};
-
-export const WithError: Story = {
-  args: {
-    name: 'password',
-    children: 'Password',
-    error: 'Password must be at least 8 characters',
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    name: 'field',
-    children: 'Disabled Field',
-    disabled: true,
-    value: 'Cannot edit',
-  },
-};`,
-
-    data: `
-export const WithData: Story = {
-  args: {
-    data: [
-      { id: 1, name: 'Item 1' },
-      { id: 2, name: 'Item 2' },
-      { id: 3, name: 'Item 3' },
-    ],
-    children: 'Data Display',
-  },
-};
-
-export const EmptyState: Story = {
-  args: {
-    data: [],
-    emptyMessage: 'No items to display',
-  },
-};
-
-export const Loading: Story = {
-  args: {
-    isLoading: true,
-    data: [],
-  },
-};
-
-export const Error: Story = {
-  args: {
-    error: 'Failed to load data',
-    data: [],
-  },
-};`,
-
-    overlay: `
-export const Open: Story = {
-  args: {
-    isOpen: true,
-    children: 'This is modal content',
-    onClose: () => console.log('Close clicked'),
-  },
-};
-
-export const Closed: Story = {
-  args: {
-    isOpen: false,
-    children: 'This content is not visible',
-    onClose: () => console.log('Close clicked'),
-  },
-};
-
-export const NoBackdropClose: Story = {
-  args: {
-    isOpen: true,
-    children: 'Click backdrop will not close this modal',
-    closeOnClickOutside: false,
-    onClose: () => console.log('Close clicked'),
-  },
-};`,
-
-    display: `
-export const Default: Story = {
-  args: {
-    children: 'Display content',
-  },
-};
-
-export const WithCustomClass: Story = {
-  args: {
-    children: 'Styled content',
-    className: 'custom-styling',
-  },
-};`,
-  };
-
-  const argTypes = {
-    form: `
-    name: {
-      control: 'text',
-      description: 'Field name attribute',
-    },
-    value: {
-      control: 'text',
-      description: 'Field value',
-    },
-    error: {
-      control: 'text',
-      description: 'Validation error message',
-    },
-    required: {
-      control: 'boolean',
-      description: 'Whether field is required',
-    },
-    onChange: {
-      action: 'changed',
-      description: 'Value change handler',
-    },`,
-    overlay: `
-    isOpen: {
-      control: 'boolean',
-      description: 'Whether overlay is visible',
-    },
-    onClose: {
-      action: 'closed',
-      description: 'Close handler',
-    },
-    closeOnClickOutside: {
-      control: 'boolean',
-      description: 'Close when clicking backdrop',
-    },`,
-    data: `
-    data: {
-      control: 'object',
-      description: 'Data array to display',
-    },
-    emptyMessage: {
-      control: 'text',
-      description: 'Message when data is empty',
-    },`,
-    interactive: `
-    disabled: {
-      control: 'boolean',
-      description: 'Disabled state',
-    },
-    isLoading: {
-      control: 'boolean',
-      description: 'Loading state',
-    },
-    error: {
-      control: 'text',
-      description: 'Error message',
-    },`,
-  };
-
-  return `import type { Meta, StoryObj } from '@storybook/react';
-import { {{name}} } from './{{name}}';
+  const basicStory = `import type { Meta, StoryObj } from '@storybook/react';
+import { ${name} } from './${name}';
 
 const meta = {
-  title: '${TEMPLATE_TYPES[templateType].name}/{{name}}',
-  component: {{name}},
+  title: 'Generated/${name}',
+  component: ${name},
   parameters: {
-    layout: '${templateType === "overlay" ? "fullscreen" : "centered"}',
+    layout: 'centered',
   },
   tags: ['autodocs'],
-  argTypes: {
-    children: {
-      control: 'text',
-      description: 'Content to display inside the component',
-    },
-    className: {
-      control: 'text',
-      description: 'Additional CSS classes',
-    },${argTypes[templateType] || ""}
-  },
-} satisfies Meta<typeof {{name}}>;
+} satisfies Meta<typeof ${name}>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
-${typeSpecificStories[templateType] || typeSpecificStories.display}`;
-}
 
-// Default styles template with type-specific styles
-function getDefaultStylesTemplate(templateType) {
-  const typeSpecificStyles = {
-    interactive: `
-/* Loading state */
-.loading {
-  position: relative;
-  min-height: 3rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+export const Default: Story = {
+  args: {},
+};
 
-.spinner {
-  width: 1.5rem;
-  height: 1.5rem;
-  border: 2px solid var(--color-border);
-  border-top-color: var(--color-primary);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
+// This component was generated from the ${patternKey} pattern
+// See ai/examples/ui-patterns/${patternData.pattern.category}/${patternData.pattern.file} for the original`;
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
+  const basicIndex = `export { ${name} } from './${name}';
+export type { ${name}Props } from './${name}';`;
 
-/* Interactive states */
-.container[role="button"] {
-  cursor: pointer;
-  user-select: none;
-  transition: all 0.2s ease;
-}
-
-.container[role="button"]:hover:not([aria-disabled="true"]) {
-  background-color: var(--color-background-hover);
-  transform: translateY(-1px);
-}
-
-.container[role="button"]:active:not([aria-disabled="true"]) {
-  transform: translateY(0);
-}
-
-.container[aria-disabled="true"] {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* Error state */
-.error {
-  background-color: var(--color-error-background);
-  border: 1px solid var(--color-error);
-  color: var(--color-error);
-}`,
-
-    form: `
-.fieldContainer {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
-}
-
-.label {
-  font-weight: 500;
-  color: var(--color-text);
-  font-size: var(--font-size-sm);
-}
-
-.required {
-  color: var(--color-error);
-  margin-left: var(--spacing-xs);
-}
-
-.input {
-  padding: var(--spacing-sm);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-base);
-  transition: all 0.2s ease;
-  background-color: var(--color-background);
-  color: var(--color-text);
-}
-
-.input:focus {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-primary-alpha);
-}
-
-.input:disabled {
-  background-color: var(--color-background-disabled);
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
-.input[aria-invalid="true"] {
-  border-color: var(--color-error);
-}
-
-.input[aria-invalid="true"]:focus {
-  box-shadow: 0 0 0 3px var(--color-error-alpha);
-}
-
-.errorMessage {
-  color: var(--color-error);
-  font-size: var(--font-size-sm);
-  margin-top: var(--spacing-xs);
-}`,
-
-    data: `
-/* Data states */
-.loading,
-.empty,
-.error {
-  padding: var(--spacing-xl);
-  text-align: center;
-  min-height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
-
-.empty {
-  color: var(--color-text-muted);
-}
-
-.error {
-  color: var(--color-error);
-  background-color: var(--color-error-background);
-  border-radius: var(--radius-md);
-}
-
-/* Data container */
-.container {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background-color: var(--color-background);
-  overflow: hidden;
-}`,
-
-    overlay: `
-.backdrop {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  animation: fadeIn 0.2s ease;
-}
-
-.container {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: var(--color-background);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-xl);
-  z-index: 1001;
-  max-width: 90vw;
-  max-height: 90vh;
-  overflow: auto;
-  animation: slideIn 0.3s ease;
-}
-
-.closeButton {
-  position: absolute;
-  top: var(--spacing-md);
-  right: var(--spacing-md);
-  width: 2rem;
-  height: 2rem;
-  border: none;
-  background: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: var(--color-text-muted);
-  transition: color 0.2s ease;
-  border-radius: var(--radius-sm);
-}
-
-.closeButton:hover {
-  color: var(--color-text);
-  background-color: var(--color-background-hover);
-}
-
-.closeButton:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -48%);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%);
-  }
-}`,
-
-    display: ``,
+  return {
+    component: adaptedComponent,
+    test: basicTest,
+    story: basicStory,
+    styles: adaptedCss,
+    index: basicIndex,
   };
-
-  return `.container {
-  /* Base styles using design tokens */
-  padding: var(--spacing-md);
-  border-radius: var(--radius-md);
-  background-color: var(--color-background);
-  color: var(--color-text);
-  font-size: var(--font-size-base);
-  line-height: var(--line-height-base);
-}
-
-/* Focus styles for accessibility */
-.container:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
-${typeSpecificStyles[templateType] || ""}
-
-/* Responsive design */
-@media (max-width: 768px) {
-  .container {
-    padding: var(--spacing-sm);
-  }
-}
-
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  .container {
-    background-color: var(--color-background-dark);
-    color: var(--color-text-dark);
-  }
-}
-
-/* High contrast mode */
-@media (prefers-contrast: high) {
-  .container {
-    border: 2px solid currentColor;
-  }
-}
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .container {
-    animation: none !important;
-    transition: none !important;
-  }
-}`;
-}
-
-// Default index template
-function getDefaultIndexTemplate() {
-  return `export { {{name}} } from './{{name}}';
-export type { {{name}}Props } from './{{name}}';`;
 }
 
 // Create template directories if they don't exist
@@ -972,10 +276,6 @@ async function ensureTemplateDirectories() {
 
 // Generate component files
 async function generateComponent(name, options) {
-  console.log(
-    chalk.blue(`\n🚀 Generating ${options.template} component: ${name}\n`),
-  );
-
   // Validate component name
   if (!/^[A-Z][a-zA-Z0-9]*$/.test(name)) {
     console.error(
@@ -984,8 +284,17 @@ async function generateComponent(name, options) {
     process.exit(1);
   }
 
-  // Get templates for the specified type
-  const templates = await getTemplates(name, options.template);
+  let templates;
+  
+  // Generate from pattern or template
+  if (options.pattern) {
+    templates = await generateFromPattern(name, options.pattern, options);
+  } else {
+    console.log(
+      chalk.blue(`\n🚀 Generating ${options.template} component: ${name}\n`),
+    );
+    templates = await getTemplates(name, options.template);
+  }
 
   // Create component directory
   const componentDir = path.join(config.outputDir, name);
@@ -1032,12 +341,19 @@ async function generateComponent(name, options) {
       } catch {}
     }
 
-    // Compile and write template
-    const compiledTemplate = Handlebars.compile(file.template);
-    const content = compiledTemplate({
-      name,
-      templateType: options.template,
-    });
+    let content;
+    
+    // For patterns, content is already adapted - don't use Handlebars
+    if (options.pattern) {
+      content = file.template;
+    } else {
+      // For templates, use Handlebars compilation
+      const compiledTemplate = Handlebars.compile(file.template);
+      content = compiledTemplate({
+        name,
+        templateType: options.template,
+      });
+    }
 
     try {
       await fs.writeFile(filePath, content);
@@ -1135,15 +451,40 @@ async function selectTemplate() {
   return template;
 }
 
+// Interactive pattern selection
+async function selectPattern() {
+  const { pattern } = await inquirer.prompt([
+    {
+      type: "list",
+      name: "pattern",
+      message: "Select UI pattern to use as base:",
+      choices: Object.entries(UI_PATTERNS).map(([key, value]) => ({
+        name: `${value.name} - ${value.description}`,
+        value: key,
+        short: value.name,
+      })),
+    },
+  ]);
+
+  console.log(
+    chalk.cyan(
+      `\n🎨 Using ${UI_PATTERNS[pattern].name} pattern from ${UI_PATTERNS[pattern].category} category\n`,
+    ),
+  );
+
+  return pattern;
+}
+
 // CLI setup
 program
   .name("enhanced-component-generator")
   .description(
-    "Generate React components with AI-optimized templates for different use cases",
+    "Generate React components with AI-optimized templates or UI patterns",
   )
   .argument("<name>", "Component name in PascalCase")
   .option("-t, --template <type>", "Component template type", "display")
-  .option("-i, --interactive", "Interactive template selection")
+  .option("-p, --pattern <pattern>", "UI pattern to use as base")
+  .option("-i, --interactive", "Interactive template/pattern selection")
   .option("-f, --force", "Overwrite existing files")
   .option("--no-storybook", "Skip Storybook story generation")
   .option("-d, --dir <dir>", "Output directory", config.outputDir)
@@ -1155,9 +496,37 @@ program
       config.outputDir = options.dir;
     }
 
-    // Select template interactively or validate provided template
+    // Handle interactive selection
     if (options.interactive) {
-      options.template = await selectTemplate();
+      const { choice } = await inquirer.prompt([
+        {
+          type: "list",
+          name: "choice",
+          message: "What would you like to generate?",
+          choices: [
+            { name: "Basic Template - Simple, scaffolded component", value: "template" },
+            { name: "UI Pattern - Rich, complete component from patterns", value: "pattern" },
+          ],
+        },
+      ]);
+
+      if (choice === "template") {
+        options.template = await selectTemplate();
+      } else {
+        options.pattern = await selectPattern();
+      }
+    }
+
+    // Validate options
+    if (options.pattern) {
+      if (!UI_PATTERNS[options.pattern]) {
+        console.error(chalk.red(`❌ Invalid pattern: ${options.pattern}`));
+        console.log(chalk.cyan("\nAvailable patterns:"));
+        Object.entries(UI_PATTERNS).forEach(([key, value]) => {
+          console.log(chalk.gray(`  - ${key}: ${value.description}`));
+        });
+        process.exit(1);
+      }
     } else if (!TEMPLATE_TYPES[options.template]) {
       console.error(chalk.red(`❌ Invalid template type: ${options.template}`));
       console.log(chalk.cyan("\nAvailable templates:"));
@@ -1170,9 +539,6 @@ program
     await generateComponent(name, options);
   });
 
-// Parse CLI arguments
-program.parse(process.argv);
-
 // Show help if no arguments
 if (!process.argv.slice(2).length) {
   program.outputHelp();
@@ -1181,4 +547,22 @@ if (!process.argv.slice(2).length) {
     console.log(chalk.gray(`\n  ${chalk.bold(key)} - ${value.description}`));
     console.log(chalk.gray(`  Examples: ${value.examples}`));
   });
+  
+  console.log(chalk.cyan("\n🎨 UI Patterns:"));
+  Object.entries(UI_PATTERNS).forEach(([key, value]) => {
+    console.log(chalk.gray(`\n  ${chalk.bold(key)} - ${value.description}`));
+    console.log(chalk.gray(`  Category: ${value.category}`));
+  });
+  
+  console.log(chalk.cyan("\n💡 Usage Examples:"));
+  console.log(chalk.gray("  # Basic template"));
+  console.log(chalk.gray("  enhanced-component-generator MyButton --template interactive"));
+  console.log(chalk.gray("\n  # Rich UI pattern"));
+  console.log(chalk.gray("  enhanced-component-generator UserLogin --pattern login-form"));
+  console.log(chalk.gray("\n  # Interactive selection"));
+  console.log(chalk.gray("  enhanced-component-generator MyComponent --interactive"));
+  process.exit(0);
 }
+
+// Parse CLI arguments
+program.parse(process.argv);

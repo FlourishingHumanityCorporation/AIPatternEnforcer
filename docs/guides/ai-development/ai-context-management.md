@@ -1,6 +1,43 @@
 # AI Context Management Guide
 
-This guide explains how to use the advanced AI context management features in ProjectTemplate to solve common problems when developing with AI assistants.
+This guide explains how to use the advanced AI context management features in ProjectTemplate to solve common problems
+when developing with AI assistants.
+
+## Table of Contents
+
+1. [🎯 The Problems These Tools Solve](#-the-problems-these-tools-solve)
+  2. [1. Context Window Overflow](#1-context-window-overflow)
+  3. [2. Documentation Duplication](#2-documentation-duplication)
+  4. [3. Lost Context Between Sessions](#3-lost-context-between-sessions)
+5. [🛠️ The Solutions](#-the-solutions)
+  6. [1. AI Focus Mode (`npm run ai:focus`)](#1-ai-focus-mode-npm-run-aifocus)
+    7. [Basic Usage](#basic-usage)
+    8. [How It Works](#how-it-works)
+    9. [Example Workflow](#example-workflow)
+  10. [2. Unified Documentation Compiler (`npm run docs:compile`)](#2-unified-documentation-compiler-npm-run-docscompile)
+    11. [Setup](#setup)
+  12. [Error Response Format](#error-response-format)
+  13. [Success Response](#success-response)
+  14. [3. AI Context Annotations (`npm run ai:parse`)](#3-ai-context-annotations-npm-run-aiparse)
+    15. [Available Annotations](#available-annotations)
+    16. [Parse and Generate Context Files](#parse-and-generate-context-files)
+    17. [Using Generated Contexts](#using-generated-contexts)
+18. [📋 Complete Workflow Example](#-complete-workflow-example)
+  19. [1. Starting a New Feature](#1-starting-a-new-feature)
+  20. [2. Add Context Annotations While Coding](#2-add-context-annotations-while-coding)
+  21. [3. Document Patterns for AI and Humans](#3-document-patterns-for-ai-and-humans)
+  22. [Notification Interface](#notification-interface)
+  23. [4. Compile and Parse](#4-compile-and-parse)
+24. [🚀 Optimal Practices](#-optimal-practices)
+  25. [1. Branch-Based Context Switching](#1-branch-based-context-switching)
+  26. [2. Regular Context Updates](#2-regular-context-updates)
+  27. [3. Context Naming Conventions](#3-context-naming-conventions)
+  28. [4. Annotation Guidelines](#4-annotation-guidelines)
+29. [🔍 Troubleshooting](#-troubleshooting)
+  30. [AI Still Seeing Too Many Files](#ai-still-seeing-too-many-files)
+  31. [Context Not Found](#context-not-found)
+  32. [Documentation Not Compiling](#documentation-not-compiling)
+33. [📚 Next Steps](#-next-steps)
 
 ## 🎯 The Problems These Tools Solve
 
@@ -114,7 +151,7 @@ interface ApiError {
   message: string;
   details?: any;
 }
-```
+```text
 ````
 
 ---ai-example---
@@ -259,7 +296,7 @@ interface Notification {
   recipient: string;
   content: NotificationContent;
 }
-```
+```text
 ````
 
 ````
@@ -277,7 +314,7 @@ npm run ai:parse
 npm run ai:focus user-notifications
 ````
 
-## 🚀 Best Practices
+## 🚀 Optimal Practices
 
 ### 1. Branch-Based Context Switching
 
@@ -337,4 +374,5 @@ npm run docs:compile
 3. Create one unified doc for your main patterns
 4. Gradually expand usage as you see benefits
 
-These tools fundamentally change how AI assistants understand your codebase, making them exponentially more effective as your project grows.
+These tools fundamentally change how AI assistants understand your codebase, making them exponentially more effective as
+your project grows.

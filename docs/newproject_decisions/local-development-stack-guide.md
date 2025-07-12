@@ -1,10 +1,63 @@
+[← Back to Documentation](../README.md) | [↑ Up to Decisions](README.md)
+
+---
+
 # Local Development Stack Decision Guide
+
+## Table of Contents
+
+1. [Quick Start Recommendations](#quick-start-recommendations)
+  2. [For Different Project Types](#for-different-project-types)
+3. [Core Principles for Local Development](#core-principles-for-local-development)
+4. [Complete Local Stack Recommendations](#complete-local-stack-recommendations)
+  5. [1. The "Just Works" Stack (Recommended for most)](#1-the-just-works-stack-recommended-for-most)
+  6. [2. The "Data Science" Stack](#2-the-data-science-stack)
+  7. [3. The "Learning Systems" Stack](#3-the-learning-systems-stack)
+  8. [4. The "Desktop App" Stack](#4-the-desktop-app-stack)
+9. [Database Choices for Local Development](#database-choices-for-local-development)
+  10. [SQLite (Default Choice)](#sqlite-default-choice)
+  11. [PostgreSQL (When you need it)](#postgresql-when-you-need-it)
+  12. [DuckDB (For Analytics)](#duckdb-for-analytics)
+13. [Essential Local Development Tools](#essential-local-development-tools)
+  14. [Cross-Runtime Tools](#cross-runtime-tools)
+  15. [Node.js Specific](#nodejs-specific)
+  16. [Python Specific](#python-specific)
+  17. [Go Specific](#go-specific)
+18. [Environment Configuration](#environment-configuration)
+  19. [Simple .env Setup](#simple-env-setup)
+  20. [Development vs Production](#development-vs-production)
+21. [Common Local Development Patterns](#common-local-development-patterns)
+  22. [1. Hot Module Replacement (HMR)](#1-hot-module-replacement-hmr)
+  23. [2. Database Migrations](#2-database-migrations)
+  24. [3. Mock External Services](#3-mock-external-services)
+  25. [4. Local File Storage](#4-local-file-storage)
+26. [Performance Tips for Local Development](#performance-tips-for-local-development)
+  27. [1. Limit Watchers](#1-limit-watchers)
+  28. [2. Use Development Builds](#2-use-development-builds)
+  29. [3. Lazy Load Development Tools](#3-lazy-load-development-tools)
+30. [Security Considerations for Local Dev](#security-considerations-for-local-dev)
+  31. [1. Separate Secrets](#1-separate-secrets)
+  32. [2. Local HTTPS (when needed)](#2-local-https-when-needed)
+  33. [3. Mock Authentication](#3-mock-authentication)
+34. [Debugging Setup](#debugging-setup)
+  35. [VS Code / Cursor Launch Config](#vs-code-cursor-launch-config)
+  36. [Browser DevTools Integration](#browser-devtools-integration)
+37. [Common Pitfalls to Avoid](#common-pitfalls-to-avoid)
+  38. [1. Over-Engineering](#1-over-engineering)
+  39. [2. Production Parity Obsession](#2-production-parity-obsession)
+  40. [3. Dependency Bloat](#3-dependency-bloat)
+41. [Quick Decision Matrix](#quick-decision-matrix)
+42. [Project Template Setup](#project-template-setup)
+43. [See Also](#see-also)
+  44. [Decision Matrices](#decision-matrices)
+  45. [Implementation Guides](#implementation-guides)
+  46. [Related Topics](#related-topics)
 
 ## Quick Start Recommendations
 
 ### For Different Project Types
 
-```
+```text
 Web Application → Node.js + Vite + SQLite
 Data Analysis → Python + Jupyter + Pandas
 Desktop App → Electron or Tauri
@@ -25,7 +78,7 @@ Learning Project → Whatever you want to learn!
 
 ### 1. The "Just Works" Stack (Recommended for most)
 
-```
+```text
 Backend:    Node.js + Express/Fastify
 Frontend:   Vite + React/Vue
 Database:   SQLite (via Prisma/Drizzle)
@@ -38,13 +91,13 @@ Tools:      tsx for TypeScript, nodemon for watching
 
 - Single language (JavaScript/TypeScript)
 - Instant startup times
-- Excellent debugging experience
+- Robust debugging experience
 - Huge ecosystem
 - AI tools know it well
 
 ### 2. The "Data Science" Stack
 
-```
+```text
 Runtime:    Python 3.11+
 Framework:  Jupyter + FastAPI
 Database:   SQLite or DuckDB
@@ -55,14 +108,14 @@ Tools:      Poetry, Black, IPython
 
 **Why this works:**
 
-- Best data manipulation tools
+- Optimal data manipulation tools
 - Interactive development
 - Visualization built-in
 - Can grow into production
 
 ### 3. The "Learning Systems" Stack
 
-```
+```text
 Language:   Go or Rust
 Framework:  Standard library (Go) or Actix (Rust)
 Database:   Embedded SQLite
@@ -78,7 +131,7 @@ Tools:      Air (Go) or cargo-watch (Rust)
 
 ### 4. The "Desktop App" Stack
 
-```
+```text
 Framework:  Electron (web tech) or Tauri (Rust/web)
 Frontend:   Your favorite web framework
 Backend:    IPC to main process
@@ -146,7 +199,7 @@ conn = duckdb.connect('local.duckdb')
 df = conn.execute("SELECT * FROM 'data.csv'").fetchdf()
 ```
 
-**Perfect for:**
+**Complete for:**
 
 - Analyzing CSVs/Parquet files
 - OLAP workloads
@@ -438,7 +491,7 @@ if (process.env.NODE_ENV === "development") {
 ❌ Matching production exactly
 ❌ Using production databases locally
 ✅ Close enough is good enough
-✅ Fast feedback > perfect parity
+✅ Fast feedback > complete parity
 
 ### 3. Dependency Bloat
 
@@ -449,11 +502,11 @@ if (process.env.NODE_ENV === "development") {
 
 ## Quick Decision Matrix
 
-| Need          | Best Choice    | Why                     |
+| Need          | Optimal Choice    | Why                     |
 | ------------- | -------------- | ----------------------- |
 | Fast startup  | Node.js/Python | Interpreted, no compile |
-| Type safety   | TypeScript     | Best of both worlds     |
-| Data analysis | Python         | Best libraries          |
+| Type safety   | TypeScript     | Optimal of both worlds     |
+| Data analysis | Python         | Optimal libraries          |
 | System tools  | Go             | Single binary           |
 | Desktop app   | Electron       | Web skills              |
 | Learning      | Any            | Pick what interests you |
@@ -479,4 +532,26 @@ npm run dev
 # You're coding in < 2 minutes!
 ```
 
-Remember: The best local development stack is the one that gets out of your way and lets you build. Don't overthink it - pick something and start creating!
+Remember: The optimal local development stack is the one that gets out of your way and lets you build. Don't overthink it -
+pick something and start creating!
+
+## See Also
+
+### Decision Matrices
+- [Backend Runtime Selection](decision-matrix-backend-runtime.md) - Node.js vs Python vs Go vs Rust
+- [API Architecture](decision-matrix-api-architecture.md) - REST vs GraphQL vs gRPC
+- [Database Selection](decision-matrix-database.md) - PostgreSQL vs SQLite vs MongoDB
+- [Frontend Framework](decision-matrix-frontend.md) - React vs Vue vs Svelte
+- [Build Tools](decision-matrix-build-tools.md) - Vite vs Webpack vs others
+
+### Implementation Guides
+- [API Design Standards](../architecture/patterns/api-design-standards.md) - RESTful API patterns
+- [Data Modeling Guide](../architecture/patterns/data-modeling-guide.md) - Database schema design
+- [Testing Guide](../guides/testing/comprehensive-testing-guide.md) - Test-first development
+- [Security Optimal Practices](../guides/security/security-best-practices.md) - Authentication patterns
+
+### Related Topics
+- [AI Integration Patterns](ai-integration-patterns.md) - Using AI in local development
+- [Desktop App Patterns](desktop-app-patterns.md) - Electron and Tauri approaches
+- [Local Error Handling](local-error-handling.md) - Error management strategies
+- [Project Examples](project-examples-with-stacks.md) - Real-world stack combinations

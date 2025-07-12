@@ -1,25 +1,59 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
+#!/bin/bash
 
-echo "🔍 Running pre-commit checks..."
+# ProjectTemplate pre-commit hook
+# Prevents committing files with problematic naming patterns
 
-# Run critical file naming check - prevents _improved, _v2 files
-npm run check:no-improved-files
+echo "🔍 Running ProjectTemplate compliance checks..."
 
-# Only proceed if naming check passes
-if [ $? -eq 0 ]; then
-  # Run lint-staged for formatting and linting
-  npx lint-staged
-  
-  if [ $? -eq 0 ]; then
-    echo "✅ Pre-commit checks passed!"
-    
-    # Optional: Show available manual checks
-    echo "💡 Additional checks available:"
-    echo "   npm run check:imports         # Validate import patterns"
-    echo "   npm run check:documentation-style  # Check doc quality"
-    echo "   npm run check:all            # Run all checks"
-  fi
-else
-  exit 1
+# 1. Check for improved/enhanced/v2 files
+IMPROVED_FILES=$(git diff --cached --name-only | grep -E "_improved\.|_enhanced\.|_v2\.|_better\.|_new\." || true)
+if [ -n "$IMPROVED_FILES" ]; then
+    echo "❌ Found files with prohibited naming patterns:"
+    echo "$IMPROVED_FILES" | sed 's/^/   - /'
+    echo ""
+    echo "💡 Please edit the original files instead of creating new versions."
+    echo "   For example: edit 'Login.jsx' instead of creating 'Login_improved.jsx'"
+    echo ""
+    echo "To bypass this check (not recommended): git commit --no-verify"
+    exit 1
 fi
+
+# 2. Check for console.log statements in JS/TS files
+CONSOLE_LOGS=$(git diff --cached --name-only --diff-filter=ACM | grep -E "\.(js|jsx|ts|tsx)$" | xargs grep -l "console\.log" 2>/dev/null || true)
+if [ -n "$CONSOLE_LOGS" ]; then
+    echo "⚠️  Warning: Found console.log statements in:"
+    echo "$CONSOLE_LOGS" | sed 's/^/   - /'
+    echo ""
+    echo "💡 Consider using proper logging with: logging.getLogger(__name__)"
+fi
+
+# 3. Check for TODO comments without TodoWrite
+NEW_TODOS=$(git diff --cached -U0 | grep -E "^\+.*TODO" | grep -v "TodoWrite" || true)
+if [ -n "$NEW_TODOS" ]; then
+    echo "ℹ️  Info: Found TODO comments. Consider using TodoWrite for task tracking."
+fi
+
+# 4. Check for files in root directory that shouldn't be there
+echo "🗂️  Checking root directory..."
+if ! npm run check:root:quiet; then
+    echo ""
+    echo "❌ Found files in root directory that violate project standards."
+    echo "   Run 'npm run check:root' for details."
+    echo ""
+    echo "To bypass this check (not recommended): git commit --no-verify"
+    exit 1
+fi
+
+# 5. Check for banned document types (summaries, reports, completion docs)
+echo "📄 Checking for banned document types..."
+if ! npm run check:banned-docs:quiet; then
+    echo ""
+    echo "❌ Found banned document types (SUMMARY, REPORT, COMPLETE)."
+    echo "   These violate CLAUDE.md documentation standards."
+    echo "   Run 'npm run check:banned-docs' for details."
+    echo ""
+    echo "To bypass this check (not recommended): git commit --no-verify"
+    exit 1
+fi
+
+echo "✅ Pre-commit checks completed"

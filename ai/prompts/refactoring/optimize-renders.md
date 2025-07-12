@@ -1,8 +1,54 @@
 # React Render Optimization Guide
 
+## Table of Contents
+
+1. [React Optimization Prompt Template](#react-optimization-prompt-template)
+2. [Current Performance Issues:](#current-performance-issues)
+3. [Component Details:](#component-details)
+4. [Performance Symptoms:](#performance-symptoms)
+5. [React Rendering Optimization Strategies](#react-rendering-optimization-strategies)
+  6. [1. Identifying Unnecessary Re-renders](#1-identifying-unnecessary-re-renders)
+    7. [React DevTools Profiler](#react-devtools-profiler)
+    8. [Custom Re-render Detection](#custom-re-render-detection)
+  9. [2. Memoization Techniques](#2-memoization-techniques)
+    10. [React.memo for Component Memoization](#reactmemo-for-component-memoization)
+    11. [useMemo for Expensive Calculations](#usememo-for-expensive-calculations)
+    12. [useCallback for Function Memoization](#usecallback-for-function-memoization)
+  13. [3. State Management Optimization](#3-state-management-optimization)
+    14. [State Structure Optimization](#state-structure-optimization)
+    15. [Context Optimization](#context-optimization)
+  16. [4. List Rendering Optimization](#4-list-rendering-optimization)
+    17. [Virtualization for Large Lists](#virtualization-for-large-lists)
+    18. [Optimized List Keys](#optimized-list-keys)
+  19. [5. Component Splitting](#5-component-splitting)
+    20. [Split Components by Responsibility](#split-components-by-responsibility)
+  21. [6. Advanced Optimization Techniques](#6-advanced-optimization-techniques)
+    22. [Lazy Loading with Suspense](#lazy-loading-with-suspense)
+    23. [Portal for Expensive Overlays](#portal-for-expensive-overlays)
+24. [Performance Optimization Patterns](#performance-optimization-patterns)
+  25. [1. Custom Hooks for Optimization](#1-custom-hooks-for-optimization)
+    26. [Debounced State Hook](#debounced-state-hook)
+    27. [Memoized Selector Hook](#memoized-selector-hook)
+  28. [2. Optimization Checklist](#2-optimization-checklist)
+    29. [Component-Level Optimization](#component-level-optimization)
+    30. [Application-Level Optimization](#application-level-optimization)
+  31. [3. Profiling and Measurement](#3-profiling-and-measurement)
+    32. [Performance Metrics](#performance-metrics)
+    33. [Memory Usage Tracking](#memory-usage-tracking)
+34. [Common Optimization Anti-Patterns](#common-optimization-anti-patterns)
+  35. [1. Over-Optimization](#1-over-optimization)
+  36. [2. Incorrect Dependencies](#2-incorrect-dependencies)
+  37. [3. Premature Optimization](#3-premature-optimization)
+38. [Optimization Testing](#optimization-testing)
+  39. [1. Performance Tests](#1-performance-tests)
+  40. [2. Re-render Tracking](#2-re-render-tracking)
+41. [Optimization Guidelines](#optimization-guidelines)
+  42. [When to Optimize](#when-to-optimize)
+  43. [When NOT to Optimize](#when-not-to-optimize)
+
 ## React Optimization Prompt Template
 
-```
+```text
 I need to optimize the rendering performance of [COMPONENT]. Please help me identify and fix unnecessary re-renders:
 
 ## Current Performance Issues:

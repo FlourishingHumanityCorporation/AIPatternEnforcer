@@ -1,0 +1,38 @@
+{
+  "level": 2,
+  "checks": {
+    "fileNaming": {
+      "enabled": true,
+      "blockOnFailure": true,
+      "level": 2
+    },
+    "imports": {
+      "enabled": true,
+      "blockOnFailure": false,
+      "level": 1
+    },
+    "documentation": {
+      "enabled": true,
+      "blockOnFailure": false,
+      "level": 1,
+      "ignorePatterns": [
+        "node_modules/**",
+        "examples/**",
+        "ai/examples/**",
+        "ai/prompts/**",
+        "templates/**",
+        "extensions/*/node_modules/**",
+        "docs/testing/**",
+        "scripts/**",
+        "**/README.md",
+        "**/*_TEMPLATE.md",
+        "docs/pilot-testing/**",
+        "CLAUDE.md"
+      ]
+    }
+  },
+  "metrics": {
+    "enabled": true,
+    "logPath": ".enforcement-metrics.json"
+  }
+}

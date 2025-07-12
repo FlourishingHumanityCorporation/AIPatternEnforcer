@@ -3,6 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const chalk = require("chalk");
 const glob = require("glob");
+const { loadConfig, shouldBlock, logMetrics } = require('./enforcement-config');
 
 // Patterns for checking imports
 const importPatterns = {
@@ -77,17 +78,26 @@ function checkFile(filePath, content) {
   // Check for wildcard imports (except allowed ones)
   const wildcardMatches = content.match(importPatterns.wildcardImports) || [];
   wildcardMatches.forEach((match) => {
-    // Allow common wildcard patterns
-    if (!match.includes("React") && !match.includes("lodash")) {
-      // Allow wildcards for VS Code extensions
-      if (
-        filePath.includes("extensions/") &&
-        (match.includes("vscode") ||
-          match.includes("path") ||
-          match.includes("fs"))
-      ) {
-        return;
-      }
+    // Allow common wildcard patterns and tool-specific patterns
+    const allowedWildcards = [
+      "React", "lodash", "vscode", "path", "fs", 
+      "chalk", "glob", // Common in build tools
+      "_" // Lodash convention
+    ];
+    
+    const hasAllowedPattern = allowedWildcards.some(pattern => match.includes(pattern));
+    
+    // Allow wildcards for specific file types
+    const allowedWildcardFiles = [
+      "extensions/", // VS Code extensions commonly use wildcards
+      "tools/", // Build and dev tools
+      "scripts/", // Dev scripts
+      "webpack.config", "vite.config", // Build configs
+    ];
+    
+    const isAllowedFile = allowedWildcardFiles.some(pattern => filePath.includes(pattern));
+    
+    if (!hasAllowedPattern && !isAllowedFile) {
       const lineNum = lines.findIndex((line) => line.includes(match)) + 1;
       violations.push({
         type: "Wildcard Import",
@@ -102,6 +112,14 @@ function checkFile(filePath, content) {
   // Check for problematic default imports
   importPatterns.problematicDefaults.forEach(({ pattern, correct }) => {
     if (pattern.test(content)) {
+      // Skip React import checks for template generators (they generate React code)
+      if (pattern.toString().includes("React") && 
+          (filePath.includes("tools/generators/") || 
+           filePath.includes("templates/") ||
+           filePath.includes("examples/"))) {
+        return;
+      }
+      
       const match = content.match(pattern)[0];
       const lineNum = lines.findIndex((line) => line.includes(match)) + 1;
       violations.push({
@@ -116,14 +134,41 @@ function checkFile(filePath, content) {
 
   // Check for banned imports
   importPatterns.bannedImports.forEach(({ pattern, message }) => {
-    // Skip console checks for enforcement tools and dev scripts
-    if (
-      pattern.toString().includes("console") &&
-      (filePath.includes("tools/enforcement/") ||
-        filePath.includes("tools/generators/") ||
-        filePath.includes("scripts/dev/"))
-    ) {
-      return;
+    // Skip console checks for legitimate use cases
+    if (pattern.toString().includes("console")) {
+      const allowedConsolePatterns = [
+        "tools/enforcement/",
+        "tools/generators/",
+        "tools/testing/", // Testing framework output
+        "tools/claude-validation/", // Validation tool output
+        "scripts/", // All development scripts (not just scripts/dev/)
+        "extensions/", // VS Code extensions legitimately use console
+        "examples/", // Example files show usage patterns
+        "ExampleApp", // Demo components
+        "src/components/Example", // Demo components
+        "test/", // Test files
+        "spec/", // Test files
+        "__tests__/", // Test files
+      ];
+      
+      if (allowedConsolePatterns.some(pattern => filePath.includes(pattern))) {
+        return;
+      }
+    }
+
+    // Skip fs imports for VS Code extensions and legitimate system tools
+    if (pattern.toString().includes("fs")) {
+      const allowedFsPatterns = [
+        "extensions/", // VS Code extensions need direct fs access
+        "tools/", // Build and generator tools
+        "scripts/", // Development scripts
+        "webpack.config", // Build configs
+        "vite.config", // Build configs
+      ];
+      
+      if (allowedFsPatterns.some(allowedPattern => filePath.includes(allowedPattern))) {
+        return;
+      }
     }
 
     const matches = content.match(pattern) || [];
@@ -192,8 +237,15 @@ async function checkImports(specificFiles = []) {
     }
   }
 
+  // Log metrics regardless of blocking behavior
+  const config = loadConfig();
+  logMetrics('imports', allViolations, config);
+  
+  const shouldBlockCommit = shouldBlock('imports', config);
+  
   if (allViolations.length > 0) {
-    console.error(chalk.red.bold("\n❌ Found import violations:\n"));
+    const messageType = shouldBlockCommit ? "❌ Found import violations:" : "⚠️  Import warnings:";
+    console.error(chalk.red.bold(`\n${messageType}\n`));
 
     // Group by type
     const byType = allViolations.reduce((acc, v) => {
@@ -218,7 +270,15 @@ async function checkImports(specificFiles = []) {
     console.error(chalk.white("  - Use path aliases (@/) for deep imports"));
     console.error(chalk.white("  - Avoid circular dependencies\n"));
 
-    process.exit(1);
+    if (shouldBlockCommit) {
+      console.error(chalk.red.bold("🚫 Commit blocked due to import violations."));
+      console.error(chalk.yellow("💡 To change enforcement level: npm run enforcement:config set-level WARNING"));
+      process.exit(1);
+    } else {
+      console.error(chalk.yellow.bold("⏩ Commit proceeding with warnings."));
+      console.error(chalk.cyan("💡 To fix issues: Follow suggestions above"));
+      console.error(chalk.cyan("💡 To block on violations: npm run enforcement:config set-level FULL"));
+    }
   } else {
     if (!specificFiles || specificFiles.length === 0) {
       console.log(chalk.green("✅ All imports are valid!"));

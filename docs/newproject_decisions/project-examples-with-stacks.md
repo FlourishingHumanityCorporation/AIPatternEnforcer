@@ -1,6 +1,54 @@
 # Project Examples with Recommended Stacks
 
-This guide provides concrete project examples with specific technology stack recommendations, helping you make quick decisions based on similar projects.
+This guide provides concrete project examples with specific technology stack recommendations, helping you make quick
+decisions based on similar projects.
+
+## Table of Contents
+
+1. [🚀 SaaS Applications](#-saas-applications)
+  2. [1. Project Management Tool (Like Asana/Trello)](#1-project-management-tool-like-asanatrello)
+  3. [2. Customer Support Platform (Like Zendesk)](#2-customer-support-platform-like-zendesk)
+  4. [3. Analytics Dashboard (Like Google Analytics)](#3-analytics-dashboard-like-google-analytics)
+5. [🛒 E-commerce Applications](#-e-commerce-applications)
+  6. [4. Online Store (Like Shopify)](#4-online-store-like-shopify)
+  7. [5. Marketplace (Like Etsy)](#5-marketplace-like-etsy)
+8. [📊 Data & Analytics](#-data-analytics)
+  9. [6. Business Intelligence Tool (Like Tableau)](#6-business-intelligence-tool-like-tableau)
+  10. [7. Social Media Analytics (Like Hootsuite)](#7-social-media-analytics-like-hootsuite)
+11. [🎯 Content & Media](#-content-media)
+  12. [8. Content Management System (Like WordPress)](#8-content-management-system-like-wordpress)
+  13. [9. Video Platform (Like YouTube)](#9-video-platform-like-youtube)
+14. [🏥 Specialized Industries](#-specialized-industries)
+  15. [10. Healthcare Platform (Like Teladoc)](#10-healthcare-platform-like-teladoc)
+  16. [11. Educational Platform (Like Coursera)](#11-educational-platform-like-coursera)
+17. [🎮 Real-time Applications](#-real-time-applications)
+  18. [12. Collaboration Tool (Like Figma)](#12-collaboration-tool-like-figma)
+  19. [13. Chat Application (Like Slack)](#13-chat-application-like-slack)
+20. [🤖 AI & Automation Tools](#-ai-automation-tools)
+  21. [14. Task Tracker with AI (Like AITaskTracker)](#14-task-tracker-with-ai-like-aitasktracker)
+  22. [15. Complex Automation System (Educational/Research)](#15-complex-automation-system-educationalresearch)
+23. [🔧 Developer Tools](#-developer-tools)
+  24. [16. API Management Platform (Like Postman)](#16-api-management-platform-like-postman)
+  25. [17. CI/CD Platform (Like GitHub Actions)](#17-cicd-platform-like-github-actions)
+26. [🎨 Creative Tools](#-creative-tools)
+  27. [18. Design Tool (Like Canva)](#18-design-tool-like-canva)
+  28. [19. Photo Editor (Like Photoshop Web)](#19-photo-editor-like-photoshop-web)
+29. [📱 Mobile-First Applications](#-mobile-first-applications)
+  30. [20. Food Delivery App (Like DoorDash)](#20-food-delivery-app-like-doordash)
+  31. [21. Social Media App (Like Instagram)](#21-social-media-app-like-instagram)
+32. [🎓 Learning & Personal Projects](#-learning-personal-projects)
+  33. [22. Personal Blog/Portfolio](#22-personal-blogportfolio)
+  34. [23. Todo/Task Manager](#23-todotask-manager)
+35. [🔍 Decision Framework](#-decision-framework)
+  36. [By Project Complexity](#by-project-complexity)
+  37. [By Team Size](#by-team-size)
+  38. [By Timeline](#by-timeline)
+39. [🚀 Quick Start Templates](#-quick-start-templates)
+  40. [SaaS Template](#saas-template)
+  41. [API-First Template](#api-first-template)
+  42. [Analytics Template](#analytics-template)
+43. [📝 Decision Checklist](#-decision-checklist)
+44. [🎯 Summary](#-summary)
 
 ## 🚀 SaaS Applications
 
@@ -22,7 +70,7 @@ This guide provides concrete project examples with specific technology stack rec
 - Real-time collaboration requires WebSocket support
 - Complex permissions and team management
 - SEO for marketing pages
-- Excellent developer experience
+- Robust developer experience
 
 **Key Features to Implement:**
 
@@ -90,7 +138,7 @@ This guide provides concrete project examples with specific technology stack rec
 
 **Why this stack:**
 
-- Excellent SEO for product pages
+- Robust SEO for product pages
 - Server-side rendering for performance
 - Integrated payment processing
 - Image optimization built-in
@@ -302,7 +350,7 @@ This guide provides concrete project examples with specific technology stack rec
 **Why this stack:**
 
 - Local-first architecture (no cloud required)
-- Python excellent for AI/ML libraries
+- Python robust for AI/ML libraries
 - Electron for system-level access
 - Desktop app for screenshot capture
 
@@ -335,7 +383,8 @@ This guide provides concrete project examples with specific technology stack rec
 - Local processing for privacy
 
 **⚠️ Important Note:**
-This type of automation may violate platform Terms of Service. Consider ethical implications and legal compliance before implementation.
+This type of automation may violate platform Terms of Service. Consider ethical implications and legal compliance before
+implementation.
 
 **Key Technical Challenges:**
 
@@ -489,7 +538,7 @@ This type of automation may violate platform Terms of Service. Consider ethical 
 
 **Why this stack:**
 
-- Excellent SEO
+- Robust SEO
 - Simple content management
 - Static generation
 - Easy deployment
@@ -625,6 +674,9 @@ Before choosing a stack, consider:
 
 ## 🎯 Summary
 
-The best technology stack depends on your specific requirements, but these examples provide proven patterns for common project types. Use the decision wizard (`npm run choose-stack`) for personalized recommendations based on your specific needs.
+The optimal technology stack depends on your specific requirements, but these examples provide proven patterns for common
+project types. Use the decision wizard (`npm run choose-stack`) for personalized recommendations based on your specific
+needs.
 
-Remember: Start simple, iterate quickly, and scale when needed. The perfect stack is the one that helps you ship your project successfully.
+Remember: Start simple, iterate quickly, and scale when needed. The complete stack is the one that helps you ship your
+project successfully.

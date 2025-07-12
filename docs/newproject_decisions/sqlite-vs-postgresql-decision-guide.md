@@ -1,8 +1,39 @@
 # SQLite vs PostgreSQL: Decision Guide
 
+## Table of Contents
+
+1. [🚀 Quick Decision Framework](#-quick-decision-framework)
+2. [📊 Side-by-Side Comparison](#-side-by-side-comparison)
+3. [🎯 Clear Use Cases](#-clear-use-cases)
+  4. [Choose SQLite When:](#choose-sqlite-when)
+  5. [Choose PostgreSQL When:](#choose-postgresql-when)
+6. [🔄 When to Migrate](#-when-to-migrate)
+  7. [SQLite → PostgreSQL](#sqlite-postgresql)
+  8. [PostgreSQL → SQLite](#postgresql-sqlite)
+9. [🛠️ Practical Examples](#-practical-examples)
+  10. [Example 1: Personal Todo App](#example-1-personal-todo-app)
+  11. [Example 2: Team Project Management](#example-2-team-project-management)
+  12. [Example 3: Analytics Dashboard](#example-3-analytics-dashboard)
+  13. [Example 4: Desktop App with Offline Support](#example-4-desktop-app-with-offline-support)
+14. [⚖️ Decision Matrix Tool](#-decision-matrix-tool)
+15. [🚨 Common Mistakes](#-common-mistakes)
+  16. [Don't Choose SQLite If:](#dont-choose-sqlite-if)
+  17. [Don't Choose PostgreSQL If:](#dont-choose-postgresql-if)
+18. [🔧 Hybrid Approaches](#-hybrid-approaches)
+  19. [SQLite + Read Replicas](#sqlite-read-replicas)
+  20. [PostgreSQL + SQLite Cache](#postgresql-sqlite-cache)
+21. [📈 Growth Path Strategy](#-growth-path-strategy)
+  22. [Start Simple (SQLite)](#start-simple-sqlite)
+  23. [Scale When Needed (PostgreSQL)](#scale-when-needed-postgresql)
+24. [🎯 Quick Reference](#-quick-reference)
+25. [💡 Pro Tips](#-pro-tips)
+  26. [SQLite Optimal Practices](#sqlite-optimal-practices)
+  27. [PostgreSQL Optimal Practices](#postgresql-optimal-practices)
+28. [🔍 When in Doubt](#-when-in-doubt)
+
 ## 🚀 Quick Decision Framework
 
-```
+```text
 Start → Will multiple people use this simultaneously?
          ├─ No → SQLite (simple, local)
          └─ Yes → How many concurrent users?
@@ -17,18 +48,18 @@ Start → Will multiple people use this simultaneously?
 | **Setup & Deployment**          |
 | Initial setup                   | Zero config      | Install/configure server  | SQLite     |
 | Deployment complexity           | Copy single file | Server management         | SQLite     |
-| Local development               | Perfect          | Requires Docker/install   | SQLite     |
+| Local development               | Complete          | Requires Docker/install   | SQLite     |
 | **Performance**                 |
-| Read performance                | Excellent        | Excellent                 | Tie        |
-| Write performance (single user) | Excellent        | Good                      | SQLite     |
-| Write performance (concurrent)  | Limited          | Excellent                 | PostgreSQL |
-| Complex queries                 | Good             | Excellent                 | PostgreSQL |
+| Read performance                | Robust        | Robust                 | Tie        |
+| Write performance (single user) | Robust        | Good                      | SQLite     |
+| Write performance (concurrent)  | Limited          | Robust                 | PostgreSQL |
+| Complex queries                 | Good             | Robust                 | PostgreSQL |
 | **Scalability**                 |
-| Concurrent reads                | Good             | Excellent                 | PostgreSQL |
-| Concurrent writes               | Limited          | Excellent                 | PostgreSQL |
+| Concurrent reads                | Good             | Robust                 | PostgreSQL |
+| Concurrent writes               | Limited          | Robust                 | PostgreSQL |
 | Database size limit             | 281TB            | Unlimited                 | PostgreSQL |
 | **Features**                    |
-| SQL compliance                  | Good             | Excellent                 | PostgreSQL |
+| SQL compliance                  | Good             | Robust                 | PostgreSQL |
 | Data types                      | Basic            | Rich (JSON, arrays, etc.) | PostgreSQL |
 | Full-text search                | Basic            | Advanced                  | PostgreSQL |
 | Stored procedures               | No               | Yes                       | PostgreSQL |
@@ -205,7 +236,7 @@ GROUP BY date_trunc('day', created_at);
 **Decision**: **SQLite**
 
 ```typescript
-// Perfect for desktop apps
+// Complete for desktop apps
 const dbPath = path.join(app.getPath("userData"), "app.db");
 const db = new Database(dbPath);
 
@@ -303,7 +334,7 @@ const main = new Pool({ connectionString: POSTGRES_URL });
 
 ## 💡 Pro Tips
 
-### SQLite Best Practices
+### SQLite Optimal Practices
 
 ```sql
 -- Enable WAL mode for better concurrency
@@ -315,7 +346,7 @@ PRAGMA temp_store = memory;
 PRAGMA synchronous = NORMAL;
 ```
 
-### PostgreSQL Best Practices
+### PostgreSQL Optimal Practices
 
 ```sql
 -- Use appropriate indexes
@@ -332,8 +363,10 @@ VACUUM ANALYZE;
 
 **Default recommendation**: Start with SQLite, migrate to PostgreSQL when you need to.
 
-**Migration trigger**: When you experience SQLite limitations in your actual use case, not based on theoretical concerns.
+**Migration trigger**: When you experience SQLite limitations in your actual use case, not based on theoretical
+concerns.
 
-**Remember**: Many successful applications run on SQLite (Fossil, Sqlite.org, many mobile apps). Don't over-engineer early.
+**Remember**: Many successful applications run on SQLite (Fossil, Sqlite.org, many mobile apps). Don't over-engineer
+early.
 
-The best database is the one that solves your current problem without creating new ones!
+The optimal database is the one that solves your current problem without creating new ones!

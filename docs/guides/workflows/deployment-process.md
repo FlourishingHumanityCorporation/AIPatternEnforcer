@@ -1,8 +1,61 @@
 # Deployment Process Guide
 
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Deployment Pipeline](#deployment-pipeline)
+3. [Pre-Deployment Checklist](#pre-deployment-checklist)
+  4. [Code Quality Gates](#code-quality-gates)
+  5. [Security Verification](#security-verification)
+  6. [Documentation Updates](#documentation-updates)
+7. [Deployment Environments](#deployment-environments)
+  8. [Local Development](#local-development)
+  9. [CI/CD Pipeline](#cicd-pipeline)
+    10. [GitHub Actions Workflow](#github-actions-workflow)
+  11. [Staging Deployment](#staging-deployment)
+    12. [1. Deploy to Staging](#1-deploy-to-staging)
+    13. [2. Staging Validation](#2-staging-validation)
+    14. [3. Performance Validation](#3-performance-validation)
+  15. [Production Deployment](#production-deployment)
+    16. [1. Pre-Production Steps](#1-pre-production-steps)
+    17. [2. Deploy to Production](#2-deploy-to-production)
+    18. [3. Post-Deployment Verification](#3-post-deployment-verification)
+19. [Deployment Strategies](#deployment-strategies)
+  20. [Blue-Green Deployment](#blue-green-deployment)
+  21. [Canary Deployment](#canary-deployment)
+  22. [Rolling Deployment](#rolling-deployment)
+23. [Database Migrations](#database-migrations)
+  24. [Safe Migration Process](#safe-migration-process)
+  25. [Migration Optimal Practices](#migration-optimal-practices)
+26. [Rollback Procedures](#rollback-procedures)
+  27. [Immediate Rollback](#immediate-rollback)
+  28. [Database Rollback](#database-rollback)
+  29. [Feature Flag Rollback](#feature-flag-rollback)
+30. [Monitoring Post-Deployment](#monitoring-post-deployment)
+  31. [Key Metrics](#key-metrics)
+  32. [Alert Configuration](#alert-configuration)
+  33. [Deployment Verification Script](#deployment-verification-script)
+34. [Environment Configuration](#environment-configuration)
+  35. [Environment Variables](#environment-variables)
+  36. [Configuration Validation](#configuration-validation)
+37. [Deployment Automation](#deployment-automation)
+  38. [Deployment Script](#deployment-script)
+39. [Troubleshooting Deployments](#troubleshooting-deployments)
+  40. [Common Issues](#common-issues)
+    41. [Build Failures](#build-failures)
+    42. [Migration Failures](#migration-failures)
+    43. [Performance Degradation](#performance-degradation)
+  44. [Emergency Procedures](#emergency-procedures)
+    45. [Maintenance Mode](#maintenance-mode)
+    46. [Incident Response](#incident-response)
+47. [Deployment Calendar](#deployment-calendar)
+  48. [Deployment Windows](#deployment-windows)
+  49. [Deployment Freeze](#deployment-freeze)
+
 ## Overview
 
-This guide covers the deployment process from local development to production, including safety checks, rollback procedures, and monitoring.
+This guide covers the deployment process from local development to production, including safety checks, rollback
+procedures, and monitoring.
 
 ## Deployment Pipeline
 
@@ -226,7 +279,7 @@ npm run db:migrate:production
 npm run db:verify:production
 ```
 
-### Migration Best Practices
+### Migration Optimal Practices
 
 - Always backwards compatible
 - Test rollback procedure

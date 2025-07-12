@@ -2,6 +2,35 @@
 
 [One-line description of what your project does]
 
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Features](#features)
+3. [Quick Start](#quick-start)
+  4. [Prerequisites](#prerequisites)
+  5. [Installation](#installation)
+  6. [Basic Usage](#basic-usage)
+7. [Documentation](#documentation)
+8. [Tech Stack](#tech-stack)
+9. [Project Structure](#project-structure)
+10. [Development](#development)
+  11. [Available Scripts](#available-scripts)
+  12. [Testing](#testing)
+  13. [Code Style](#code-style)
+14. [Contributing](#contributing)
+  15. [Quick Contribution Steps](#quick-contribution-steps)
+16. [Deployment](#deployment)
+  17. [Production Deployment](#production-deployment)
+18. [Configuration](#configuration)
+  19. [Environment Variables](#environment-variables)
+20. [API Reference](#api-reference)
+  21. [REST API](#rest-api)
+22. [Troubleshooting](#troubleshooting)
+  23. [Common Issues](#common-issues)
+24. [License](#license)
+25. [Acknowledgments](#acknowledgments)
+26. [Support](#support)
+
 ## Overview
 
 [2-3 paragraphs explaining:
@@ -57,10 +86,11 @@ const result = await MainFeature.doSomething({
 
 ## Documentation
 
-- [Getting Started](docs/getting-started.md)
-- [API Reference](docs/api/README.md)
-- [Configuration](docs/configuration.md)
-- [Examples](examples/README.md)
+<!-- Note: The links below are template placeholders. Replace with actual paths for your project -->
+- [Getting Started](docs/getting-started.md) <!-- Template placeholder -->
+- [API Reference](docs/api/README.md) <!-- Template placeholder -->
+- [Configuration](docs/configuration.md) <!-- Template placeholder -->
+- [Examples](examples/README.md) <!-- Template placeholder -->
 
 ## Tech Stack
 
@@ -71,7 +101,7 @@ const result = await MainFeature.doSomething({
 
 ## Project Structure
 
-```
+```text
 src/
 ├── features/       # Feature-based modules
 ├── components/     # Shared components
@@ -117,14 +147,15 @@ Run `npm run lint:fix` to auto-fix issues.
 
 ## Contributing
 
+<!-- Note: Replace with actual contributing guide link if it exists -->
 We love contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
 ### Quick Contribution Steps
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
+2. Create your feature branch (`git checkout -b feature/functional-feature`)
+3. Commit your changes (`git commit -m 'feat: add functional feature'`)
+4. Push to the branch (`git push origin feature/functional-feature`)
 5. Open a Pull Request
 
 ## Deployment
@@ -139,6 +170,7 @@ npm run deploy:production
 vercel --prod
 ```
 
+<!-- Note: Replace with actual deployment guide link -->
 See [Deployment Guide](docs/deployment.md) for detailed instructions.
 
 ## Configuration
@@ -166,6 +198,7 @@ Base URL: `https://api.[project-name].com`
 | `/users/:id` | GET    | Get user    |
 | `/users`     | POST   | Create user |
 
+<!-- Note: Replace with actual API documentation link -->
 See [API Documentation](docs/api/README.md) for full reference.
 
 ## Troubleshooting
@@ -196,6 +229,7 @@ Solution:
 3. Run migrations: `npm run db:migrate`
 </details>
 
+<!-- Note: Replace with actual troubleshooting guide link -->
 See [Troubleshooting Guide](docs/troubleshooting.md) for more solutions.
 
 ## License

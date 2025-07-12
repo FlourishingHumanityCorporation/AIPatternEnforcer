@@ -1,5 +1,17 @@
 # State Management Patterns
 
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Frontend State Patterns](#frontend-state-patterns)
+  3. [1. Component State (Local)](#1-component-state-local)
+  4. [2. Context API (Shared)](#2-context-api-shared)
+  5. [3. Server State (React Query/SWR)](#3-server-state-react-queryswr)
+6. [Backend State Patterns](#backend-state-patterns)
+  7. [1. Request-Scoped State](#1-request-scoped-state)
+  8. [2. Cache Patterns](#2-cache-patterns)
+9. [Optimal Practices](#optimal-practices)
+
 ## Overview
 
 State management patterns for maintaining predictable, debuggable application state.
@@ -93,7 +105,7 @@ class CacheService {
 }
 ```
 
-## Best Practices
+## Optimal Practices
 
 1. **Single Source of Truth** - Each piece of state should have one authoritative source
 2. **Minimize State** - Don't store what can be computed

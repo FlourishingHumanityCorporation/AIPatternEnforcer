@@ -1,5 +1,17 @@
 # Context Reinforcement Template
 
+## Table of Contents
+
+1. [Purpose](#purpose)
+2. [Reinforcement Structure](#reinforcement-structure)
+  3. [Project Context Reminder](#project-context-reminder)
+  4. [Architecture Patterns (MANDATORY)](#architecture-patterns-mandatory)
+  5. [Code Style Rules (NON-NEGOTIABLE)](#code-style-rules-non-negotiable)
+  6. [Current Task Context](#current-task-context)
+  7. [Examples to Follow](#examples-to-follow)
+  8. [Verification Checklist](#verification-checklist)
+9. [Usage Instructions](#usage-instructions)
+
 ## Purpose
 
 Use this template when AI starts forgetting project conventions or generating inconsistent code.

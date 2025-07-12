@@ -1,5 +1,19 @@
 # Unit Test Generation Prompt Template
 
+## Table of Contents
+
+1. [Context](#context)
+2. [Code to Test](#code-to-test)
+3. [Test Requirements](#test-requirements)
+  4. [Coverage Goals](#coverage-goals)
+  5. [Specific Scenarios to Test](#specific-scenarios-to-test)
+6. [Testing Framework](#testing-framework)
+7. [Dependencies to Mock](#dependencies-to-mock)
+8. [Existing Test Patterns](#existing-test-patterns)
+9. [Output Requirements](#output-requirements)
+10. [Test Structure Template](#test-structure-template)
+11. [Additional Considerations](#additional-considerations)
+
 ## Context
 
 I need unit tests for [COMPONENT/FUNCTION NAME] in [PROJECT NAME].

@@ -1,0 +1,28 @@
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { {{name}} } from './{{name}}';
+
+describe('{{name}}', () => {
+  it('renders children correctly', () => {
+    render(<{{name}}>Test Content</{{name}}>);
+    expect(screen.getByText('Test Content')).toBeInTheDocument();
+  });
+
+  it('renders with custom className', () => {
+    const { container } = render(
+      <{{name}} className="custom-class">
+        Display Content
+      </{{name}}>
+    );
+    expect(container.firstChild).toHaveClass('custom-class');
+  });
+
+  it('applies custom test ID', () => {
+    render(
+      <{{name}} testId="custom-test-id">
+        Content
+      </{{name}}>
+    );
+    expect(screen.getByTestId('custom-test-id')).toBeInTheDocument();
+  });
+});

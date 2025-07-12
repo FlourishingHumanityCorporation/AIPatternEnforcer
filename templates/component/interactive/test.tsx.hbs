@@ -1,0 +1,39 @@
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { {{name}} } from './{{name}}';
+
+describe('{{name}}', () => {
+  it('renders children correctly', () => {
+    render(<{{name}}>Test Content</{{name}}>);
+    expect(screen.getByText('Test Content')).toBeInTheDocument();
+  });
+
+  it('handles disabled state', () => {
+    const { container } = render(<{{name}} disabled>Disabled</{{name}}>);
+    expect(container.firstChild).toHaveAttribute('aria-disabled', 'true');
+  });
+
+  it('shows loading state', () => {
+    render(<{{name}} isLoading>Content</{{name}}>);
+    expect(screen.getByTestId('{{kebabCase name}}-loading')).toBeInTheDocument();
+    expect(screen.queryByText('Content')).not.toBeInTheDocument();
+  });
+
+  it('renders with custom className', () => {
+    const { container } = render(
+      <{{name}} className="custom-class">
+        Interactive Content
+      </{{name}}>
+    );
+    expect(container.firstChild).toHaveClass('custom-class');
+  });
+
+  it('applies custom test ID', () => {
+    render(
+      <{{name}} testId="custom-test-id">
+        Content
+      </{{name}}>
+    );
+    expect(screen.getByTestId('custom-test-id')).toBeInTheDocument();
+  });
+});

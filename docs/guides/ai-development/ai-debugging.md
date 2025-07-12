@@ -1,8 +1,49 @@
 # AI-Assisted Debugging Guide
 
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Pre-Debugging Checklist](#pre-debugging-checklist)
+3. [Debugging Workflow](#debugging-workflow)
+  4. [1. Context Gathering](#1-context-gathering)
+  5. [2. Problem Statement Template](#2-problem-statement-template)
+6. [Issue Description](#issue-description)
+7. [Error Details](#error-details)
+8. [Reproduction Steps](#reproduction-steps)
+9. [Expected vs Actual](#expected-vs-actual)
+10. [Environment](#environment)
+11. [Recent Changes](#recent-changes)
+  12. [3. Systematic Debugging Prompts](#3-systematic-debugging-prompts)
+    13. [Root Cause Analysis](#root-cause-analysis)
+    14. [State Debugging](#state-debugging)
+    15. [Performance Debugging](#performance-debugging)
+16. [AI Debugging Strategies](#ai-debugging-strategies)
+  17. [1. Hypothesis-Driven Debugging](#1-hypothesis-driven-debugging)
+  18. [2. Divide and Conquer](#2-divide-and-conquer)
+  19. [3. Time Travel Debugging](#3-time-travel-debugging)
+20. [Common Debugging Scenarios](#common-debugging-scenarios)
+  21. [Async/Promise Issues](#asyncpromise-issues)
+  22. [Type Errors](#type-errors)
+  23. [State Management](#state-management)
+  24. [API Integration](#api-integration)
+25. [Advanced Debugging Techniques](#advanced-debugging-techniques)
+  26. [1. Minimal Reproduction](#1-minimal-reproduction)
+  27. [2. Binary Search Debugging](#2-binary-search-debugging)
+  28. [3. Debugging by Proxy](#3-debugging-by-proxy)
+29. [Post-Debugging Actions](#post-debugging-actions)
+  30. [1. Root Cause Documentation](#1-root-cause-documentation)
+  31. [2. Test Creation](#2-test-creation)
+  32. [3. Pattern Recognition](#3-pattern-recognition)
+33. [Debugging Toolbox](#debugging-toolbox)
+  34. [Essential Commands](#essential-commands)
+  35. [Debug Logging Strategy](#debug-logging-strategy)
+  36. [Browser Debugging](#browser-debugging)
+37. [When AI Debugging Fails](#when-ai-debugging-fails)
+
 ## Overview
 
-AI tools can significantly accelerate debugging, but they need the right context and approach. This guide covers effective strategies for using AI to debug issues.
+AI tools can significantly accelerate debugging, but they need the right context and approach. This guide covers
+effective strategies for using AI to debug issues.
 
 ## Pre-Debugging Checklist
 
@@ -165,7 +206,7 @@ Debug async issue:
 
 ```javascript
 [problematic async code]
-```
+```text
 ````
 
 Check for:
@@ -373,4 +414,5 @@ If AI can't help resolve the issue:
 4. **Manual Debugging**: Use traditional debugger tools
 5. **Ask Colleagues**: Sometimes human insight is needed
 
-Remember: AI is a debugging assistant, not a replacement for understanding your code. Use it to accelerate investigation, but verify all suggestions.
+Remember: AI is a debugging assistant, not a replacement for understanding your code. Use it to accelerate
+investigation, but verify all suggestions.

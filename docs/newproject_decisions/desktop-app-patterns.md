@@ -1,5 +1,43 @@
 # Desktop Application Patterns Guide
 
+## Table of Contents
+
+1. [Quick Decision Flow](#quick-decision-flow)
+2. [Requirements Gathering](#requirements-gathering)
+  3. [Application Requirements](#application-requirements)
+  4. [Technical Requirements](#technical-requirements)
+5. [Options Evaluation Matrix](#options-evaluation-matrix)
+  6. [Desktop Framework Comparison](#desktop-framework-comparison)
+  7. [Resource Usage Comparison](#resource-usage-comparison)
+8. [Detailed Comparison](#detailed-comparison)
+  9. [Option A: Electron (Web Technologies Champion)](#option-a-electron-web-technologies-champion)
+  10. [Option B: Tauri (Rust-Powered Efficiency)](#option-b-tauri-rust-powered-efficiency)
+  11. [Option C: Flutter Desktop](#option-c-flutter-desktop)
+12. [Architecture Patterns](#architecture-patterns)
+  13. [Pattern 1: Main/Renderer Process Separation](#pattern-1-mainrenderer-process-separation)
+  14. [Pattern 2: State Management](#pattern-2-state-management)
+  15. [Pattern 3: Auto-Update Implementation](#pattern-3-auto-update-implementation)
+16. [Local Development Setup](#local-development-setup)
+  17. [Electron Development](#electron-development)
+  18. [Tauri Development](#tauri-development)
+19. [Security Optimal Practices](#security-optimal-practices)
+  20. [Electron Security Checklist](#electron-security-checklist)
+  21. [Tauri Security Features](#tauri-security-features)
+22. [Performance Optimization](#performance-optimization)
+  23. [Startup Time Optimization](#startup-time-optimization)
+  24. [Memory Usage Optimization](#memory-usage-optimization)
+25. [Distribution & Code Signing](#distribution-code-signing)
+  26. [macOS Notarization](#macos-notarization)
+  27. [Windows Code Signing](#windows-code-signing)
+28. [Decision Template](#decision-template)
+29. [Real-World Examples](#real-world-examples)
+  30. [Example 1: Note-Taking App](#example-1-note-taking-app)
+  31. [Example 2: Design Tool](#example-2-design-tool)
+  32. [Example 3: System Monitor](#example-3-system-monitor)
+33. [AI Assistant Integration](#ai-assistant-integration)
+  34. [Desktop App Planning Prompt](#desktop-app-planning-prompt)
+  35. [Code Generation Context](#code-generation-context)
+
 ## Quick Decision Flow
 
 ```mermaid
@@ -492,7 +530,7 @@ custom-protocol = ["tauri/custom-protocol"]
 }
 ```
 
-## Security Best Practices
+## Security Optimal Practices
 
 ### Electron Security Checklist
 
@@ -702,5 +740,5 @@ When planning desktop app:
 - Framework: [React/Vue/Svelte]
 - Features: [tray icon, auto-update, file handling]
 - Platforms: [Windows, macOS, Linux]
-  Include security best practices and platform-specific code."
+  Include security optimal practices and platform-specific code."
 ```

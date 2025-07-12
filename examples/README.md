@@ -2,6 +2,16 @@
 
 This directory contains complete example implementations using the project template.
 
+## Table of Contents
+
+1. [Available Examples](#available-examples)
+  2. [1. Next.js + PostgreSQL (`nextjs-postgres/`)](#1-nextjs-postgresql-nextjs-postgres)
+  3. [2. Vite + Fastify (`vite-fastify/`)](#2-vite-fastify-vite-fastify)
+4. [How to Use](#how-to-use)
+  5. [Quick Start](#quick-start)
+6. [Adding New Examples](#adding-new-examples)
+7. [Example Requirements](#example-requirements)
+
 ## Available Examples
 
 ### 1. Next.js + PostgreSQL (`nextjs-postgres/`)
@@ -57,7 +67,7 @@ To add a new example:
 Each example should demonstrate:
 - ✅ Proper project structure
 - ✅ AI-friendly documentation
-- ✅ Security best practices
+- ✅ Security optimal practices
 - ✅ Testing setup
 - ✅ Development workflow
 - ✅ Error handling patterns

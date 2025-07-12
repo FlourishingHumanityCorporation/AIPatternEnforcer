@@ -1,5 +1,45 @@
 # API Documentation
 
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Authentication](#authentication)
+  3. [Obtain Access Token](#obtain-access-token)
+  4. [Refresh Token](#refresh-token)
+5. [Error Responses](#error-responses)
+6. [Endpoints](#endpoints)
+  7. [Users](#users)
+    8. [List Users](#list-users)
+    9. [Get User](#get-user)
+    10. [Create User](#create-user)
+    11. [Update User](#update-user)
+    12. [Delete User](#delete-user)
+  13. [[Resource Name]](#resource-name)
+    14. [List [Resources]](#list-resources)
+    15. [Get [Resource]](#get-resource)
+    16. [Create [Resource]](#create-resource)
+    17. [Update [Resource]](#update-resource)
+    18. [Delete [Resource]](#delete-resource)
+19. [Pagination](#pagination)
+20. [Filtering](#filtering)
+21. [Sorting](#sorting)
+22. [Rate Limiting](#rate-limiting)
+23. [Webhooks](#webhooks)
+  24. [Configure Webhook](#configure-webhook)
+  25. [Webhook Payload](#webhook-payload)
+26. [API Versioning](#api-versioning)
+27. [SDK Usage](#sdk-usage)
+  28. [JavaScript/TypeScript](#javascripttypescript)
+  29. [Python](#python)
+30. [Testing](#testing)
+  31. [Test Environment](#test-environment)
+  32. [Example Requests](#example-requests)
+33. [Changelog](#changelog)
+  34. [v1.2.0 (2024-01-15)](#v120-2024-01-15)
+  35. [v1.1.0 (2023-12-01)](#v110-2023-12-01)
+  36. [v1.0.0 (2023-10-01)](#v100-2023-10-01)
+37. [Support](#support)
+
 ## Overview
 
 Base URL: `https://api.[your-domain].com/v1`

@@ -1,8 +1,47 @@
 # Frontend Framework Decision Matrix
 
+## Table of Contents
+
+1. [Quick Decision Flow for Frontend](#quick-decision-flow-for-frontend)
+2. [Requirements Assessment](#requirements-assessment)
+  3. [Project Requirements](#project-requirements)
+  4. [Team Requirements](#team-requirements)
+  5. [Performance Requirements](#performance-requirements)
+6. [Comprehensive Comparison Matrix](#comprehensive-comparison-matrix)
+  7. [Weighted Score Calculation](#weighted-score-calculation)
+8. [Detailed Framework Analysis](#detailed-framework-analysis)
+  9. [Next.js 14 (App Router)](#nextjs-14-app-router)
+  10. [Vite + React](#vite-react)
+  11. [Remix](#remix)
+  12. [SvelteKit](#sveltekit)
+13. [Local Development Scenarios](#local-development-scenarios)
+  14. [Scenario 1: Personal Blog/Portfolio](#scenario-1-personal-blogportfolio)
+  15. [Scenario 2: Dashboard/Admin Panel](#scenario-2-dashboardadmin-panel)
+  16. [Scenario 3: E-commerce Site](#scenario-3-e-commerce-site)
+  17. [Scenario 4: Learning Project](#scenario-4-learning-project)
+  18. [Scenario 5: Real-time Collaboration App](#scenario-5-real-time-collaboration-app)
+19. [Framework-Specific Setup Commands](#framework-specific-setup-commands)
+  20. [Next.js Setup](#nextjs-setup)
+  21. [Vite + React Setup](#vite-react-setup)
+  22. [Remix Setup](#remix-setup)
+  23. [SvelteKit Setup](#sveltekit-setup)
+24. [Local Development Considerations](#local-development-considerations)
+  25. [Build Speed (Development)](#build-speed-development)
+  26. [Memory Usage (Development)](#memory-usage-development)
+  27. [Hot Reload Speed](#hot-reload-speed)
+28. [AI Assistant Compatibility](#ai-assistant-compatibility)
+  29. [Optimal for AI Development](#optimal-for-ai-development)
+  30. [AI-Friendly Documentation](#ai-friendly-documentation)
+31. [Decision Template](#decision-template)
+32. [Quick Reference Guide](#quick-reference-guide)
+33. [Migration Strategies](#migration-strategies)
+  34. [From Create React App](#from-create-react-app)
+  35. [From Next.js Pages to App Router](#from-nextjs-pages-to-app-router)
+  36. [From Vue to React](#from-vue-to-react)
+
 ## Quick Decision Flow for Frontend
 
-```
+```text
 Start → Need SSR/SEO?
          ├─ Yes → Complex routing/data needs?
          │         ├─ Yes → Next.js (full framework)
@@ -69,7 +108,7 @@ Start → Need SSR/SEO?
 
 ### Weighted Score Calculation
 
-```
+```text
 Next.js:     (Σ weight × score) / total_weight = ___
 Vite+React:  (Σ weight × score) / total_weight = ___
 Remix:       (Σ weight × score) / total_weight = ___
@@ -82,7 +121,7 @@ Angular:     (Σ weight × score) / total_weight = ___
 
 ### Next.js 14 (App Router)
 
-**Best for:**
+**Optimal for:**
 
 - SEO-critical applications
 - E-commerce sites
@@ -92,7 +131,7 @@ Angular:     (Σ weight × score) / total_weight = ___
 
 **Local dev advantages:**
 
-- Excellent developer experience
+- Robust developer experience
 - Built-in optimization
 - API routes (full-stack)
 - Great debugging tools
@@ -129,7 +168,7 @@ export default function UserPage({ params }: { params: { id: string } }) {
 
 ### Vite + React
 
-**Best for:**
+**Optimal for:**
 
 - Single-page applications
 - Flexible architecture needs
@@ -141,7 +180,7 @@ export default function UserPage({ params }: { params: { id: string } }) {
 
 - Lightning-fast HMR
 - Minimal configuration
-- Excellent debugging
+- Robust debugging
 - Rich plugin ecosystem
 - Framework agnostic
 
@@ -183,7 +222,7 @@ export default {
 
 ### Remix
 
-**Best for:**
+**Optimal for:**
 
 - Progressive enhancement
 - Form-heavy applications
@@ -194,7 +233,7 @@ export default {
 **Local dev advantages:**
 
 - Simple mental model
-- Excellent form handling
+- Robust form handling
 - Fast page loads
 - Built-in optimization
 - Great error handling
@@ -229,7 +268,7 @@ export default function UserPage() {
 
 ### SvelteKit
 
-**Best for:**
+**Optimal for:**
 
 - Beginner-friendly projects
 - Small to medium applications
@@ -240,7 +279,7 @@ export default function UserPage() {
 **Local dev advantages:**
 
 - Minimal boilerplate
-- Excellent performance
+- Robust performance
 - Simple reactive model
 - Great developer tools
 - Fast compilation
@@ -279,19 +318,19 @@ export default function UserPage() {
 
 **Requirements**: SEO, static generation, simple content
 **Recommendation**: **Next.js** or **SvelteKit**
-**Rationale**: Built-in SSG, excellent SEO, simple deployment
+**Rationale**: Built-in SSG, robust SEO, simple deployment
 
 ### Scenario 2: Dashboard/Admin Panel
 
 **Requirements**: Complex state, real-time updates, no SEO needs
 **Recommendation**: **Vite + React**
-**Rationale**: Maximum flexibility, excellent state management options
+**Rationale**: Maximum flexibility, robust state management options
 
 ### Scenario 3: E-commerce Site
 
 **Requirements**: SEO, performance, complex routing
 **Recommendation**: **Next.js**
-**Rationale**: Built-in optimization, excellent SEO, proven at scale
+**Rationale**: Built-in optimization, robust SEO, proven at scale
 
 ### Scenario 4: Learning Project
 
@@ -347,7 +386,7 @@ npm run dev
 
 ### Build Speed (Development)
 
-```
+```text
 SvelteKit:   ~100ms (incremental)
 Vite+React:  ~200ms (incremental)
 Next.js:     ~500ms (incremental)
@@ -357,7 +396,7 @@ Angular:     ~1000ms (incremental)
 
 ### Memory Usage (Development)
 
-```
+```text
 SvelteKit:   ~200MB
 Vite+React:  ~300MB
 Next.js:     ~400MB
@@ -367,14 +406,14 @@ Angular:     ~500MB
 
 ### Hot Reload Speed
 
-```
+```text
 All modern frameworks: <100ms
-Quality: Excellent across all options
+Quality: Robust across all options
 ```
 
 ## AI Assistant Compatibility
 
-### Best for AI Development
+### Optimal for AI Development
 
 1. **Next.js** - Most training data, well-documented patterns
 2. **Vite + React** - Flexible, lots of examples
@@ -438,12 +477,12 @@ export function UserCard({ user, onEdit }: UserCardProps) {
 
 ## Quick Reference Guide
 
-| Need                 | Best Choice  | Why                     |
+| Need                 | Optimal Choice  | Why                     |
 | -------------------- | ------------ | ----------------------- |
 | SEO required         | Next.js      | Built-in SSR/SSG        |
 | SPA only             | Vite + React | Maximum flexibility     |
 | Beginner friendly    | SvelteKit    | Simple mental model     |
-| Form-heavy app       | Remix        | Excellent form handling |
+| Form-heavy app       | Remix        | Robust form handling |
 | Large team           | Angular      | Strong conventions      |
 | Performance critical | SvelteKit    | Smallest bundles        |
 | Learning React       | Vite + React | Pure React experience   |
@@ -476,4 +515,5 @@ npm install -D vite @vitejs/plugin-react
 # Gradual conversion possible
 ```
 
-Remember: Choose based on your specific needs, team skills, and project requirements. All modern frameworks provide excellent local development experience!
+Remember: Choose based on your specific needs, team skills, and project requirements. All modern frameworks provide
+robust local development experience!

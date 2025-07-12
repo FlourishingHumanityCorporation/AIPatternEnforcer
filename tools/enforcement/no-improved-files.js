@@ -2,6 +2,7 @@
 const glob = require("glob");
 const path = require("path");
 const chalk = require("chalk");
+const { loadConfig, shouldBlock, logMetrics } = require('./enforcement-config');
 
 // Define patterns that violate naming rules
 const improvedPatterns = [
@@ -87,8 +88,15 @@ async function checkForImprovedFiles(specificFiles = []) {
   // Remove duplicates
   violations = [...new Set(violations)];
 
+  // Log metrics and check if we should block
+  const config = loadConfig();
+  logMetrics('fileNaming', violations, config);
+  
+  const shouldBlockCommit = shouldBlock('fileNaming', config);
+
   if (violations.length > 0) {
-    console.error(chalk.red.bold("\n❌ Found files violating naming rules:\n"));
+    const messageType = shouldBlockCommit ? "❌ Found files violating naming rules:" : "⚠️  File naming warnings:";
+    console.error(chalk.red.bold(`\n${messageType}\n`));
 
     violations.forEach((file, index) => {
       const suggested = suggestBetterName(file);
@@ -107,7 +115,15 @@ async function checkForImprovedFiles(specificFiles = []) {
     console.error(chalk.white("   - Reduces confusion in codebase"));
     console.error(chalk.white("   - Follows ProjectTemplate standards\n"));
 
-    process.exit(1);
+    if (shouldBlockCommit) {
+      console.error(chalk.red.bold("🚫 Commit blocked due to naming violations."));
+      console.error(chalk.yellow("💡 File naming is always enforced at PARTIAL level and above"));
+      process.exit(1);
+    } else {
+      console.error(chalk.yellow.bold("⏩ Commit proceeding with warnings."));
+      console.error(chalk.cyan("💡 To fix issues: Follow suggestions above"));
+      console.error(chalk.cyan("💡 File naming will block at PARTIAL level"));
+    }
   } else {
     if (!filesToCheck || filesToCheck.length === 0) {
       console.log(chalk.green("✅ No naming violations found!"));

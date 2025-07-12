@@ -4,6 +4,23 @@
 - Deciders: [List team members involved]
 - Date: [YYYY-MM-DD]
 
+## Table of Contents
+
+1. [Context and Problem Statement](#context-and-problem-statement)
+2. [Decision Drivers](#decision-drivers)
+3. [Considered Options](#considered-options)
+  4. [Frontend Framework](#frontend-framework)
+  5. [Backend Framework](#backend-framework)
+  6. [Database](#database)
+  7. [State Management (Frontend)](#state-management-frontend)
+8. [Decision Outcome](#decision-outcome)
+  9. [Rationale](#rationale)
+  10. [Positive Consequences](#positive-consequences)
+  11. [Negative Consequences](#negative-consequences)
+12. [Migration Strategy](#migration-strategy)
+13. [Review Criteria](#review-criteria)
+14. [Notes](#notes)
+
 ## Context and Problem Statement
 
 We need to select the primary frameworks for our application including:
@@ -30,7 +47,7 @@ We need to select the primary frameworks for our application including:
 ### Frontend Framework
 
 1. **React**
-   - Pros: Huge ecosystem, most popular, excellent AI support
+   - Pros: Huge ecosystem, most popular, robust AI support
    - Cons: Requires many decisions, frequent breaking changes
 
 2. **Vue 3**
@@ -74,7 +91,7 @@ We need to select the primary frameworks for our application including:
    - Cons: Eventually need schema, consistency challenges
 
 3. **SQLite**
-   - Pros: Zero ops, perfect for small apps
+   - Pros: Zero ops, complete for small apps
    - Cons: Limited concurrent writes, single machine
 
 4. **Supabase**
@@ -105,7 +122,7 @@ Chosen stack: **[Your choices here]**
 
 Example:
 
-- Frontend: React (familiar to team, best AI support)
+- Frontend: React (familiar to team, optimal AI support)
 - Backend: Next.js API routes + Fastify microservices
 - Database: PostgreSQL with Prisma ORM
 - State: Zustand + TanStack Query
@@ -116,13 +133,15 @@ Example:
 [Explain why this combination works for your specific needs]
 
 Example rationale:
-"We chose React because our team has experience and AI tools provide excellent React support. Next.js gives us SSR capabilities and easy deployment. PostgreSQL provides the reliability we need for financial data. Zustand offers simplicity without sacrificing power. This stack is boring but proven."
+"We chose React because our team has experience and AI tools provide robust React support. Next.js gives us SSR
+capabilities and easy deployment. PostgreSQL provides the reliability we need for financial data. Zustand offers
+simplicity without sacrificing power. This stack is boring but proven."
 
 ### Positive Consequences
 
 - Mature ecosystem with solutions for most problems
 - Easy to hire developers
-- Excellent AI tool support
+- Robust AI tool support
 - Can scale from MVP to enterprise
 
 ### Negative Consequences

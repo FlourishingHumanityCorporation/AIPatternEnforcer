@@ -1,8 +1,53 @@
 # Performance Investigation Guide
 
+## Table of Contents
+
+1. [Performance Debugging Prompt Template](#performance-debugging-prompt-template)
+2. [Current Performance Issues:](#current-performance-issues)
+3. [Performance Metrics:](#performance-metrics)
+4. [Symptoms:](#symptoms)
+5. [Technical Context:](#technical-context)
+6. [Performance Investigation Methodology](#performance-investigation-methodology)
+  7. [1. Identify Performance Bottlenecks](#1-identify-performance-bottlenecks)
+    8. [Frontend Performance Issues](#frontend-performance-issues)
+    9. [Backend Performance Issues](#backend-performance-issues)
+  10. [2. Performance Profiling Tools](#2-performance-profiling-tools)
+    11. [Browser DevTools](#browser-devtools)
+    12. [React DevTools Profiler](#react-devtools-profiler)
+  13. [3. Common Performance Patterns](#3-common-performance-patterns)
+    14. [React Performance Optimization](#react-performance-optimization)
+    15. [API Performance Optimization](#api-performance-optimization)
+  16. [4. Performance Testing](#4-performance-testing)
+    17. [Lighthouse Audit](#lighthouse-audit)
+    18. [Bundle Analysis](#bundle-analysis)
+    19. [Performance Monitoring](#performance-monitoring)
+20. [Performance Optimization Strategies](#performance-optimization-strategies)
+  21. [1. React Performance](#1-react-performance)
+    22. [Unnecessary Re-renders](#unnecessary-re-renders)
+    23. [State Management](#state-management)
+  24. [2. Bundle Size Optimization](#2-bundle-size-optimization)
+    25. [Code Splitting](#code-splitting)
+    26. [Tree Shaking](#tree-shaking)
+  27. [3. Network Optimization](#3-network-optimization)
+    28. [Request Optimization](#request-optimization)
+    29. [Asset Optimization](#asset-optimization)
+  30. [4. Memory Management](#4-memory-management)
+    31. [Cleanup Side Effects](#cleanup-side-effects)
+32. [Performance Testing Checklist](#performance-testing-checklist)
+  33. [Frontend Performance](#frontend-performance)
+  34. [Backend Performance](#backend-performance)
+  35. [Network Performance](#network-performance)
+36. [Performance Monitoring](#performance-monitoring)
+  37. [Continuous Monitoring](#continuous-monitoring)
+  38. [Real User Monitoring](#real-user-monitoring)
+39. [Common Performance Anti-Patterns](#common-performance-anti-patterns)
+  40. [React Anti-Patterns](#react-anti-patterns)
+  41. [JavaScript Anti-Patterns](#javascript-anti-patterns)
+42. [Performance Optimization Checklist](#performance-optimization-checklist)
+
 ## Performance Debugging Prompt Template
 
-```
+```text
 I'm experiencing performance issues with [COMPONENT/FEATURE]. Please help me investigate and optimize the performance:
 
 ## Current Performance Issues:

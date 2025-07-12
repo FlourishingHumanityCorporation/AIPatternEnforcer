@@ -1,5 +1,33 @@
 # Local Error Handling Guide
 
+## Table of Contents
+
+1. [Quick Decision Flow](#quick-decision-flow)
+2. [Requirements Gathering](#requirements-gathering)
+  3. [Error Handling Requirements](#error-handling-requirements)
+  4. [Technical Requirements](#technical-requirements)
+5. [Error Handling Patterns](#error-handling-patterns)
+  6. [Pattern 1: Centralized Error Management](#pattern-1-centralized-error-management)
+  7. [Pattern 2: Local Error Storage](#pattern-2-local-error-storage)
+  8. [Pattern 3: User-Friendly Error Messages](#pattern-3-user-friendly-error-messages)
+  9. [Pattern 4: Offline Error Handling](#pattern-4-offline-error-handling)
+  10. [Pattern 5: Data Recovery](#pattern-5-data-recovery)
+11. [Error Analytics Without Cloud](#error-analytics-without-cloud)
+  12. [Local Analytics Implementation](#local-analytics-implementation)
+  13. [Visual Error Dashboard](#visual-error-dashboard)
+14. [Crash Recovery](#crash-recovery)
+  15. [Desktop App Crash Handler](#desktop-app-crash-handler)
+  16. [Browser Crash Detection](#browser-crash-detection)
+17. [Testing Error Handlers](#testing-error-handlers)
+  18. [Unit Testing Errors](#unit-testing-errors)
+19. [Optimal Practices](#optimal-practices)
+  20. [Do's ✅](#dos-)
+  21. [Don'ts ❌](#donts-)
+22. [Decision Template](#decision-template)
+23. [AI Assistant Integration](#ai-assistant-integration)
+  24. [Error Handling Setup](#error-handling-setup)
+  25. [Debugging Assistant](#debugging-assistant)
+
 ## Quick Decision Flow
 
 ```mermaid
@@ -840,7 +868,7 @@ describe('Error Flow Integration', () => {
 })
 ```
 
-## Best Practices
+## Optimal Practices
 
 ### Do's ✅
 

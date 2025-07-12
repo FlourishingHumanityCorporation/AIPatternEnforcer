@@ -5,6 +5,8 @@ export interface FileViolation {
   file: string;
   reason: string;
   suggestion: string;
+  type?: 'filename' | 'content' | 'document-type';
+  line?: string;
 }
 
 export class FileNameEnforcer {
@@ -25,6 +27,32 @@ export class FileNameEnforcer {
     /_FIXED\./,
     /_COMPLETE\./,
   ];
+
+  private bannedDocumentPatterns = {
+    endings: [
+      'SUMMARY.md',
+      'REPORT.md', 
+      'COMPLETE.md',
+      'COMPLETION.md',
+      'FIXED.md',
+      'DONE.md',
+      'FINISHED.md',
+      'STATUS.md',
+      'FINAL.md'
+    ],
+    patterns: [
+      /^COMPLETE[-_]/i,
+      /^DONE[-_]/i,
+      /^FIXED[-_]/i,
+      /^FINISHED[-_]/i,
+      /^FINAL[-_]/i,
+      /[-_]COMPLETE$/i,
+      /[-_]SUMMARY$/i,
+      /[-_]REPORT$/i,
+      /[-_]STATUS$/i,
+      /[-_]FINAL$/i
+    ]
+  };
 
   private ignorePatterns = [
     "node_modules/**",
@@ -48,11 +76,25 @@ export class FileNameEnforcer {
       }
     }
 
-    // Check for violations
+    // Check for banned document types (markdown files only)
+    if (fileName.endsWith('.md')) {
+      const bannedCheck = this.checkBannedDocument(fileName);
+      if (bannedCheck) {
+        return {
+          file: filePath,
+          type: 'document-type',
+          reason: bannedCheck.reason,
+          suggestion: bannedCheck.suggestion,
+        };
+      }
+    }
+
+    // Check for improved/enhanced patterns
     for (const pattern of this.improvedPatterns) {
       if (pattern.test(fileName)) {
         return {
           file: filePath,
+          type: 'filename',
           reason: `Matches pattern: ${pattern.source}`,
           suggestion: this.suggestBetterName(filePath),
         };
@@ -136,6 +178,32 @@ export class FileNameEnforcer {
     }
 
     return path.join(dir, suggested + ext);
+  }
+
+  private checkBannedDocument(fileName: string): { reason: string; suggestion: string } | null {
+    const upperName = fileName.toUpperCase();
+
+    // Check exact endings
+    for (const ending of this.bannedDocumentPatterns.endings) {
+      if (upperName.endsWith(ending.toUpperCase())) {
+        return {
+          reason: `Banned document type: ${ending}`,
+          suggestion: 'Delete this file or convert to technical documentation without status markers'
+        };
+      }
+    }
+
+    // Check patterns
+    for (const pattern of this.bannedDocumentPatterns.patterns) {
+      if (pattern.test(fileName)) {
+        return {
+          reason: `Matches banned document pattern: ${pattern}`,
+          suggestion: 'Use descriptive names without status/completion indicators'
+        };
+      }
+    }
+
+    return null;
   }
 
   private matchesPattern(filePath: string, pattern: string): boolean {

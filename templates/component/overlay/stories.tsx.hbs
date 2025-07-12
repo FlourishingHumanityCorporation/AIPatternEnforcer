@@ -1,0 +1,69 @@
+import type { Meta, StoryObj } from '@storybook/react';
+import { {{name}} } from './{{name}}';
+
+const meta = {
+  title: 'Overlay/{{name}}',
+  component: {{name}},
+  parameters: {
+    layout: 'fullscreen',
+  },
+  tags: ['autodocs'],
+  argTypes: {
+    children: {
+      control: 'text',
+      description: 'Content to display inside the component',
+    },
+    className: {
+      control: 'text',
+      description: 'Additional CSS classes',
+    },
+    isOpen: {
+      control: 'boolean',
+      description: 'Whether overlay is visible',
+    },
+    onClose: {
+      action: 'closed',
+      description: 'Close handler',
+    },
+    closeOnClickOutside: {
+      control: 'boolean',
+      description: 'Close when clicking backdrop',
+    },
+  },
+} satisfies Meta<typeof {{name}}>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  args: {
+    isOpen: true,
+    children: 'This is modal content',
+    onClose: () => console.log('Close clicked'),
+  },
+};
+
+export const Open: Story = {
+  args: {
+    isOpen: true,
+    children: 'This is modal content',
+    onClose: () => console.log('Close clicked'),
+  },
+};
+
+export const Closed: Story = {
+  args: {
+    isOpen: false,
+    children: 'This content is not visible',
+    onClose: () => console.log('Close clicked'),
+  },
+};
+
+export const NoBackdropClose: Story = {
+  args: {
+    isOpen: true,
+    children: 'Click backdrop will not close this modal',
+    closeOnClickOutside: false,
+    onClose: () => console.log('Close clicked'),
+  },
+};

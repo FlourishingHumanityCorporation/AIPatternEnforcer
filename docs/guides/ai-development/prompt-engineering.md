@@ -1,30 +1,67 @@
+[← Back to Documentation](../../README.md) | [↑ Up to AI Development](../README.md)
+
+---
+
 # Prompt Engineering Guide
+
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Core Principles](#core-principles)
+  3. [1. Be Specific and Explicit](#1-be-specific-and-explicit)
+  4. [2. Provide Context](#2-provide-context)
+  5. [3. Set Constraints](#3-set-constraints)
+6. [Prompt Templates](#prompt-templates)
+  7. [Feature Implementation](#feature-implementation)
+  8. [Bug Fixing](#bug-fixing)
+  9. [Code Review](#code-review)
+10. [Advanced Techniques](#advanced-techniques)
+  11. [1. Chain of Thought](#1-chain-of-thought)
+  12. [2. Few-Shot Examples](#2-few-shot-examples)
+  13. [3. Negative Examples](#3-negative-examples)
+  14. [4. Role Assignment](#4-role-assignment)
+15. [Common Patterns](#common-patterns)
+  16. [API Endpoint Creation](#api-endpoint-creation)
+  17. [Component Generation](#component-generation)
+  18. [Database Migration](#database-migration)
+19. [Debugging Prompts](#debugging-prompts)
+  20. [Performance Investigation](#performance-investigation)
+  21. [Error Analysis](#error-analysis)
+22. [Tips for Better Results](#tips-for-better-results)
+  23. [DO:](#do)
+  24. [DON'T:](#dont)
+25. [Prompt Iteration](#prompt-iteration)
+26. [Saving Effective Prompts](#saving-effective-prompts)
+27. [Measuring Prompt Effectiveness](#measuring-prompt-effectiveness)
 
 ## Overview
 
-Effective prompt engineering is crucial for getting high-quality, consistent outputs from AI tools. This guide covers best practices for crafting prompts that produce reliable results.
+Effective prompt engineering is crucial for getting high-quality, consistent outputs from AI tools. This guide covers
+optimal practices for crafting prompts that produce reliable results.
 
 ## Core Principles
 
 ### 1. Be Specific and Explicit
 
-```
+```text
 ❌ Bad: "Fix the bug"
 ✅ Good: "Fix the null pointer exception in UserService.getProfile() when user.email is undefined"
 ```
 
 ### 2. Provide Context
 
-```
+```javascript
 ❌ Bad: "Write a function to validate email"
-✅ Good: "Write a TypeScript function to validate email addresses following RFC 5322 spec, returning {valid: boolean, error?: string}"
+✅ Good: "Write a TypeScript function to validate email addresses following RFC 5322 spec, returning {valid: boolean,
+error?: string}"
 ```
 
 ### 3. Set Constraints
 
-```
+```text
 ❌ Bad: "Optimize this code"
-✅ Good: "Optimize this code for readability while maintaining O(n) time complexity. Use existing lodash utilities where appropriate."
+✅ Good: "Optimize this code for readability while maintaining O(n) time complexity. Use existing lodash utilities where
+appropriate."
 ```
 
 ## Prompt Templates
@@ -81,7 +118,7 @@ Focus area: [Specific concerns]
 
 Encourage step-by-step reasoning:
 
-```
+```text
 "Let's approach this step-by-step:
 1. First, analyze the current implementation
 2. Identify the root cause
@@ -93,7 +130,7 @@ Encourage step-by-step reasoning:
 
 Provide examples of desired output:
 
-```
+```text
 "Create a React component following this pattern:
 Example: @components/Button/Button.tsx
 Requirements: [specific requirements]"
@@ -103,7 +140,7 @@ Requirements: [specific requirements]"
 
 Show what NOT to do:
 
-```
+```text
 "Refactor this code.
 DO NOT:
 - Use any or unknown types
@@ -115,8 +152,9 @@ DO NOT:
 
 Set a specific perspective:
 
-```
-"You are a senior TypeScript developer focused on type safety and performance. Review this code and suggest improvements."
+```typescript
+"You are a senior TypeScript developer focused on type safety and performance. Review this code and suggest
+improvements."
 ```
 
 ## Common Patterns
@@ -185,7 +223,7 @@ Debug this error:
 
 [Full error stack]
 
-```
+```text
 Environment: [Dev/Prod]
 Recent changes: [What changed]
 Analyze:
@@ -240,4 +278,5 @@ Track these metrics:
 - Code review changes required
 - Time saved vs manual coding
 
-Remember: Good prompts are an investment. Time spent crafting clear prompts pays off in better outputs and fewer iterations.
+Remember: Good prompts are an investment. Time spent crafting clear prompts pays off in better outputs and fewer
+iterations.

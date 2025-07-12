@@ -2,7 +2,8 @@
 
 ## Overview
 
-This document maps each friction point from AI-assisted development to specific solutions within the meta project template structure. Each section shows:
+This document maps each friction point from AI-assisted development to specific solutions within the meta project
+template structure. Each section shows:
 
 - 🔴 **The Problem** - Specific friction point from experience
 - 🟢 **The Solution** - Mitigation strategy
@@ -25,13 +26,14 @@ This document maps each friction point from AI-assisted development to specific 
 
 ### 1.1 "Goldfish Memory": Context Window Constraints
 
-🔴 **Problem**: AI forgets project conventions, previous instructions decay, context window fills with irrelevant information
+🔴 **Problem**: AI forgets project conventions, previous instructions decay, context window fills with irrelevant
+information
 
 🟢 **Solution**: Persistent system prompts, contextual re-injection, focused context curation
 
 📁 **Template Implementation**:
 
-```
+```text
 ai/
 ├── config/
 │   ├── .cursorrules               # Persistent rules loaded every session
@@ -48,7 +50,7 @@ scripts/
 
 > 📖 **See also**:
 >
-> - [Manual Context Requirements](CLAUDE.md#manual-context-requirements) for context provision best practices
+> - [Manual Context Requirements](CLAUDE.md#manual-context-requirements) for context provision optimal practices
 > - [Local Model Setup](docs/guides/ai-development/local-model-setup.md) for offline AI integration
 > - [AI Configuration](ai/config/README.md) for detailed config documentation
 
@@ -79,7 +81,7 @@ You are working on {{PROJECT_NAME}} with these immutable rules:
 
 📁 **Template Implementation**:
 
-```
+```text
 ai/
 └── prompts/
     ├── templates/
@@ -121,7 +123,7 @@ scripts/
 
 📁 **Template Implementation**:
 
-```
+```text
 docs/
 ├── architecture/
 │   ├── README.md                   # High-level architecture overview
@@ -156,7 +158,7 @@ graph LR
     UI[UI Components] --> Store[Zustand Store]
     Store --> API[API Layer]
     API --> DB[Database]
-```
+```text
 ````
 
 ## Key Principles
@@ -267,7 +269,7 @@ You may ONLY use these verified APIs:
 
 📁 **Template Implementation**:
 
-```
+```text
 ai/
 └── prompts/
     ├── testing/
@@ -310,7 +312,7 @@ Only after tests are complete, implement code that passes ALL tests
 
 📁 **Template Implementation**:
 
-```
+```text
 docs/
 ├── references/
 │   └── dependencies/
@@ -335,7 +337,7 @@ ai/
 
 📁 **Template Implementation**:
 
-```
+```text
 docs/
 ├── guides/
 │   └── team/
@@ -364,7 +366,7 @@ ai/
 
 📁 **Template Implementation**:
 
-```
+```text
 docs/
 └── architecture/
     ├── patterns/
@@ -394,7 +396,7 @@ scripts/
 
 📁 **Template Implementation**:
 
-```
+```text
 templates/
 ├── utils/
 │   └── create-utility.hbs          # Utility function template
@@ -420,7 +422,7 @@ ai/
 
 📁 **Template Implementation**:
 
-```
+```text
 ai/
 ├── .cursorrules
 │   # Section: "Prefer simple solutions"
@@ -442,7 +444,7 @@ docs/
 
 📁 **Template Implementation**:
 
-```
+```text
 scripts/
 ├── analysis/
 │   ├── bundle-analysis.sh         # Check bundle size
@@ -469,7 +471,7 @@ ai/
 
 📁 **Template Implementation**:
 
-```
+```text
 config/
 └── security/
     ├── headers.json               # Security headers
@@ -500,7 +502,7 @@ scripts/
 
 📁 **Template Implementation**:
 
-```
+```text
 docs/
 └── references/
     └── dependencies/
@@ -530,7 +532,7 @@ scripts/
 
 📁 **Template Implementation**:
 
-```
+```text
 scripts/
 └── dev/
     ├── debug-snapshot.sh         # Capture full runtime state
@@ -576,7 +578,7 @@ netstat -an | grep ESTABLISHED
 
 📁 **Template Implementation**:
 
-```
+```text
 templates/
 └── tests/
     ├── unit.test.hbs             # Comprehensive unit test
@@ -603,7 +605,7 @@ docs/
 
 📁 **Template Implementation**:
 
-```
+```text
 config/
 └── typescript/
     └── tsconfig.strict.json      # Strict type checking
@@ -631,7 +633,7 @@ ai/
 
 📁 **Template Implementation**:
 
-```
+```text
 config/
 └── ide/
     ├── vscode-settings.json      # Optimized settings
@@ -652,7 +654,7 @@ docs/
 
 📁 **Template Implementation**:
 
-```
+```text
 config/
 └── ide/
     └── keybindings.json          # AI shortcuts namespaced
@@ -671,7 +673,7 @@ docs/
 
 📁 **Template Implementation**:
 
-```
+```python
 .aiignore.template                # Exclude from indexing
 ├── # Large files
 ├── node_modules/
@@ -695,7 +697,7 @@ scripts/
 
 📁 **Template Implementation**:
 
-```
+```text
 scripts/
 └── dev/
     ├── env-dump.sh               # Full environment snapshot
@@ -719,7 +721,7 @@ ai/
 
 📁 **Template Implementation**:
 
-```
+```text
 .github/
 └── PULL_REQUEST_TEMPLATE.md      # Requires AI declaration
 
@@ -742,7 +744,7 @@ scripts/
 
 📁 **Template Implementation**:
 
-```
+```text
 ai/
 └── prompts/
     └── snippets/                 # Quick-access prompts
@@ -762,7 +764,7 @@ docs/
 
 📁 **Template Implementation**:
 
-```
+```text
 docs/
 └── decisions/
     └── templates/
@@ -786,7 +788,7 @@ ai/
 
 📁 **Template Implementation**:
 
-```
+```text
 ai/
 └── prompts/
     ├── library/                   # Categorized prompts
@@ -810,7 +812,7 @@ tools/
 
 📁 **Template Implementation**:
 
-```
+```text
 ai/
 ├── .cursorrules
 │   # Section: "Scope Limitations"
@@ -831,7 +833,7 @@ scripts/
 
 📁 **Template Implementation**:
 
-```
+```text
 config/
 └── ai/
     └── fallback-models.json      # Local model configs
@@ -892,4 +894,6 @@ tools/
 
 ---
 
-_This mapping shows that every major friction point in AI development has a specific solution implemented in the template structure. The key is not just having these files, but actively maintaining and evolving them based on real project experience._
+_This mapping shows that every major friction point in AI development has a specific solution implemented in the
+template structure. The key is not just having these files, but actively maintaining and evolving them based on real
+project experience._

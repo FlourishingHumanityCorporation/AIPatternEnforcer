@@ -1,6 +1,27 @@
 # ProjectTemplate Assistant VS Code Extension
 
-A VS Code extension that enhances AI-assisted development by automatically loading context, enforcing naming conventions, and streamlining workflows.
+A VS Code extension that enhances AI-assisted development by automatically loading context, enforcing naming
+conventions, and streamlining workflows.
+
+## Table of Contents
+
+1. [Features](#features)
+  2. [🤖 Smart Context Loading](#-smart-context-loading)
+  3. [📝 File Naming Enforcement](#-file-naming-enforcement)
+  4. [📊 Project Dashboard](#-project-dashboard)
+  5. [⚡ Keyboard Shortcuts](#-keyboard-shortcuts)
+6. [Installation](#installation)
+7. [Configuration](#configuration)
+8. [Commands](#commands)
+9. [How It Works](#how-it-works)
+  10. [Context Building](#context-building)
+  11. [Naming Enforcement](#naming-enforcement)
+12. [Development](#development)
+13. [Troubleshooting](#troubleshooting)
+  14. [Context not loading automatically](#context-not-loading-automatically)
+  15. [Naming enforcement not working](#naming-enforcement-not-working)
+16. [Contributing](#contributing)
+17. [License](#license)
 
 ## Features
 

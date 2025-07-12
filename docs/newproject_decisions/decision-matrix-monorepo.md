@@ -1,5 +1,43 @@
 # Monorepo Architecture Decision Matrix
 
+## Table of Contents
+
+1. [Quick Decision Flow](#quick-decision-flow)
+2. [Requirements Gathering](#requirements-gathering)
+  3. [Project Structure Requirements](#project-structure-requirements)
+  4. [Technical Requirements](#technical-requirements)
+5. [Options Evaluation Matrix](#options-evaluation-matrix)
+  6. [Monorepo Tools Comparison](#monorepo-tools-comparison)
+  7. [Monorepo vs Polyrepo Decision Matrix](#monorepo-vs-polyrepo-decision-matrix)
+8. [Detailed Comparison](#detailed-comparison)
+  9. [Option A: Nx (Enterprise-Grade Monorepo)](#option-a-nx-enterprise-grade-monorepo)
+  10. [Option B: Turborepo (Vercel's High-Performance Build)](#option-b-turborepo-vercels-high-performance-build)
+  11. [Option C: PNPM Workspaces (Lightweight & Efficient)](#option-c-pnpm-workspaces-lightweight-efficient)
+  12. [Option D: Yarn Workspaces (Simple & Native)](#option-d-yarn-workspaces-simple-native)
+13. [Implementation Patterns](#implementation-patterns)
+  14. [Pattern 1: Shared Configuration](#pattern-1-shared-configuration)
+  15. [Pattern 2: Shared Component Library](#pattern-2-shared-component-library)
+  16. [Pattern 3: Cross-Package Scripts](#pattern-3-cross-package-scripts)
+17. [Local Development Optimization](#local-development-optimization)
+  18. [VSCode Settings for Monorepo](#vscode-settings-for-monorepo)
+  19. [Git Configuration](#git-configuration)
+  20. [Performance Tips](#performance-tips)
+21. [Cost-Benefit Analysis](#cost-benefit-analysis)
+  22. [Setup Costs](#setup-costs)
+  23. [Long-term Benefits](#long-term-benefits)
+24. [Migration Strategies](#migration-strategies)
+  25. [From Polyrepo to Monorepo](#from-polyrepo-to-monorepo)
+  26. [From Monorepo to Polyrepo](#from-monorepo-to-polyrepo)
+27. [Decision Template](#decision-template)
+28. [Real-World Examples](#real-world-examples)
+  29. [Example 1: E-commerce Platform](#example-1-e-commerce-platform)
+  30. [Example 2: SaaS Startup](#example-2-saas-startup)
+  31. [Example 3: Open Source UI Library](#example-3-open-source-ui-library)
+32. [Common Pitfalls & Solutions](#common-pitfalls-solutions)
+33. [AI Assistant Integration](#ai-assistant-integration)
+  34. [For Monorepo Decisions](#for-monorepo-decisions)
+  35. [Prompt Templates](#prompt-templates)
+
 ## Quick Decision Flow
 
 ```mermaid
@@ -232,7 +270,7 @@ auto-install-peers=true
 
 ### Pattern 1: Shared Configuration
 
-```
+```text
 monorepo/
 ├── packages/
 │   ├── eslint-config/
@@ -357,7 +395,7 @@ git config core.untrackedcache true
 
 ### Long-term Benefits
 
-```
+```text
 Shared Code Savings = (Packages × Duplication %) × Dev Hours
 Build Time Savings = (Sequential Time - Parallel Time) × Builds/Day
 Consistency Value = Reduced Bugs × Fix Time × Team Size

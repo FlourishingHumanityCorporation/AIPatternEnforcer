@@ -1,5 +1,60 @@
 # Feature Lifecycle Guide
 
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Feature Lifecycle Stages](#feature-lifecycle-stages)
+3. [Stage 1: Requirements Gathering](#stage-1-requirements-gathering)
+  4. [1.1 Understand the Need](#11-understand-the-need)
+5. [Feature Request Analysis](#feature-request-analysis)
+  6. [1.2 Technical Requirements](#12-technical-requirements)
+7. [Business Requirements](#business-requirements)
+8. [Technical Requirements](#technical-requirements)
+9. [Dependencies](#dependencies)
+10. [Constraints](#constraints)
+  11. [1.3 AI-Assisted Research](#13-ai-assisted-research)
+12. [Stage 2: Design](#stage-2-design)
+  13. [2.1 Architecture Design](#21-architecture-design)
+  14. [2.2 API Design](#22-api-design)
+15. [API Design Template](#api-design-template)
+  16. [Endpoint: [/api/resource]](#endpoint-apiresource)
+  17. [2.3 Data Model Design](#23-data-model-design)
+  18. [2.4 UI/UX Design](#24-uiux-design)
+19. [Stage 3: Implementation](#stage-3-implementation)
+  20. [3.1 Setup Feature Structure](#31-setup-feature-structure)
+  21. [3.2 Test-Driven Development](#32-test-driven-development)
+  22. [3.3 Implementation Checklist](#33-implementation-checklist)
+  23. [3.4 AI-Assisted Implementation](#34-ai-assisted-implementation)
+24. [Stage 4: Testing](#stage-4-testing)
+  25. [4.1 Testing Pyramid](#41-testing-pyramid)
+  26. [4.2 Test Categories](#42-test-categories)
+  27. [4.3 Test Coverage Requirements](#43-test-coverage-requirements)
+  28. [4.4 AI-Assisted Testing](#44-ai-assisted-testing)
+29. [Stage 5: Code Review](#stage-5-code-review)
+  30. [5.1 Pre-Review Checklist](#51-pre-review-checklist)
+  31. [5.2 Self-Review](#52-self-review)
+  32. [5.3 PR Creation](#53-pr-creation)
+  33. [5.4 Review Process](#54-review-process)
+34. [Stage 6: Deployment](#stage-6-deployment)
+  35. [6.1 Pre-Deployment](#61-pre-deployment)
+  36. [6.2 Deployment Steps](#62-deployment-steps)
+  37. [6.3 Feature Flags](#63-feature-flags)
+38. [Stage 7: Monitoring](#stage-7-monitoring)
+  39. [7.1 Setup Monitoring](#71-setup-monitoring)
+  40. [7.2 Monitor Health](#72-monitor-health)
+  41. [7.3 Incident Response](#73-incident-response)
+42. [Feature Completion](#feature-completion)
+  43. [Documentation Update](#documentation-update)
+  44. [Retrospective](#retrospective)
+45. [Feature Retrospective](#feature-retrospective)
+  46. [What went well?](#what-went-well)
+  47. [What could improve?](#what-could-improve)
+  48. [Action items:](#action-items)
+  49. [Knowledge Sharing](#knowledge-sharing)
+50. [Templates and Tools](#templates-and-tools)
+  51. [Feature Tracking](#feature-tracking)
+  52. [Time Estimates](#time-estimates)
+
 ## Overview
 
 This guide covers the complete lifecycle of a feature from conception to deployment, with AI assistance at each stage.
@@ -63,7 +118,7 @@ EOF
 
 ```markdown
 Research prompt for AI:
-"Research best practices for implementing [feature type].
+"Research optimal practices for implementing [feature type].
 Consider:
 
 - Security implications
@@ -100,7 +155,7 @@ Request:
   "field1": "type",
   "field2": "type"
 }
-```
+```text
 ````
 
 Response:
@@ -206,7 +261,7 @@ Implementation prompt:
 
 ### 4.1 Testing Pyramid
 
-```
+```text
          /\
         /  \    E2E Tests (10%)
        /----\
@@ -442,4 +497,5 @@ vim CHANGELOG.md
 - Large feature: 2-4 weeks
 - Epic: 1-3 months
 
-Remember: Each stage benefits from AI assistance, but human judgment and creativity remain essential throughout the lifecycle.
+Remember: Each stage benefits from AI assistance, but human judgment and creativity remain essential throughout the
+lifecycle.

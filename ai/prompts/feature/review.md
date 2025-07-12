@@ -1,11 +1,56 @@
 # Feature Review Checklist
 
+## Table of Contents
+
+1. [Self-Review Prompt Template](#self-review-prompt-template)
+2. [Code Quality Review:](#code-quality-review)
+3. [Testing Review:](#testing-review)
+4. [Documentation Review:](#documentation-review)
+5. [Feature Completeness:](#feature-completeness)
+6. [Detailed Review Categories](#detailed-review-categories)
+  7. [1. Code Quality Assessment](#1-code-quality-assessment)
+    8. [TypeScript Quality](#typescript-quality)
+    9. [Code Structure](#code-structure)
+    10. [Error Handling](#error-handling)
+  11. [2. React-Specific Review](#2-react-specific-review)
+    12. [Component Design](#component-design)
+    13. [Performance](#performance)
+    14. [Accessibility](#accessibility)
+  15. [3. Testing Quality](#3-testing-quality)
+    16. [Unit Tests](#unit-tests)
+    17. [Integration Tests](#integration-tests)
+    18. [Test Quality](#test-quality)
+  19. [4. API and Data](#4-api-and-data)
+    20. [API Design](#api-design)
+    21. [Data Management](#data-management)
+  22. [5. Security Review](#5-security-review)
+    23. [Input Validation](#input-validation)
+    24. [Authentication & Authorization](#authentication-authorization)
+  25. [6. Performance Review](#6-performance-review)
+    26. [Frontend Performance](#frontend-performance)
+    27. [Backend Performance](#backend-performance)
+  28. [7. User Experience](#7-user-experience)
+    29. [Functionality](#functionality)
+    30. [Design Consistency](#design-consistency)
+31. [Review Questions](#review-questions)
+  32. [Technical Questions](#technical-questions)
+  33. [User Experience Questions](#user-experience-questions)
+  34. [Maintenance Questions](#maintenance-questions)
+35. [Common Issues to Look For](#common-issues-to-look-for)
+  36. [Code Issues](#code-issues)
+  37. [React Issues](#react-issues)
+  38. [Testing Issues](#testing-issues)
+39. [Review Completion Checklist](#review-completion-checklist)
+40. [Post-Review Actions](#post-review-actions)
+41. [Review Prompt for AI Assistant](#review-prompt-for-ai-assistant)
+
 ## Self-Review Prompt Template
 
 Use this template to conduct a thorough review of your feature implementation before requesting code review:
 
-```
-I have implemented [FEATURE_NAME] and need to conduct a self-review. Please help me review the implementation against the following criteria:
+```text
+I have implemented [FEATURE_NAME] and need to conduct a self-review. Please help me review the implementation against
+the following criteria:
 
 ## Code Quality Review:
 - [ ] TypeScript types are properly defined
@@ -263,7 +308,7 @@ Please analyze the implementation and provide feedback on areas for improvement.
 
 ## Review Prompt for AI Assistant
 
-```
+```text
 Please review my implementation of [FEATURE_NAME] against the following criteria:
 
 1. **Code Quality**: Are there any code smells, anti-patterns, or areas for improvement?

@@ -4,9 +4,20 @@
 - Deciders: Project architects
 - Date: 2024-01-01
 
+## Table of Contents
+
+1. [Context and Problem Statement](#context-and-problem-statement)
+2. [Decision Drivers](#decision-drivers)
+3. [Considered Options](#considered-options)
+4. [Decision Outcome](#decision-outcome)
+  5. [Core Principles](#core-principles)
+  6. [Positive Consequences](#positive-consequences)
+  7. [Negative Consequences](#negative-consequences)
+
 ## Context and Problem Statement
 
-We need to establish core principles that will guide all development decisions in this project to ensure consistency, maintainability, and quality.
+We need to establish core principles that will guide all development decisions in this project to ensure consistency,
+maintainability, and quality.
 
 ## Decision Drivers
 
@@ -23,7 +34,8 @@ We need to establish core principles that will guide all development decisions i
 
 ## Decision Outcome
 
-Chosen option: "Define custom principles for our context", because our development workflow includes AI assistance which requires specific considerations.
+Chosen option: "Define custom principles for our context", because our development workflow includes AI assistance which
+requires specific considerations.
 
 ### Core Principles
 

@@ -1,8 +1,23 @@
 # Working with Cursor IDE
 
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Setup](#setup)
+3. [Key Features](#key-features)
+  4. [1. Context Awareness](#1-context-awareness)
+  5. [2. AI Commands](#2-ai-commands)
+  6. [3. Optimal Practices](#3-optimal-practices)
+7. [Common Workflows](#common-workflows)
+  8. [Creating New Features](#creating-new-features)
+  9. [Debugging](#debugging)
+  10. [Refactoring](#refactoring)
+11. [Tips and Tricks](#tips-and-tricks)
+
 ## Overview
 
-Cursor is an AI-first IDE that enhances development productivity. This guide covers best practices for using Cursor effectively in this project.
+Cursor is an AI-first IDE that enhances development productivity. This guide covers optimal practices for using Cursor
+effectively in this project.
 
 ## Setup
 
@@ -33,7 +48,7 @@ Cursor uses `.cursorrules` to understand project conventions:
 - **Ctrl+L**: Chat with full codebase context
 - **Ctrl+Shift+L**: Generate from description
 
-### 3. Best Practices
+### 3. Optimal Practices
 
 1. **Use Specific References**
 

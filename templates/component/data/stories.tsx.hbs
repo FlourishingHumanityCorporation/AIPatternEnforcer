@@ -1,0 +1,75 @@
+import type { Meta, StoryObj } from '@storybook/react';
+import { {{name}} } from './{{name}}';
+
+const meta = {
+  title: 'Data/{{name}}',
+  component: {{name}},
+  parameters: {
+    layout: 'centered',
+  },
+  tags: ['autodocs'],
+  argTypes: {
+    children: {
+      control: 'text',
+      description: 'Content to display inside the component',
+    },
+    className: {
+      control: 'text',
+      description: 'Additional CSS classes',
+    },
+    data: {
+      control: 'object',
+      description: 'Data array to display',
+    },
+    emptyMessage: {
+      control: 'text',
+      description: 'Message when data is empty',
+    },
+  },
+} satisfies Meta<typeof {{name}}>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  args: {
+    data: [
+      { id: 1, name: 'Item 1' },
+      { id: 2, name: 'Item 2' },
+      { id: 3, name: 'Item 3' },
+    ],
+    children: 'Data Display',
+  },
+};
+
+export const WithData: Story = {
+  args: {
+    data: [
+      { id: 1, name: 'Item 1' },
+      { id: 2, name: 'Item 2' },
+      { id: 3, name: 'Item 3' },
+    ],
+    children: 'Data Display',
+  },
+};
+
+export const EmptyState: Story = {
+  args: {
+    data: [],
+    emptyMessage: 'No items to display',
+  },
+};
+
+export const Loading: Story = {
+  args: {
+    isLoading: true,
+    data: [],
+  },
+};
+
+export const Error: Story = {
+  args: {
+    error: 'Failed to load data',
+    data: [],
+  },
+};

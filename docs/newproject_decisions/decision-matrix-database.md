@@ -1,8 +1,53 @@
 # Database Decision Matrix (Local Development Focus)
 
+## Table of Contents
+
+1. [Quick Decision Flow for Databases](#quick-decision-flow-for-databases)
+2. [Requirements Assessment](#requirements-assessment)
+  3. [Data Requirements](#data-requirements)
+  4. [Development Requirements](#development-requirements)
+  5. [Operational Requirements](#operational-requirements)
+6. [Comprehensive Database Comparison](#comprehensive-database-comparison)
+  7. [Weighted Score Calculation](#weighted-score-calculation)
+8. [Detailed Database Analysis](#detailed-database-analysis)
+  9. [SQLite (Recommended for Local Development)](#sqlite-recommended-for-local-development)
+  10. [PostgreSQL (Production-Ready Choice)](#postgresql-production-ready-choice)
+  11. [MySQL (Alternative to PostgreSQL)](#mysql-alternative-to-postgresql)
+  12. [MongoDB (Document Database)](#mongodb-document-database)
+  13. [Redis (In-Memory Database)](#redis-in-memory-database)
+14. [Database Choice by Project Type](#database-choice-by-project-type)
+  15. [Personal/Learning Projects](#personallearning-projects)
+  16. [Small Business Applications](#small-business-applications)
+  17. [Content Management Systems](#content-management-systems)
+  18. [Analytics/Reporting Applications](#analyticsreporting-applications)
+  19. [Real-time Applications](#real-time-applications)
+  20. [E-commerce Platforms](#e-commerce-platforms)
+21. [Local Development Setups](#local-development-setups)
+  22. [SQLite (Zero Config)](#sqlite-zero-config)
+  23. [PostgreSQL (Docker)](#postgresql-docker)
+  24. [MongoDB (Docker)](#mongodb-docker)
+  25. [Redis (Docker)](#redis-docker)
+26. [Migration Strategies](#migration-strategies)
+  27. [SQLite to PostgreSQL](#sqlite-to-postgresql)
+  28. [Schema Evolution](#schema-evolution)
+29. [Performance Optimization](#performance-optimization)
+  30. [SQLite Optimization](#sqlite-optimization)
+  31. [PostgreSQL Optimization](#postgresql-optimization)
+  32. [MongoDB Optimization](#mongodb-optimization)
+33. [Cost Analysis (Monthly Estimates)](#cost-analysis-monthly-estimates)
+  34. [Small Scale (< 1GB data, < 1000 users)](#small-scale-1gb-data-1000-users)
+  35. [Medium Scale (1-10GB data, 1000-10000 users)](#medium-scale-1-10gb-data-1000-10000-users)
+  36. [Large Scale (10GB+ data, 10000+ users)](#large-scale-10gb-data-10000-users)
+37. [Decision Template](#decision-template)
+38. [Quick Reference](#quick-reference)
+39. [Common Pitfalls to Avoid](#common-pitfalls-to-avoid)
+  40. [Over-Engineering](#over-engineering)
+  41. [Under-Engineering](#under-engineering)
+  42. [Local Development Issues](#local-development-issues)
+
 ## Quick Decision Flow for Databases
 
-```
+```text
 Start → Local development only?
          ├─ Yes → Simple data model?
          │         ├─ Yes → SQLite (zero config)
@@ -75,7 +120,7 @@ Start → Local development only?
 
 ### Weighted Score Calculation
 
-```
+```text
 SQLite:      (Σ weight × score) / total_weight = ___
 PostgreSQL:  (Σ weight × score) / total_weight = ___
 MySQL:       (Σ weight × score) / total_weight = ___
@@ -88,7 +133,7 @@ Firebase:    (Σ weight × score) / total_weight = ___
 
 ### SQLite (Recommended for Local Development)
 
-**Best for:**
+**Optimal for:**
 
 - Personal projects and MVPs
 - Local-first applications
@@ -100,7 +145,7 @@ Firebase:    (Σ weight × score) / total_weight = ___
 
 - Zero configuration required
 - Single file database
-- Excellent for version control
+- Robust for version control
 - No server setup needed
 - Great local performance
 
@@ -140,7 +185,7 @@ const user = await prisma.user.create({
 
 ### PostgreSQL (Production-Ready Choice)
 
-**Best for:**
+**Optimal for:**
 
 - Production applications
 - Complex relational data
@@ -151,7 +196,7 @@ const user = await prisma.user.create({
 **Local dev advantages:**
 
 - Feature-rich SQL support
-- Excellent performance
+- Robust performance
 - Strong consistency guarantees
 - Rich ecosystem
 - Advanced indexing
@@ -193,7 +238,7 @@ const db = new PrismaClient({
 
 ### MySQL (Alternative to PostgreSQL)
 
-**Best for:**
+**Optimal for:**
 
 - Web applications
 - Content management systems
@@ -203,7 +248,7 @@ const db = new PrismaClient({
 **Local dev advantages:**
 
 - Mature ecosystem
-- Excellent documentation
+- Robust documentation
 - Wide hosting support
 - Strong performance
 
@@ -229,7 +274,7 @@ services:
 
 ### MongoDB (Document Database)
 
-**Best for:**
+**Optimal for:**
 
 - Flexible schema requirements
 - Rapid prototyping
@@ -275,7 +320,7 @@ const user = new User({
 
 ### Redis (In-Memory Database)
 
-**Best for:**
+**Optimal for:**
 
 - Caching layer
 - Session storage
@@ -560,7 +605,7 @@ db.users.find({ email: "user@example.com" }).explain("executionStats");
 
 ## Quick Reference
 
-| Need               | Best Choice             | Setup       |
+| Need               | Optimal Choice             | Setup       |
 | ------------------ | ----------------------- | ----------- |
 | Simple local app   | SQLite                  | Zero config |
 | Learning project   | SQLite                  | File-based  |
@@ -591,4 +636,5 @@ db.users.find({ email: "user@example.com" }).explain("executionStats");
 - Version control your database schema
 - Test migrations thoroughly
 
-Remember: The best database is the one your team can effectively use to build and maintain your application. Start simple and evolve as needed!
+Remember: The optimal database is the one your team can effectively use to build and maintain your application. Start
+simple and evolve as needed!

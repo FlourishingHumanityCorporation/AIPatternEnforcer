@@ -1,8 +1,39 @@
 # End-to-End Testing Guide
 
+## Table of Contents
+
+1. [E2E Testing Prompt Template](#e2e-testing-prompt-template)
+2. [User Workflow:](#user-workflow)
+3. [Technical Context:](#technical-context)
+4. [Test Environment:](#test-environment)
+5. [Specific Requirements:](#specific-requirements)
+6. [E2E Testing Strategies](#e2e-testing-strategies)
+  7. [1. User Journey Testing](#1-user-journey-testing)
+    8. [Complete Registration Flow](#complete-registration-flow)
+    9. [E-commerce Purchase Flow](#e-commerce-purchase-flow)
+  10. [2. Cross-Browser Testing](#2-cross-browser-testing)
+    11. [Multi-Browser Test Configuration](#multi-browser-test-configuration)
+  12. [3. Mobile Testing](#3-mobile-testing)
+    13. [Mobile-Specific E2E Tests](#mobile-specific-e2e-tests)
+  14. [4. Performance Testing](#4-performance-testing)
+    15. [Core Web Vitals Testing](#core-web-vitals-testing)
+  16. [5. Accessibility Testing](#5-accessibility-testing)
+    17. [A11y E2E Testing](#a11y-e2e-testing)
+18. [E2E Testing Optimal Practices](#e2e-testing-optimal-practices)
+  19. [1. Test Structure and Organization](#1-test-structure-and-organization)
+    20. [Page Object Model](#page-object-model)
+    21. [Test Data Management](#test-data-management)
+  22. [2. Error Handling and Debugging](#2-error-handling-and-debugging)
+    23. [Comprehensive Error Handling](#comprehensive-error-handling)
+24. [E2E Testing Checklist](#e2e-testing-checklist)
+  25. [Test Planning](#test-planning)
+  26. [Test Implementation](#test-implementation)
+  27. [Test Maintenance](#test-maintenance)
+  28. [Monitoring and Reporting](#monitoring-and-reporting)
+
 ## E2E Testing Prompt Template
 
-```
+```text
 I need to create end-to-end tests for [USER_WORKFLOW]. Please help me design comprehensive E2E tests:
 
 ## User Workflow:
@@ -32,7 +63,7 @@ I need to create end-to-end tests for [USER_WORKFLOW]. Please help me design com
 - [Note accessibility requirements]
 - [Include any special edge cases]
 
-Please provide E2E test examples with setup, test cases, and best practices.
+Please provide E2E test examples with setup, test cases, and optimal practices.
 ```
 
 ## E2E Testing Strategies
@@ -554,7 +585,7 @@ test.describe("Accessibility Testing", () => {
 });
 ```
 
-## E2E Testing Best Practices
+## E2E Testing Optimal Practices
 
 ### 1. Test Structure and Organization
 

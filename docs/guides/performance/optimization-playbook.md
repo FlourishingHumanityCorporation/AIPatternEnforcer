@@ -1,8 +1,41 @@
+[← Back to Documentation](../../README.md) | [↑ Up to Guides](../README.md)
+
+---
+
 # Performance Optimization Playbook
+
+## Table of Contents
+
+1. [Purpose](#purpose)
+2. [Quick Performance Wins](#quick-performance-wins)
+3. [Frontend Performance Patterns](#frontend-performance-patterns)
+  4. [Bundle Size Optimization](#bundle-size-optimization)
+  5. [Component Performance](#component-performance)
+  6. [Image Optimization](#image-optimization)
+7. [Database Query Optimization](#database-query-optimization)
+  8. [Query Performance Basics](#query-performance-basics)
+  9. [Efficient Pagination](#efficient-pagination)
+  10. [Database Connection Pooling](#database-connection-pooling)
+11. [Caching Strategies](#caching-strategies)
+  12. [In-Memory Caching](#in-memory-caching)
+  13. [API Response Caching](#api-response-caching)
+  14. [Browser Caching](#browser-caching)
+15. [Performance Monitoring](#performance-monitoring)
+  16. [Frontend Performance Metrics](#frontend-performance-metrics)
+  17. [Backend Performance Monitoring](#backend-performance-monitoring)
+18. [Optimization Checklists](#optimization-checklists)
+  19. [Frontend Performance Checklist](#frontend-performance-checklist)
+  20. [Backend Performance Checklist](#backend-performance-checklist)
+21. [AI Performance Optimization Prompts](#ai-performance-optimization-prompts)
+  22. [Frontend Optimization](#frontend-optimization)
+  23. [Database Query Optimization](#database-query-optimization)
+24. [Common Performance Anti-Patterns](#common-performance-anti-patterns)
+25. [Further Reading](#further-reading)
 
 ## Purpose
 
-This guide provides practical performance optimization techniques for local development. Good performance habits during development lead to faster applications in production.
+This guide provides practical performance optimization techniques for local development. Good performance habits during
+development lead to faster applications in production.
 
 ## Quick Performance Wins
 
@@ -643,7 +676,7 @@ Analyze this React component for performance issues:
 
 ```tsx
 [paste component code]
-```
+```text
 ````
 
 Check for:

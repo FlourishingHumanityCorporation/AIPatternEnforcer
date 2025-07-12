@@ -1,5 +1,14 @@
 # Error Handling Patterns
 
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Patterns](#patterns)
+  3. [1. Error Types](#1-error-types)
+  4. [2. Error Handling Middleware](#2-error-handling-middleware)
+  5. [3. Async Error Handling](#3-async-error-handling)
+6. [Optimal Practices](#optimal-practices)
+
 ## Overview
 
 Consistent error handling across the application ensures better debugging, monitoring, and user experience.
@@ -88,7 +97,7 @@ router.get(
 );
 ```
 
-## Best Practices
+## Optimal Practices
 
 1. **Always throw meaningful errors** - Include context about what failed
 2. **Catch errors at boundaries** - API routes, service methods

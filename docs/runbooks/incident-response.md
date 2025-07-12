@@ -2,6 +2,50 @@
 
 This runbook defines how to respond to production incidents effectively and consistently.
 
+## Table of Contents
+
+1. [Incident Severity Levels](#incident-severity-levels)
+  2. [SEV1 - Critical](#sev1---critical)
+  3. [SEV2 - High](#sev2---high)
+  4. [SEV3 - Medium](#sev3---medium)
+  5. [SEV4 - Low](#sev4---low)
+6. [Incident Response Flow](#incident-response-flow)
+7. [Initial Response](#initial-response)
+  8. [1. Acknowledge Incident](#1-acknowledge-incident)
+  9. [2. Assess Impact](#2-assess-impact)
+  10. [3. Establish Command](#3-establish-command)
+11. [Communication](#communication)
+  12. [Create Incident Channel](#create-incident-channel)
+  13. [Status Updates](#status-updates)
+  14. [Stakeholder Notifications](#stakeholder-notifications)
+    15. [Internal](#internal)
+    16. [External (if needed)](#external-if-needed)
+17. [Diagnosis Tools](#diagnosis-tools)
+  18. [Application Logs](#application-logs)
+  19. [System Metrics](#system-metrics)
+  20. [Database Queries](#database-queries)
+21. [Common Incident Patterns](#common-incident-patterns)
+  22. [Pattern 1: Database Connection Pool Exhausted](#pattern-1-database-connection-pool-exhausted)
+  23. [Pattern 2: Memory Leak](#pattern-2-memory-leak)
+  24. [Pattern 3: Third-Party Service Down](#pattern-3-third-party-service-down)
+25. [Incident Commander Checklist](#incident-commander-checklist)
+  26. [During Incident](#during-incident)
+  27. [Resolution](#resolution)
+28. [Recovery Procedures](#recovery-procedures)
+  29. [After Rollback](#after-rollback)
+  30. [After Fix Forward](#after-fix-forward)
+31. [Post-Incident](#post-incident)
+  32. [Immediate (Within 2 hours)](#immediate-within-2-hours)
+  33. [Within 48 hours](#within-48-hours)
+34. [Incident Metrics](#incident-metrics)
+35. [Tools and Templates](#tools-and-templates)
+  36. [Incident Template](#incident-template)
+  37. [Quick Commands](#quick-commands)
+38. [Emergency Contacts](#emergency-contacts)
+  39. [Internal Escalation](#internal-escalation)
+  40. [External Support](#external-support)
+41. [Remember](#remember)
+
 ## Incident Severity Levels
 
 ### SEV1 - Critical
@@ -112,7 +156,7 @@ This creates:
 
 Every 15 minutes (SEV1) or 30 minutes (SEV2):
 
-```
+```text
 UPDATE [14:30 EST]
 Status: Investigating root cause
 Impact: Payment processing down for 15 min
@@ -124,7 +168,7 @@ Next update: 14:45 EST
 
 #### Internal
 
-```
+```text
 Subject: [SEV1] Production Incident - Payment System
 
 Team,
@@ -144,7 +188,7 @@ Updates every 15 minutes in incident channel.
 
 #### External (if needed)
 
-```
+```text
 Subject: Service Disruption Notice
 
 We are currently experiencing issues with payment processing.

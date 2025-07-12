@@ -1,5 +1,16 @@
 # Project Requirements Discovery
 
+## Table of Contents
+
+1. [1. Core Functionality](#1-core-functionality)
+2. [2. User Profile](#2-user-profile)
+3. [3. Data Characteristics](#3-data-characteristics)
+4. [4. Business Constraints](#4-business-constraints)
+5. [5. Technical Requirements](#5-technical-requirements)
+6. [6. Performance Requirements](#6-performance-requirements)
+7. [7. Development Priorities (Rank 1-5)](#7-development-priorities-rank-1-5)
+8. [8. AI Development Considerations](#8-ai-development-considerations)
+
 ## 1. Core Functionality
 
 - [ ] What is the primary purpose of this application?

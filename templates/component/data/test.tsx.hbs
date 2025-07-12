@@ -1,0 +1,47 @@
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { {{name}} } from './{{name}}';
+
+describe('{{name}}', () => {
+  it('renders children correctly', () => {
+    const testData = [{ id: 1, name: 'Item 1' }, { id: 2, name: 'Item 2' }];
+    render(<{{name}} data={testData}>Test Content</{{name}}>);
+    expect(screen.getByText('Test Content')).toBeInTheDocument();
+  });
+
+  it('shows empty state when no data', () => {
+    render(<{{name}} data={[]} emptyMessage="No items" />);
+    expect(screen.getByText('No items')).toBeInTheDocument();
+  });
+
+  it('shows loading state', () => {
+    render(<{{name}} isLoading data={[1, 2, 3]} />);
+    expect(screen.getByTestId('{{kebabCase name}}-loading')).toBeInTheDocument();
+  });
+
+  it('renders data correctly', () => {
+    const testData = [{ id: 1, name: 'Item 1' }, { id: 2, name: 'Item 2' }];
+    render(<{{name}} data={testData}>Data content</{{name}}>);
+    expect(screen.getByText('Data content')).toBeInTheDocument();
+  });
+
+  it('renders with custom className', () => {
+    const testData = [{ id: 1, name: 'Item 1' }];
+    const { container } = render(
+      <{{name}} data={testData} className="custom-class">
+        Data Content
+      </{{name}}>
+    );
+    expect(container.firstChild).toHaveClass('custom-class');
+  });
+
+  it('applies custom test ID', () => {
+    const testData = [{ id: 1, name: 'Item 1' }];
+    render(
+      <{{name}} data={testData} testId="custom-test-id">
+        Content
+      </{{name}}>
+    );
+    expect(screen.getByTestId('custom-test-id')).toBeInTheDocument();
+  });
+});

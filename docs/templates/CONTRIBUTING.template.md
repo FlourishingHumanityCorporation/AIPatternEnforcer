@@ -1,6 +1,7 @@
 # Contributing to [Project Name]
 
-First off, thank you for considering contributing to [Project Name]! It's people like you that make this project such a great tool.
+First off, thank you for considering contributing to [Project Name]! It's people like you that make this project such a
+great tool.
 
 ## Table of Contents
 
@@ -15,14 +16,15 @@ First off, thank you for considering contributing to [Project Name]! It's people
 
 ## Code of Conduct
 
-This project and everyone participating in it is governed by our Code of Conduct. By participating, you are expected to uphold this code. Please report unacceptable behavior to [email].
+This project and everyone participating in it is governed by our Code of Conduct. By participating, you are expected to
+uphold this code. Please report unacceptable behavior to [email].
 
 ### Our Standards
 
 - Using welcoming and inclusive language
 - Being respectful of differing viewpoints and experiences
 - Gracefully accepting constructive criticism
-- Focusing on what is best for the community
+- Focusing on what is optimal for the community
 - Showing empathy towards other community members
 
 ## Getting Started
@@ -36,7 +38,8 @@ This project and everyone participating in it is governed by our Code of Conduct
 
 ### Reporting Bugs
 
-Before creating bug reports, please check existing issues to avoid duplicates. When you create a bug report, include as many details as possible:
+Before creating bug reports, please check existing issues to avoid duplicates. When you create a bug report, include as
+many details as possible:
 
 **Bug Report Template:**
 
@@ -134,7 +137,7 @@ npm run type-check
 
 ### Project Structure
 
-```
+```text
 src/
 ├── features/      # Feature modules
 ├── components/    # Shared components
@@ -211,7 +214,7 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/):
 
 ### Format
 
-```
+```text
 <type>(<scope>): <subject>
 
 <body>
@@ -267,7 +270,7 @@ refactor(utils): simplify date formatting logic
 
    ```bash
    git add .
-   git commit -m "feat: add amazing feature"
+   git commit -m "feat: add functional feature"
    ```
 
 5. **Push to your fork**
@@ -369,7 +372,8 @@ See our [public roadmap](https://github.com/[owner]/[project]/projects/1) for pl
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under the same license as the project (see LICENSE file).
+By contributing, you agree that your contributions will be licensed under the same license as the project (see LICENSE
+file).
 
 ## Questions?
 

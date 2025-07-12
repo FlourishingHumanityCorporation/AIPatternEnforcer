@@ -1,6 +1,25 @@
 # Document Relationship Map
 
-This document visualizes the relationships between all documentation in ProjectTemplate, helping you navigate and understand the connections between different resources.
+This document visualizes the relationships between all documentation in ProjectTemplate, helping you navigate and
+understand the connections between different resources.
+
+## Table of Contents
+
+1. [🗺️ High-Level Navigation Map](#-high-level-navigation-map)
+2. [📚 Document Categories and Relationships](#-document-categories-and-relationships)
+  3. [1. Entry Points](#1-entry-points)
+  4. [2. Core Concepts](#2-core-concepts)
+  5. [3. AI Development Chain](#3-ai-development-chain)
+  6. [4. Decision Making Flow](#4-decision-making-flow)
+  7. [5. Development Workflow Documents](#5-development-workflow-documents)
+  8. [6. Cross-Reference Matrix](#6-cross-reference-matrix)
+  9. [7. Navigation Patterns](#7-navigation-patterns)
+10. [🔄 Bidirectional References](#-bidirectional-references)
+11. [📍 Quick Links by Use Case](#-quick-links-by-use-case)
+  12. ["I want to customize the template"](#i-want-to-customize-the-template)
+  13. ["I need to debug an issue"](#i-need-to-debug-an-issue)
+  14. ["I want to use local AI models"](#i-want-to-use-local-ai-models)
+  15. ["I need to generate code"](#i-need-to-generate-code)
 
 ## 🗺️ High-Level Navigation Map
 
@@ -50,17 +69,22 @@ These documents are where users typically start:
 
 Central documents that explain the template's philosophy:
 
-| Document                        | Purpose                       | Cross-References                                          |
-| ------------------------------- | ----------------------------- | --------------------------------------------------------- |
-| `FRICTION-MAPPING.md`           | Maps problems to solutions    | Links to specific implementations in ai/, scripts/, docs/ |
-| `template-architecture.md`      | Explains structure and design | References all major directories                          |
-| `docs/DOCUMENTATION_ROADMAP.md` | Index of all documentation    | Links to every doc file                                   |
+| Document                        | Purpose                       | Cross-References
+|
+| ------------------------------- | ----------------------------- |
+--------------------------------------------------------- |
+| `FRICTION-MAPPING.md`           | Maps problems to solutions    | Links to specific implementations in ai/, scripts/,
+docs/ |
+| `template-architecture.md`      | Explains structure and design | References all major directories
+|
+| `docs/DOCUMENTATION_ROADMAP.md` | Index of all documentation    | Links to every doc file
+|
 
 ### 3. AI Development Chain
 
 Documents that support AI-assisted development:
 
-```
+```text
 ai/config/README.md
     ├─→ .claude (Claude configuration)
     ├─→ .cursorrules (Cursor IDE rules)
@@ -84,7 +108,7 @@ scripts/dev/
 
 How technical decisions connect:
 
-```
+```text
 docs/newproject_decisions/
     ├─→ TECHNICAL_STACK_GAPS_ANALYSIS.md (Overview)
     │    ├─→ decision-matrix-backend-runtime.md
@@ -103,7 +127,7 @@ docs/newproject_decisions/
 
 **Testing Chain:**
 
-```
+```text
 CLAUDE.md §Test-First-Development
     ↓
 docs/guides/testing/comprehensive-testing-guide.md
@@ -115,7 +139,7 @@ ai/prompts/testing/unit-tests.md
 
 **Debugging Chain:**
 
-```
+```text
 CLAUDE.md §Arrow-Chain-RCA
     ↓
 CLAUDE.md §Debug-Context-Capture
@@ -127,7 +151,7 @@ ai/prompts/debugging/error-analysis.md
 
 **Code Generation Chain:**
 
-```
+```text
 CLAUDE.md §Generator-Tools
     ↓
 tools/generators/component-generator.js
@@ -214,4 +238,5 @@ These documents have strong two-way relationships:
 - Customize: `templates/component/`
 - Reference: `CLAUDE.md` §Generator-Tools
 
-This relationship map helps you understand how all pieces of ProjectTemplate work together to create a cohesive AI-assisted development experience.
+This relationship map helps you understand how all pieces of ProjectTemplate work together to create a cohesive
+AI-assisted development experience.

@@ -1,8 +1,55 @@
 # Memory Leak Debugging Guide
 
+## Table of Contents
+
+1. [Memory Leak Investigation Prompt Template](#memory-leak-investigation-prompt-template)
+2. [Symptoms:](#symptoms)
+3. [Current Metrics:](#current-metrics)
+4. [Technical Context:](#technical-context)
+5. [Suspected Areas:](#suspected-areas)
+6. [Memory Leak Detection](#memory-leak-detection)
+  7. [1. Browser DevTools Memory Profiling](#1-browser-devtools-memory-profiling)
+    8. [Heap Snapshot Analysis](#heap-snapshot-analysis)
+    9. [Performance Timeline](#performance-timeline)
+  10. [2. Common Memory Leak Sources](#2-common-memory-leak-sources)
+    11. [Event Listeners](#event-listeners)
+    12. [Timers and Intervals](#timers-and-intervals)
+    13. [API Subscriptions](#api-subscriptions)
+    14. [DOM References](#dom-references)
+  15. [3. State Management Memory Leaks](#3-state-management-memory-leaks)
+    16. [Redux/Context Leaks](#reduxcontext-leaks)
+    17. [Large State Objects](#large-state-objects)
+  18. [4. Third-Party Library Leaks](#4-third-party-library-leaks)
+    19. [Library Cleanup](#library-cleanup)
+20. [Memory Leak Prevention](#memory-leak-prevention)
+  21. [1. React Optimal Practices](#1-react-optimal-practices)
+    22. [Proper Effect Cleanup](#proper-effect-cleanup)
+    23. [Custom Hooks for Common Patterns](#custom-hooks-for-common-patterns)
+  24. [2. Memory Management Patterns](#2-memory-management-patterns)
+    25. [Object Pooling](#object-pooling)
+    26. [Weak References](#weak-references)
+  27. [3. Memory Monitoring](#3-memory-monitoring)
+    28. [Production Monitoring](#production-monitoring)
+29. [Memory Leak Testing](#memory-leak-testing)
+  30. [1. Automated Testing](#1-automated-testing)
+    31. [Jest Memory Tests](#jest-memory-tests)
+    32. [Cypress Memory Tests](#cypress-memory-tests)
+  33. [2. Manual Testing](#2-manual-testing)
+    34. [Memory Leak Testing Checklist](#memory-leak-testing-checklist)
+35. [Common Memory Leak Solutions](#common-memory-leak-solutions)
+  36. [1. React-Specific Solutions](#1-react-specific-solutions)
+    37. [Abort Controllers for Fetch](#abort-controllers-for-fetch)
+    38. [Cleanup Refs](#cleanup-refs)
+  39. [2. General JavaScript Solutions](#2-general-javascript-solutions)
+    40. [Cleanup Closures](#cleanup-closures)
+41. [Memory Leak Prevention Checklist](#memory-leak-prevention-checklist)
+  42. [Development Checklist](#development-checklist)
+  43. [Testing Checklist](#testing-checklist)
+  44. [Code Review Checklist](#code-review-checklist)
+
 ## Memory Leak Investigation Prompt Template
 
-```
+```text
 I suspect there's a memory leak in [COMPONENT/FEATURE]. Please help me identify and fix the memory leak:
 
 ## Symptoms:
@@ -322,7 +369,7 @@ const CleanComponent = () => {
 
 ## Memory Leak Prevention
 
-### 1. React Best Practices
+### 1. React Optimal Practices
 
 #### Proper Effect Cleanup
 

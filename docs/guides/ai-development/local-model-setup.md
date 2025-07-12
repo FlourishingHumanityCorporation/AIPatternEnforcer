@@ -1,6 +1,46 @@
+[← Back to Documentation](../../README.md) | [↑ Up to AI Development](../README.md)
+
+---
+
 # Local AI Model Setup Guide
 
-This guide covers setting up and integrating local AI models for development, eliminating dependency on cloud APIs and enabling offline AI-assisted development.
+This guide covers setting up and integrating local AI models for development, eliminating dependency on cloud APIs and
+enabling offline AI-assisted development.
+
+## Table of Contents
+
+1. [Why Local Models?](#why-local-models)
+2. [Recommended Local Model Solutions](#recommended-local-model-solutions)
+  3. [1. Ollama (Recommended for Most Users)](#1-ollama-recommended-for-most-users)
+    4. [Installation](#installation)
+    5. [Setup Models](#setup-models)
+    6. [Memory Requirements](#memory-requirements)
+  7. [2. LocalAI](#2-localai)
+    8. [Installation](#installation)
+    9. [Configuration](#configuration)
+  10. [3. LM Studio](#3-lm-studio)
+11. [Integration Patterns](#integration-patterns)
+  12. [1. Direct Integration with Ollama](#1-direct-integration-with-ollama)
+  13. [2. OpenAI-Compatible API (LocalAI/LM Studio)](#2-openai-compatible-api-localailm-studio)
+  14. [3. Fallback Pattern](#3-fallback-pattern)
+15. [Model Selection Guide](#model-selection-guide)
+  16. [By Task Type](#by-task-type)
+  17. [By Hardware](#by-hardware)
+18. [Performance Optimization](#performance-optimization)
+  19. [1. Model Quantization](#1-model-quantization)
+  20. [2. Context Window Management](#2-context-window-management)
+  21. [3. Response Caching](#3-response-caching)
+22. [IDE Integration](#ide-integration)
+  23. [VS Code / Cursor Settings](#vs-code-cursor-settings)
+  24. [Custom Prompts for Local Models](#custom-prompts-for-local-models)
+25. [Monitoring & Debugging](#monitoring-debugging)
+  26. [Performance Tracking](#performance-tracking)
+27. [Optimal Practices](#optimal-practices)
+28. [Troubleshooting](#troubleshooting)
+  29. [Common Issues](#common-issues)
+30. [Example: Complete Integration](#example-complete-integration)
+31. [Next Steps](#next-steps)
+32. [See Also](#see-also)
 
 ## Why Local Models?
 
@@ -14,7 +54,7 @@ This guide covers setting up and integrating local AI models for development, el
 
 ### 1. Ollama (Recommended for Most Users)
 
-**Best for**: General development tasks, code completion, documentation
+**Optimal for**: General development tasks, code completion, documentation
 **Models**: Llama 3, CodeLlama, Mistral, Mixtral
 
 #### Installation
@@ -55,7 +95,7 @@ ollama run llama3:8b "Explain async/await in JavaScript"
 
 ### 2. LocalAI
 
-**Best for**: OpenAI API compatibility, multiple model formats
+**Optimal for**: OpenAI API compatibility, multiple model formats
 **Models**: Any GGML/GGUF format models
 
 #### Installation
@@ -85,7 +125,7 @@ parameters:
 
 ### 3. LM Studio
 
-**Best for**: GUI interface, easy model management
+**Optimal for**: GUI interface, easy model management
 **Platform**: macOS, Windows, Linux
 
 - Download from [lmstudio.ai](https://lmstudio.ai)
@@ -330,7 +370,8 @@ echo "=== Local AI Model Status ==="
 # Check Ollama
 if command -v ollama &> /dev/null; then
     echo "Ollama: $(ollama list | wc -l) models installed"
-    echo "Ollama API: $(curl -s http://localhost:11434/api/tags | jq -r '.models[].name' 2>/dev/null | head -3 || echo "Not running")"
+echo "Ollama API: $(curl -s http://localhost:11434/api/tags | jq -r '.models[].name' 2>/dev/null | head -3 || echo "Not
+running")"
 fi
 
 # Check GPU usage
@@ -350,7 +391,7 @@ time curl -s -X POST http://localhost:11434/api/generate \
   > /dev/null 2>&1 || echo "Model not responding"
 ```
 
-## Best Practices
+## Optimal Practices
 
 1. **Start Small**: Begin with 7B models and scale up as needed
 2. **Quantize When Possible**: Use Q4/Q5 quantization for better performance

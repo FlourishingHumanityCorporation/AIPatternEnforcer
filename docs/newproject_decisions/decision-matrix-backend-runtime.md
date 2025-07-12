@@ -1,15 +1,46 @@
 # Backend Runtime Decision Matrix (Local Development Focus)
 
+## Table of Contents
+
+1. [Quick Decision Flow for Local Projects](#quick-decision-flow-for-local-projects)
+2. [Requirements Assessment](#requirements-assessment)
+  3. [Local Development Requirements](#local-development-requirements)
+  4. [Project Requirements](#project-requirements)
+  5. [Developer Experience Requirements](#developer-experience-requirements)
+6. [Evaluation Matrix for Local Development](#evaluation-matrix-for-local-development)
+  7. [Weighted Score Calculation](#weighted-score-calculation)
+8. [Detailed Runtime Analysis](#detailed-runtime-analysis)
+  9. [Node.js (JavaScript/TypeScript)](#nodejs-javascripttypescript)
+  10. [Python (FastAPI/Django/Flask)](#python-fastapidjangoflask)
+  11. [Go](#go)
+  12. [Rust](#rust)
+13. [Local Development Scenarios](#local-development-scenarios)
+  14. [Scenario 1: Personal Project/Side Project](#scenario-1-personal-projectside-project)
+  15. [Scenario 2: Local Data Analysis Tool](#scenario-2-local-data-analysis-tool)
+  16. [Scenario 3: Desktop Application](#scenario-3-desktop-application)
+  17. [Scenario 4: Local Development Tools](#scenario-4-local-development-tools)
+18. [Local Development Considerations](#local-development-considerations)
+  19. [Setup Time (Fresh Machine)](#setup-time-fresh-machine)
+  20. [Resource Usage (Typical Local Project)](#resource-usage-typical-local-project)
+21. [AI Assistant Guidance](#ai-assistant-guidance)
+  22. [For AI Code Generation](#for-ai-code-generation)
+  23. [Runtime-Specific .cursorrules](#runtime-specific-cursorrules)
+24. [Migration Strategies](#migration-strategies)
+  25. [Incremental Migration Pattern](#incremental-migration-pattern)
+  26. [Hybrid Architecture Example](#hybrid-architecture-example)
+27. [Decision Template for Local Projects](#decision-template-for-local-projects)
+28. [References](#references)
+
 ## Quick Decision Flow for Local Projects
 
-```
+```text
 Start → Is this a learning/experimental project?
          ├─ Yes → Use what you want to learn
          └─ No → Is this data/ML heavy?
-                  ├─ Yes → Python (best libraries)
+                  ├─ Yes → Python (optimal libraries)
                   └─ No → Need fast iteration?
                           ├─ Yes → Node.js or Python
-                          └─ No → Want best tooling?
+                          └─ No → Want optimal tooling?
                                   ├─ Yes → Node.js (npm ecosystem)
                                   └─ No → Go (simple deployment)
 ```
@@ -65,7 +96,7 @@ Start → Is this a learning/experimental project?
 
 ### Weighted Score Calculation
 
-```
+```text
 Node.js:  (Σ weight × score) / total_weight = ___
 Python:   (Σ weight × score) / total_weight = ___
 Go:       (Σ weight × score) / total_weight = ___
@@ -78,7 +109,7 @@ Java:     (Σ weight × score) / total_weight = ___
 
 ### Node.js (JavaScript/TypeScript)
 
-**Best for local development:**
+**Optimal for local development:**
 
 - Rapid prototyping and experimentation
 - Full-stack JavaScript projects
@@ -89,7 +120,7 @@ Java:     (Σ weight × score) / total_weight = ___
 **Local dev advantages:**
 
 - Instant startup with nodemon/tsx watch
-- Excellent debugging in VS Code/Cursor
+- Robust debugging in VS Code/Cursor
 - No compile step (JavaScript)
 - Rich REPL for experimentation
 - Single language for frontend/backend
@@ -120,7 +151,7 @@ app.get("/api/users", async (req, res) => {
 
 ### Python (FastAPI/Django/Flask)
 
-**Best for local development:**
+**Optimal for local development:**
 
 - Data analysis and visualization projects
 - Machine learning experiments
@@ -130,7 +161,7 @@ app.get("/api/users", async (req, res) => {
 
 **Local dev advantages:**
 
-- Excellent REPL and notebook support
+- Robust REPL and notebook support
 - Simple virtual environment setup
 - No compilation needed
 - Great for exploratory programming
@@ -161,7 +192,7 @@ async def get_users(db: AsyncSession):
 
 ### Go
 
-**Best for local development:**
+**Optimal for local development:**
 
 - Learning systems programming
 - Building developer tools
@@ -211,7 +242,7 @@ func main() {
 
 ### Rust
 
-**Best for local development:**
+**Optimal for local development:**
 
 - Learning systems programming safely
 - Performance experiments
@@ -221,8 +252,8 @@ func main() {
 
 **Local dev advantages:**
 
-- Excellent error messages
-- Cargo is fantastic package manager
+- Robust error messages
+- Cargo is reliable package manager
 - Great for learning low-level concepts
 - Memory safety without GC
 - Strong local tooling (rustup, cargo)
@@ -255,13 +286,13 @@ async fn main() -> std::io::Result<()> {
 
 **Requirements**: Fast iteration, learning friendly, minimal setup
 **Recommendation**: **Node.js** or **Python**
-**Rationale**: Both have excellent local dev experience, choose based on preference
+**Rationale**: Both have robust local dev experience, choose based on preference
 
 ### Scenario 2: Local Data Analysis Tool
 
 **Requirements**: CSV/JSON processing, visualizations, ad-hoc scripts
 **Recommendation**: **Python** with Jupyter
-**Rationale**: Best data libraries, interactive development
+**Rationale**: Optimal data libraries, interactive development
 
 ### Scenario 3: Desktop Application
 
@@ -287,7 +318,7 @@ async fn main() -> std::io::Result<()> {
 
 ### Resource Usage (Typical Local Project)
 
-```
+```text
 Idle Memory Usage:
 Node.js:  ~50-100 MB
 Python:   ~30-80 MB
@@ -395,7 +426,7 @@ graph LR
 
 ## References
 
-- [Node.js Best Practices](https://github.com/goldbergyoni/nodebestpractices)
+- [Node.js Optimal Practices](https://github.com/goldbergyoni/nodebestpractices)
 - [Python API Performance](https://fastapi.tiangolo.com/benchmarks/)
 - [Go vs Node.js Benchmark](https://benchmarksgame-team.pages.debian.net/)
 - [Rust Web Framework Comparison](https://www.arewewebyet.org/)

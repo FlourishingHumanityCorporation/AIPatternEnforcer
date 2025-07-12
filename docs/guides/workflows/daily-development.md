@@ -1,4 +1,51 @@
+[← Back to Documentation](../../README.md) | [↑ Up to Workflows](../README.md)
+
+---
+
 # Daily Development Workflow
+
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Morning Startup Routine](#morning-startup-routine)
+  3. [1. Environment Check (5 min)](#1-environment-check-5-min)
+  4. [2. Context Loading (5 min)](#2-context-loading-5-min)
+  5. [3. Plan the Day](#3-plan-the-day)
+6. [Development Flow](#development-flow)
+  7. [Starting a New Feature](#starting-a-new-feature)
+    8. [1. Create Feature Branch](#1-create-feature-branch)
+    9. [2. Gather Context](#2-gather-context)
+    10. [3. AI Planning Session](#3-ai-planning-session)
+    11. [4. Test-First Development](#4-test-first-development)
+  12. [During Development](#during-development)
+    13. [Code-Review-As-You-Go](#code-review-as-you-go)
+    14. [AI Interaction Pattern](#ai-interaction-pattern)
+    15. [Commit Strategy](#commit-strategy)
+16. [Debugging Workflow](#debugging-workflow)
+  17. [1. Quick Debug](#1-quick-debug)
+  18. [2. Systematic Debug](#2-systematic-debug)
+19. [Code Review Process](#code-review-process)
+  20. [Preparing PR](#preparing-pr)
+  21. [PR Template Usage](#pr-template-usage)
+22. [End of Day Routine](#end-of-day-routine)
+  23. [1. Clean Up (10 min)](#1-clean-up-10-min)
+  24. [2. Document Progress](#2-document-progress)
+  25. [3. Prepare Tomorrow](#3-prepare-tomorrow)
+26. [Weekly Maintenance](#weekly-maintenance)
+  27. [Monday - Planning](#monday---planning)
+  28. [Wednesday - Quality](#wednesday---quality)
+  29. [Friday - Cleanup](#friday---cleanup)
+30. [Optimal Practices](#optimal-practices)
+  31. [DO:](#do)
+  32. [DON'T:](#dont)
+33. [Productivity Tips](#productivity-tips)
+  34. [Time Boxing](#time-boxing)
+  35. [Context Switching](#context-switching)
+  36. [AI Effectiveness](#ai-effectiveness)
+37. [Troubleshooting Daily Issues](#troubleshooting-daily-issues)
+  38. ["AI gives inconsistent answers"](#ai-gives-inconsistent-answers)
+  39. ["Tests failing in CI but not locally"](#tests-failing-in-ci-but-not-locally)
+  40. ["Merge conflicts"](#merge-conflicts)
 
 ## Overview
 
@@ -219,7 +266,7 @@ gh issue comment [issue-number] --body "Progress update..."
 - Refactor technical debt
 - Update team knowledge base
 
-## Best Practices
+## Optimal Practices
 
 ### DO:
 
@@ -293,4 +340,5 @@ git rebase origin/main
 # Fix conflicts with AI help
 ```
 
-Remember: The goal is sustainable productivity. Take breaks, document well, and use AI as an accelerator, not a replacement for thinking.
+Remember: The goal is sustainable productivity. Take breaks, document well, and use AI as an accelerator, not a
+replacement for thinking.

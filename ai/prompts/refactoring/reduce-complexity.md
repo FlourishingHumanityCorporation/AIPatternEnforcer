@@ -1,8 +1,49 @@
 # Code Complexity Reduction Guide
 
+## Table of Contents
+
+1. [Complexity Reduction Prompt Template](#complexity-reduction-prompt-template)
+2. [Current Complexity Issues:](#current-complexity-issues)
+3. [Code Details:](#code-details)
+4. [Specific Issues:](#specific-issues)
+5. [Complexity Reduction Strategies](#complexity-reduction-strategies)
+  6. [1. Function Decomposition](#1-function-decomposition)
+    7. [Breaking Down Large Functions](#breaking-down-large-functions)
+  8. [2. Conditional Logic Simplification](#2-conditional-logic-simplification)
+    9. [Replace Complex If-Else with Strategy Pattern](#replace-complex-if-else-with-strategy-pattern)
+    10. [Early Returns to Reduce Nesting](#early-returns-to-reduce-nesting)
+  11. [3. React Component Simplification](#3-react-component-simplification)
+    12. [Component Decomposition](#component-decomposition)
+  13. [4. Data Structure Simplification](#4-data-structure-simplification)
+    14. [Flatten Nested Data Structures](#flatten-nested-data-structures)
+  15. [5. Error Handling Simplification](#5-error-handling-simplification)
+    16. [Centralized Error Handling](#centralized-error-handling)
+17. [Complexity Metrics and Guidelines](#complexity-metrics-and-guidelines)
+  18. [1. Measurable Complexity Indicators](#1-measurable-complexity-indicators)
+    19. [Cyclomatic Complexity](#cyclomatic-complexity)
+    20. [Lines of Code](#lines-of-code)
+    21. [Nesting Depth](#nesting-depth)
+  22. [2. Complexity Reduction Checklist](#2-complexity-reduction-checklist)
+    23. [Function-Level](#function-level)
+    24. [Component-Level](#component-level)
+    25. [Architecture-Level](#architecture-level)
+  26. [3. Refactoring Patterns](#3-refactoring-patterns)
+    27. [Extract Method](#extract-method)
+    28. [Replace Conditional with Polymorphism](#replace-conditional-with-polymorphism)
+29. [Common Complexity Anti-Patterns](#common-complexity-anti-patterns)
+  30. [1. God Functions/Components](#1-god-functionscomponents)
+  31. [2. Deep Nesting](#2-deep-nesting)
+  32. [3. Code Duplication](#3-code-duplication)
+  33. [4. Magic Numbers/Strings](#4-magic-numbersstrings)
+34. [Complexity Reduction Benefits](#complexity-reduction-benefits)
+  35. [1. Maintainability](#1-maintainability)
+  36. [2. Testability](#2-testability)
+  37. [3. Performance](#3-performance)
+  38. [4. Team Collaboration](#4-team-collaboration)
+
 ## Complexity Reduction Prompt Template
 
-```
+```text
 I need to reduce the complexity of [COMPONENT/FUNCTION]. Please help me simplify and refactor this code:
 
 ## Current Complexity Issues:

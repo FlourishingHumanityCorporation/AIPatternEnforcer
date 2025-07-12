@@ -2,6 +2,42 @@
 
 This runbook provides step-by-step instructions for deploying to production.
 
+## Table of Contents
+
+1. [Pre-Deployment Checklist](#pre-deployment-checklist)
+2. [Deployment Steps](#deployment-steps)
+  3. [1. Prepare Release](#1-prepare-release)
+  4. [2. Run Pre-Deployment Checks](#2-run-pre-deployment-checks)
+  5. [3. Deploy to Staging](#3-deploy-to-staging)
+  6. [4. Production Deployment](#4-production-deployment)
+  7. [5. Post-Deployment Verification](#5-post-deployment-verification)
+  8. [6. Monitor Application](#6-monitor-application)
+9. [Rollback Procedure](#rollback-procedure)
+  10. [Immediate Rollback (< 5 minutes)](#immediate-rollback-5-minutes)
+  11. [Database Rollback](#database-rollback)
+12. [Deployment Windows](#deployment-windows)
+  13. [Standard Deployments](#standard-deployments)
+  14. [Emergency Deployments](#emergency-deployments)
+  15. [Blackout Periods](#blackout-periods)
+16. [Communication Plan](#communication-plan)
+  17. [Before Deployment](#before-deployment)
+  18. [After Deployment](#after-deployment)
+  19. [If Issues Occur](#if-issues-occur)
+20. [Service-Specific Instructions](#service-specific-instructions)
+  21. [Vercel](#vercel)
+  22. [AWS](#aws)
+  23. [Heroku](#heroku)
+24. [Troubleshooting](#troubleshooting)
+  25. [Build Failures](#build-failures)
+  26. [Migration Failures](#migration-failures)
+  27. [Performance Issues](#performance-issues)
+28. [Emergency Contacts](#emergency-contacts)
+  29. [Escalation Path](#escalation-path)
+  30. [External Services](#external-services)
+31. [Post-Deployment Tasks](#post-deployment-tasks)
+32. [Deployment Metrics](#deployment-metrics)
+33. [Appendix: Quick Commands](#appendix-quick-commands)
+
 ## Pre-Deployment Checklist
 
 - [ ] All tests passing in CI

@@ -1,8 +1,40 @@
 # Integration Testing Guide
 
+## Table of Contents
+
+1. [Integration Testing Prompt Template](#integration-testing-prompt-template)
+2. [Testing Scope:](#testing-scope)
+3. [Technical Context:](#technical-context)
+4. [Integration Points:](#integration-points)
+5. [Test Requirements:](#test-requirements)
+6. [Integration Testing Strategies](#integration-testing-strategies)
+  7. [1. Component Integration Testing](#1-component-integration-testing)
+    8. [React Component Integration](#react-component-integration)
+  9. [2. API Integration Testing](#2-api-integration-testing)
+    10. [REST API Integration](#rest-api-integration)
+  11. [3. Database Integration Testing](#3-database-integration-testing)
+    12. [Database Operation Testing](#database-operation-testing)
+  13. [4. State Management Integration](#4-state-management-integration)
+    14. [Redux Integration Testing](#redux-integration-testing)
+  15. [5. End-to-End Workflow Testing](#5-end-to-end-workflow-testing)
+    16. [Complete User Journey](#complete-user-journey)
+17. [Integration Testing Optimal Practices](#integration-testing-optimal-practices)
+  18. [1. Test Environment Setup](#1-test-environment-setup)
+    19. [Test Database Management](#test-database-management)
+    20. [Test Data Factories](#test-data-factories)
+  21. [2. Mock Strategy](#2-mock-strategy)
+    22. [Selective Mocking](#selective-mocking)
+  23. [3. Integration Test Organization](#3-integration-test-organization)
+    24. [Test Suite Structure](#test-suite-structure)
+25. [Integration Testing Checklist](#integration-testing-checklist)
+  26. [Pre-Test Setup](#pre-test-setup)
+  27. [Test Coverage](#test-coverage)
+  28. [Test Quality](#test-quality)
+  29. [Maintenance](#maintenance)
+
 ## Integration Testing Prompt Template
 
-```
+```text
 I need to create integration tests for [COMPONENT/FEATURE]. Please help me design comprehensive integration tests:
 
 ## Testing Scope:
@@ -526,7 +558,7 @@ describe("User Registration Workflow", () => {
 });
 ```
 
-## Integration Testing Best Practices
+## Integration Testing Optimal Practices
 
 ### 1. Test Environment Setup
 

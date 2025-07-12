@@ -2,6 +2,42 @@
 
 This runbook covers how to safely rollback deployments when issues are detected in production.
 
+## Table of Contents
+
+1. [When to Rollback](#when-to-rollback)
+2. [Rollback Decision Tree](#rollback-decision-tree)
+3. [Emergency Rollback (< 2 minutes)](#emergency-rollback-2-minutes)
+4. [Standard Rollback (< 5 minutes)](#standard-rollback-5-minutes)
+  5. [Step 1: Initiate Rollback](#step-1-initiate-rollback)
+  6. [Step 2: Verify Rollback](#step-2-verify-rollback)
+  7. [Step 3: Monitor Metrics](#step-3-monitor-metrics)
+8. [Database Rollback](#database-rollback)
+  9. [Check If Database Changes Were Made](#check-if-database-changes-were-made)
+  10. [Rollback Database Changes](#rollback-database-changes)
+  11. [Data Recovery](#data-recovery)
+12. [Feature Flag Rollback](#feature-flag-rollback)
+13. [Service-Specific Rollbacks](#service-specific-rollbacks)
+  14. [Vercel](#vercel)
+  15. [AWS ECS](#aws-ecs)
+  16. [Kubernetes](#kubernetes)
+17. [Communication During Rollback](#communication-during-rollback)
+  18. [Initial Alert](#initial-alert)
+  19. [Updates Every 5 Minutes](#updates-every-5-minutes)
+  20. [Resolution Message](#resolution-message)
+21. [Post-Rollback Actions](#post-rollback-actions)
+  22. [Immediate (Within 30 minutes)](#immediate-within-30-minutes)
+  23. [Within 24 Hours](#within-24-hours)
+24. [Rollback Testing](#rollback-testing)
+25. [Common Rollback Scenarios](#common-rollback-scenarios)
+  26. [Scenario 1: API Breaking Change](#scenario-1-api-breaking-change)
+  27. [Scenario 2: Database Migration Issue](#scenario-2-database-migration-issue)
+  28. [Scenario 3: Performance Degradation](#scenario-3-performance-degradation)
+29. [Rollback Metrics](#rollback-metrics)
+30. [Tools and Scripts](#tools-and-scripts)
+  31. [Automated Rollback Script](#automated-rollback-script)
+  32. [Rollback Verification](#rollback-verification)
+33. [Remember](#remember)
+
 ## When to Rollback
 
 Rollback immediately if you observe:
@@ -14,7 +50,7 @@ Rollback immediately if you observe:
 
 ## Rollback Decision Tree
 
-```
+```text
 Is the site completely down?
 ├─ Yes → Execute Emergency Rollback
 └─ No → Is error rate > 5%?
@@ -196,7 +232,7 @@ kubectl rollout status deployment/myapp
 
 ### Initial Alert
 
-```
+```text
 🚨 PRODUCTION ISSUE DETECTED
 Impact: [Brief description]
 Action: Initiating rollback
@@ -206,7 +242,7 @@ Incident Commander: [Name]
 
 ### Updates Every 5 Minutes
 
-```
+```text
 UPDATE [Time]
 Status: Rollback in progress
 Progress: [X%] complete
@@ -216,7 +252,7 @@ Next update: [Time]
 
 ### Resolution Message
 
-```
+```text
 ✅ ISSUE RESOLVED
 Rollback completed at [Time]
 Service restored to version [X]
@@ -388,7 +424,7 @@ fi
 
 ## Remember
 
-- **Speed over perfection**: Fast rollback is better than perfect diagnosis
+- **Speed over perfection**: Fast rollback is better than complete diagnosis
 - **Communicate often**: Over-communicate during incidents
 - **Document everything**: You'll need it for the post-mortem
 - **No blame**: Focus on fixing, not fault-finding

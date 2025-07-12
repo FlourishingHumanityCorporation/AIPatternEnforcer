@@ -1,6 +1,29 @@
 # Decision Log
 
-This log tracks all significant technical and architectural decisions for the project. Most recent decisions are at the top.
+This log tracks all significant technical and architectural decisions for the project. Most recent decisions are at the
+top.
+
+## Table of Contents
+
+1. [Decision Template](#decision-template)
+  2. [[Date] - [Decision Title]](#date---decision-title)
+3. [2024 Decisions](#2024-decisions)
+  4. [2024-MM-DD - Example: Adopt TypeScript Strict Mode](#2024-mm-dd---example-adopt-typescript-strict-mode)
+  5. [2024-MM-DD - Example: Use Zustand for State Management](#2024-mm-dd---example-use-zustand-for-state-management)
+  6. [2024-MM-DD - Example: Adopt Cursor as Primary IDE](#2024-mm-dd---example-adopt-cursor-as-primary-ide)
+  7. [2024-MM-DD - Example: Implement Feature Flags](#2024-mm-dd---example-implement-feature-flags)
+  8. [2024-MM-DD - Example: PostgreSQL as Primary Database](#2024-mm-dd---example-postgresql-as-primary-database)
+  9. [2024-MM-DD - Example: Mandatory PR Reviews](#2024-mm-dd---example-mandatory-pr-reviews)
+  10. [2024-MM-DD - Example: Node.js 20 Upgrade](#2024-mm-dd---example-nodejs-20-upgrade)
+11. [2023 Decisions](#2023-decisions)
+  12. [2023-12-01 - Example: Adopt React Query](#2023-12-01---example-adopt-react-query)
+13. [Decision Categories](#decision-categories)
+  14. [Architecture](#architecture)
+  15. [Tools](#tools)
+  16. [Process](#process)
+  17. [Security](#security)
+18. [Review Schedule](#review-schedule)
+19. [How to Propose a Decision](#how-to-propose-a-decision)
 
 ## Decision Template
 
@@ -32,7 +55,8 @@ This log tracks all significant technical and architectural decisions for the pr
 
 **Decision**: Enable TypeScript strict mode for all new code
 
-**Context**: We were seeing runtime errors that could have been caught at compile time. Strict mode catches many common bugs.
+**Context**: We were seeing runtime errors that could have been caught at compile time. Strict mode catches many common
+bugs.
 
 **Consequences**:
 
@@ -137,7 +161,8 @@ This log tracks all significant technical and architectural decisions for the pr
 
 **Decision**: Require 1 approval for all PRs, 2 for critical paths
 
-**Context**: Several bugs slipped through that review would have caught. Team agrees reviews are valuable learning opportunity.
+**Context**: Several bugs slipped through that review would have caught. Team agrees reviews are valuable learning
+opportunity.
 
 **Consequences**:
 
