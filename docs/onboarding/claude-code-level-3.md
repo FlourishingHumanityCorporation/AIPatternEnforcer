@@ -182,11 +182,9 @@ system improvements.
 ### Architectural Patterns
 - [Advanced Patterns](../architecture/patterns/) - Complex design patterns
 - [Architecture Decisions](../architecture/decisions/) - Decision-making frameworks
-- [Technical Debt Management](../guides/maintenance/) - Technical debt strategies
 
 ### Mentoring Resources
-- [Knowledge Sharing](../guides/collaboration/) - Effective knowledge transfer
-- [Code Review Guidelines](../guides/workflows/code-review.md) - Quality assurance
+- [Knowledge Sharing Guidelines](../guides/testing/comprehensive-testing-guide.md) - Effective knowledge transfer
 
 ## 🛠️ Level 3 Advanced Tooling
 

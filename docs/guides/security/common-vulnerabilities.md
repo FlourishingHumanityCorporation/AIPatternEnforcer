@@ -329,7 +329,6 @@ const config = {
 ## Related Documentation
 
 - [Security Optimal Practices](security-optimal-practices.md)
-- [Authentication Patterns](../../architecture/patterns/authentication.md)
 - [API Security Guidelines](../../architecture/patterns/api-design-standards.md)
 
 ---

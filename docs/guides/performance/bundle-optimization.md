@@ -599,8 +599,6 @@ const AdvancedFeatures = lazy(() => {
 ## Related Documentation
 
 - [Performance Optimization Playbook](optimization-playbook.md)
-- [Loading Strategies](loading-strategies.md)
-- [Caching Strategies](caching-strategies.md)
 
 ---
 
