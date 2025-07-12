@@ -281,15 +281,23 @@ Commands:
   status    Show enforcement status
 
 Options:
-  --fix         Auto-fix violations (with check command)
-  --dry-run     Preview changes without applying them
-  --force       Force overwrite existing config
-  --verbose     Verbose output
-  --config=PATH Use specific config file
+  --fix               Auto-fix violations (with check command)
+  --dry-run           Preview changes without applying them
+  --force             Force overwrite existing config
+  --verbose           Verbose output
+  --config=PATH       Use specific config file
+  --format=FORMAT     Output format (text, json, markdown)
+
+Advanced Fixer Options:
+  --no-advanced       Disable advanced auto-fixer (use basic fixer)
+  --no-typescript     Disable TypeScript-aware transformations
+  --cross-file        Enable cross-file analysis for shared loggers
+  --no-module-naming  Disable module-based logger naming
 
 Examples:
   node log-enforcer.js check
   node log-enforcer.js fix --dry-run
+  node log-enforcer.js fix --cross-file --verbose
   node log-enforcer.js config --force
         `);
         process.exit(0);
