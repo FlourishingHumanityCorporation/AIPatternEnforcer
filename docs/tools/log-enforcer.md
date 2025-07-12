@@ -639,8 +639,8 @@ npm test -- tools/enforcement/log-enforcer
 
 ## Related Tools and Documentation
 
-- **[Import Enforcer](import-enforcer.md)**: Enforces proper import statements
-- **[Documentation Enforcer](documentation-enforcer.md)**: Ensures code documentation
+- **[Check Imports](../../tools/enforcement/check-imports.js)**: Enforces proper import statements
+- **[Documentation Style Enforcer](../../tools/enforcement/documentation-style.js)**: Ensures code documentation
 - **[Enforcement System Guide](../guides/enforcement/ENFORCEMENT.md)**: Complete enforcement framework documentation
 - **[CLAUDE.md](../../CLAUDE.md)**: Project AI instructions including logging rules
 

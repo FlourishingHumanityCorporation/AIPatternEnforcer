@@ -1,1 +1,0 @@
-export { useSamplefeature, useSamplefeatureList } from './useSamplefeature';

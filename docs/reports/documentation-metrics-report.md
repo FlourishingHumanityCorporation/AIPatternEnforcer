@@ -1,41 +1,41 @@
 # Documentation Metrics Report
 
-**Generated**: 2025-07-12T05:22:08.639Z
+**Generated**: 2025-07-12T05:54:19.920Z
 **Project**: project-template
 **Branch**: feature/integration-enhancement-initiative
 
 ## Executive Summary
 
-- **Overall Coverage**: 17% (poor)
-- **Documentation Debt**: 33 items
+- **Overall Coverage**: 14% (poor)
+- **Documentation Debt**: 56 items
 - **Quality Score**: 72%
-- **Estimated Effort**: 15.5 hours
+- **Estimated Effort**: 24 hours
 
 ## Coverage Analysis
 
-### Overall Coverage: 17%
+### Overall Coverage: 14%
 - **Target**: 90%
 - **Status**: poor
-- **Files needing documentation**: 33
+- **Files needing documentation**: 56
 
 ### Coverage by File Type
 - **components**: 0% (0/2)
-- **tools**: 0% (0/6)
-- **scripts**: 0% (0/3)
-- **configs**: 0% (0/1)
-- **other**: 28% (11/40)
+- **tools**: 0% (0/12)
+- **scripts**: 0% (0/8)
+- **configs**: 5% (1/22)
+- **other**: 31% (18/59)
 
 ## Documentation Debt
 
 ### Priority Breakdown
-- **HIGH**: 1 items
-- **MEDIUM**: 26 items
-- **LOW**: 6 items
+- **HIGH**: 2 items
+- **MEDIUM**: 34 items
+- **LOW**: 20 items
 
 ### Recent Changes
-- **Significant Changes**: 23 files
-- **Breaking Changes**: 29 files
-- **Requires Immediate Attention**: 57 files
+- **Significant Changes**: 47 files
+- **Breaking Changes**: 32 files
+- **Requires Immediate Attention**: 94 files
 
 ## Quality Assessment
 
@@ -46,20 +46,20 @@
 
 ## Trends
 
-- **Coverage Trend**: improving (+27%)
-- **Debt Trend**: declining (-29 items)
+- **Coverage Trend**: improving (+18%)
+- **Debt Trend**: improving (+55 items)
 - **Quality Trend**: stable (0%)
 
 ## Recommendations
 
 ### Documentation coverage below minimum threshold
 **Priority**: CRITICAL
-**Description**: Current coverage: 17%, minimum: 80%
+**Description**: Current coverage: 14%, minimum: 80%
 **Action**: Immediate documentation effort required
 **Impact**: high
 
 ### Significant documentation effort required
 **Priority**: MEDIUM
-**Description**: Estimated 15.5 hours of documentation work
+**Description**: Estimated 24 hours of documentation work
 **Action**: Plan dedicated documentation sprint
 **Impact**: medium

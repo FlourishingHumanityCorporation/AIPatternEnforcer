@@ -1,1 +1,0 @@
-export { SamplefeatureProvider, useSamplefeatureContext } from './sampleFeature.store';

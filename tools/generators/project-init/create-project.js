@@ -92,6 +92,8 @@ async function createProject() {
     '.eslintrc.json',
     '.prettierrc',
     'tsconfig.json',
+    'vite.config.ts',
+    'index.html',
     '.gitignore',
     'README.md',
     'CLAUDE.md',
@@ -126,6 +128,17 @@ async function createProject() {
   // Remove template-specific scripts
   delete newPackageJson.scripts['create-project'];
   delete newPackageJson.scripts['cleanup:template'];
+
+  // Update Vite scripts to use root-level config
+  if (newPackageJson.scripts['dev']) {
+    newPackageJson.scripts['dev'] = newPackageJson.scripts['dev'].replace('--config config/vite.config.ts', '');
+  }
+  if (newPackageJson.scripts['build']) {
+    newPackageJson.scripts['build'] = newPackageJson.scripts['build'].replace('--config config/vite.config.ts', '');
+  }
+  if (newPackageJson.scripts['preview']) {
+    newPackageJson.scripts['preview'] = newPackageJson.scripts['preview'].replace('--config config/vite.config.ts', '');
+  }
 
   fs.writeFileSync(
     path.join(targetDir, 'package.json'),

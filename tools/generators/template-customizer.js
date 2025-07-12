@@ -20,12 +20,12 @@ const FRAMEWORK_CONFIGS = {
       '@types/react-dom': '^18.0.0',
     },
     scripts: {
-      dev: 'vite --config config/vite.config.ts',
-      build: 'vite build --config config/vite.config.ts',
-      preview: 'vite preview --config config/vite.config.ts',
+      dev: 'vite',
+      build: 'vite build',
+      preview: 'vite preview',
     },
     files: {
-      'config/vite.config.ts': 'vite-config',
+      'vite.config.ts': 'vite-config',
       'src/main.tsx': 'react-main',
       'src/App.tsx': 'react-app',
     },
@@ -80,18 +80,39 @@ const FRAMEWORK_CONFIGS = {
 async function customizeTemplate() {
   console.log(chalk.blue.bold('\n🎨 Customize ProjectTemplate\n'));
 
-  const { framework } = await inquirer.prompt([
-    {
-      type: 'list',
-      name: 'framework',
-      message: 'Choose your framework:',
-      choices: [
-        { name: 'React (Vite) - Fast, modern web apps', value: 'react' },
-        { name: 'Next.js 14 - Full-stack React framework', value: 'nextjs' },
-        { name: 'Express API - Backend API server', value: 'express' },
-      ],
-    },
-  ]);
+  // Check for command-line framework argument
+  const frameworkArg = process.argv.find(arg => arg.startsWith('--framework='));
+  const frameworkFlag = process.argv.indexOf('--framework');
+  
+  let framework;
+  
+  if (frameworkArg) {
+    framework = frameworkArg.split('=')[1];
+  } else if (frameworkFlag !== -1 && process.argv[frameworkFlag + 1]) {
+    framework = process.argv[frameworkFlag + 1];
+  } else {
+    // Interactive mode
+    const response = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'framework',
+        message: 'Choose your framework:',
+        choices: [
+          { name: 'React (Vite) - Fast, modern web apps', value: 'react' },
+          { name: 'Next.js 14 - Full-stack React framework', value: 'nextjs' },
+          { name: 'Express API - Backend API server', value: 'express' },
+        ],
+      },
+    ]);
+    framework = response.framework;
+  }
+  
+  // Validate framework
+  if (!FRAMEWORK_CONFIGS[framework]) {
+    console.error(chalk.red(`Error: Unknown framework "${framework}"`));
+    console.error(chalk.gray('Available frameworks: react, nextjs, express'));
+    process.exit(1);
+  }
 
   const config = FRAMEWORK_CONFIGS[framework];
   
@@ -168,10 +189,9 @@ import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
-  root: path.resolve(__dirname, '..'),
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, '../src'),
+      '@': path.resolve(__dirname, './src'),
     },
   },
   server: {

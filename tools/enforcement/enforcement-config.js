@@ -48,6 +48,12 @@ const DEFAULT_CONFIG = {
       blockOnFailure: true,    // Always block these
       level: ENFORCEMENT_LEVELS.FULL,
       description: 'Prevents creation of status/completion/summary documents'
+    },
+    configFiles: {
+      enabled: true,
+      blockOnFailure: false,   // Start with warnings
+      level: ENFORCEMENT_LEVELS.WARNING,
+      description: 'Validates configuration file consistency and standards'
     }
   },
   metrics: {
@@ -192,7 +198,7 @@ function cli() {
     case 'enable':
       const checkToEnable = args[1];
       if (!checkToEnable) {
-        console.error('Usage: node enforcement-config.js enable <fileNaming|imports|documentation>');
+        console.error('Usage: node enforcement-config.js enable <fileNaming|imports|documentation|configFiles>');
         process.exit(1);
       }
       const enableConfig = loadConfig();
@@ -209,7 +215,7 @@ function cli() {
     case 'disable':
       const checkToDisable = args[1];
       if (!checkToDisable) {
-        console.error('Usage: node enforcement-config.js disable <fileNaming|imports|documentation>');
+        console.error('Usage: node enforcement-config.js disable <fileNaming|imports|documentation|configFiles>');
         process.exit(1);
       }
       const disableConfig = loadConfig();
@@ -250,7 +256,7 @@ function cli() {
       console.log('  metrics                  Show enforcement metrics');
       console.log('');
       console.log('Levels: SILENT, WARNING, PARTIAL, FULL');
-      console.log('Checks: fileNaming, imports, documentation');
+      console.log('Checks: fileNaming, imports, documentation, configFiles');
   }
 }
 

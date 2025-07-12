@@ -34,10 +34,10 @@
     "moduleResolution": "node"
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "scripts/**/*.ts",
-    "scripts/**/*.tsx",
+    "src/App.tsx",
+    "src/main.tsx",
+    "src/components/**/[!*test*].ts",
+    "src/components/**/[!*test*].tsx",
     "tests/example.test.ts",
     "*.ts",
     "*.tsx"

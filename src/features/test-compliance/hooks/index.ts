@@ -1,1 +1,0 @@
-export { useTestcompliance, useTestcomplianceList } from './useTestcompliance';

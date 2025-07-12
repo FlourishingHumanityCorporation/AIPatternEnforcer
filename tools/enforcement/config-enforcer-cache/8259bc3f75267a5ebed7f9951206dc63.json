@@ -1,0 +1,16 @@
+{
+  "timestamp": 1752298907442,
+  "result": {
+    "isValid": false,
+    "violations": [
+      {
+        "type": "duplicate_dependency",
+        "message": "Dependency \"@vitejs/plugin-react\" appears in multiple sections: dependencies and devDependencies",
+        "severity": "warning",
+        "dependency": "@vitejs/plugin-react"
+      }
+    ],
+    "fixes": [],
+    "validationTime": 0.6356669664382935
+  }
+}

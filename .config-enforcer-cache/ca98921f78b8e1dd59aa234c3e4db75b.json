@@ -1,0 +1,20 @@
+{
+  "timestamp": 1752299530737,
+  "result": {
+    "isValid": true,
+    "violations": [
+      {
+        "type": "missing_define_config",
+        "message": "Vite config should use defineConfig for better TypeScript support",
+        "severity": "info"
+      }
+    ],
+    "fixes": [
+      {
+        "type": "add_define_config",
+        "description": "Wrap config with defineConfig()"
+      }
+    ],
+    "validationTime": 0.06316602230072021
+  }
+}

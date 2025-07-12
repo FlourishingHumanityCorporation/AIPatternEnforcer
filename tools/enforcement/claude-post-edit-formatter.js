@@ -14,6 +14,24 @@ function isMarkdownFile(filePath) {
   return filePath && filePath.endsWith('.md');
 }
 
+function isConfigFile(filePath) {
+  if (!filePath) return false;
+  
+  const fileName = path.basename(filePath);
+  const configFiles = [
+    'package.json',
+    'tsconfig.json',
+    '.eslintrc.json',
+    '.env.example',
+    '.gitignore',
+    '.aiignore'
+  ];
+  
+  return configFiles.includes(fileName) || 
+         fileName.endsWith('.config.js') || 
+         fileName.endsWith('.config.ts');
+}
+
 function shouldProcess(filePath) {
   // Skip node_modules, .git, and other ignored directories
   const skipPatterns = [
@@ -38,6 +56,37 @@ function runFixDocs(filePath) {
     return true;
   } catch (error) {
     // Don't fail the hook if fix-docs fails
+    return false;
+  }
+}
+
+function runConfigEnforcer(filePath) {
+  try {
+    // Run config enforcer fix on the specific file if it's a config file
+    execSync(`node tools/enforcement/config-enforcer.js fix --quiet`, {
+      cwd: process.cwd(),
+      stdio: ['pipe', 'pipe', 'pipe']
+    });
+    return true;
+  } catch (error) {
+    // Don't fail the hook if config enforcer fails
+    return false;
+  }
+}
+
+function formatJsonFile(filePath) {
+  try {
+    const content = fs.readFileSync(filePath, 'utf8');
+    const parsed = JSON.parse(content);
+    const formatted = JSON.stringify(parsed, null, 2) + '\n';
+    
+    if (content !== formatted) {
+      fs.writeFileSync(filePath, formatted, 'utf8');
+      return true;
+    }
+    return false;
+  } catch (error) {
+    // Don't fail if we can't format
     return false;
   }
 }

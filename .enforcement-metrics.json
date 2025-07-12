@@ -15,16 +15,20 @@
   },
   "2025-07-12": {
     "fileNaming": {
-      "runs": 145,
+      "runs": 189,
       "violations": 4
     },
     "imports": {
-      "runs": 154,
-      "violations": 3529
+      "runs": 198,
+      "violations": 4369
     },
     "documentation": {
-      "runs": 151,
-      "violations": 94681
+      "runs": 195,
+      "violations": 120693
+    },
+    "configFiles": {
+      "runs": 12,
+      "violations": 26
     }
   }
 }

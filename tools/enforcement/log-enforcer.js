@@ -26,7 +26,7 @@ class LogEnforcementSystem {
     
     const result = await this.enforcer.enforce({
       ...options,
-      format: 'text'
+      format: options.format || 'text'
     });
     
     return {
@@ -221,13 +221,16 @@ async function main() {
   const args = process.argv.slice(2);
   const command = args[0] || 'check';
   
+  const patterns = args.filter(arg => !arg.startsWith('--') && arg !== command);
+  
   const options = {
     fix: args.includes('--fix'),
     dryRun: args.includes('--dry-run'),
     force: args.includes('--force'),
     verbose: args.includes('--verbose'),
     configPath: args.find(arg => arg.startsWith('--config='))?.split('=')[1],
-    patterns: args.filter(arg => !arg.startsWith('--') && arg !== command)
+    format: args.find(arg => arg.startsWith('--format='))?.split('=')[1],
+    patterns: patterns.length > 0 ? patterns : undefined
   };
   
   const system = new LogEnforcementSystem();

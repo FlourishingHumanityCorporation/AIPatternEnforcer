@@ -1,0 +1,47 @@
+{
+  "enabled": true,
+  "languages": {
+    "python": {
+      "enabled": true,
+      "severity": "error",
+      "autoFix": true,
+      "excludePatterns": [
+        "**/migrations/**/*.py",
+        "**/venv/**/*.py",
+        "**/.venv/**/*.py"
+      ]
+    },
+    "javascript": {
+      "enabled": true,
+      "severity": "error",
+      "autoFix": true,
+      "preferredLogger": "winston",
+      "excludePatterns": [
+        "**/node_modules/**/*.js",
+        "**/dist/**/*.js",
+        "**/*.min.js"
+      ]
+    }
+  },
+  "rules": {
+    "noPrintStatements": {
+      "enabled": true,
+      "severity": "error",
+      "message": "Use logging.getLogger(__name__) instead of print()"
+    },
+    "noConsoleUsage": {
+      "enabled": true,
+      "severity": "error",
+      "message": "Use proper logging library instead of console",
+      "allowedMethods": []
+    }
+  },
+  "performance": {
+    "enableCache": true,
+    "parallelism": 4
+  },
+  "reporting": {
+    "format": "text",
+    "verbose": false
+  }
+}

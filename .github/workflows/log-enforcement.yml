@@ -1,0 +1,245 @@
+name: Log Enforcement
+
+on:
+  pull_request:
+    paths:
+      - '**/*.js'
+      - '**/*.jsx'
+      - '**/*.ts'
+      - '**/*.tsx'
+      - '**/*.py'
+  workflow_dispatch:
+    inputs:
+      validate_all:
+        description: 'Validate all files'
+        required: false
+        default: 'false'
+      auto_fix:
+        description: 'Auto-fix violations'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  log-enforcement:
+    name: Log Enforcement Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Need full history for diff
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Generate log enforcer config if missing
+        run: |
+          if [ ! -f ".log-enforcer.json" ]; then
+            echo "🔧 Generating default log enforcer configuration..."
+            npm run setup:log-enforcer || node tools/enforcement/log-enforcer.js config --force
+          fi
+      
+      - name: Check logging compliance (PR mode)
+        if: github.event_name == 'pull_request'
+        id: check_pr
+        run: |
+          echo "🔍 Checking logging compliance for PR..."
+          
+          # Get list of changed files
+          CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }}..HEAD | grep -E '\.(js|jsx|ts|tsx|py)$' || true)
+          
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "✅ No JavaScript/TypeScript/Python files changed"
+            echo "skip=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          echo "📁 Files to check:"
+          echo "$CHANGED_FILES" | sed 's/^/  - /'
+          
+          # Run log enforcement on changed files
+          if echo "$CHANGED_FILES" | xargs npm run check:logs --; then
+            echo "✅ No logging violations found in changed files"
+            echo "violations_found=false" >> $GITHUB_OUTPUT
+          else
+            echo "❌ Logging violations found in changed files"
+            echo "violations_found=true" >> $GITHUB_OUTPUT
+            
+            # Generate detailed report for PR comment
+            echo "📋 Generating detailed report..."
+            echo "$CHANGED_FILES" | xargs node tools/enforcement/log-enforcer.js check --format=markdown > log-violations-report.md
+            
+            # Store the report for the comment step
+            echo "report_generated=true" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Check all files (manual trigger)
+        if: github.event.inputs.validate_all == 'true'
+        id: check_all
+        run: |
+          echo "🔍 Checking logging compliance for all files..."
+          
+          if npm run check:logs; then
+            echo "✅ No logging violations found"
+            echo "violations_found=false" >> $GITHUB_OUTPUT
+          else
+            echo "❌ Logging violations found"
+            echo "violations_found=true" >> $GITHUB_OUTPUT
+            
+            # Generate report
+            node tools/enforcement/log-enforcer.js check --format=markdown > log-violations-report.md
+            echo "report_generated=true" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Auto-fix violations (if requested)
+        if: github.event.inputs.auto_fix == 'true'
+        run: |
+          echo "🔧 Auto-fixing logging violations..."
+          
+          if npm run fix:logs; then
+            echo "✅ Auto-fix completed"
+            
+            # Check if any files were actually changed
+            if git diff --quiet; then
+              echo "ℹ️ No files needed fixing"
+            else
+              echo "📝 Files were modified during auto-fix"
+              git diff --name-only
+              
+              echo ""
+              echo "⚠️ Note: Changes were made automatically."
+              echo "Please review the changes and commit them if acceptable."
+            fi
+          else
+            echo "❌ Auto-fix failed"
+            exit 1
+          fi
+      
+      - name: Post PR comment with violations
+        if: github.event_name == 'pull_request' && steps.check_pr.outputs.violations_found == 'true' && steps.check_pr.outputs.report_generated == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            
+            // Read the report
+            let report = '';
+            try {
+              report = fs.readFileSync('log-violations-report.md', 'utf8');
+            } catch (error) {
+              report = '❌ Failed to generate detailed report. Please check the logs.';
+            }
+            
+            // Format the comment
+            const comment = `## 🚨 Log Enforcement Violations
+            
+            This PR introduces logging violations that need to be fixed before merging.
+            
+            ${report}
+            
+            ### How to fix:
+            
+            1. **Auto-fix (recommended):**
+               \`\`\`bash
+               npm run fix:logs
+               \`\`\`
+            
+            2. **Preview changes first:**
+               \`\`\`bash
+               npm run fix:logs:dry-run
+               \`\`\`
+            
+            3. **Manual fixes:**
+               - Replace \`console.log()\` with proper logging libraries
+               - Replace \`print()\` with \`logging.getLogger(__name__)\`
+            
+            ### Configuration:
+            - Violations are defined in \`.log-enforcer.json\`
+            - Add \`// log-enforcer-disable-next-line\` to disable specific lines
+            - See [Log Enforcement Guide](docs/guides/logging/proper-logging-practices.md) for details
+            
+            ---
+            <sub>🤖 This comment was generated by the Log Enforcement workflow.</sub>`;
+            
+            // Post the comment
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+      
+      - name: Check for override label
+        if: github.event_name == 'pull_request'
+        id: check_override
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const labels = context.payload.pull_request.labels.map(label => label.name);
+            const hasOverride = labels.includes('skip-log-enforcement');
+            
+            if (hasOverride) {
+              console.log('⚠️ Log enforcement override detected (skip-log-enforcement label)');
+            }
+            
+            return hasOverride;
+      
+      - name: Fail on violations (blocking)
+        if: |
+          (
+            (github.event_name == 'pull_request' && steps.check_pr.outputs.violations_found == 'true') ||
+            (github.event.inputs.validate_all == 'true' && steps.check_all.outputs.violations_found == 'true')
+          ) &&
+          steps.check_override.outputs.result != 'true'
+        run: |
+          echo ""
+          echo "🚫 Log enforcement failed!"
+          echo ""
+          echo "This PR cannot be merged until logging violations are fixed."
+          echo ""
+          echo "Quick fix options:"
+          echo "  1. Run: npm run fix:logs"
+          echo "  2. Review and commit the auto-fixes"
+          echo "  3. Or fix violations manually"
+          echo ""
+          echo "Override: Add 'skip-log-enforcement' label to PR to bypass (not recommended)"
+          exit 1
+      
+      - name: Override warning
+        if: |
+          github.event_name == 'pull_request' && 
+          steps.check_pr.outputs.violations_found == 'true' && 
+          steps.check_override.outputs.result == 'true'
+        run: |
+          echo ""
+          echo "⚠️ Log enforcement violations detected but SKIPPED due to override label"
+          echo ""
+          echo "🏷️ Override label 'skip-log-enforcement' is present"
+          echo "🚨 This should only be used in exceptional circumstances"
+          echo ""
+          echo "Violations still exist and should be addressed in a follow-up PR."
+      
+      - name: Success summary
+        if: |
+          (github.event_name == 'pull_request' && steps.check_pr.outputs.skip != 'true' && steps.check_pr.outputs.violations_found != 'true') ||
+          (github.event.inputs.validate_all == 'true' && steps.check_all.outputs.violations_found != 'true')
+        run: |
+          echo ""
+          echo "✅ Log enforcement passed!"
+          echo ""
+          echo "📊 Summary:"
+          echo "  - All logging practices are compliant"
+          echo "  - No console.log() or print() statements found"
+          echo "  - Code follows proper logging patterns"
+          echo ""

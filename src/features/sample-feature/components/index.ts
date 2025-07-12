@@ -1,1 +1,0 @@
-export { SamplefeatureView } from './SamplefeatureView';

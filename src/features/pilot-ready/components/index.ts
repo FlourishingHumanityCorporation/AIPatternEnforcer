@@ -1,1 +1,0 @@
-export { PilotreadyView } from './PilotreadyView';

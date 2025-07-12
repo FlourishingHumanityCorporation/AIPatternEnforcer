@@ -1,0 +1,73 @@
+{
+  "timestamp": 1752298907442,
+  "result": {
+    "isValid": false,
+    "violations": [
+      {
+        "type": "suboptimal_compiler_option",
+        "message": "tsconfig.json: recommend setting strict to true",
+        "severity": "info",
+        "option": "strict",
+        "expectedValue": true
+      },
+      {
+        "type": "suboptimal_compiler_option",
+        "message": "tsconfig.json: recommend setting noImplicitReturns to true",
+        "severity": "info",
+        "option": "noImplicitReturns",
+        "expectedValue": true
+      },
+      {
+        "type": "suboptimal_compiler_option",
+        "message": "tsconfig.json: recommend setting noFallthroughCasesInSwitch to true",
+        "severity": "info",
+        "option": "noFallthroughCasesInSwitch",
+        "expectedValue": true
+      },
+      {
+        "type": "suboptimal_compiler_option",
+        "message": "tsconfig.json: recommend setting moduleResolution to node",
+        "severity": "info",
+        "option": "moduleResolution",
+        "expectedValue": "node"
+      },
+      {
+        "type": "json_formatting",
+        "message": "JSON file formatting is inconsistent",
+        "severity": "info"
+      }
+    ],
+    "fixes": [
+      {
+        "type": "update_compiler_option",
+        "option": "strict",
+        "value": true,
+        "description": "Set strict to true"
+      },
+      {
+        "type": "update_compiler_option",
+        "option": "noImplicitReturns",
+        "value": true,
+        "description": "Set noImplicitReturns to true"
+      },
+      {
+        "type": "update_compiler_option",
+        "option": "noFallthroughCasesInSwitch",
+        "value": true,
+        "description": "Set noFallthroughCasesInSwitch to true"
+      },
+      {
+        "type": "update_compiler_option",
+        "option": "moduleResolution",
+        "value": "node",
+        "description": "Set moduleResolution to node"
+      },
+      {
+        "type": "format_json",
+        "content": "{\n  \"extends\": \"./config/typescript/tsconfig.base.json\",\n  \"compilerOptions\": {\n    \"baseUrl\": \".\",\n    \"paths\": {\n      \"@/*\": [\n        \"src/*\"\n      ],\n      \"@components/*\": [\n        \"src/components/*\"\n      ],\n      \"@features/*\": [\n        \"src/features/*\"\n      ],\n      \"@hooks/*\": [\n        \"src/hooks/*\"\n      ],\n      \"@services/*\": [\n        \"src/services/*\"\n      ],\n      \"@utils/*\": [\n        \"src/utils/*\"\n      ],\n      \"@types/*\": [\n        \"src/types/*\"\n      ],\n      \"@config/*\": [\n        \"src/config/*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"src/**/*\",\n    \"scripts/**/*\",\n    \"tools/**/*\",\n    \"tests/**/*\",\n    \"*.ts\",\n    \"*.tsx\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"dist\",\n    \"build\",\n    \"coverage\",\n    \"extensions/**/*\",\n    \"tests/test-fresh-install/**/*\"\n  ]\n}",
+        "description": "Format JSON with consistent 2-space indentation"
+      }
+    ],
+    "validationTime": 0.2565000057220459
+  }
+}

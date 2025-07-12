@@ -211,7 +211,7 @@ class JavaScriptLogFixer {
           if (
             node.callee.type === 'Identifier' &&
             node.callee.name === 'require' &&
-            node.arguments.length > 0 &&
+            node.arguments && node.arguments.length > 0 &&
             node.arguments[0].type === 'StringLiteral'
           ) {
             const source = node.arguments[0].value;
@@ -267,47 +267,49 @@ class JavaScriptLogFixer {
       });
       
       // Second pass: transform console calls
-      traverse(ast, {
-        CallExpression(path) {
-          const { node } = path;
-          
-          // Transform console.* calls
-          if (
-            node.callee.type === 'MemberExpression' &&
-            node.callee.object.type === 'Identifier' &&
-            node.callee.object.name === 'console' &&
-            node.callee.property.type === 'Identifier'
-          ) {
-            const consoleMethod = node.callee.property.name;
-            const loggerMethod = consoleToLoggerMap[consoleMethod] || 'info';
+      if (needsLoggerImport || needsLoggerInstance) {
+        traverse(ast, {
+          CallExpression(path) {
+            const { node } = path;
             
-            // Replace with logger call
-            const newCall = t.callExpression(
-              t.memberExpression(
-                t.identifier(loggerVariableName),
-                t.identifier(loggerMethod)
-              ),
-              node.arguments
-            );
-            
-            path.replaceWith(newCall);
-            
-            changes.push({
-              line: node.loc.start.line,
-              column: node.loc.start.column,
-              old: `console.${consoleMethod}`,
-              new: `${loggerVariableName}.${loggerMethod}`,
-              type: 'console_to_logger'
-            });
+            // Transform console.* calls
+            if (
+              node.callee.type === 'MemberExpression' &&
+              node.callee.object.type === 'Identifier' &&
+              node.callee.object.name === 'console' &&
+              node.callee.property.type === 'Identifier'
+            ) {
+              const consoleMethod = node.callee.property.name;
+              const loggerMethod = consoleToLoggerMap[consoleMethod] || 'info';
+              
+              // Replace with logger call
+              const newCall = t.callExpression(
+                t.memberExpression(
+                  t.identifier(loggerVariableName),
+                  t.identifier(loggerMethod)
+                ),
+                node.arguments
+              );
+              
+              path.replaceWith(newCall);
+              
+              changes.push({
+                line: node.loc.start.line,
+                column: node.loc.start.column,
+                old: `console.${consoleMethod}`,
+                new: `${loggerVariableName}.${loggerMethod}`,
+                type: 'console_to_logger'
+              });
+            }
           }
-        }
-      });
+        });
+      }
       
       // Add missing imports and logger instance
       if (needsLoggerImport && !hasLoggerImport) {
         // Find insertion point for import
         let insertIndex = 0;
-        for (let i = 0; i < ast.body.length; i++) {
+        for (let i = 0; ast.body && i < ast.body.length; i++) {
           if (t.isImportDeclaration(ast.body[i]) || 
               (t.isVariableDeclaration(ast.body[i]) && 
                ast.body[i].declarations.some(d => 
@@ -320,7 +322,9 @@ class JavaScriptLogFixer {
           }
         }
         
-        ast.body.splice(insertIndex, 0, self.generateLoggerImport());
+        if (ast.body) {
+          ast.body.splice(insertIndex, 0, self.generateLoggerImport());
+        }
         changes.push({
           type: 'import_added',
           library: self.options.preferredLogger
@@ -330,7 +334,7 @@ class JavaScriptLogFixer {
       if (needsLoggerInstance && !hasLoggerInstance) {
         // Find insertion point for logger instance
         let insertIndex = 0;
-        for (let i = 0; i < ast.body.length; i++) {
+        for (let i = 0; ast.body && i < ast.body.length; i++) {
           if (t.isImportDeclaration(ast.body[i]) || 
               (t.isVariableDeclaration(ast.body[i]) && 
                ast.body[i].declarations.some(d => 
@@ -343,7 +347,9 @@ class JavaScriptLogFixer {
           }
         }
         
-        ast.body.splice(insertIndex, 0, self.generateLoggerInstance());
+        if (ast.body) {
+          ast.body.splice(insertIndex, 0, self.generateLoggerInstance());
+        }
         changes.push({
           type: 'logger_instance_added',
           variableName: loggerVariableName
