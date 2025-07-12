@@ -106,14 +106,3 @@ __snapshots__/
 !CLAUDE.md
 !ai/config/
 !ai/prompts/
-
-# Essential AI ignore patterns
-.git/
-.env.*
-
-# ProjectTemplate AI-specific patterns
-.config-enforcer-cache/
-.config-enforcer-backups/
-.enforcement-metrics.json
-docs/reports/
-*.backup

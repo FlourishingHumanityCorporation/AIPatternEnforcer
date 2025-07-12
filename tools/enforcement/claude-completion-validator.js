@@ -42,6 +42,11 @@ function runEnforcementChecks() {
       name: 'Documentation Style',
       command: 'npm run check:documentation-style --quiet',
       required: false
+    },
+    {
+      name: 'Configuration Files',
+      command: 'npm run check:config --quiet',
+      required: false
     }
   ];
 

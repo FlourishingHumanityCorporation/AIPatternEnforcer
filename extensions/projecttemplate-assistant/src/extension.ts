@@ -4,10 +4,12 @@ import { ContextManager } from "./contextManager";
 import { FileNameEnforcer, FileViolation } from "./fileNameEnforcer";
 import { DashboardProvider } from "./dashboardProvider";
 import { ClaudeValidator } from "./claudeValidator";
+import { LogEnforcer, LogEnforcementCodeActionProvider } from "./logEnforcer";
 
 let contextManager: ContextManager;
 let fileNameEnforcer: FileNameEnforcer;
 let claudeValidator: ClaudeValidator;
+let logEnforcer: LogEnforcer;
 let statusBarItem: vscode.StatusBarItem;
 
 export function activate(context: vscode.ExtensionContext) {
@@ -16,6 +18,13 @@ export function activate(context: vscode.ExtensionContext) {
   // Initialize components
   contextManager = new ContextManager(context);
   fileNameEnforcer = new FileNameEnforcer();
+  
+  // Initialize log enforcer
+  try {
+    logEnforcer = new LogEnforcer();
+  } catch (error) {
+    console.log("Log enforcer not available:", error);
+  }
   
   // Initialize Claude validator (with error handling for non-ProjectTemplate workspaces)
   try {
@@ -55,6 +64,14 @@ export function activate(context: vscode.ExtensionContext) {
       .get("enableNamingEnforcement")
   ) {
     setupNamingEnforcement(context);
+  }
+
+  // Set up log enforcement
+  if (logEnforcer && vscode.workspace
+    .getConfiguration("projecttemplate")
+    .get("enableLogEnforcement", true)
+  ) {
+    setupLogEnforcement(context);
   }
 
   // Show welcome message on first activation
@@ -210,6 +227,174 @@ function registerCommands(context: vscode.ExtensionContext) {
             await claudeValidator.openConfigurationFile();
           } catch (error) {
             vscode.window.showErrorMessage(`Failed to open config: ${error}`);
+          }
+        }
+      )
+    );
+  }
+
+  // Log enforcement commands
+  if (logEnforcer) {
+    // Check log compliance
+    context.subscriptions.push(
+      vscode.commands.registerCommand(
+        "projecttemplate.checkLogCompliance",
+        async () => {
+          try {
+            updateStatusBar("Checking logs...", 0);
+            const result = await logEnforcer.checkWorkspace();
+            
+            if (result.success) {
+              vscode.window.showInformationMessage(
+                `✅ No logging violations found! Analyzed ${result.stats.filesAnalyzed} files.`
+              );
+              updateStatusBar("Log Check: Clean", 3000);
+            } else {
+              const action = await vscode.window.showWarningMessage(
+                `❌ Found ${result.violations.length} logging violations in ${result.stats.filesAnalyzed} files`,
+                "Fix All",
+                "Show Problems"
+              );
+              
+              if (action === "Fix All") {
+                vscode.commands.executeCommand("projecttemplate.fixAllLogViolations");
+              } else if (action === "Show Problems") {
+                vscode.commands.executeCommand("workbench.actions.view.problems");
+              }
+              
+              updateStatusBar(`Log: ${result.violations.length} issues`, 0);
+            }
+          } catch (error) {
+            vscode.window.showErrorMessage(`Log compliance check failed: ${error}`);
+            updateStatusBar("Log Check: Error", 2000);
+          }
+        }
+      )
+    );
+
+    // Fix all log violations
+    context.subscriptions.push(
+      vscode.commands.registerCommand(
+        "projecttemplate.fixAllLogViolations",
+        async () => {
+          try {
+            updateStatusBar("Fixing logs...", 0);
+            await logEnforcer.fixWorkspace();
+            
+            // Refresh diagnostics for open documents
+            vscode.workspace.textDocuments.forEach(doc => {
+              if (doc.languageId && ['javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'python'].includes(doc.languageId)) {
+                logEnforcer.checkDocument(doc);
+              }
+            });
+            
+            updateStatusBar("Log: Fixed", 3000);
+          } catch (error) {
+            vscode.window.showErrorMessage(`Auto-fix failed: ${error}`);
+            updateStatusBar("Log Fix: Error", 2000);
+          }
+        }
+      )
+    );
+
+    // Fix single violation
+    context.subscriptions.push(
+      vscode.commands.registerCommand(
+        "projecttemplate.fixLogViolation",
+        async (uri: vscode.Uri, range: vscode.Range) => {
+          try {
+            const document = await vscode.workspace.openTextDocument(uri);
+            await logEnforcer.fixDocument(document);
+            
+            // Refresh diagnostics
+            await logEnforcer.checkDocument(document);
+            
+            vscode.window.showInformationMessage("✅ Logging violation fixed");
+          } catch (error) {
+            vscode.window.showErrorMessage(`Fix failed: ${error}`);
+          }
+        }
+      )
+    );
+
+    // Disable enforcement for line
+    context.subscriptions.push(
+      vscode.commands.registerCommand(
+        "projecttemplate.disableLogEnforcementLine",
+        async (uri: vscode.Uri, range: vscode.Range) => {
+          try {
+            const document = await vscode.workspace.openTextDocument(uri);
+            const edit = new vscode.WorkspaceEdit();
+            
+            const line = range.start.line;
+            const lineText = document.lineAt(line);
+            const indent = lineText.text.match(/^\\s*/)?.[0] || '';
+            
+            // Determine comment style based on language
+            const comment = document.languageId === 'python' 
+              ? '# log-enforcer-disable-next-line'
+              : '// log-enforcer-disable-next-line';
+            
+            const disableComment = `${indent}${comment}\\n`;
+            edit.insert(uri, new vscode.Position(line, 0), disableComment);
+            
+            await vscode.workspace.applyEdit(edit);
+            
+            // Refresh diagnostics
+            setTimeout(() => logEnforcer.checkDocument(document), 100);
+            
+            vscode.window.showInformationMessage("✅ Log enforcement disabled for this line");
+          } catch (error) {
+            vscode.window.showErrorMessage(`Failed to disable enforcement: ${error}`);
+          }
+        }
+      )
+    );
+
+    // Show log enforcement status
+    context.subscriptions.push(
+      vscode.commands.registerCommand(
+        "projecttemplate.showLogEnforcementStatus",
+        async () => {
+          try {
+            const result = await logEnforcer.checkWorkspace();
+            
+            const items = [
+              {
+                label: "📊 Statistics",
+                description: `${result.stats.filesAnalyzed} files analyzed, ${result.violations.length} violations`,
+                detail: `Analysis completed in ${result.stats.timeElapsed}ms`
+              },
+              {
+                label: "🔧 Fix All Violations",
+                description: "Automatically fix all logging violations",
+                action: "fix"
+              },
+              {
+                label: "📋 Show Problems Panel",
+                description: "View detailed violations in Problems panel",
+                action: "problems"
+              },
+              {
+                label: "⚙️ Configure Log Enforcement",
+                description: "Open log enforcement settings",
+                action: "settings"
+              }
+            ];
+
+            const selected = await vscode.window.showQuickPick(items, {
+              placeHolder: "Log Enforcement Status"
+            });
+
+            if (selected?.action === "fix") {
+              vscode.commands.executeCommand("projecttemplate.fixAllLogViolations");
+            } else if (selected?.action === "problems") {
+              vscode.commands.executeCommand("workbench.actions.view.problems");
+            } else if (selected?.action === "settings") {
+              vscode.commands.executeCommand("workbench.action.openSettings", "projecttemplate.logEnforcement");
+            }
+          } catch (error) {
+            vscode.window.showErrorMessage(`Failed to get status: ${error}`);
           }
         }
       )

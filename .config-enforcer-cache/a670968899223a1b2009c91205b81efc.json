@@ -1,7 +1,7 @@
 {
-  "timestamp": 1752299158244,
+  "timestamp": 1752299764792,
   "result": {
-    "isValid": false,
+    "isValid": true,
     "violations": [
       {
         "type": "missing_project_patterns",
@@ -52,6 +52,6 @@
         "description": "Remove duplicate gitignore patterns"
       }
     ],
-    "validationTime": 0.25183403491973877
+    "validationTime": 0.2927500009536743
   }
 }

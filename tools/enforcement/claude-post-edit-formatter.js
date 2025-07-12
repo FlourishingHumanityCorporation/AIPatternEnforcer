@@ -146,6 +146,23 @@ function main() {
           }
         }
 
+        // Auto-fix config files
+        if (isConfigFile(filePath)) {
+          const fileName = path.basename(filePath);
+          
+          // Format JSON config files
+          if (fileName.endsWith('.json')) {
+            if (formatJsonFile(filePath)) {
+              processedActions.push('Formatted JSON configuration');
+            }
+          }
+          
+          // Run config enforcer fixes
+          if (runConfigEnforcer(filePath)) {
+            processedActions.push('Applied configuration fixes');
+          }
+        }
+
         // Run enforcement check (non-blocking)
         runEnforcementCheck(filePath);
 

@@ -1,7 +1,7 @@
 {
-  "timestamp": 1752299158243,
+  "timestamp": 1752299764791,
   "result": {
-    "isValid": false,
+    "isValid": true,
     "violations": [
       {
         "type": "missing_common_env",
@@ -17,6 +17,6 @@
         "description": "Add DATABASE_URL documentation"
       }
     ],
-    "validationTime": 0.6259579658508301
+    "validationTime": 0.4783329963684082
   }
 }

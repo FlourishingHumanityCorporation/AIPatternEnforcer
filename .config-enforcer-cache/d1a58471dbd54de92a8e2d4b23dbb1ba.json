@@ -1,5 +1,5 @@
 {
-  "timestamp": 1752299158244,
+  "timestamp": 1752299764793,
   "result": {
     "isValid": false,
     "violations": [
@@ -46,6 +46,6 @@
         "description": "Add AI-specific ignore patterns"
       }
     ],
-    "validationTime": 0.19795894622802734
+    "validationTime": 0.19308292865753174
   }
 }
