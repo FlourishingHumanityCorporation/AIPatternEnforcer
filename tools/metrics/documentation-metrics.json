@@ -1,22 +1,22 @@
 {
-  "timestamp": "2025-07-12T05:54:19.920Z",
+  "timestamp": "2025-07-12T06:01:36.533Z",
   "version": "1.0.0",
   "project": {
     "name": "project-template",
-    "lastCommit": "ef44e2a",
+    "lastCommit": "ed194ae",
     "branch": "feature/integration-enhancement-initiative"
   },
   "coverage": {
     "overall": {
-      "total": 134,
-      "documented": 19,
-      "undocumented": 56,
-      "percentage": 14
+      "total": 10,
+      "documented": 2,
+      "undocumented": 0,
+      "percentage": 20
     },
     "byType": {
       "components": {
         "pattern": {},
-        "total": 2,
+        "total": 0,
         "documented": 0,
         "percentage": 0
       },
@@ -28,27 +28,27 @@
       },
       "tools": {
         "pattern": {},
-        "total": 12,
+        "total": 0,
         "documented": 0,
         "percentage": 0
       },
       "scripts": {
         "pattern": {},
-        "total": 8,
+        "total": 0,
         "documented": 0,
         "percentage": 0
       },
       "configs": {
         "pattern": {},
-        "total": 22,
+        "total": 7,
         "documented": 1,
-        "percentage": 5
+        "percentage": 14
       },
       "other": {
         "pattern": {},
-        "total": 59,
-        "documented": 18,
-        "percentage": 31
+        "total": 2,
+        "documented": 1,
+        "percentage": 50
       }
     },
     "byPriority": {
@@ -58,17 +58,17 @@
         "percentage": 0
       },
       "high": {
-        "total": 2,
+        "total": 0,
         "documented": 0,
         "percentage": 0
       },
       "medium": {
-        "total": 34,
+        "total": 0,
         "documented": 0,
         "percentage": 0
       },
       "low": {
-        "total": 20,
+        "total": 0,
         "documented": 0,
         "percentage": 0
       }
@@ -81,25 +81,25 @@
     "status": "poor"
   },
   "debt": {
-    "total": 56,
+    "total": 0,
     "byPriority": {
       "critical": 0,
-      "high": 2,
-      "medium": 34,
-      "low": 20
+      "high": 0,
+      "medium": 0,
+      "low": 0
     },
     "newFiles": 0,
-    "modifiedFiles": 56,
-    "estimatedHours": 24,
+    "modifiedFiles": 0,
+    "estimatedHours": 0,
     "trends": {
       "weekly": 0,
       "monthly": 0,
       "direction": "stable"
     },
     "changeAnalysis": {
-      "significantChanges": 47,
-      "breakingChanges": 32,
-      "requiresImmediate": 94
+      "significantChanges": 3,
+      "breakingChanges": 7,
+      "requiresImmediate": 10
     }
   },
   "quality": {
@@ -125,29 +125,29 @@
   "trends": {
     "available": true,
     "coverage": {
-      "trend": "improving",
-      "change": 18,
-      "current": 20,
-      "previous": 17,
+      "trend": "declining",
+      "change": -65,
+      "current": 14,
+      "previous": 40,
       "values": [
-        17,
         40,
         38,
         33,
-        20
+        20,
+        14
       ]
     },
     "debt": {
       "trend": "improving",
-      "change": 55,
-      "current": 51,
-      "previous": 33,
+      "change": 1300,
+      "current": 56,
+      "previous": 4,
       "values": [
-        33,
         4,
         16,
         20,
-        51
+        51,
+        56
       ]
     },
     "quality": {
@@ -164,8 +164,8 @@
       ]
     },
     "period": {
-      "from": "2025-07-12T05:22:08.639Z",
-      "to": "2025-07-12T05:47:50.351Z",
+      "from": "2025-07-12T05:29:01.984Z",
+      "to": "2025-07-12T05:54:19.920Z",
       "entries": 5
     }
   },
@@ -174,16 +174,16 @@
       "type": "coverage_critical",
       "priority": "critical",
       "title": "Documentation coverage below minimum threshold",
-      "description": "Current coverage: 14%, minimum: 80%",
+      "description": "Current coverage: 20%, minimum: 80%",
       "action": "Immediate documentation effort required",
       "impact": "high"
     },
     {
-      "type": "effort_planning",
-      "priority": "medium",
-      "title": "Significant documentation effort required",
-      "description": "Estimated 24 hours of documentation work",
-      "action": "Plan dedicated documentation sprint",
+      "type": "trend_warning",
+      "priority": "high",
+      "title": "Documentation coverage declining",
+      "description": "Coverage has decreased by 65% recently",
+      "action": "Review and strengthen documentation practices",
       "impact": "medium"
     }
   ]

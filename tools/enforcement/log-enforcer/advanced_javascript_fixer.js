@@ -465,6 +465,10 @@ class AdvancedJavaScriptLogFixer {
    * Add logger infrastructure (imports and instances)
    */
   addLoggerInfrastructure(ast, filepath, requirements) {
+    if (!ast.body || !Array.isArray(ast.body)) {
+      throw new Error('Invalid AST structure: body is not an array');
+    }
+
     if (requirements.needsImport) {
       const imports = this.generateAdvancedLoggerImport(filepath);
       const importNodes = Array.isArray(imports) ? imports : [imports];

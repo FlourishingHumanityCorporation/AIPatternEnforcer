@@ -1307,5 +1307,124 @@
       },
       "overall": 72
     }
+  },
+  {
+    "timestamp": "2025-07-12T06:01:36.533Z",
+    "coverage": {
+      "overall": {
+        "total": 10,
+        "documented": 2,
+        "undocumented": 0,
+        "percentage": 20
+      },
+      "byType": {
+        "components": {
+          "pattern": {},
+          "total": 0,
+          "documented": 0,
+          "percentage": 0
+        },
+        "api": {
+          "pattern": {},
+          "total": 0,
+          "documented": 0,
+          "percentage": 0
+        },
+        "tools": {
+          "pattern": {},
+          "total": 0,
+          "documented": 0,
+          "percentage": 0
+        },
+        "scripts": {
+          "pattern": {},
+          "total": 0,
+          "documented": 0,
+          "percentage": 0
+        },
+        "configs": {
+          "pattern": {},
+          "total": 7,
+          "documented": 1,
+          "percentage": 14
+        },
+        "other": {
+          "pattern": {},
+          "total": 2,
+          "documented": 1,
+          "percentage": 50
+        }
+      },
+      "byPriority": {
+        "critical": {
+          "total": 0,
+          "documented": 0,
+          "percentage": 0
+        },
+        "high": {
+          "total": 0,
+          "documented": 0,
+          "percentage": 0
+        },
+        "medium": {
+          "total": 0,
+          "documented": 0,
+          "percentage": 0
+        },
+        "low": {
+          "total": 0,
+          "documented": 0,
+          "percentage": 0
+        }
+      },
+      "targets": {
+        "minimum": 80,
+        "target": 90,
+        "excellent": 95
+      },
+      "status": "poor"
+    },
+    "debt": {
+      "total": 0,
+      "byPriority": {
+        "critical": 0,
+        "high": 0,
+        "medium": 0,
+        "low": 0
+      },
+      "newFiles": 0,
+      "modifiedFiles": 0,
+      "estimatedHours": 0,
+      "trends": {
+        "weekly": 0,
+        "monthly": 0,
+        "direction": "stable"
+      },
+      "changeAnalysis": {
+        "significantChanges": 3,
+        "breakingChanges": 7,
+        "requiresImmediate": 10
+      }
+    },
+    "quality": {
+      "standards": {
+        "hasTemplates": true,
+        "hasStyleGuide": true,
+        "hasEnforcement": true,
+        "score": 100
+      },
+      "consistency": {
+        "fileNaming": false,
+        "structureConsistency": true,
+        "score": 50
+      },
+      "completeness": {
+        "hasExamples": true,
+        "hasAPIDoc": false,
+        "hasSetupGuides": true,
+        "score": 67
+      },
+      "overall": 72
+    }
   }
 ]
