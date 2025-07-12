@@ -104,35 +104,35 @@ function checkDocumentationCoverage() {
   console.log('\n📊 Actual Documentation Coverage Report');
   console.log('=====================================\n');
   
-  console.log(`📁 Tools Coverage: ${toolPercentage}% (${toolCoverage.documented}/${toolCoverage.total})`);
-  console.log(`   Documentation files found: ${toolDocs.length}`);
+  logger.info(`📁 Tools Coverage: ${toolPercentage}% (${toolCoverage.documented}/${toolCoverage.total})`);
+  logger.info(`   Documentation files found: ${toolDocs.length}`);
   if (toolCoverage.missing.length > 0 && toolCoverage.missing.length <= 10) {
-    console.log('   Missing documentation for:');
+    logger.info('   Missing documentation for:');
     toolCoverage.missing.forEach(file => {
-      console.log(`     - ${path.relative(projectRoot, file)}`);
+      logger.info(`     - ${path.relative(projectRoot, file)}`);
     });
   } else if (toolCoverage.missing.length > 10) {
-    console.log(`   Missing documentation for ${toolCoverage.missing.length} files`);
+    logger.info(`   Missing documentation for ${toolCoverage.missing.length} files`);
   }
   
-  console.log(`\n📁 Scripts Coverage: ${scriptPercentage}% (${scriptCoverage.documented}/${scriptCoverage.total})`);
-  console.log(`   Documentation files found: ${scriptDocs.length}`);
+  logger.info(`\n📁 Scripts Coverage: ${scriptPercentage}% (${scriptCoverage.documented}/${scriptCoverage.total})`);
+  logger.info(`   Documentation files found: ${scriptDocs.length}`);
   if (scriptCoverage.missing.length > 0 && scriptCoverage.missing.length <= 10) {
-    console.log('   Missing documentation for:');
+    logger.info('   Missing documentation for:');
     scriptCoverage.missing.forEach(file => {
-      console.log(`     - ${path.relative(projectRoot, file)}`);
+      logger.info(`     - ${path.relative(projectRoot, file)}`);
     });
   } else if (scriptCoverage.missing.length > 10) {
-    console.log(`   Missing documentation for ${scriptCoverage.missing.length} files`);
+    logger.info(`   Missing documentation for ${scriptCoverage.missing.length} files`);
   }
   
-  console.log(`\n📊 Overall Coverage: ${overallPercentage}% (${overallDocumented}/${overallTotal})`);
+  logger.info(`\n📊 Overall Coverage: ${overallPercentage}% (${overallDocumented}/${overallTotal})`);
   
   if (overallPercentage >= 80) {
-    console.log('\n✅ Coverage target of 80% has been reached!');
+    logger.info('\n✅ Coverage target of 80% has been reached!');
   } else {
     const needed = Math.ceil(overallTotal * 0.8) - overallDocumented;
-    console.log(`\n⚠️  Need to document ${needed} more files to reach 80% coverage`);
+    logger.info(`\n⚠️  Need to document ${needed} more files to reach 80% coverage`);
   }
   
   // List of documented files not matching any code files
@@ -147,9 +147,9 @@ function checkDocumentationCoverage() {
   });
   
   if (orphanedDocs.length > 0) {
-    console.log('\n📝 Documentation files without matching code files:');
+    logger.info('\n📝 Documentation files without matching code files:');
     orphanedDocs.forEach(doc => {
-      console.log(`   - ${path.relative(projectRoot, doc)}`);
+      logger.info(`   - ${path.relative(projectRoot, doc)}`);
     });
   }
   
