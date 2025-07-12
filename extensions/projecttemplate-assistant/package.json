@@ -32,7 +32,9 @@
     "onCommand:projecttemplate.refreshContext",
     "onCommand:projecttemplate.showDashboard",
     "onCommand:projecttemplate.validateClaude",
-    "onCommand:projecttemplate.validateClaudeFromClipboard"
+    "onCommand:projecttemplate.validateClaudeFromClipboard",
+    "onCommand:projecttemplate.checkLogCompliance",
+    "onCommand:projecttemplate.fixAllLogViolations"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -70,6 +72,21 @@
       {
         "command": "projecttemplate.claudeConfig",
         "title": "Open Claude Validation Config",
+        "category": "ProjectTemplate"
+      },
+      {
+        "command": "projecttemplate.checkLogCompliance",
+        "title": "Check Log Compliance",
+        "category": "ProjectTemplate"
+      },
+      {
+        "command": "projecttemplate.fixAllLogViolations",
+        "title": "Fix All Log Violations",
+        "category": "ProjectTemplate"
+      },
+      {
+        "command": "projecttemplate.showLogEnforcementStatus",
+        "title": "Show Log Enforcement Status",
         "category": "ProjectTemplate"
       }
     ],
@@ -120,6 +137,27 @@
           "default": "WARNING",
           "enum": ["CRITICAL", "WARNING", "INFO", "DISABLED"],
           "description": "Minimum severity level for Claude validation"
+        },
+        "projecttemplate.enableLogEnforcement": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable real-time log enforcement with diagnostics and quick fixes"
+        },
+        "projecttemplate.logEnforcementExcludeTests": {
+          "type": "boolean",
+          "default": true,
+          "description": "Exclude test files from log enforcement checks"
+        },
+        "projecttemplate.logEnforcementAutoFix": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically fix log violations on save"
+        },
+        "projecttemplate.logEnforcementSeverity": {
+          "type": "string",
+          "default": "error",
+          "enum": ["error", "warning", "info"],
+          "description": "Severity level for log enforcement diagnostics"
         }
       }
     },
@@ -140,6 +178,18 @@
         "command": "projecttemplate.validateClaudeFromClipboard",
         "key": "ctrl+shift+v",
         "mac": "cmd+shift+v",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "projecttemplate.checkLogCompliance",
+        "key": "ctrl+shift+l",
+        "mac": "cmd+shift+l",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "projecttemplate.fixAllLogViolations",
+        "key": "ctrl+shift+f",
+        "mac": "cmd+shift+f",
         "when": "editorTextFocus"
       }
     ]

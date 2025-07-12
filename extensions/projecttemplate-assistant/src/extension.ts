@@ -76,7 +76,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   // Show welcome message on first activation
   if (context.globalState.get("projecttemplate.firstActivation", true)) {
-    showWelcomeMessage(context);
+    showWelcomeMessage();
     context.globalState.update("projecttemplate.firstActivation", false);
   }
 }
@@ -702,5 +702,9 @@ function showWelcomeMessage() {
 export function deactivate() {
   if (statusBarItem) {
     statusBarItem.dispose();
+  }
+  
+  if (logEnforcer) {
+    logEnforcer.dispose();
   }
 }

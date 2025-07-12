@@ -5,6 +5,7 @@ const { ConfigEnforcer } = require('./config-enforcer/index');
 const JsonValidator = require('./config-enforcer/validators/json-validator');
 const EnvValidator = require('./config-enforcer/validators/env-validator');
 const JsConfigValidator = require('./config-enforcer/validators/js-config-validator');
+const YamlValidator = require('./config-enforcer/validators/yaml-validator');
 const { shouldBlock, logMetrics } = require('./enforcement-config');
 
 /**
@@ -25,6 +26,7 @@ async function main() {
     enforcer.registerValidator('json', new JsonValidator(enforcer.config.fileTypes.json));
     enforcer.registerValidator('environment', new EnvValidator(enforcer.config.fileTypes.environment));
     enforcer.registerValidator('javascript', new JsConfigValidator(enforcer.config.fileTypes.javascript));
+    enforcer.registerValidator('yaml', new YamlValidator(enforcer.config.fileTypes.yaml));
 
     switch (command) {
       case 'check':
