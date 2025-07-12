@@ -466,6 +466,65 @@ function setupNamingEnforcement(context: vscode.ExtensionContext) {
   context.subscriptions.push(fileWatcher);
 }
 
+function setupLogEnforcement(context: vscode.ExtensionContext) {
+  // Register code action provider
+  const codeActionProvider = new LogEnforcementCodeActionProvider(logEnforcer);
+  context.subscriptions.push(
+    vscode.languages.registerCodeActionsProvider(
+      [
+        { language: 'javascript' },
+        { language: 'typescript' },
+        { language: 'javascriptreact' },
+        { language: 'typescriptreact' },
+        { language: 'python' }
+      ],
+      codeActionProvider
+    )
+  );
+
+  // Watch for document changes
+  context.subscriptions.push(
+    vscode.workspace.onDidOpenTextDocument((document) => {
+      logEnforcer.checkDocument(document);
+    })
+  );
+
+  context.subscriptions.push(
+    vscode.workspace.onDidSaveTextDocument((document) => {
+      logEnforcer.checkDocument(document);
+    })
+  );
+
+  context.subscriptions.push(
+    vscode.workspace.onDidChangeTextDocument((event) => {
+      // Debounce checking on typing
+      setTimeout(() => {
+        logEnforcer.checkDocument(event.document);
+      }, 1000);
+    })
+  );
+
+  // Watch for configuration changes
+  context.subscriptions.push(
+    vscode.workspace.onDidChangeConfiguration((event) => {
+      if (event.affectsConfiguration('projecttemplate.enableLogEnforcement') ||
+          event.affectsConfiguration('projecttemplate.logEnforcementExcludeTests')) {
+        logEnforcer.updateConfiguration();
+        
+        // Re-check all open documents
+        vscode.workspace.textDocuments.forEach(doc => {
+          logEnforcer.checkDocument(doc);
+        });
+      }
+    })
+  );
+
+  // Check all currently open documents
+  vscode.workspace.textDocuments.forEach(document => {
+    logEnforcer.checkDocument(document);
+  });
+}
+
 async function handleFileRename(violation: FileViolation) {
   const oldUri = vscode.Uri.file(violation.file);
   const newUri = vscode.Uri.file(violation.suggestion);
