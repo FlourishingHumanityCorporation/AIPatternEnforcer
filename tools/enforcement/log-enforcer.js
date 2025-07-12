@@ -240,10 +240,15 @@ async function main() {
     verbose: args.includes('--verbose'),
     configPath: args.find(arg => arg.startsWith('--config='))?.split('=')[1],
     format: args.find(arg => arg.startsWith('--format='))?.split('=')[1],
-    patterns: patterns.length > 0 ? patterns : undefined
+    patterns: patterns.length > 0 ? patterns : undefined,
+    // Advanced fixer options
+    useAdvancedFixer: !args.includes('--no-advanced'),
+    enableTypeScriptTransforms: !args.includes('--no-typescript'),
+    enableCrossFileAnalysis: args.includes('--cross-file'),
+    useModuleBasedNaming: !args.includes('--no-module-naming')
   };
   
-  const system = new LogEnforcementSystem();
+  const system = new LogEnforcementSystem(options);
   
   try {
     let result;
