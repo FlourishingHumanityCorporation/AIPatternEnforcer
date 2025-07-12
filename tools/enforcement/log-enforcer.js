@@ -13,10 +13,18 @@ const JavaScriptLogFixer = require('./log-enforcer/javascript_fixer');
 const AdvancedJavaScriptLogFixer = require('./log-enforcer/advanced_javascript_fixer');
 
 class LogEnforcementSystem {
-  constructor() {
+  constructor(options = {}) {
     this.enforcer = new LogEnforcer();
     this.pythonFixer = new PythonLogFixer();
     this.jsFixer = new JavaScriptLogFixer();
+    this.advancedJsFixer = new AdvancedJavaScriptLogFixer({
+      enableTypeScriptTransforms: options.enableTypeScriptTransforms !== false,
+      enableCrossFileAnalysis: options.enableCrossFileAnalysis || false,
+      useModuleBasedNaming: options.useModuleBasedNaming !== false,
+      projectRoot: process.cwd(),
+      ...options
+    });
+    this.useAdvancedFixer = options.useAdvancedFixer !== false;
   }
 
   /**
@@ -86,7 +94,8 @@ class LogEnforcementSystem {
     
     // Fix JavaScript/TypeScript files
     if (jsFiles.size > 0) {
-      const jsResults = await this.jsFixer.fixFiles(
+      const fixer = this.useAdvancedFixer ? this.advancedJsFixer : this.jsFixer;
+      const jsResults = await fixer.fixFiles(
         Array.from(jsFiles),
         { dryRun: options.dryRun }
       );
