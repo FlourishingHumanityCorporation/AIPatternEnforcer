@@ -134,7 +134,7 @@ Angular:     (Σ weight × score) / total_weight = ___
 - Robust developer experience
 - Built-in optimization
 - API routes (full-stack)
-- Great debugging tools
+- Effective debugging tools
 - Fast refresh
 
 **Architecture example:**
@@ -236,7 +236,7 @@ export default {
 - Robust form handling
 - Fast page loads
 - Built-in optimization
-- Great error handling
+- Effective error handling
 
 **Architecture example:**
 
@@ -281,7 +281,7 @@ export default function UserPage() {
 - Minimal boilerplate
 - Robust performance
 - Simple reactive model
-- Great developer tools
+- Effective developer tools
 - Fast compilation
 
 **Architecture example:**
@@ -336,7 +336,7 @@ export default function UserPage() {
 
 **Requirements**: Easy to understand, modern patterns
 **Recommendation**: **SvelteKit**
-**Rationale**: Simplest mental model, great documentation
+**Rationale**: Simplest mental model, effective documentation
 
 ### Scenario 5: Real-time Collaboration App
 

@@ -13,7 +13,8 @@
 
 ## Overview
 
-Comprehensive integration test suite for ProjectTemplate workflows that validates project creation and template customization functionality independently.
+Comprehensive integration test suite for ProjectTemplate workflows that validates project creation and template
+customization functionality independently.
 
 **Tool Type**: Test Script  
 **Language**: JavaScript (Node.js)  

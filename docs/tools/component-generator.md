@@ -18,7 +18,8 @@
 
 ## Overview
 
-Automated React component generator that creates complete, production-ready components with TypeScript, tests, stories, and styles. Follows ProjectTemplate standards and optimal practices for accessibility, testing, and maintainability.
+Automated React component generator that creates complete, production-ready components with TypeScript, tests, stories,
+and styles. Follows ProjectTemplate standards and optimal practices for accessibility, testing, and maintainability.
 
 **Tool Type**: CLI Code Generator  
 **Language**: JavaScript (Node.js)  

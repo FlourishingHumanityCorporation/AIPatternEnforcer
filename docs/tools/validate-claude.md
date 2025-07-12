@@ -17,7 +17,9 @@
 
 ## Overview
 
-CLI tool that validates Claude Code responses against ProjectTemplate rules to ensure consistent behavior across development sessions. Helps maintain quality standards and catches common violations before they impact development workflow.
+CLI tool that validates Claude Code responses against ProjectTemplate rules to ensure consistent behavior across
+development sessions. Helps maintain quality standards and catches common violations before they impact development
+workflow.
 
 **Tool Type**: CLI Validation Tool  
 **Language**: JavaScript (Node.js)  

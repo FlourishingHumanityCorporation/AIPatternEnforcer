@@ -1,5 +1,5 @@
 {
-  "timestamp": 1752300080658,
+  "timestamp": 1752300451515,
   "result": {
     "isValid": true,
     "violations": [
@@ -17,6 +17,6 @@
         "description": "Add DATABASE_URL documentation"
       }
     ],
-    "validationTime": 0.4304170608520508
+    "validationTime": 0.6165419816970825
   }
 }

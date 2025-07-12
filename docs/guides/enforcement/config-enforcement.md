@@ -1,8 +1,54 @@
 # Configuration File Enforcement
 
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Supported File Types](#supported-file-types)
+  3. [JSON Configuration Files](#json-configuration-files)
+  4. [Environment Files](#environment-files)
+  5. [JavaScript/TypeScript Configuration](#javascripttypescript-configuration)
+  6. [YAML Configuration Files](#yaml-configuration-files)
+7. [Basic Usage](#basic-usage)
+  8. [Validation Commands](#validation-commands)
+  9. [Auto-Fix Commands](#auto-fix-commands)
+  10. [Enforcement Status](#enforcement-status)
+11. [What It Validates](#what-it-validates)
+  12. [Package.json Validation](#packagejson-validation)
+  13. [TypeScript Configuration](#typescript-configuration)
+  14. [Environment Files](#environment-files)
+  15. [JavaScript Config Files](#javascript-config-files)
+  16. [YAML Files](#yaml-files)
+17. [Integration Features](#integration-features)
+  18. [Real-Time Claude Integration](#real-time-claude-integration)
+  19. [Automated Fixes](#automated-fixes)
+20. [Configuration](#configuration)
+  21. [Enforcement Levels](#enforcement-levels)
+  22. [File-Type Configuration](#file-type-configuration)
+  23. [Backup and Safety](#backup-and-safety)
+24. [Common Workflows](#common-workflows)
+  25. [New Project Setup](#new-project-setup)
+  26. [Before Committing Changes](#before-committing-changes)
+  27. [Debugging Configuration Issues](#debugging-configuration-issues)
+28. [Examples](#examples)
+  29. [Example Violations and Fixes](#example-violations-and-fixes)
+    30. [Package.json Issues](#packagejson-issues)
+    31. [Gitignore Improvements](#gitignore-improvements)
+    32. [Environment File Security](#environment-file-security)
+33. [Performance and Caching](#performance-and-caching)
+  34. [Cache Management](#cache-management)
+35. [Troubleshooting](#troubleshooting)
+  36. [Common Issues](#common-issues)
+  37. [Getting Help](#getting-help)
+38. [Advanced Usage](#advanced-usage)
+  39. [Custom Configuration](#custom-configuration)
+  40. [Integration with CI/CD](#integration-with-cicd)
+  41. [Custom Validators](#custom-validators)
+42. [Benefits](#benefits)
+
 ## Overview
 
-The ProjectTemplate configuration enforcer automatically validates and fixes configuration files across your project. It ensures consistency, prevents common errors, and maintains security best practices for configuration files.
+The ProjectTemplate configuration enforcer automatically validates and fixes configuration files across your project. It
+ensures consistency, prevents common errors, and maintains security optimal practices for configuration files.
 
 ## Supported File Types
 
@@ -75,7 +121,7 @@ npm run enforcement:config disable configFiles
 - **Deprecated fields**: Identifies outdated configuration
 
 ### TypeScript Configuration
-- **Compiler options**: Recommends strict mode and best practices
+- **Compiler options**: Recommends strict mode and optimal practices
 - **Module resolution**: Ensures proper configuration
 - **Deprecated options**: Identifies outdated settings
 
@@ -91,7 +137,7 @@ npm run enforcement:config disable configFiles
 
 ### YAML Files
 - **Syntax validation**: Proper YAML structure and indentation
-- **GitHub Actions**: Security best practices, required fields
+- **GitHub Actions**: Security optimal practices, required fields
 - **Docker Compose**: Security checks, version validation
 
 ## Integration Features
@@ -404,7 +450,8 @@ jobs:
 
 ### Custom Validators
 
-The system is extensible. See existing validators in `tools/enforcement/config-enforcer/validators/` for examples of creating custom validation logic.
+The system is extensible. See existing validators in `tools/enforcement/config-enforcer/validators/` for examples of
+creating custom validation logic.
 
 ## Benefits
 
@@ -415,4 +462,5 @@ The system is extensible. See existing validators in `tools/enforcement/config-e
 - **Integration**: Works seamlessly with development workflows
 - **Safety**: Backup and rollback capabilities prevent data loss
 
-The configuration enforcer is designed to enhance development productivity while maintaining high standards for configuration management.
+The configuration enforcer is designed to enhance development productivity while maintaining high standards for
+configuration management.

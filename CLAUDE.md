@@ -2,6 +2,11 @@
 
 **Essential rules for AI assistants working on ProjectTemplate.**
 
+> **⚡ EXPERIENCED DEVELOPER FAST-TRACK:**  
+> `npm run onboard` → `npm run g:c ComponentName` → `npm test` → `npm run check:all` → commit  
+> Quick Access: [Command Reference](docs/quick-reference.md) | [Daily Commands](#daily-commands) | [Critical
+Rules](#-critical-rules)
+
 > 📋 **First time here?** Start with [QUICK-START.md](QUICK-START.md) (2-minute orientation)
 > 📋 **Ready for AI setup?** See [AI Assistant Setup](docs/guides/ai-development/ai-assistant-setup.md) (5-minute setup)
 > 📋 **Need comprehensive guidance?** See [Documentation Index](./DOCS_INDEX.md) (complete methodology)  
@@ -56,15 +61,16 @@
 npm run dev                    # Start development server
 npm test                      # Run all tests
 npm run lint                  # Run linting
-npm run typecheck            # Check types
+npm run type-check           # Check types
 
 # Code Generation
 npm run g:c ComponentName     # Enhanced component generator (interactive)
 npm run g:component Name      # Basic component generator
 
 # Setup
-npm run setup:quick           # 2-minute basic setup
-npm run setup:guided          # Interactive setup wizard
+npm run onboard               # Unified setup + first component (<5 min) - RECOMMENDED
+npm run setup:quick           # 2-minute basic setup (minimal)
+npm run setup:guided          # Interactive setup wizard (detailed)
 
 # Debugging
 npm run debug:snapshot       # Capture debug context
@@ -81,22 +87,24 @@ npm run setup:verify-ai     # Verify AI setup is working
 # Enforcement
 npm run check:all           # Check all enforcement rules
 npm run check:logs          # Check logging compliance
+npm run check:config        # Check configuration files
 npm run fix:docs            # Fix documentation violations
 npm run fix:docs:dry-run    # Preview documentation fixes
 npm run fix:logs            # Fix logging violations
 npm run fix:logs:dry-run    # Preview logging fixes
+npm run fix:config          # Fix configuration issues
+npm run fix:config:dry-run  # Preview configuration fixes
 npm run setup:log-enforcer  # Generate log enforcer config
 npm run enforcement:status  # Show current settings
 ```
 
 ### Key Files
 - **Essential Rules**: `CLAUDE.md` (this file)
+- **Quick Reference**: `docs/quick-reference.md` - Commands & troubleshooting
+- **Workflow Integration**: `docs/guides/workflow-integration.md` - Complete system integration
 - **Documentation Index**: `DOCS_INDEX.md` - Complete navigation hub
-- **Quick Setup**: `docs/guides/ai-development/ai-assistant-setup.md` - 5-minute onboarding
-- **Documentation Index**: `DOCS_INDEX.md` - Navigation hub
 - **AI Config**: `ai/config/.cursorrules`
 - **Claude Code Hooks**: `.claude/settings.json` - Real-time enforcement
-- **Enforcement Guide**: `docs/guides/enforcement/ENFORCEMENT.md`
 - **Context Control**: `.aiignore`
 
 ---
@@ -110,7 +118,7 @@ npm run enforcement:status  # Show current settings
 3. **NEVER use bare except clauses** - Always specify exception types
 4. **NEVER use `print()` in production** - Use `logging.getLogger(__name__)` (enforced automatically)
 5. **NEVER use `console.log()` in production** - Use proper logging libraries (enforced automatically)
-6. **NEVER create announcement-style docs** - No "We're excited to announce!"
+6. **NEVER create announcement-style docs** - No "This document describes!"
 7. **NEVER implement poor workarounds** - Use Arrow-Chain RCA methodology (see FULL-GUIDE.md)
 
 ### ALWAYS DO THESE
@@ -172,12 +180,13 @@ project-root/
 ## 🚀 QUICK START COMMANDS
 
 ```bash
-# Install and setup
+# Quick start (recommended)
 npm install
-npm run setup:hooks        # One-command setup
+npm run onboard           # Complete setup + first component
 
-# Generate your first component
-npm run g:c TestComponent
+# Alternative manual approach
+npm run setup:hooks       # Just git hooks setup
+npm run g:c TestComponent # Generate component manually
 
 # Verify setup works
 npm test
@@ -193,8 +202,9 @@ npm run validate
 ```bash
 npm test                   # All tests must pass
 npm run lint              # No linting errors
-npm run typecheck         # No type errors
-npm run check:all         # All enforcement checks
+npm run type-check        # No type errors
+npm run check:all         # All enforcement checks (includes config)
+npm run check:config      # Configuration validation
 ```
 
 ### Test Coverage:
@@ -209,7 +219,7 @@ npm run check:all         # All enforcement checks
 ## 📚 DOCUMENTATION STANDARDS
 
 ### Writing Rules:
-- ❌ NO: "We're excited to announce...", "Successfully implemented!", superlatives
+- ❌ NO: "This document describes...", "Implemented!", superlatives
 - ✅ YES: Professional, timeless, measured language
 - ✅ YES: Link to source files with line numbers
 - ✅ YES: Technical descriptions without overconfidence

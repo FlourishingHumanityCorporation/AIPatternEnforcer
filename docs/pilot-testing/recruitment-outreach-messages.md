@@ -47,7 +47,7 @@ Questions? DM me or ask here!
 ### Follow-up Message (3 days later)
 
 ```text
-Quick update on the ProjectTemplate pilot - we've had great interest and still have 3 spots available!
+Quick update on the ProjectTemplate pilot - we've had effective interest and still have 3 spots available!
 
 If you're tired of:
 • AI generating `component_v2_final_FINAL.js` files
@@ -88,7 +88,8 @@ Please share with developers who might be interested!
 Hi everyone! Quick announcement - we're running a pilot program for ProjectTemplate, a system that makes AI coding
 assistants work better with your projects.
 
-The problem: AI tools generate great code but terrible file names, don't follow project patterns, and require constant
+The problem: AI tools generate effective code but terrible file names, don't follow project patterns, and require
+constant
 context.
 
 Our solution: Smart generators, automated enforcement, and optimized project structure.

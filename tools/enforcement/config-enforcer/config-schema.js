@@ -41,7 +41,8 @@ const configSchema = {
                 'package.json',
                 'tsconfig.json',
                 '.eslintrc.json',
-                'tsconfig.*.json'
+                'tsconfig.*.json',
+                '**/*.json'  // Catch all JSON files
               ]
             },
             excludePatterns: {
@@ -216,15 +217,15 @@ const configSchema = {
     crossFileValidation: {
       type: 'object',
       properties: {
-        enabled: { type: 'boolean', default: false }, // Advanced feature, start disabled
+        enabled: { type: 'boolean', default: true }, // Enable cross-file validation
         validateScriptConsistency: { 
           type: 'boolean', 
-          default: false,
+          default: true,
           description: 'Check package.json scripts match available configs'
         },
         validateImportPaths: { 
           type: 'boolean', 
-          default: false,
+          default: false, // Keep this conservative for now
           description: 'Validate import paths against tsconfig paths'
         }
       }
@@ -370,8 +371,8 @@ const defaultConfig = {
     }
   },
   crossFileValidation: {
-    enabled: false,
-    validateScriptConsistency: false,
+    enabled: true,
+    validateScriptConsistency: true,
     validateImportPaths: false
   },
   backup: {

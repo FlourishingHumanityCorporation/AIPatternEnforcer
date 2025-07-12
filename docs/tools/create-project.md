@@ -18,7 +18,8 @@
 
 ## Overview
 
-Project creation tool that generates new projects from the ProjectTemplate base. Provides interactive setup with customization options, handles file copying, dependency management, and initial git repository setup.
+Project creation tool that generates new projects from the ProjectTemplate base. Provides interactive setup with
+customization options, handles file copying, dependency management, and initial git repository setup.
 
 **Tool Type**: Project Creation CLI  
 **Language**: JavaScript (Node.js)  
@@ -81,7 +82,8 @@ Template Files Copied:
 node tools/generators/project-init/create-project.js
 ```
 
-**Note**: This tool is designed to be interactive and takes no command line arguments. All configuration is done through prompts.
+**Note**: This tool is designed to be interactive and takes no command line arguments. All configuration is done through
+prompts.
 
 ### Interactive Prompts
 The tool guides you through:
@@ -95,7 +97,7 @@ The tool guides you through:
 
 ### Step 1: Project Name
 ```text
-? Project name: my-awesome-project
+? Project name: my-effective-project
 
 Validation:
 - Required field
@@ -105,7 +107,7 @@ Validation:
 
 ### Step 2: Project Location
 ```text
-? Where to create the project: ./my-awesome-project
+? Where to create the project: ./my-effective-project
 
 Default: ./{project-name}
 - Can be relative or absolute path

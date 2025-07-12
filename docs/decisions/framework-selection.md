@@ -51,7 +51,7 @@ We need to select the primary frameworks for our application including:
    - Cons: Requires many decisions, frequent breaking changes
 
 2. **Vue 3**
-   - Pros: Gentle learning curve, great docs, stable API
+   - Pros: Gentle learning curve, effective docs, stable API
    - Cons: Smaller ecosystem, less AI training data
 
 3. **Angular**
@@ -59,13 +59,13 @@ We need to select the primary frameworks for our application including:
    - Cons: Steep learning curve, verbose, heavy
 
 4. **SvelteKit**
-   - Pros: Great performance, simpler mental model
+   - Pros: Effective performance, simpler mental model
    - Cons: Smaller community, less mature ecosystem
 
 ### Backend Framework
 
 1. **Next.js (Full-stack)**
-   - Pros: Same language front/back, great DX, Vercel deployment
+   - Pros: Same language front/back, effective DX, Vercel deployment
    - Cons: Not ideal for complex APIs, vendor lock-in risk
 
 2. **Express + TypeScript**
@@ -95,7 +95,7 @@ We need to select the primary frameworks for our application including:
    - Cons: Limited concurrent writes, single machine
 
 4. **Supabase**
-   - Pros: Postgres + extras, great DX, auth included
+   - Pros: Postgres + extras, effective DX, auth included
    - Cons: Vendor lock-in, costs scale with usage
 
 ### State Management (Frontend)
@@ -105,7 +105,7 @@ We need to select the primary frameworks for our application including:
    - Cons: Less ecosystem than Redux
 
 2. **Redux Toolkit**
-   - Pros: Mature, predictable, great DevTools
+   - Pros: Mature, predictable, effective DevTools
    - Cons: Boilerplate, learning curve
 
 3. **Context + useReducer**
@@ -113,7 +113,7 @@ We need to select the primary frameworks for our application including:
    - Cons: Performance pitfalls, no DevTools
 
 4. **TanStack Query** (for server state)
-   - Pros: Purpose-built for server state, great caching
+   - Pros: Purpose-built for server state, effective caching
    - Cons: Additional complexity
 
 ## Decision Outcome

@@ -1,0 +1,85 @@
+{
+  "timestamp": "2025-07-12T16:38:03.012Z",
+  "summary": {
+    "totalChecks": 7,
+    "passedChecks": 3,
+    "failedChecks": 4,
+    "criticalFailures": 3,
+    "totalViolations": 2520,
+    "readinessLevel": "not-ready",
+    "overallStatus": "failed"
+  },
+  "details": {
+    "Logging Compliance": {
+      "passed": false,
+      "violations": 1690,
+      "details": "1690 logging violations found",
+      "critical": true,
+      "duration": 778
+    },
+    "Configuration Validation": {
+      "passed": true,
+      "violations": 0,
+      "details": "All configurations valid",
+      "critical": true,
+      "duration": 208
+    },
+    "Import Standards": {
+      "passed": true,
+      "violations": 0,
+      "details": "All imports compliant",
+      "critical": false,
+      "duration": 246
+    },
+    "Documentation Standards": {
+      "passed": false,
+      "violations": 818,
+      "details": "818 documentation style warnings",
+      "critical": false,
+      "duration": 470
+    },
+    "Test Coverage": {
+      "passed": false,
+      "violations": 1,
+      "details": "Test coverage: 8%",
+      "critical": true,
+      "duration": 2064
+    },
+    "Type Checking": {
+      "passed": true,
+      "violations": 0,
+      "details": "No type errors",
+      "critical": true,
+      "duration": 1044
+    },
+    "Linting": {
+      "passed": false,
+      "violations": 11,
+      "details": "11 errors, 53 warnings",
+      "critical": true,
+      "duration": 1042
+    }
+  },
+  "recommendations": [
+    {
+      "issue": "1690 logging violations",
+      "action": "Run \"npm run fix:logs\" to automatically fix most violations",
+      "priority": "high"
+    },
+    {
+      "issue": "818 documentation style warnings",
+      "action": "Fix documentation standards issues",
+      "priority": "medium"
+    },
+    {
+      "issue": "Coverage below 80% threshold",
+      "action": "Write tests for uncovered code paths",
+      "priority": "medium"
+    },
+    {
+      "issue": "11 errors, 53 warnings",
+      "action": "Fix linting issues",
+      "priority": "high"
+    }
+  ]
+}

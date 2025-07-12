@@ -301,7 +301,7 @@ function registerCommands(context: vscode.ExtensionContext) {
     context.subscriptions.push(
       vscode.commands.registerCommand(
         "projecttemplate.fixLogViolation",
-        async (uri: vscode.Uri, range: vscode.Range) => {
+        async (uri: vscode.Uri, _range: vscode.Range) => {
           try {
             const document = await vscode.workspace.openTextDocument(uri);
             await logEnforcer.fixDocument(document);

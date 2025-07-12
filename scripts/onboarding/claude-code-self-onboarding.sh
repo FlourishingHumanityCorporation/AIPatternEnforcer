@@ -267,6 +267,9 @@ phase_assess() {
             state.level = 1;
             fs.writeFileSync('$ONBOARDING_STATE_FILE', JSON.stringify(state, null, 2));
         "
+        
+        # Record interaction in capability tracker
+        npm run claude:capability:record -- "patternRecognition" "true" '{"phase":"assess","description":"Completed pattern recognition phase"}' --silent >/dev/null 2>&1 || true
     fi
     
     local end_time=$(date +%s)
@@ -332,6 +335,9 @@ EOF
             state.level = 2;
             fs.writeFileSync('$ONBOARDING_STATE_FILE', JSON.stringify(state, null, 2));
         "
+        
+        # Record validation capability in tracker
+        npm run claude:capability:record -- "validationCompliance" "true" '{"phase":"reinforce","description":"Validation systems working"}' --silent >/dev/null 2>&1 || true
         success "Level 2 capability achieved - Project-Aware Assistant"
     fi
     
@@ -457,6 +463,8 @@ EOF
 
 # Check if resuming from previous state
 check_resume() {
+    local force_restart=${1:-false}
+    
     if [[ -f "$ONBOARDING_STATE_FILE" ]]; then
         local completion_status=$(node -e "
             const state = JSON.parse(require('fs').readFileSync('$ONBOARDING_STATE_FILE', 'utf8'));
@@ -464,9 +472,14 @@ check_resume() {
         ")
         
         if [[ "$completion_status" == "completed" ]]; then
-            warning "Onboarding already completed. Use --force to restart."
-            echo "Run 'npm run claude:validate-onboarding' to check status."
-            exit 0
+            if [[ "$force_restart" == "false" ]]; then
+                warning "Onboarding already completed. Use --force to restart."
+                echo "Run 'npm run claude:validate-onboarding' to check status."
+                exit 0
+            else
+                log "Force restart: ignoring completed status"
+                return 1  # Return 1 to indicate no resume needed
+            fi
         fi
         
         echo "📂 Found existing onboarding state. Resuming..."
@@ -505,7 +518,7 @@ main() {
     check_project_root
     
     # Check for resume or force restart
-    if check_resume && [[ "$force_restart" == false ]]; then
+    if check_resume "$force_restart" && [[ "$force_restart" == false ]]; then
         # Resume from last phase
         local next_phase=$(get_next_phase)
         if [[ -n "$next_phase" ]]; then

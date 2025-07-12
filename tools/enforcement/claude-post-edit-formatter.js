@@ -14,6 +14,15 @@ function isMarkdownFile(filePath) {
   return filePath && filePath.endsWith('.md');
 }
 
+function isJavaScriptFile(filePath) {
+  return filePath && (
+    filePath.endsWith('.js') || 
+    filePath.endsWith('.jsx') || 
+    filePath.endsWith('.ts') || 
+    filePath.endsWith('.tsx')
+  );
+}
+
 function isConfigFile(filePath) {
   if (!filePath) return false;
   
@@ -105,6 +114,157 @@ function runEnforcementCheck(filePath) {
   }
 }
 
+function runConsoleLogFix(filePath) {
+  try {
+    // Skip files that are allowed to use console.log
+    const allowedPatterns = [
+      'tools/enforcement/',
+      'tools/generators/',
+      'scripts/',
+      'extensions/',
+      'examples/',
+      'test/',
+      'spec/',
+      '__tests__/'
+    ];
+    
+    if (allowedPatterns.some(pattern => filePath.includes(pattern))) {
+      return false;
+    }
+
+    const content = fs.readFileSync(filePath, 'utf8');
+    
+    // Check if file has console.log statements
+    if (!content.includes('console.')) {
+      return false;
+    }
+
+    // Replace console.log with proper logging
+    let modified = content;
+    let hasChanges = false;
+
+    // TypeScript/JavaScript specific replacements
+    if (filePath.endsWith('.ts') || filePath.endsWith('.tsx')) {
+      // Check if logger is already imported
+      if (!content.includes('import') || !content.includes('logger')) {
+        // Add logger import at the top of the file
+        const importStatement = "import { logger } from '@/utils/logger';\n";
+        const firstImportMatch = content.match(/^import.*$/m);
+        
+        if (firstImportMatch) {
+          modified = modified.replace(firstImportMatch[0], firstImportMatch[0] + '\n' + importStatement.trim());
+        } else {
+          // No imports yet, add at the beginning
+          modified = importStatement + modified;
+        }
+      }
+    } else {
+      // JavaScript (CommonJS)
+      if (!content.includes('require') || !content.includes('logger')) {
+        const requireStatement = "const { logger } = require('../utils/logger');\n";
+        const firstRequireMatch = content.match(/^const.*require.*$/m);
+        
+        if (firstRequireMatch) {
+          modified = modified.replace(firstRequireMatch[0], firstRequireMatch[0] + '\n' + requireStatement.trim());
+        } else {
+          // No requires yet, add at the beginning
+          modified = requireStatement + modified;
+        }
+      }
+    }
+
+    // Replace console methods with logger methods
+    modified = modified.replace(/console\.log\(/g, 'logger.info(');
+    modified = modified.replace(/console\.error\(/g, 'logger.error(');
+    modified = modified.replace(/console\.warn\(/g, 'logger.warn(');
+    modified = modified.replace(/console\.info\(/g, 'logger.info(');
+    modified = modified.replace(/console\.debug\(/g, 'logger.debug(');
+
+    hasChanges = modified !== content;
+
+    if (hasChanges) {
+      fs.writeFileSync(filePath, modified, 'utf8');
+      return true;
+    }
+
+    return false;
+  } catch (error) {
+    // Don't fail if we can't fix console.log
+    return false;
+  }
+}
+
+function runImportFix(filePath) {
+  try {
+    // Skip non-source files
+    const skipPatterns = [
+      'tools/enforcement/',
+      'tools/generators/',
+      'scripts/',
+      'extensions/',
+      'node_modules/',
+      'dist/',
+      'build/'
+    ];
+    
+    if (skipPatterns.some(pattern => filePath.includes(pattern))) {
+      return false;
+    }
+
+    const content = fs.readFileSync(filePath, 'utf8');
+    let modified = content;
+    let hasChanges = false;
+
+    // Fix problematic default imports
+    // React import fix
+    modified = modified.replace(
+      /import\s+React\s+from\s+['"]react['"]/g,
+      "import * as React from 'react'"
+    );
+
+    // Fix lodash default import
+    modified = modified.replace(
+      /import\s+lodash\s+from\s+['"]lodash['"]/g,
+      "import * as _ from 'lodash'"
+    );
+
+    // Fix wildcard imports for specific modules (convert to named imports)
+    // This is a simplified version - in production you'd analyze what's actually used
+    modified = modified.replace(
+      /import\s+\*\s+as\s+(\w+)\s+from\s+['"](.+?)['"];?/g,
+      (match, alias, module) => {
+        // Keep wildcards for known patterns
+        if (['React', '_', 'path', 'fs', 'vscode'].includes(alias)) {
+          return match;
+        }
+        // For others, suggest specific imports
+        return `// TODO: Replace with specific imports\n${match}`;
+      }
+    );
+
+    // Add path aliases for deep imports (more than 2 parent levels)
+    modified = modified.replace(
+      /from\s+['"](\.\.[\/\\]){3,}(.+?)['"]/g,
+      (match, dots, path) => {
+        // Suggest using path alias
+        return `from '@/${path}'`;
+      }
+    );
+
+    hasChanges = modified !== content;
+
+    if (hasChanges) {
+      fs.writeFileSync(filePath, modified, 'utf8');
+      return true;
+    }
+
+    return false;
+  } catch (error) {
+    // Don't fail if we can't fix imports
+    return false;
+  }
+}
+
 function main() {
   try {
     // Read JSON input from stdin
@@ -163,6 +323,16 @@ function main() {
           }
         }
 
+        // Auto-fix JavaScript/TypeScript files
+        if (isJavaScriptFile(filePath)) {
+          if (runConsoleLogFix(filePath)) {
+            processedActions.push('Replaced console.log with proper logging');
+          }
+          if (runImportFix(filePath)) {
+            processedActions.push('Fixed import violations');
+          }
+        }
+
         // Run enforcement check (non-blocking)
         runEnforcementCheck(filePath);
 
@@ -192,4 +362,4 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { isMarkdownFile, shouldProcess };
+module.exports = { isMarkdownFile, isJavaScriptFile, shouldProcess, runConsoleLogFix, runImportFix };

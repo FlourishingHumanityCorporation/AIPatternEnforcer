@@ -2,9 +2,45 @@
 
 This guide outlines the logging standards enforced by ProjectTemplate's log enforcer system.
 
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Rules](#rules)
+  3. [1. No Print Statements in Production Code](#1-no-print-statements-in-production-code)
+  4. [2. No Console Usage in Production JavaScript/TypeScript](#2-no-console-usage-in-production-javascripttypescript)
+  5. [3. Required Logger Instance](#3-required-logger-instance)
+6. [Allowed Exceptions](#allowed-exceptions)
+  7. [Test Files](#test-files)
+  8. [CLI Scripts](#cli-scripts)
+  9. [Inline Disables](#inline-disables)
+10. [Configuration](#configuration)
+  11. [Setting Up Log Enforcer](#setting-up-log-enforcer)
+  12. [Customizing File Patterns](#customizing-file-patterns)
+13. [Commands](#commands)
+  14. [Check for Violations](#check-for-violations)
+  15. [Auto-fix Violations](#auto-fix-violations)
+  16. [Integration with Existing Workflows](#integration-with-existing-workflows)
+17. [Supported Logging Libraries](#supported-logging-libraries)
+  18. [Python](#python)
+  19. [JavaScript/TypeScript](#javascripttypescript)
+20. [Integration with Development Tools](#integration-with-development-tools)
+  21. [Pre-commit Hooks](#pre-commit-hooks)
+  22. [VS Code Integration](#vs-code-integration)
+  23. [CI/CD Pipeline](#cicd-pipeline)
+24. [Troubleshooting](#troubleshooting)
+  25. [Common Issues](#common-issues)
+  26. [Getting Help](#getting-help)
+27. [Migration Guide](#migration-guide)
+  28. [From Print Statements](#from-print-statements)
+  29. [From Console Usage](#from-console-usage)
+30. [Optimal Practices](#optimal-practices)
+31. [Performance Considerations](#performance-considerations)
+32. [Security Notes](#security-notes)
+
 ## Overview
 
-Proper logging is essential for debugging, monitoring, and maintaining applications. The log enforcer automatically prevents common logging anti-patterns and ensures consistent logging practices across the codebase.
+Proper logging is essential for debugging, monitoring, and maintaining applications. The log enforcer automatically
+prevents common logging anti-patterns and ensures consistent logging practices across the codebase.
 
 ## Rules
 
@@ -328,7 +364,7 @@ JavaScript auto-fixing is planned for a future release. Currently:
 3. Manually replace console statements
 4. Run `npm run check:logs` to verify compliance
 
-## Best Practices
+## Optimal Practices
 
 1. **Use structured logging**: Include relevant context in log messages
 2. **Choose appropriate log levels**: DEBUG, INFO, WARN, ERROR

@@ -54,7 +54,7 @@ includes:
 ### IDE / Code Editor
 
 1. **Cursor**
-   - Pros: AI-first design, based on VS Code, great AI integration
+   - Pros: AI-first design, based on VS Code, effective AI integration
    - Cons: Newer, smaller extension ecosystem, costs money
    - Cost: $20/month per developer
    - AI: Native AI integration
@@ -74,7 +74,7 @@ includes:
 ### AI Coding Assistants
 
 1. **GitHub Copilot**
-   - Pros: Great code completion, integrated with GitHub
+   - Pros: Effective code completion, integrated with GitHub
    - Cons: Limited to code completion mainly
    - Cost: $10/month individual, $19/month business
 
@@ -91,7 +91,7 @@ includes:
 ### Version Control Platform
 
 1. **GitHub**
-   - Pros: Industry standard, great integrations, Actions CI/CD
+   - Pros: Industry standard, effective integrations, Actions CI/CD
    - Cons: Microsoft owned (if that matters)
    - Cost: Free for public, $4/user/month for private
 
@@ -125,7 +125,7 @@ includes:
 ### Error Tracking
 
 1. **Sentry**
-   - Pros: Industry leader, great integrations
+   - Pros: Industry leader, effective integrations
    - Cons: Can get expensive with scale
    - Cost: Free for 5K errors/month, then $26/month+
 
@@ -142,7 +142,7 @@ includes:
 ### Monitoring
 
 1. **Datadog**
-   - Pros: Comprehensive, great visualizations
+   - Pros: Comprehensive, effective visualizations
    - Cons: Expensive, complex pricing
    - Cost: $15/host/month starting
 

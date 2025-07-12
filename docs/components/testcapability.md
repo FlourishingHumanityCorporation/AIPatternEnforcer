@@ -41,7 +41,9 @@
 
 ## Overview
 
-TestCapability is an advanced interactive React component designed for testing user interface capabilities including buttons, inputs, toggles, and other interactive elements. It provides comprehensive state management, accessibility features, and responsive design patterns.
+TestCapability is an advanced interactive React component designed for testing user interface capabilities including
+buttons, inputs, toggles, and other interactive elements. It provides comprehensive state management, accessibility
+features, and responsive design patterns.
 
 **Component Type**: Functional  
 **Category**: Interactive/Testing  
@@ -429,7 +431,7 @@ const meta: Meta<typeof TestCapability> = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Advanced interactive component for testing UI capabilities with state management and accessibility features'
+component: 'Advanced interactive component for testing UI capabilities with state management and accessibility features'
       }
     }
   },

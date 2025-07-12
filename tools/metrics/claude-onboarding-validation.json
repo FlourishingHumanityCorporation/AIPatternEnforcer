@@ -1,15 +1,16 @@
 {
-  "validationTime": "2025-07-11T22:17:08-07:00",
+  "validationTime": "2025-07-12T09:30:51-07:00",
   "onboardingLevel": 2,
-  "totalOnboardingDuration": "63s",
+  "totalOnboardingDuration": "7s",
   "validationResults": {
     "onboardingCompletion": true,
     "learnPhasesCompleted": true,
     "coreCapabilitiesValidated": true,
-    "practicalWorkflowsTested": true,
-    "patternKnowledgeVerified": true
+    "practicalWorkflowsTested": false,
+    "patternKnowledgeVerified": true,
+    "realComplianceScore": "%"
   },
-  "readinessLevel": "production",
+  "readinessLevel": "development-only",
   "recommendations": [
     "Monitor compliance rates during real development work",
     "Review CLAUDE.md rules regularly",

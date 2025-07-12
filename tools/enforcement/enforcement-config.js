@@ -46,7 +46,7 @@ const DEFAULT_CONFIG = {
     bannedDocs: {
       enabled: true,
       blockOnFailure: true,    // Always block these
-      level: ENFORCEMENT_LEVELS.FULL,
+      level: ENFORCEMENT_LEVELS.PARTIAL,  // Block at PARTIAL level
       description: 'Prevents creation of status/completion/summary documents'
     },
     configFiles: {

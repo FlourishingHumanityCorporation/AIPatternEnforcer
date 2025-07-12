@@ -1426,5 +1426,362 @@
       },
       "overall": 72
     }
+  },
+  {
+    "timestamp": "2025-07-12T06:11:14.543Z",
+    "coverage": {
+      "overall": {
+        "total": 40,
+        "documented": 18,
+        "undocumented": 5,
+        "percentage": 45
+      },
+      "byType": {
+        "components": {
+          "pattern": {},
+          "total": 0,
+          "documented": 0,
+          "percentage": 0
+        },
+        "api": {
+          "pattern": {},
+          "total": 0,
+          "documented": 0,
+          "percentage": 0
+        },
+        "tools": {
+          "pattern": {},
+          "total": 4,
+          "documented": 0,
+          "percentage": 0
+        },
+        "scripts": {
+          "pattern": {},
+          "total": 1,
+          "documented": 0,
+          "percentage": 0
+        },
+        "configs": {
+          "pattern": {},
+          "total": 12,
+          "documented": 1,
+          "percentage": 8
+        },
+        "other": {
+          "pattern": {},
+          "total": 18,
+          "documented": 17,
+          "percentage": 94
+        }
+      },
+      "byPriority": {
+        "critical": {
+          "total": 0,
+          "documented": 0,
+          "percentage": 0
+        },
+        "high": {
+          "total": 0,
+          "documented": 0,
+          "percentage": 0
+        },
+        "medium": {
+          "total": 1,
+          "documented": 0,
+          "percentage": 0
+        },
+        "low": {
+          "total": 4,
+          "documented": 0,
+          "percentage": 0
+        }
+      },
+      "targets": {
+        "minimum": 80,
+        "target": 90,
+        "excellent": 95
+      },
+      "status": "poor"
+    },
+    "debt": {
+      "total": 5,
+      "byPriority": {
+        "critical": 0,
+        "high": 0,
+        "medium": 1,
+        "low": 4
+      },
+      "newFiles": 1,
+      "modifiedFiles": 4,
+      "estimatedHours": 1.5,
+      "trends": {
+        "weekly": 0,
+        "monthly": 0,
+        "direction": "stable"
+      },
+      "changeAnalysis": {
+        "significantChanges": 7,
+        "breakingChanges": 14,
+        "requiresImmediate": 23
+      }
+    },
+    "quality": {
+      "standards": {
+        "hasTemplates": true,
+        "hasStyleGuide": true,
+        "hasEnforcement": true,
+        "score": 100
+      },
+      "consistency": {
+        "fileNaming": false,
+        "structureConsistency": true,
+        "score": 50
+      },
+      "completeness": {
+        "hasExamples": true,
+        "hasAPIDoc": false,
+        "hasSetupGuides": true,
+        "score": 67
+      },
+      "overall": 72
+    }
+  },
+  {
+    "timestamp": "2025-07-12T16:37:32.374Z",
+    "coverage": {
+      "overall": {
+        "total": 72,
+        "documented": 27,
+        "undocumented": 10,
+        "percentage": 38
+      },
+      "byType": {
+        "components": {
+          "pattern": {},
+          "total": 0,
+          "documented": 0,
+          "percentage": 0
+        },
+        "api": {
+          "pattern": {},
+          "total": 0,
+          "documented": 0,
+          "percentage": 0
+        },
+        "tools": {
+          "pattern": {},
+          "total": 8,
+          "documented": 0,
+          "percentage": 0
+        },
+        "scripts": {
+          "pattern": {},
+          "total": 2,
+          "documented": 0,
+          "percentage": 0
+        },
+        "configs": {
+          "pattern": {},
+          "total": 25,
+          "documented": 2,
+          "percentage": 8
+        },
+        "other": {
+          "pattern": {},
+          "total": 27,
+          "documented": 25,
+          "percentage": 93
+        }
+      },
+      "byPriority": {
+        "critical": {
+          "total": 0,
+          "documented": 0,
+          "percentage": 0
+        },
+        "high": {
+          "total": 0,
+          "documented": 0,
+          "percentage": 0
+        },
+        "medium": {
+          "total": 3,
+          "documented": 0,
+          "percentage": 0
+        },
+        "low": {
+          "total": 7,
+          "documented": 0,
+          "percentage": 0
+        }
+      },
+      "targets": {
+        "minimum": 80,
+        "target": 90,
+        "excellent": 95
+      },
+      "status": "poor"
+    },
+    "debt": {
+      "total": 10,
+      "byPriority": {
+        "critical": 0,
+        "high": 0,
+        "medium": 3,
+        "low": 7
+      },
+      "newFiles": 3,
+      "modifiedFiles": 7,
+      "estimatedHours": 3.3,
+      "trends": {
+        "weekly": 0,
+        "monthly": 0,
+        "direction": "stable"
+      },
+      "changeAnalysis": {
+        "significantChanges": 14,
+        "breakingChanges": 17,
+        "requiresImmediate": 33
+      }
+    },
+    "quality": {
+      "standards": {
+        "hasTemplates": true,
+        "hasStyleGuide": true,
+        "hasEnforcement": true,
+        "score": 100
+      },
+      "consistency": {
+        "fileNaming": false,
+        "structureConsistency": true,
+        "score": 50
+      },
+      "completeness": {
+        "hasExamples": true,
+        "hasAPIDoc": false,
+        "hasSetupGuides": true,
+        "score": 67
+      },
+      "overall": 72
+    }
+  },
+  {
+    "timestamp": "2025-07-12T16:42:58.839Z",
+    "coverage": {
+      "overall": {
+        "total": 82,
+        "documented": 29,
+        "undocumented": 13,
+        "percentage": 35
+      },
+      "byType": {
+        "components": {
+          "pattern": {},
+          "total": 0,
+          "documented": 0,
+          "percentage": 0
+        },
+        "api": {
+          "pattern": {},
+          "total": 0,
+          "documented": 0,
+          "percentage": 0
+        },
+        "tools": {
+          "pattern": {},
+          "total": 11,
+          "documented": 0,
+          "percentage": 0
+        },
+        "scripts": {
+          "pattern": {},
+          "total": 2,
+          "documented": 0,
+          "percentage": 0
+        },
+        "configs": {
+          "pattern": {},
+          "total": 27,
+          "documented": 2,
+          "percentage": 7
+        },
+        "other": {
+          "pattern": {},
+          "total": 29,
+          "documented": 27,
+          "percentage": 93
+        }
+      },
+      "byPriority": {
+        "critical": {
+          "total": 0,
+          "documented": 0,
+          "percentage": 0
+        },
+        "high": {
+          "total": 0,
+          "documented": 0,
+          "percentage": 0
+        },
+        "medium": {
+          "total": 3,
+          "documented": 0,
+          "percentage": 0
+        },
+        "low": {
+          "total": 10,
+          "documented": 0,
+          "percentage": 0
+        }
+      },
+      "targets": {
+        "minimum": 80,
+        "target": 90,
+        "excellent": 95
+      },
+      "status": "poor"
+    },
+    "debt": {
+      "total": 13,
+      "byPriority": {
+        "critical": 0,
+        "high": 0,
+        "medium": 3,
+        "low": 10
+      },
+      "newFiles": 3,
+      "modifiedFiles": 10,
+      "estimatedHours": 4,
+      "trends": {
+        "weekly": 0,
+        "monthly": 0,
+        "direction": "stable"
+      },
+      "changeAnalysis": {
+        "significantChanges": 15,
+        "breakingChanges": 17,
+        "requiresImmediate": 36
+      }
+    },
+    "quality": {
+      "standards": {
+        "hasTemplates": true,
+        "hasStyleGuide": true,
+        "hasEnforcement": true,
+        "score": 100
+      },
+      "consistency": {
+        "fileNaming": false,
+        "structureConsistency": true,
+        "score": 50
+      },
+      "completeness": {
+        "hasExamples": true,
+        "hasAPIDoc": false,
+        "hasSetupGuides": true,
+        "score": 67
+      },
+      "overall": 72
+    }
   }
 ]

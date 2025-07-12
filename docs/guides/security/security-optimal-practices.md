@@ -22,7 +22,7 @@ with the template follow security standards.
 
 ## Authentication & Authorization
 
-### Best Practices
+### Optimal Practices
 - Implement proper session management
 - Use secure authentication tokens (JWT with appropriate expiry)
 - Implement role-based access control (RBAC)

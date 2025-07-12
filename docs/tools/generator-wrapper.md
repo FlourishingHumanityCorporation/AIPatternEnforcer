@@ -18,7 +18,8 @@
 
 ## Overview
 
-Analytics wrapper that adds usage tracking to all code generators in ProjectTemplate. Provides insights into generator usage patterns, success rates, and performance metrics to help improve development tools and workflows.
+Analytics wrapper that adds usage tracking to all code generators in ProjectTemplate. Provides insights into generator
+usage patterns, success rates, and performance metrics to help improve development tools and workflows.
 
 **Tool Type**: Analytics Wrapper / Middleware  
 **Language**: JavaScript (Node.js)  

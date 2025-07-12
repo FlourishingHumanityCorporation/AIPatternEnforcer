@@ -126,7 +126,7 @@ Tools:      Air (Go) or cargo-watch (Rust)
 
 - Learn lower-level concepts
 - Minimal magic
-- Great performance
+- Effective performance
 - Single binary output
 
 ### 4. The "Desktop App" Stack
@@ -334,7 +334,7 @@ export default {
 npm run db:push     # Push schema changes
 npm run db:studio   # Visual database editor
 
-# No migration files needed for local dev!
+# No migration files needed for local dev
 ```
 
 ### 3. Mock External Services
@@ -529,7 +529,7 @@ npm run db:push
 # Start development
 npm run dev
 
-# You're coding in < 2 minutes!
+# You're coding in < 2 minutes
 ```
 
 Remember: The optimal local development stack is the one that gets out of your way and lets you build. Don't overthink

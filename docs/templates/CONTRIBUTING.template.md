@@ -1,7 +1,7 @@
 # Contributing to [Project Name]
 
 First off, thank you for considering contributing to [Project Name]! It's people like you that make this project such a
-great tool.
+effective tool.
 
 ## Table of Contents
 

@@ -147,7 +147,7 @@
 ### Common Mentoring Mistakes
 
 ❌ **Don't**: Overwhelm with all features at once
-✅ **Do**: Start with Super Quick Start in [QUICK-START.md](../../QUICK-START.md)
+✅ **Do**: Start with Highly Quick Start in [QUICK-START.md](../../QUICK-START.md)
 
 ❌ **Don't**: Skip setup verification
 ✅ **Do**: Always run `npm run setup:verify-ai` together

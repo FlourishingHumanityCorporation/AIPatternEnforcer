@@ -6,6 +6,7 @@ const JsonValidator = require('./config-enforcer/validators/json-validator');
 const EnvValidator = require('./config-enforcer/validators/env-validator');
 const JsConfigValidator = require('./config-enforcer/validators/js-config-validator');
 const YamlValidator = require('./config-enforcer/validators/yaml-validator');
+const CrossFileValidator = require('./config-enforcer/validators/cross-file-validator');
 const { shouldBlock, logMetrics } = require('./enforcement-config');
 
 /**
@@ -27,6 +28,11 @@ async function main() {
     enforcer.registerValidator('environment', new EnvValidator(enforcer.config.fileTypes.environment));
     enforcer.registerValidator('javascript', new JsConfigValidator(enforcer.config.fileTypes.javascript));
     enforcer.registerValidator('yaml', new YamlValidator(enforcer.config.fileTypes.yaml));
+    
+    // Register cross-file validator if enabled
+    if (enforcer.config.crossFileValidation.enabled) {
+      enforcer.registerValidator('cross-file', new CrossFileValidator(enforcer.config.crossFileValidation));
+    }
 
     switch (command) {
       case 'check':

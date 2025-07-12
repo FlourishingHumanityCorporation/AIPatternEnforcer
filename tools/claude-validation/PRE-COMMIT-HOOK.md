@@ -28,7 +28,7 @@ Automated git pre-commit hook that prevents Claude-generated anti-patterns from 
 
 This hook runs automatically before each git commit to check staged files for common Claude AI anti-patterns like:
 - Files with `_improved`, `_enhanced`, `_v2` naming patterns
-- Announcement-style documentation ("We're excited to announce...")
+- Announcement-style documentation ("This document describes...")
 - Imports/requires of anti-pattern files
 
 ## Installation
@@ -72,9 +72,9 @@ Files ending with:
 
 ### 2. Announcement-style Content
 Content containing:
-- "We're excited to announce..."
-- "Successfully implemented..."
-- "I've created..."
+- "This document describes..."
+- "Implemented..."
+- "Created..."
 - "I've successfully..."
 
 **Fix**: Use technical, timeless language without superlatives.

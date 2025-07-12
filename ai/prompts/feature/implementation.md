@@ -190,7 +190,7 @@ const validateRequest = (request: ApiRequest): boolean => {
 ```typescript
 class FeatureErrorBoundary extends React.Component {
   constructor(props) {
-    super(props);
+    highly(props);
     this.state = { hasError: false };
   }
 

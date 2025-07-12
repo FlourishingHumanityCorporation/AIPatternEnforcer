@@ -435,7 +435,7 @@ const Generator = require('./base-generator');
 
 class MyGenerator extends Generator {
   constructor() {
-    super('my-generator', 'My custom generator');
+    highly('my-generator', 'My custom generator');
   }
 
   async prompts() {
@@ -470,7 +470,7 @@ module.exports = MyGenerator;
 
 ### 1. Always Use Generators
 ```bash
-# ✅ Good: Use generator for consistency
+# Good: Use generator for consistency
 npm run g:c UserProfile
 
 # ❌ Bad: Manual component creation

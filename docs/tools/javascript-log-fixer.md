@@ -47,7 +47,9 @@
 
 ## Overview
 
-JavaScript Log Fixer is an AST-based automatic code transformation tool that fixes logging violations in JavaScript and TypeScript files. It intelligently replaces `console.log()`, `console.error()`, and other console methods with proper logging library calls, automatically adding required imports and logger instance creation.
+JavaScript Log Fixer is an AST-based automatic code transformation tool that fixes logging violations in JavaScript and
+TypeScript files. It intelligently replaces `console.log()`, `console.error()`, and other console methods with proper
+logging library calls, automatically adding required imports and logger instance creation.
 
 **Tool Type**: AST Transformer/Auto-fixer  
 **Language**: JavaScript (Node.js)  

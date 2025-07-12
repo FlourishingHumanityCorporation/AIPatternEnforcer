@@ -1,0 +1,96 @@
+{
+  "name": "React + Vite + TypeScript",
+  "description": "Complete configuration template for modern React applications with Vite, TypeScript, ESLint, Prettier, and Vitest",
+  "version": "1.0.0",
+  "type": "config",
+  "framework": "react",
+  "buildTool": "vite",
+  "language": "typescript",
+  "features": [
+    "TypeScript configuration with strict settings",
+    "Vite build configuration with optimizations",
+    "ESLint with React and TypeScript rules",
+    "Prettier code formatting",
+    "Vitest testing setup with jsdom",
+    "Path mapping with @ aliases",
+    "Environment variable configuration",
+    "Pre-commit hooks ready"
+  ],
+  "files": [
+    {
+      "template": "package.json.hbs",
+      "target": "package.json",
+      "description": "Package configuration with optimized scripts and dependencies"
+    },
+    {
+      "template": "tsconfig.json.hbs", 
+      "target": "tsconfig.json",
+      "description": "TypeScript configuration with strict settings and path mapping"
+    },
+    {
+      "template": "tsconfig.node.json.hbs",
+      "target": "tsconfig.node.json", 
+      "description": "Node.js specific TypeScript configuration"
+    },
+    {
+      "template": "vite.config.ts.hbs",
+      "target": "vite.config.ts",
+      "description": "Vite configuration with React plugin and optimizations"
+    },
+    {
+      "template": ".eslintrc.json.hbs",
+      "target": ".eslintrc.json",
+      "description": "ESLint configuration for React and TypeScript"
+    },
+    {
+      "template": ".prettierrc.hbs",
+      "target": ".prettierrc",
+      "description": "Prettier code formatting configuration"
+    },
+    {
+      "template": "test-setup.ts.hbs",
+      "target": "src/test-setup.ts",
+      "description": "Vitest test environment setup"
+    },
+    {
+      "template": ".env.example.hbs",
+      "target": ".env.example",
+      "description": "Environment variables template"
+    }
+  ],
+  "variables": {
+    "projectName": {
+      "type": "string",
+      "description": "Name of the project",
+      "default": "my-react-app"
+    },
+    "description": {
+      "type": "string", 
+      "description": "Project description",
+      "default": "A modern React application"
+    },
+    "author": {
+      "type": "string",
+      "description": "Project author",
+      "default": "Your Name"
+    },
+    "license": {
+      "type": "string",
+      "description": "Project license",
+      "default": "MIT"
+    }
+  },
+  "postInstall": [
+    "npm install",
+    "npm run type-check",
+    "npm run lint",
+    "git init",
+    "git add .",
+    "git commit -m \"Initial commit with React + Vite configuration\""
+  ],
+  "requirements": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "tags": ["react", "vite", "typescript", "frontend", "spa"]
+}

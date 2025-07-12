@@ -1,9 +1,9 @@
 {
-  "timestamp": 1752300080657,
+  "timestamp": 1752300451514,
   "result": {
     "isValid": true,
     "violations": [],
     "fixes": [],
-    "validationTime": 0.19937491416931152
+    "validationTime": 0.23016703128814697
   }
 }

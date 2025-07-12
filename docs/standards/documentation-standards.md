@@ -67,7 +67,7 @@ maintainability across all project documentation.
 - Apply consistent terminology
 
 ### 4. **Timeless Language**
-- Avoid announcement-style language ("We're excited to announce...")
+- Avoid announcement-style language ("This document describes...")
 - Use present tense for current functionality
 - Focus on technical facts over marketing
 - Write documentation that won't become stale
@@ -261,8 +261,8 @@ Common issues and solutions (if applicable).
 
 ### Forbidden Patterns
 ❌ **Never Use**:
-- "We're excited to announce..."
-- "Successfully implemented..."
+- "This document describes..."
+- "Implemented..."
 - "This functional feature..."
 - "Simply" or "just" (minimizes complexity)
 - "Obviously" or "clearly" (excludes readers)

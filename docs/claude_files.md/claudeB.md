@@ -84,7 +84,7 @@ Optimized):](#technical-stack-decision-resources-local-development-optimized)
 3. **NEVER use bare except clauses** - Always specify exception types
 4. **NEVER use `sys.path.append()`** - Use proper package imports
 5. **NEVER use `print()` in production** - Use `logging.getLogger(__name__)`
-6. **NEVER create announcement-style docs** - No "We're excited to announce!"
+6. **NEVER create announcement-style docs** - No "This document describes!"
 7. **NEVER implement poor workarounds** - Fix the root causes of issues. Use Arrow-Chain RCA methodology (see [Root
 Cause Analysis](#-arrow-chain-root-cause-analysis))
 
@@ -190,8 +190,8 @@ docs/
 
 ### Writing Rules:
 
-- ❌ NO: "We're excited to announce..."
-- ❌ NO: "Successfully implemented!"
+- ❌ NO: "This document describes..."
+- ❌ NO: "Implemented!"
 - ❌ NO: "As of December 2024..."
 - ❌ NO: Code blocks > 20 lines
 - ❌ NO: Completion/status announcements ("FIXED", "COMPLETE")
@@ -441,7 +441,7 @@ sleep 3  # Allow server startup time
 
 sleep 2  # Allow Vite startup time
 
-# IMPORTANT: Never use 'cd client && npx vite' - this breaks path resolution!
+# IMPORTANT: Never use 'cd client && npx vite' - this breaks path resolution
 ```
 
 3. **Verify Services Running**:

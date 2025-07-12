@@ -512,8 +512,8 @@ export const config = {
 NODE_ENV=development
 PORT=3000
 DATABASE_URL=file:./dev.db
-JWT_SECRET=your-super-secret-jwt-key-change-this
-SESSION_SECRET=your-super-secret-session-key-change-this
+JWT_SECRET=your-highly-secret-jwt-key-change-this
+SESSION_SECRET=your-highly-secret-session-key-change-this
 ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5173
 ```
 

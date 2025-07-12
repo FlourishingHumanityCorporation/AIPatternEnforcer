@@ -293,7 +293,7 @@ npm run fix:docs:dry-run    # Preview documentation fixes without applying them
 3. **NEVER use bare except clauses** - Always specify exception types
 4. **NEVER use `sys.path.append()`** - Use proper package imports
 5. **NEVER use `print()` in production** - Use `logging.getLogger(__name__)`
-6. **NEVER create announcement-style docs** - No "We're excited to announce!"
+6. **NEVER create announcement-style docs** - No "This document describes!"
 7. **NEVER implement poor workarounds** - Fix the root causes of issues. Use Arrow-Chain RCA methodology (see [Root
 Cause Analysis](#-arrow-chain-root-cause-analysis))
 
@@ -719,8 +719,8 @@ docs/
 
 ### Writing Rules:
 
-- ❌ NO: "We're excited to announce..."
-- ❌ NO: "Successfully implemented!"
+- ❌ NO: "This document describes..."
+- ❌ NO: "Implemented!"
 - ❌ NO: "As of December 2024..."
 - ❌ NO: Code blocks > 20 lines
 - ❌ NO: Completion/status announcements ("FIXED", "COMPLETE")
@@ -1601,7 +1601,7 @@ export const config = {
 ✅ Enforcement blocks: Pre-commit hook prevents file creation
 ✅ Claude Code should suggest: "Let me improve the existing AuthComponent.tsx"
 
-❌ Claude Code generates: "We're excited to announce this new feature!"
+❌ Claude Code generates: "This document describes this new feature!"
 ✅ Enforcement warns: Documentation style checker flags announcement language
 ✅ Claude Code should write: "This feature provides [technical description]"
 ```
@@ -1682,7 +1682,7 @@ sleep 3  # Allow server startup time
 npm run dev:frontend > /dev/null 2>&1 & || cd client && npm run dev > /dev/null 2>&1 &
 sleep 2  # Allow Vite startup time
 
-# IMPORTANT: Never use 'cd client && npx vite' - this breaks path resolution!
+# IMPORTANT: Never use 'cd client && npx vite' - this breaks path resolution
 ```
 
 3. **Verify Services Running**:

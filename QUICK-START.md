@@ -5,7 +5,7 @@
 ## Table of Contents
 
 1. [30-Second Decision Tree](#30-second-decision-tree)
-2. [⚡ Super Quick Start (2 minutes)](#-super-quick-start-2-minutes)
+2. [⚡ Highly Quick Start (2 minutes)](#-highly-quick-start-2-minutes)
 3. [🚀 Guided Setup (5 minutes)](#-guided-setup-5-minutes)
 4. [🧭 Choose Your Learning Path](#-choose-your-learning-path)
   5. [🟢 New to AI Development (15 min)](#-new-to-ai-development-15-min)
@@ -21,7 +21,7 @@
 
 ```text
 ┌─ First time here? ────────────────────────────────┐
-│  → 2-minute setup: `npm run setup:guided`        │
+│  → Quick onboard: `npm run onboard` (<5 min)     │
 │  → Explore generators: `npm run demo:generators` │  
 │  → Pick learning path: [USER-JOURNEY.md]         │
 └────────────────────────────────────────────────────┘
@@ -45,7 +45,7 @@
 └───────────────────────────────────────────────────┘
 ```
 
-## ⚡ Super Quick Start (2 minutes)
+## ⚡ Highly Quick Start (2 minutes)
 
 **For experienced developers who want immediate value:**
 

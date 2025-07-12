@@ -7,6 +7,19 @@
 const fs = require('fs');
 const path = require('path');
 
+// Simple logging utility for capability tracker
+const logger = {
+    error: (message, error = null) => {
+        console.error(`[CapabilityTracker] ERROR: ${message}`, error || '');
+    },
+    info: (message) => {
+        console.log(`[CapabilityTracker] ${message}`);
+    },
+    warn: (message) => {
+        console.warn(`[CapabilityTracker] WARN: ${message}`);
+    }
+};
+
 class CapabilityTracker {
     constructor() {
         this.stateFile = 'tools/metrics/claude-onboarding-state.json';
@@ -131,7 +144,7 @@ class CapabilityTracker {
         try {
             return JSON.parse(fs.readFileSync(this.stateFile, 'utf8'));
         } catch (error) {
-            console.error('Error reading onboarding state:', error);
+            logger.error('Error reading onboarding state:', error);
             return { level: 0, capabilities: {}, completionStatus: 'error' };
         }
     }
@@ -140,7 +153,7 @@ class CapabilityTracker {
         try {
             return JSON.parse(fs.readFileSync(this.metricsFile, 'utf8'));
         } catch (error) {
-            console.error('Error reading capability metrics:', error);
+            logger.error('Error reading capability metrics:', error);
             this.initializeMetrics();
             return JSON.parse(fs.readFileSync(this.metricsFile, 'utf8'));
         }

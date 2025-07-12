@@ -51,7 +51,9 @@
 
 ## Overview
 
-Log Enforcer is a comprehensive logging compliance tool that integrates with ProjectTemplate's enforcement system. It detects and automatically fixes improper logging practices such as `print()` statements in Python and `console.log()` usage in JavaScript/TypeScript, ensuring consistent logging standards across the codebase.
+Log Enforcer is a comprehensive logging compliance tool that integrates with ProjectTemplate's enforcement system. It
+detects and automatically fixes improper logging practices such as `print()` statements in Python and `console.log()`
+usage in JavaScript/TypeScript, ensuring consistent logging standards across the codebase.
 
 **Tool Type**: CLI/Script  
 **Language**: JavaScript (Node.js)  

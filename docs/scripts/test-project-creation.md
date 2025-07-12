@@ -13,7 +13,8 @@
 
 ## Overview
 
-Focused test script that validates the core project creation workflow without interactive prompts, ensuring the template can create functional projects programmatically.
+Focused test script that validates the core project creation workflow without interactive prompts, ensuring the template
+can create functional projects programmatically.
 
 **Tool Type**: Test Script  
 **Language**: JavaScript (Node.js)  
@@ -337,7 +338,7 @@ if (buildOutput.includes('dist/index.html')) {
 }
 ```
 
-### Best Practices
+### Optimal Practices
 - Always use unique project names with timestamps
 - Copy only necessary files to speed up tests
 - Remove template-specific scripts that won't work in test projects

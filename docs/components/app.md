@@ -24,7 +24,8 @@
 
 ## Overview
 
-The root React component for ProjectTemplate applications. Currently provides a minimal starting structure with welcome message and development guidance, designed to be easily customized and expanded as the foundation for new projects.
+The root React component for ProjectTemplate applications. Currently provides a minimal starting structure with welcome
+message and development guidance, designed to be easily customized and expanded as the foundation for new projects.
 
 **Component Type**: Root Application Component  
 **Location**: `src/App.tsx`  

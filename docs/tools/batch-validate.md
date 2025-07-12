@@ -104,9 +104,9 @@ node tools/claude-validation/batch-validate.js "**/*.ts"
 
 # Output:
 # 🔍 Batch Validation Starting...
-# ✅ src/App.tsx - PASSED
+# src/App.tsx - PASSED
 # ❌ src/utils/helper.ts - FAILED (3 violations)
-# ✅ src/components/Button.tsx - PASSED
+# src/components/Button.tsx - PASSED
 # 
 # 📊 Summary: 2/3 passed (66.7%)
 ```

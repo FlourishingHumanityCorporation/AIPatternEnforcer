@@ -31,6 +31,9 @@ information
 
 🟢 **Solution**: Persistent system prompts, contextual re-injection, focused context curation
 
+🛠️ **Implementation Guide**: [Context Window Optimization](docs/guides/implementation/context-window-optimization.md) -
+10-15 minute setup
+
 📁 **Template Implementation**:
 
 ```text
@@ -364,6 +367,9 @@ ai/
 
 🟢 **Solution**: Exemplar files, architectural rules, linting
 
+🛠️ **Implementation Guide**: [Code Generation Quality](docs/guides/implementation/code-generation-quality.md) - 15-20
+minute setup
+
 📁 **Template Implementation**:
 
 ```text
@@ -468,6 +474,9 @@ ai/
 🔴 **Problem**: AI generates code with security vulnerabilities
 
 🟢 **Solution**: Security-first prompting, SAST tools, secure examples
+
+🛠️ **Implementation Guide**: [Security Vulnerability
+Prevention](docs/guides/implementation/security-vulnerability-prevention.md) - 12-15 minute setup
 
 📁 **Template Implementation**:
 

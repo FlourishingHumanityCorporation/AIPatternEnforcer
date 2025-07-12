@@ -13,8 +13,11 @@ npm run g:feature auth     # Feature module with hooks + state management
 # Each saves 15-45 minutes of manual coding
 ```
 
-> **🚀 Get productive in 2 minutes:** [QUICK-START.md](QUICK-START.md) | **🎮 Try generators:** `npm run
-demo:generators`
+> **⚡ Quick Start:** `npm run onboard` - Complete setup + first component in <5 minutes  
+> **📖 Experienced Developer?** [Quick Reference](docs/quick-reference.md) - Commands & troubleshooting |
+[CLAUDE.md](CLAUDE.md) - Implementation rules
+> **🚀 New to ProjectTemplate?** [QUICK-START.md](QUICK-START.md) - Detailed orientation | **🎮 Try generators:** `npm
+run demo:generators`
 
 ## Table of Contents
 
@@ -34,13 +37,16 @@ git clone [this-repo] my-project
 cd my-project
 npm install
 
-# 2. Run guided setup
-npm run setup:guided
+# 2. Run unified onboarding (recommended)
+npm run onboard
+# - Installs dependencies
+# - Sets up git hooks
+# - Generates your first component
+# - Validates everything works
 
-# 3. Generate your first component
-npm run g:c MyButton
-
-# ✅ You now have a complete component with tests!
+# Alternative: Manual setup
+npm run setup:guided  # Interactive setup wizard
+npm run g:c MyButton  # Generate first component
 ```
 
 **Generate production-ready code in seconds. Each generator creates comprehensive files with tests, documentation, and
@@ -258,8 +264,8 @@ npm run check:imports
 
 ```bash
 # Blocks these patterns:
-❌ "We're excited to announce..."
-❌ "Successfully implemented!"
+❌ "This document describes..."
+❌ "Implemented!"
 ❌ "As of December 2024..."
 
 # Run manual check:

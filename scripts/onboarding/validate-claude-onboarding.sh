@@ -172,22 +172,54 @@ test_practical_workflows() {
         warning "Component generation not available or needs setup"
     fi
     
-    # Test 2: Validation Commands
+    # Test 2: Actual Compliance Validation
     ((total_workflows++))
-    local validation_commands=("npm run check:all" "npm run validate")
-    local working_validations=0
+    log "Running real compliance checks..."
     
-    for cmd in "${validation_commands[@]}"; do
-        if eval "$cmd --silent" >/dev/null 2>&1; then
-            ((working_validations++))
-        fi
-    done
+    # Check actual compliance - this will FAIL if there are violations
+    local compliance_score=0
+    local total_checks=4
     
-    if [[ $working_validations -gt 0 ]]; then
-        success "Validation commands working ($working_validations/${#validation_commands[@]})"
+    # Test logging compliance
+    if npm run check:logs --silent >/dev/null 2>&1; then
+        success "Logging compliance: PASS"
+        ((compliance_score++))
+    else
+        error "Logging compliance: FAIL (violations found)"
+    fi
+    
+    # Test TypeScript compliance
+    if npm run type-check --silent >/dev/null 2>&1; then
+        success "TypeScript compliance: PASS"
+        ((compliance_score++))
+    else
+        error "TypeScript compliance: FAIL (type errors found)"
+    fi
+    
+    # Test linting compliance
+    if npm run lint --silent >/dev/null 2>&1; then
+        success "ESLint compliance: PASS"
+        ((compliance_score++))
+    else
+        error "ESLint compliance: FAIL (linting errors found)"
+    fi
+    
+    # Test configuration compliance
+    if npm run check:config --silent >/dev/null 2>&1; then
+        success "Configuration compliance: PASS"
+        ((compliance_score++))
+    else
+        error "Configuration compliance: FAIL (config violations found)"
+    fi
+    
+    local compliance_percentage=$((compliance_score * 100 / total_checks))
+    
+    if [[ $compliance_percentage -ge 75 ]]; then
+        success "REAL compliance validation: $compliance_score/$total_checks checks pass ($compliance_percentage%)"
         ((workflow_score++))
     else
-        error "No validation commands working"
+        error "REAL compliance validation: FAILED - only $compliance_score/$total_checks checks pass ($compliance_percentage%)"
+        warning "This means the onboarding system has NOT properly prepared the environment"
     fi
     
     # Test 3: Context Management
@@ -282,10 +314,11 @@ generate_validation_report() {
     "onboardingCompletion": true,
     "learnPhasesCompleted": true,
     "coreCapabilitiesValidated": true,
-    "practicalWorkflowsTested": true,
-    "patternKnowledgeVerified": true
+    "practicalWorkflowsTested": false,
+    "patternKnowledgeVerified": true,
+    "realComplianceScore": "$compliance_percentage%"
   },
-  "readinessLevel": "production",
+  "readinessLevel": "development-only",
   "recommendations": [
     "Monitor compliance rates during real development work",
     "Review CLAUDE.md rules regularly",

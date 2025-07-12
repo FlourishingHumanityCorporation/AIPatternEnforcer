@@ -2,6 +2,33 @@
 
 **Generated**: 2025-07-12T05:39:50.190Z
 
+## Table of Contents
+
+1. [Summary](#summary)
+2. [Immediate Actions Required](#immediate-actions-required)
+  3. [5 new files lack documentation](#5-new-files-lack-documentation)
+  4. [High documentation debt detected](#high-documentation-debt-detected)
+  5. [Consider enabling documentation enforcement](#consider-enabling-documentation-enforcement)
+6. [Detailed Analysis](#detailed-analysis)
+  7. [Files Requiring Documentation](#files-requiring-documentation)
+    8. [scripts/integration-tests.js](#scriptsintegration-testsjs)
+    9. [scripts/test-project-creation.js](#scriptstest-project-creationjs)
+    10. [scripts/test-template-customization.js](#scriptstest-template-customizationjs)
+    11. [tools/enforcement/config-enforcer.js](#toolsenforcementconfig-enforcerjs)
+    12. [scripts/debug-js-detector.js](#scriptsdebug-js-detectorjs)
+    13. [scripts/debug-js-fixer-simple.js](#scriptsdebug-js-fixer-simplejs)
+    14. [scripts/debug-js-fixer.js](#scriptsdebug-js-fixerjs)
+    15. [scripts/test-create-project.js](#scriptstest-create-projectjs)
+    16. [scripts/test-js-fixer.js](#scriptstest-js-fixerjs)
+    17. [tools/enforcement/claude-hook-validator.js](#toolsenforcementclaude-hook-validatorjs)
+    18. [tools/enforcement/enforcement-config.js](#toolsenforcementenforcement-configjs)
+    19. [tools/enforcement/log-enforcer/javascript_fixer.js](#toolsenforcementlog-enforcerjavascript_fixerjs)
+    20. [tools/enforcement/root-file-enforcement.js](#toolsenforcementroot-file-enforcementjs)
+    21. [tools/generators/project-init/create-project.js](#toolsgeneratorsproject-initcreate-projectjs)
+    22. [tools/generators/template-customizer.js](#toolsgeneratorstemplate-customizerjs)
+    23. [vite.config.ts](#viteconfigts)
+  24. [Files Requiring Manual Review](#files-requiring-manual-review)
+
 ## Summary
 
 - **Total Files Analyzed**: 33

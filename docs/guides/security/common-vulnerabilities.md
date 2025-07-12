@@ -333,4 +333,5 @@ const config = {
 
 ---
 
-**Security Note**: This documentation should be regularly updated as new vulnerabilities are discovered. Always stay informed about the latest security threats and prevention techniques.
+**Security Note**: This documentation should be regularly updated as new vulnerabilities are discovered. Always stay
+informed about the latest security threats and prevention techniques.

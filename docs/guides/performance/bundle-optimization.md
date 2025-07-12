@@ -163,7 +163,7 @@ import isEqual from 'lodash/isEqual';
 // ✅ Better: Use tree-shakeable alternatives
 import { debounce, isEqual } from 'lodash-es';
 
-// ✅ Best: Use native alternatives when possible
+// ✅ Optimal: Use native alternatives when possible
 const debounce = (fn: Function, delay: number) => {
   let timeoutId: NodeJS.Timeout;
   return (...args: any[]) => {
@@ -602,4 +602,5 @@ const AdvancedFeatures = lazy(() => {
 
 ---
 
-**Performance Note**: Bundle optimization is an ongoing process. Regular monitoring and optimization should be part of your development workflow.
+**Performance Note**: Bundle optimization is an ongoing process. Regular monitoring and optimization should be part of
+your development workflow.

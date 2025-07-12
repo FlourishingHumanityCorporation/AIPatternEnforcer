@@ -26,7 +26,7 @@ export class AppError extends Error {
     public statusCode: number = 500,
     public isOperational: boolean = true,
   ) {
-    super(message);
+    highly(message);
     Object.setPrototypeOf(this, AppError.prototype);
   }
 }
@@ -34,13 +34,13 @@ export class AppError extends Error {
 // Specific error types
 export class ValidationError extends AppError {
   constructor(message: string, details?: any) {
-    super(message, "VALIDATION_ERROR", 400);
+    highly(message, "VALIDATION_ERROR", 400);
   }
 }
 
 export class NotFoundError extends AppError {
   constructor(resource: string) {
-    super(`${resource} not found`, "NOT_FOUND", 404);
+    highly(`${resource} not found`, "NOT_FOUND", 404);
   }
 }
 ```

@@ -83,17 +83,13 @@ export class LogEnforcer {
       });
 
       let stdout = '';
-      let stderr = '';
 
       child.stdout.on('data', (data) => {
         stdout += data.toString();
       });
 
-      child.stderr.on('data', (data) => {
-        stderr += data.toString();
-      });
 
-      child.on('close', (code) => {
+      child.on('close', (_code) => {
         try {
           // Extract JSON from the output (skip the initial status messages)
           const jsonStart = stdout.indexOf('{');
@@ -106,7 +102,16 @@ export class LogEnforcer {
           const result = JSON.parse(jsonOutput);
           
           // Convert to our format
-          const violations: LogViolation[] = result.violations.map((v: any) => ({
+          interface ViolationData {
+            line: number;
+            column: number;
+            type: 'console_usage' | 'print_statement';
+            method?: string;
+            message: string;
+            filepath?: string;
+          }
+          
+          const violations: LogViolation[] = result.violations.map((v: ViolationData) => ({
             line: v.line,
             column: v.column,
             type: v.type,
@@ -148,22 +153,12 @@ export class LogEnforcer {
         stdio: ['pipe', 'pipe', 'pipe']
       });
 
-      let stdout = '';
-      let stderr = '';
 
-      child.stdout.on('data', (data) => {
-        stdout += data.toString();
-      });
-
-      child.stderr.on('data', (data) => {
-        stderr += data.toString();
-      });
-
-      child.on('close', (code) => {
-        if (code === 0) {
+      child.on('close', (_code) => {
+        if (_code === 0) {
           resolve(true);
         } else {
-          reject(new Error(`Log enforcer fix failed: ${stderr}`));
+          reject(new Error('Log enforcer fix failed'));
         }
       });
 
@@ -184,23 +179,12 @@ export class LogEnforcer {
         stdio: ['pipe', 'pipe', 'pipe']
       });
 
-      let stdout = '';
-      let stderr = '';
-
-      child.stdout.on('data', (data) => {
-        stdout += data.toString();
-      });
-
-      child.stderr.on('data', (data) => {
-        stderr += data.toString();
-      });
-
-      child.on('close', (code) => {
-        if (code === 0) {
+      child.on('close', (_code) => {
+        if (_code === 0) {
           vscode.window.showInformationMessage('✅ Log enforcement fixes applied');
           resolve();
         } else {
-          reject(new Error(`Log enforcer fix failed: ${stderr}`));
+          reject(new Error('Log enforcer fix failed'));
         }
       });
 
@@ -215,7 +199,7 @@ export class LogEnforcer {
       return { violations: [] };
     }
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const logEnforcerPath = path.join(this.workspaceRoot, 'tools/enforcement/log-enforcer.js');
       
       const child = spawn('node', [logEnforcerPath, 'check', '--format=json', filePath], {
@@ -224,17 +208,13 @@ export class LogEnforcer {
       });
 
       let stdout = '';
-      let stderr = '';
 
       child.stdout.on('data', (data) => {
         stdout += data.toString();
       });
 
-      child.stderr.on('data', (data) => {
-        stderr += data.toString();
-      });
 
-      child.on('close', (code) => {
+      child.on('close', (_code) => {
         try {
           // Extract JSON from the output
           const jsonStart = stdout.indexOf('{');
@@ -247,9 +227,18 @@ export class LogEnforcer {
           const result = JSON.parse(jsonOutput);
           
           // Convert to our format
+          interface ViolationData {
+            line: number;
+            column: number;
+            type: 'console_usage' | 'print_statement';
+            method?: string;
+            message: string;
+            filepath?: string;
+          }
+          
           const violations: LogViolation[] = result.violations
-            .filter((v: any) => v.filepath === filePath)
-            .map((v: any) => ({
+            .filter((v: ViolationData) => v.filepath === filePath)
+            .map((v: ViolationData) => ({
               line: v.line,
               column: v.column,
               type: v.type,

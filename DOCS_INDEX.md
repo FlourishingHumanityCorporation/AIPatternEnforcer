@@ -24,10 +24,10 @@ navigate the documentation structure.
 16. [📝 Notes for AI Assistants](#-notes-for-ai-assistants)
 
 ## 🚀 Quick Start
-- `QUICK-START.md` - **Start here** - 2-minute orientation for new users
-- `CLAUDE.md` - Primary AI assistant instructions and project rules
-- `README.md` - Project overview and setup instructions
-- `docs/README.md` - Documentation hub with category navigation
+- `docs/quick-reference.md` - **Experienced developers** - Commands, configs, troubleshooting
+- `QUICK-START.md` - **New users** - 2-minute orientation and path selection
+- `CLAUDE.md` - **AI assistants** - Primary AI instructions and project rules
+- `README.md` - **Project overview** - Setup instructions and feature showcase
 
 ## 📖 Core Documentation
 
@@ -74,6 +74,7 @@ navigate the documentation structure.
 
 ### Code Quality & Enforcement
 - `docs/guides/enforcement/ENFORCEMENT.md` - Complete enforcement system documentation and guidelines
+- `docs/guides/enforcement/config-enforcement.md` - Configuration validation and auto-fixing
 
 ### Templates
 - `docs/templates/README.template.md` - Project README template
@@ -114,6 +115,9 @@ npm run validate:docs:fix      # Attempt to fix broken links automatically
 # Enforcement
 npm run enforcement:status     # Show current enforcement settings
 npm run check:all             # Run all enforcement checks
+npm run check:config          # Validate configuration files
+npm run fix:config            # Auto-fix configuration issues
+npm run fix:config:dry-run    # Preview configuration fixes
 ```
 
 ## 📝 Notes for AI Assistants

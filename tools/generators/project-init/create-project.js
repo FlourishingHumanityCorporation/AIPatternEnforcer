@@ -185,23 +185,42 @@ npm run build
 
   fs.writeFileSync(path.join(targetDir, 'README.md'), readmeContent);
 
-  // Initialize git repository
+  // Initialize git repository (do this before npm install to avoid husky issues)
   if (useGit) {
     console.log(chalk.blue('\n📦 Initializing git repository...'));
-    execSync('git init', { cwd: targetDir, stdio: 'inherit' });
-    
-    // Create initial commit
-    execSync('git add .', { cwd: targetDir, stdio: 'inherit' });
-    execSync('git commit -m "Initial commit from ProjectTemplate"', {
-      cwd: targetDir,
-      stdio: 'inherit',
-    });
+    try {
+      execSync('git init', { cwd: targetDir, stdio: 'inherit' });
+      console.log(chalk.green('✓ Git repository initialized'));
+    } catch (error) {
+      console.warn(chalk.yellow('⚠ Git initialization failed. Continuing without git.'));
+      useGit = false;
+    }
   }
 
   // Install dependencies
   if (installDeps) {
     console.log(chalk.blue('\n📦 Installing dependencies...'));
-    execSync('npm install', { cwd: targetDir, stdio: 'inherit' });
+    try {
+      execSync('npm install', { cwd: targetDir, stdio: 'inherit' });
+      console.log(chalk.green('✓ Dependencies installed successfully'));
+    } catch (error) {
+      console.error(chalk.red('✗ Failed to install dependencies'));
+      console.error(chalk.yellow('You can install them manually with: npm install'));
+    }
+  }
+
+  // Create initial commit after dependencies are installed
+  if (useGit) {
+    try {
+      execSync('git add .', { cwd: targetDir, stdio: 'inherit' });
+      execSync('git commit -m "Initial commit from ProjectTemplate"', {
+        cwd: targetDir,
+        stdio: 'inherit',
+      });
+      console.log(chalk.green('✓ Initial commit created'));
+    } catch (error) {
+      console.warn(chalk.yellow('⚠ Failed to create initial commit'));
+    }
   }
 
   console.log(chalk.green.bold(`\n✅ Project created successfully!\n`));

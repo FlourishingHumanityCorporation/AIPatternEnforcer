@@ -7,7 +7,7 @@ You're one of the first 5 developers testing this system. Your feedback will dir
 ## Table of Contents
 
 1. [🎯 Pilot Goals](#-pilot-goals)
-2. [⚡ Super Quick Setup (3 minutes)](#-super-quick-setup-3-minutes)
+2. [⚡ Highly Quick Setup (3 minutes)](#-highly-quick-setup-3-minutes)
   3. [Step 1: Install](#step-1-install)
   4. [Step 2: Test](#step-2-test)
   5. [Step 3: Configure for pilot](#step-3-configure-for-pilot)
@@ -50,7 +50,7 @@ You're one of the first 5 developers testing this system. Your feedback will dir
 - **2-minute daily feedback** via quick survey
 - **End-of-week interview** (15 minutes)
 
-## ⚡ Super Quick Setup (3 minutes)
+## ⚡ Highly Quick Setup (3 minutes)
 
 ### Step 1: Install
 ```bash

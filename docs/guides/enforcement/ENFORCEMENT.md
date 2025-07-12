@@ -5,12 +5,13 @@
 1. [Overview](#overview)
 2. [Why Enforcement Exists](#why-enforcement-exists)
 3. [Enforcement Rules](#enforcement-rules)
-4. [Working with Enforcement](#working-with-enforcement)
-5. [Common Scenarios](#common-scenarios)
-6. [Fixing Violations](#fixing-violations)
-7. [Enforcement Configuration](#enforcement-configuration)
-8. [Claude Code Hooks Integration](#claude-code-hooks-integration)
-9. [AI Integration](#ai-integration)
+4. [Configuration Validation](#configuration-validation)
+5. [Working with Enforcement](#working-with-enforcement)
+6. [Common Scenarios](#common-scenarios)
+7. [Fixing Violations](#fixing-violations)
+8. [Enforcement Configuration](#enforcement-configuration)
+9. [Claude Code Hooks Integration](#claude-code-hooks-integration)
+10. [AI Integration](#ai-integration)
 
 ## Overview
 
@@ -20,6 +21,7 @@ The ProjectTemplate enforcement system automatically maintains code quality and 
 - **VS Code extension** providing real-time warnings
 - **Fix commands** that automatically resolve common issues
 - **Documentation validation** ensuring consistent style
+- **Configuration validation** maintaining correct project settings
 
 This system supports AI-assisted development by maintaining clean, predictable project structures.
 
@@ -129,6 +131,94 @@ docs/reports/performance-analysis.md
 
 **Rationale**: Technical documentation should be measurable and timeless.
 
+## Configuration Validation
+
+**Configuration validation ensures project settings remain consistent and correct as development progresses.**
+
+### Overview
+
+The config enforcer validates:
+- **JSON configurations**: `package.json`, `tsconfig.json`, `.eslintrc.json`
+- **Environment files**: `.env`, `.env.example`, environment variable usage
+- **JavaScript configs**: `vite.config.js`, `webpack.config.js`, build configurations  
+- **YAML files**: GitHub Actions workflows, Docker Compose, CI/CD configs
+
+### Quick Commands
+
+```bash
+# Check all configuration files
+npm run check:config
+
+# Auto-fix configuration issues  
+npm run fix:config
+
+# Preview fixes without applying
+npm run fix:config:dry-run
+
+# Check specific config type
+npm run check:config -- --type=json
+npm run check:config -- --type=env
+```
+
+### Validation Rules
+
+**1. JSON Schema Validation**
+```bash
+✅ Valid: Proper JSON syntax, required fields present
+❌ Invalid: Missing dependencies, malformed JSON, incorrect field types
+```
+
+**2. Environment Variable Consistency**  
+```bash
+✅ Valid: All process.env usage documented in .env.example
+❌ Invalid: Undocumented environment variables in code
+```
+
+**3. Build Configuration Alignment**
+```bash
+✅ Valid: Vite config matches package.json scripts
+❌ Invalid: TypeScript paths mismatch between tsconfig and build config
+```
+
+**4. Cross-File Dependencies**
+```bash
+✅ Valid: package.json dependencies align with imports
+❌ Invalid: Missing dependencies for used packages
+```
+
+### Common Issues Fixed
+
+The config enforcer automatically resolves:
+
+- **Missing package.json fields**: Adds required metadata
+- **Outdated dependencies**: Flags version mismatches  
+- **Inconsistent TypeScript paths**: Aligns tsconfig with actual structure
+- **Environment variable gaps**: Ensures .env.example completeness
+- **Workflow file errors**: Validates GitHub Actions syntax
+
+### Integration with Development
+
+Configuration validation runs:
+- **During Claude Code hooks**: Prevents bad configs before file operations
+- **Pre-commit**: Blocks commits with configuration errors
+- **CI/CD pipelines**: Validates configs in automated builds
+- **Manual checks**: On-demand validation during development
+
+### Configuration Health Dashboard
+
+View current config status:
+```bash
+npm run check:config --report
+```
+
+Output includes:
+- Configuration file inventory (11 files validated)
+- Health scores by file type
+- Performance metrics (validation time ~12ms)
+- Specific violations with fix suggestions
+
+For detailed configuration validation usage, see: [Config Enforcer Guide](./config-enforcement.md)
+
 ## Working with Enforcement
 
 ### IDE Integration (VS Code)
@@ -151,10 +241,10 @@ Enforcement runs automatically on every commit:
 ```bash
 git commit -m "Add user authentication"
 # Automatically runs:
-# ✓ Check for improved files
-# ✓ Validate root directory
-# ✓ Check banned documents
-# ✓ Validate documentation style
+# Check for improved files
+# Validate root directory
+# Check banned documents
+# Validate documentation style
 ```
 
 ### Manual Checks
@@ -169,6 +259,13 @@ npm run check:all
 npm run check:root
 npm run check:banned-docs
 npm run check:documentation-style
+npm run check:config
+
+# Configuration-specific checks
+npm run check:config -- --type=json
+npm run check:config -- --type=env
+npm run fix:config
+npm run fix:config:dry-run
 ```
 
 ## Common Scenarios

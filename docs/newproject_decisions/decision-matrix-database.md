@@ -147,7 +147,7 @@ Firebase:    (Σ weight × score) / total_weight = ___
 - Single file database
 - Robust for version control
 - No server setup needed
-- Great local performance
+- Effective local performance
 
 **Architecture example:**
 
@@ -418,7 +418,7 @@ npm install @supabase/supabase-js
 ### SQLite (Zero Config)
 
 ```bash
-# No setup needed!
+# No setup needed
 npm install prisma @prisma/client
 npx prisma init --datasource-provider sqlite
 npx prisma db push

@@ -23,8 +23,62 @@ const SUPERLATIVE_REPLACEMENTS = {
   'incredible': 'comprehensive',
   'outstanding': 'well-designed',
   'wonderful': 'well-structured',
-  'brilliant': 'efficient'
+  'brilliant': 'efficient',
+  'great': 'effective',
+  'super': 'highly',
+  'terrific': 'efficient',
+  'fabulous': 'well-designed',
+  'marvelous': 'comprehensive',
+  'spectacular': 'significant',
+  'exceptional': 'notable',
+  'revolutionary': 'innovative',
+  'groundbreaking': 'innovative',
+  'game-changing': 'impactful'
 };
+
+// Announcement-style patterns to replace
+const ANNOUNCEMENT_PATTERNS = [
+  {
+    pattern: /We're excited to announce/gi,
+    replacement: 'This document describes'
+  },
+  {
+    pattern: /We're pleased to introduce/gi,
+    replacement: 'This section introduces'
+  },
+  {
+    pattern: /Successfully implemented/gi,
+    replacement: 'Implemented'
+  },
+  {
+    pattern: /Successfully completed/gi,
+    replacement: 'Completed'
+  },
+  {
+    pattern: /Successfully added/gi,
+    replacement: 'Added'
+  },
+  {
+    pattern: /I've implemented/gi,
+    replacement: 'Implemented'
+  },
+  {
+    pattern: /I've added/gi,
+    replacement: 'Added'
+  },
+  {
+    pattern: /I've created/gi,
+    replacement: 'Created'
+  },
+  {
+    pattern: /Let's explore/gi,
+    replacement: 'This section covers'
+  },
+  {
+    pattern: /Let's dive into/gi,
+    replacement: 'This section examines'
+  }
+];
 
 // Common code block language detection
 const CODE_PATTERNS = {
@@ -97,6 +151,26 @@ function fixSuperlatives(content) {
       return replacement.charAt(0).toUpperCase() + replacement.slice(1);
     });
   }
+  
+  return fixed;
+}
+
+function fixAnnouncementStyle(content) {
+  let fixed = content;
+  
+  for (const { pattern, replacement } of ANNOUNCEMENT_PATTERNS) {
+    fixed = fixed.replace(pattern, replacement);
+  }
+  
+  // Fix exclamation marks in headers
+  fixed = fixed.replace(/^(#{1,6}[^#\n]+)!+$/gm, '$1');
+  
+  // Remove completion/status indicators
+  fixed = fixed.replace(/^(#{1,6})\s*✅\s*/gm, '$1 ');
+  fixed = fixed.replace(/^(#{1,6})\s*✓\s*/gm, '$1 ');
+  fixed = fixed.replace(/\s*\[COMPLETE\]/gi, '');
+  fixed = fixed.replace(/\s*\[DONE\]/gi, '');
+  fixed = fixed.replace(/\s*\[FINISHED\]/gi, '');
   
   return fixed;
 }
@@ -198,9 +272,10 @@ function fixDocument(filePath) {
     let content = fs.readFileSync(filePath, 'utf8');
     const originalContent = content;
     
-    // Apply fixes
-    content = fixLineLength(content);
+    // Apply fixes in order
+    content = fixAnnouncementStyle(content);
     content = fixSuperlatives(content);
+    content = fixLineLength(content);
     content = fixCodeBlocks(content);
     
     // Add TOC if document is long enough and doesn't already have one
@@ -214,8 +289,9 @@ function fixDocument(filePath) {
       return {
         fixed: true,
         changes: [
-          'Line length optimized',
+          'Announcement-style language replaced',
           'Superlatives replaced with technical terms',
+          'Line length optimized',
           'Code blocks properly labeled',
           'Table of contents added (if needed)'
         ]

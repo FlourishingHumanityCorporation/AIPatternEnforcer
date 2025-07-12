@@ -52,7 +52,7 @@ npm run claude:stats
 
 ## Key Patterns
 
-### ✅ What Claude Should Do
+### What Claude Should Do
 
 **Complex Requests (promptImprovement + todoWriteUsage + generatorUsage):**
 ```text

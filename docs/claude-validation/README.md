@@ -128,7 +128,7 @@ npm run claude:dashboard
 
 ## 🎯 Examples
 
-### ✅ Good Complex Response
+### Good Complex Response
 ```text
 **Improved Prompt**: Create a React login component with form validation and API integration.
 
@@ -148,7 +148,7 @@ I'll create an improved version of your login component.
 Let me create login_improved.js with better validation...
 ```
 
-### ✅ Good Simple Response
+### Good Simple Response
 ```text
 Use the useState hook for local component state:
 

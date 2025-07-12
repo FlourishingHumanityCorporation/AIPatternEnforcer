@@ -369,6 +369,22 @@ class ConfigEnforcer {
       }
     }
 
+    // Run cross-file validation if enabled
+    if (this.config.crossFileValidation.enabled && this.validators.has('cross-file')) {
+      const crossFileValidator = this.validators.get('cross-file');
+      const crossFileResult = await crossFileValidator.validate();
+      
+      crossFileResult.fileType = 'cross-file';
+      crossFileResult.filePath = 'project-wide';
+      results.push(crossFileResult);
+      
+      this.stats.filesAnalyzed++;
+      if (!crossFileResult.isValid) {
+        this.violations.push(crossFileResult);
+        this.stats.violations += crossFileResult.violations.length;
+      }
+    }
+
     const endTime = performance.now();
     this.stats.timeElapsed = endTime - startTime;
 

@@ -536,7 +536,7 @@ npm install -D vite @vitejs/plugin-react
 
 **Recommended:** Vite
 **Alternative:** Parcel 2
-**Why:** Fast HMR, great DX, minimal config
+**Why:** Fast HMR, effective DX, minimal config
 
 ### Static Site Generator
 

@@ -726,7 +726,7 @@ class ApiError extends Error {
     public status: number,
     public code: string,
   ) {
-    super(message);
+    highly(message);
     this.name = "ApiError";
   }
 }

@@ -690,7 +690,7 @@ echo "GraphQL patterns" > docs/architecture/patterns/graphql/schema-design.md
    ```
 
 3. **Knowledge Sharing**
-   - Save exceptional AI conversations
+   - Save notable AI conversations
    - Document clever solutions
    - Share debugging victories
 

@@ -164,7 +164,7 @@ app.get("/api/users", async (req, res) => {
 - Robust REPL and notebook support
 - Simple virtual environment setup
 - No compilation needed
-- Great for exploratory programming
+- Effective for exploratory programming
 - Extensive scientific libraries
 
 **Example architecture:**
@@ -206,7 +206,7 @@ async def get_users(db: AsyncSession):
 - Fast compilation
 - Minimal dependencies
 - Built-in testing and benchmarking
-- Great for local network tools
+- Effective for local network tools
 
 **Example architecture:**
 
@@ -254,7 +254,7 @@ func main() {
 
 - Robust error messages
 - Cargo is reliable package manager
-- Great for learning low-level concepts
+- Effective for learning low-level concepts
 - Memory safety without GC
 - Strong local tooling (rustup, cargo)
 

@@ -1,0 +1,33 @@
+{
+  "timestamp": "2025-07-12T16:38:03.028Z",
+  "fake": {
+    "level": "Unknown",
+    "readinessLevel": "development-only",
+    "claimedCompliance": {},
+    "reportedViolations": 0
+  },
+  "real": {
+    "level": 0,
+    "levelName": "Critical Issues",
+    "readinessLevel": "not-ready",
+    "actualCompliance": {
+      "criticalFailures": 3,
+      "totalViolations": 2520,
+      "passedChecks": 3,
+      "totalChecks": 7,
+      "testCoverage": "8%"
+    },
+    "actualViolations": {
+      "logging": 1690,
+      "linting": 11,
+      "documentation": 818,
+      "imports": 0
+    },
+    "totalViolations": 2520
+  },
+  "discrepancies": {
+    "levelDifference": 0,
+    "violationsDifference": 2520,
+    "falseReadiness": false
+  }
+}

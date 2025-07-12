@@ -19,7 +19,8 @@
 
 ## Overview
 
-Advanced React component generator with AI-optimized templates and rich UI patterns. Goes beyond basic scaffolding to provide complete, production-ready components with sophisticated state management, accessibility, and testing patterns.
+Advanced React component generator with AI-optimized templates and rich UI patterns. Goes beyond basic scaffolding to
+provide complete, production-ready components with sophisticated state management, accessibility, and testing patterns.
 
 **Tool Type**: Advanced CLI Code Generator  
 **Language**: JavaScript (Node.js)  
@@ -29,7 +30,7 @@ Advanced React component generator with AI-optimized templates and rich UI patte
 ## Quick Start
 
 ```bash
-# Interactive mode - best for learning
+# Interactive mode - optimal for learning
 node tools/generators/enhanced-component-generator.js MyComponent --interactive
 
 # Generate from template type
