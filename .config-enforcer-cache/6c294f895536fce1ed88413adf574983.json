@@ -1,0 +1,60 @@
+{
+  "timestamp": 1752339367631,
+  "result": {
+    "isValid": false,
+    "violations": [
+      {
+        "type": "suboptimal_compiler_option",
+        "message": "tsconfig.json: recommend setting noImplicitReturns to true",
+        "severity": "info",
+        "option": "noImplicitReturns",
+        "expectedValue": true
+      },
+      {
+        "type": "suboptimal_compiler_option",
+        "message": "tsconfig.json: recommend setting noFallthroughCasesInSwitch to true",
+        "severity": "info",
+        "option": "noFallthroughCasesInSwitch",
+        "expectedValue": true
+      },
+      {
+        "type": "suboptimal_compiler_option",
+        "message": "tsconfig.json: recommend setting moduleResolution to node",
+        "severity": "info",
+        "option": "moduleResolution",
+        "expectedValue": "node"
+      },
+      {
+        "type": "json_formatting",
+        "message": "JSON file formatting is inconsistent",
+        "severity": "warning"
+      }
+    ],
+    "fixes": [
+      {
+        "type": "update_compiler_option",
+        "option": "noImplicitReturns",
+        "value": true,
+        "description": "Set noImplicitReturns to true"
+      },
+      {
+        "type": "update_compiler_option",
+        "option": "noFallthroughCasesInSwitch",
+        "value": true,
+        "description": "Set noFallthroughCasesInSwitch to true"
+      },
+      {
+        "type": "update_compiler_option",
+        "option": "moduleResolution",
+        "value": "node",
+        "description": "Set moduleResolution to node"
+      },
+      {
+        "type": "format_json",
+        "content": "{\n  \"compilerOptions\": {\n    \"module\": \"commonjs\",\n    \"target\": \"ES2020\",\n    \"outDir\": \"out\",\n    \"lib\": [\n      \"ES2020\"\n    ],\n    \"sourceMap\": true,\n    \"rootDir\": \"src\",\n    \"strict\": true,\n    \"esModuleInterop\": true,\n    \"skipLibCheck\": true,\n    \"forceConsistentCasingInFileNames\": true\n  },\n  \"exclude\": [\n    \"node_modules\",\n    \".vscode-test\"\n  ]\n}",
+        "description": "Format JSON with consistent 2-space indentation"
+      }
+    ],
+    "validationTime": 0.06037497520446777
+  }
+}

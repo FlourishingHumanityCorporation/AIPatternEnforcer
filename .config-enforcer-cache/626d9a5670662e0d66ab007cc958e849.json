@@ -1,0 +1,42 @@
+{
+  "timestamp": 1752339367638,
+  "result": {
+    "isValid": true,
+    "violations": [
+      {
+        "type": "yaml_trailing_whitespace",
+        "message": "Line 221 has trailing whitespace",
+        "severity": "info",
+        "line": 221
+      },
+      {
+        "type": "yaml_trailing_whitespace",
+        "message": "Line 222 has trailing whitespace",
+        "severity": "info",
+        "line": 222
+      },
+      {
+        "type": "yaml_mixed_indentation",
+        "message": "YAML file has mixed indentation styles",
+        "severity": "info"
+      }
+    ],
+    "fixes": [
+      {
+        "type": "remove_trailing_whitespace",
+        "line": 221,
+        "description": "Remove trailing whitespace on line 221"
+      },
+      {
+        "type": "remove_trailing_whitespace",
+        "line": 222,
+        "description": "Remove trailing whitespace on line 222"
+      },
+      {
+        "type": "standardize_indentation",
+        "description": "Standardize to 2-space indentation"
+      }
+    ],
+    "validationTime": 0.19633400440216064
+  }
+}

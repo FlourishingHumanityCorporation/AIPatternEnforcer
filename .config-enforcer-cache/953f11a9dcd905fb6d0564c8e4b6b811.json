@@ -1,0 +1,21 @@
+{
+  "timestamp": 1752339367633,
+  "result": {
+    "isValid": false,
+    "violations": [
+      {
+        "type": "json_formatting",
+        "message": "JSON file formatting is inconsistent",
+        "severity": "warning"
+      }
+    ],
+    "fixes": [
+      {
+        "type": "format_json",
+        "content": "{\n  \"headers\": {\n    \"Strict-Transport-Security\": {\n      \"value\": \"max-age=63072000; includeSubDomains; preload\",\n      \"description\": \"Forces HTTPS connections for 2 years\"\n    },\n    \"X-Content-Type-Options\": {\n      \"value\": \"nosniff\",\n      \"description\": \"Prevents MIME type sniffing\"\n    },\n    \"X-Frame-Options\": {\n      \"value\": \"DENY\",\n      \"description\": \"Prevents clickjacking by denying iframe embedding\"\n    },\n    \"X-XSS-Protection\": {\n      \"value\": \"1; mode=block\",\n      \"description\": \"Enables XSS filtering in older browsers\"\n    },\n    \"Referrer-Policy\": {\n      \"value\": \"strict-origin-when-cross-origin\",\n      \"description\": \"Controls referrer information sent with requests\"\n    },\n    \"Permissions-Policy\": {\n      \"value\": \"camera=(), microphone=(), geolocation=()\",\n      \"description\": \"Restricts browser features\"\n    },\n    \"Content-Security-Policy\": {\n      \"value\": \"See csp-policy.json for detailed policy\",\n      \"description\": \"Controls resources the browser can load\"\n    }\n  },\n  \"implementation\": {\n    \"nextjs\": {\n      \"file\": \"next.config.js\",\n      \"example\": \"async headers() { return [{ source: '/(.*)', headers: [...] }] }\"\n    },\n    \"express\": {\n      \"package\": \"helmet\",\n      \"example\": \"app.use(helmet({ contentSecurityPolicy: false }));\"\n    },\n    \"nginx\": {\n      \"file\": \"nginx.conf\",\n      \"example\": \"add_header X-Frame-Options \\\"DENY\\\" always;\"\n    }\n  },\n  \"testing\": {\n    \"tools\": [\n      \"securityheaders.com\",\n      \"Mozilla Observatory\",\n      \"SSL Labs\"\n    ],\n    \"command\": \"npm run test:security:headers\"\n  },\n  \"exceptions\": {\n    \"development\": {\n      \"Strict-Transport-Security\": \"Disabled in development\",\n      \"Content-Security-Policy\": \"Relaxed for hot reload\"\n    },\n    \"embed\": {\n      \"X-Frame-Options\": \"SAMEORIGIN for embed routes\",\n      \"routes\": [\n        \"/embed/*\",\n        \"/widget/*\"\n      ]\n    }\n  }\n}",
+        "description": "Format JSON with consistent 2-space indentation"
+      }
+    ],
+    "validationTime": 0.06229197978973389
+  }
+}

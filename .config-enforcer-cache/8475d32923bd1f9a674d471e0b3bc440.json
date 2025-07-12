@@ -1,0 +1,22 @@
+{
+  "timestamp": 1752339367636,
+  "result": {
+    "isValid": true,
+    "violations": [
+      {
+        "type": "missing_common_env",
+        "message": "Consider documenting common environment variable: DATABASE_URL",
+        "severity": "info",
+        "envVar": "DATABASE_URL"
+      }
+    ],
+    "fixes": [
+      {
+        "type": "add_common_env",
+        "envVar": "DATABASE_URL",
+        "description": "Add DATABASE_URL documentation"
+      }
+    ],
+    "validationTime": 0.6309999227523804
+  }
+}
