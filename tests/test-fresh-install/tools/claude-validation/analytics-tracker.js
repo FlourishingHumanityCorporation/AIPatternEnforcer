@@ -14,12 +14,12 @@ class AnalyticsTracker {
     this.analyticsDir = path.join(__dirname, '.analytics');
     this.statsFile = path.join(this.analyticsDir, 'usage-stats.json');
     this.sessionsFile = path.join(this.analyticsDir, 'sessions.json');
-    
+
     // Ensure analytics directory exists
     if (!fs.existsSync(this.analyticsDir)) {
       fs.mkdirSync(this.analyticsDir, { recursive: true });
     }
-    
+
     this.ensureStatsFile();
   }
 
@@ -54,7 +54,7 @@ class AnalyticsTracker {
     try {
       return JSON.parse(fs.readFileSync(this.statsFile, 'utf-8'));
     } catch (error) {
-      console.warn('Analytics: Could not load stats, using defaults');
+      logger.warn('Analytics: Could not load stats, using defaults');
       this.ensureStatsFile();
       return this.loadStats();
     }
@@ -64,7 +64,7 @@ class AnalyticsTracker {
     try {
       fs.writeFileSync(this.statsFile, JSON.stringify(stats, null, 2));
     } catch (error) {
-      console.warn('Analytics: Could not save stats:', error.message);
+      logger.warn('Analytics: Could not save stats:', error.message);
     }
   }
 
@@ -79,10 +79,10 @@ class AnalyticsTracker {
   trackValidation(options = {}) {
     const stats = this.loadStats();
     const today = new Date().toISOString().split('T')[0];
-    
+
     // Update totals
     stats.totalValidations++;
-    
+
     // Track daily usage
     if (!stats.daily[today]) {
       stats.daily[today] = {
@@ -94,50 +94,50 @@ class AnalyticsTracker {
         scoreSum: 0
       };
     }
-    
+
     stats.daily[today].validations++;
-    
+
     // Track validation result
     if (options.passed === true) {
       stats.daily[today].passed++;
     } else if (options.passed === false) {
       stats.daily[today].failed++;
     }
-    
+
     // Track score
     if (options.score !== undefined) {
       stats.daily[today].scoreSum += options.score;
       stats.daily[today].avgScore = stats.daily[today].scoreSum / stats.daily[today].validations;
     }
-    
+
     // Track patterns
     if (options.violations && Array.isArray(options.violations)) {
-      options.violations.forEach(violation => {
+      options.violations.forEach((violation) => {
         if (!stats.patterns[violation.rule]) {
           stats.patterns[violation.rule] = { violations: 0, severity: violation.severity };
         }
         stats.patterns[violation.rule].violations++;
-        
+
         if (!stats.daily[today].patterns[violation.rule]) {
           stats.daily[today].patterns[violation.rule] = 0;
         }
         stats.daily[today].patterns[violation.rule]++;
       });
     }
-    
+
     // Track context flags
     if (options.isComplex !== undefined) {
       if (!stats.daily[today].context) stats.daily[today].context = {};
       stats.daily[today].context.complex = (stats.daily[today].context.complex || 0) + (options.isComplex ? 1 : 0);
       stats.daily[today].context.simple = (stats.daily[today].context.simple || 0) + (options.isComplex ? 0 : 1);
     }
-    
+
     // Track performance
     if (options.processingTime !== undefined) {
       stats.performance.totalProcessingTime += options.processingTime;
       stats.performance.averageResponseTime = stats.performance.totalProcessingTime / stats.totalValidations;
     }
-    
+
     this.saveStats(stats);
   }
 
@@ -145,23 +145,23 @@ class AnalyticsTracker {
   trackConfigChange(changeType, pattern = null, value = null) {
     const stats = this.loadStats();
     stats.userBehavior.configurationChanges++;
-    
+
     const today = new Date().toISOString().split('T')[0];
     if (!stats.daily[today]) {
       stats.daily[today] = { validations: 0, passed: 0, failed: 0, patterns: {} };
     }
-    
+
     if (!stats.daily[today].configChanges) {
       stats.daily[today].configChanges = [];
     }
-    
+
     stats.daily[today].configChanges.push({
       type: changeType,
       pattern,
       value,
       timestamp: new Date().toISOString()
     });
-    
+
     this.saveStats(stats);
   }
 
@@ -169,18 +169,18 @@ class AnalyticsTracker {
   trackHelpUsage(helpType = 'general') {
     const stats = this.loadStats();
     stats.userBehavior.helpViewCount++;
-    
+
     const today = new Date().toISOString().split('T')[0];
     if (!stats.daily[today]) {
       stats.daily[today] = { validations: 0, passed: 0, failed: 0, patterns: {} };
     }
-    
+
     if (!stats.daily[today].helpViews) {
       stats.daily[today].helpViews = {};
     }
-    
+
     stats.daily[today].helpViews[helpType] = (stats.daily[today].helpViews[helpType] || 0) + 1;
-    
+
     this.saveStats(stats);
   }
 
@@ -194,7 +194,7 @@ class AnalyticsTracker {
       timestamp: new Date().toISOString(),
       context: JSON.stringify(context).substring(0, 500)
     };
-    
+
     this.saveStats(stats);
   }
 
@@ -214,48 +214,48 @@ class AnalyticsTracker {
         lastError: stats.systemHealth.lastError
       }
     };
-    
+
     // Calculate compliance rate
     let totalPassed = 0;
     let totalFailed = 0;
-    
+
     // Get last N days of data
     for (let i = 0; i < days; i++) {
       const date = new Date(today);
       date.setDate(date.getDate() - i);
       const dateStr = date.toISOString().split('T')[0];
-      
+
       if (stats.daily[dateStr]) {
         const dayData = stats.daily[dateStr];
         totalPassed += dayData.passed || 0;
         totalFailed += dayData.failed || 0;
-        
+
         summary.dailyTrends[dateStr] = {
           validations: dayData.validations || 0,
           passed: dayData.passed || 0,
           failed: dayData.failed || 0,
           avgScore: Math.round(dayData.avgScore || 0),
-          complianceRate: dayData.validations > 0 
-            ? Math.round(((dayData.passed || 0) / dayData.validations) * 100)
-            : 0
+          complianceRate: dayData.validations > 0 ?
+          Math.round((dayData.passed || 0) / dayData.validations * 100) :
+          0
         };
       }
     }
-    
-    summary.overallComplianceRate = totalPassed + totalFailed > 0 
-      ? Math.round((totalPassed / (totalPassed + totalFailed)) * 100)
-      : 0;
-    
+
+    summary.overallComplianceRate = totalPassed + totalFailed > 0 ?
+    Math.round(totalPassed / (totalPassed + totalFailed) * 100) :
+    0;
+
     // Top violations
-    summary.topViolations = Object.entries(stats.patterns)
-      .sort((a, b) => b[1].violations - a[1].violations)
-      .slice(0, 5)
-      .map(([rule, data]) => ({
-        rule,
-        violations: data.violations,
-        severity: data.severity
-      }));
-    
+    summary.topViolations = Object.entries(stats.patterns).
+    sort((a, b) => b[1].violations - a[1].violations).
+    slice(0, 5).
+    map(([rule, data]) => ({
+      rule,
+      violations: data.violations,
+      severity: data.severity
+    }));
+
     return summary;
   }
 
@@ -263,7 +263,7 @@ class AnalyticsTracker {
   exportAnalytics() {
     const stats = this.loadStats();
     const summary = this.getAnalyticsSummary(30); // 30 days
-    
+
     return {
       exportDate: new Date().toISOString(),
       summary,
@@ -278,11 +278,11 @@ class AnalyticsTracker {
         },
         // Last 30 days only
         dailyStats: Object.fromEntries(
-          Object.entries(stats.daily)
-            .filter(([date]) => {
-              const daysDiff = (new Date() - new Date(date)) / (1000 * 60 * 60 * 24);
-              return daysDiff <= 30;
-            })
+          Object.entries(stats.daily).
+          filter(([date]) => {
+            const daysDiff = (new Date() - new Date(date)) / (1000 * 60 * 60 * 24);
+            return daysDiff <= 30;
+          })
         )
       }
     };
@@ -294,14 +294,14 @@ class AnalyticsTracker {
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - 90);
     const cutoffStr = cutoffDate.toISOString().split('T')[0];
-    
+
     const newDaily = {};
     Object.entries(stats.daily).forEach(([date, data]) => {
       if (date >= cutoffStr) {
         newDaily[date] = data;
       }
     });
-    
+
     stats.daily = newDaily;
     this.saveStats(stats);
   }
@@ -314,14 +314,14 @@ if (require.main === module) {
 
   switch (command) {
     case 'summary':
-      console.log(JSON.stringify(tracker.getAnalyticsSummary(), null, 2));
+      logger.info(JSON.stringify(tracker.getAnalyticsSummary(), null, 2));
       break;
     case 'export':
-      console.log(JSON.stringify(tracker.exportAnalytics(), null, 2));
+      logger.info(JSON.stringify(tracker.exportAnalytics(), null, 2));
       break;
     case 'clean':
       tracker.cleanOldData();
-      console.log('Old analytics data cleaned');
+      logger.info('Old analytics data cleaned');
       break;
     case 'track':
       // Manual tracking for testing
@@ -330,10 +330,10 @@ if (require.main === module) {
         score: parseInt(process.argv[4]) || 100,
         processingTime: 50
       });
-      console.log('Test validation tracked');
+      logger.info('Test validation tracked');
       break;
     default:
-      console.log(`
+      logger.info(`
 Analytics Tracker Commands:
   summary    Show usage summary
   export     Export anonymized data  

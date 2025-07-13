@@ -79,10 +79,10 @@ ensures consistency, prevents common errors, and maintains security optimal prac
 
 ```bash
 # Check all configuration files
-npm run check:config
+npm run check:all
 
 # Check quietly (for scripts)
-npm run check:config:quiet
+npm run check:all:quiet
 
 # Check as part of all enforcement rules
 npm run check:all
@@ -92,10 +92,10 @@ npm run check:all
 
 ```bash
 # Apply automatic fixes to configuration files
-npm run fix:config
+npm run check:all
 
 # Preview fixes without applying them
-npm run fix:config:dry-run
+npm run check:all:dry-run
 ```
 
 ### Enforcement Status
@@ -230,10 +230,10 @@ All auto-fixes include safety features:
 
 ```bash
 # 1. Check initial configuration state
-npm run check:config
+npm run check:all
 
 # 2. Apply recommended fixes
-npm run fix:config
+npm run check:all
 
 # 3. Verify all configurations are valid
 npm run check:all
@@ -243,7 +243,7 @@ npm run check:all
 
 ```bash
 # Check and fix any configuration issues
-npm run fix:config
+npm run check:all
 
 # Verify enforcement compliance
 npm run check:all
@@ -257,16 +257,16 @@ git commit -m "Updated project configuration"
 
 ```bash
 # Check configuration with detailed output
-npm run check:config
+npm run check:all
 
 # Preview what would be fixed
-npm run fix:config:dry-run
+npm run check:all:dry-run
 
 # Apply fixes incrementally
-npm run fix:config
+npm run check:all
 
 # Verify the fixes worked
-npm run check:config
+npm run check:all
 ```
 
 ## Examples
@@ -352,7 +352,7 @@ The config enforcer includes performance optimizations:
 node tools/enforcement/config-enforcer.js clear-cache
 
 # View cache statistics (included in validation output)
-npm run check:config
+npm run check:all
 # Files analyzed: 8, Cache hits: 5, Time elapsed: 15ms
 ```
 
@@ -381,7 +381,7 @@ npm run enforcement:config set-level WARNING
 **Auto-fix not working**:
 ```bash
 # Check if auto-fix is enabled for the file type
-npm run check:config
+npm run check:all
 
 # Enable auto-fix in configuration
 # (Edit .config-enforcer.json)
@@ -445,7 +445,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
       - run: npm install
-      - run: npm run check:config
+      - run: npm run check:all
 ```
 
 ### Custom Validators

@@ -16,14 +16,14 @@ export async function POST(req: NextRequest) {
     if (!image && !imageUrl) {
       return new Response(JSON.stringify({ error: "No image provided" }), {
         status: 400,
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" }
       });
     }
 
     if (!prompt) {
       return new Response(JSON.stringify({ error: "No prompt provided" }), {
         status: 400,
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" }
       });
     }
 
@@ -34,18 +34,18 @@ export async function POST(req: NextRequest) {
     if (image) {
       // Validate image type
       const allowedTypes = [
-        "image/png",
-        "image/jpeg",
-        "image/gif",
-        "image/webp",
-      ];
+      "image/png",
+      "image/jpeg",
+      "image/gif",
+      "image/webp"];
+
       if (!allowedTypes.includes(image.type)) {
         return new Response(
           JSON.stringify({ error: "Unsupported image type" }),
           {
             status: 400,
-            headers: { "Content-Type": "application/json" },
-          },
+            headers: { "Content-Type": "application/json" }
+          }
         );
       }
 
@@ -55,8 +55,8 @@ export async function POST(req: NextRequest) {
           JSON.stringify({ error: "Image too large (max 5MB)" }),
           {
             status: 400,
-            headers: { "Content-Type": "application/json" },
-          },
+            headers: { "Content-Type": "application/json" }
+          }
         );
       }
 
@@ -82,9 +82,9 @@ export async function POST(req: NextRequest) {
               model: "llava", // Vision model in Ollama
               prompt,
               images: [imageData],
-              stream: false,
-            }),
-          },
+              stream: false
+            })
+          }
         );
 
         if (response.ok) {
@@ -95,7 +95,7 @@ export async function POST(req: NextRequest) {
           throw new Error("Local vision model not available");
         }
       } catch (error) {
-        console.error("Local vision model error:", error);
+        logger.error("Local vision model error:", error);
 
         // Fallback to OpenAI Vision
         if (process.env.OPENAI_API_KEY && imageData) {
@@ -106,29 +106,29 @@ export async function POST(req: NextRequest) {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
-                  Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+                  Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
                 },
                 body: JSON.stringify({
                   model: "gpt-4-vision-preview",
                   messages: [
+                  {
+                    role: "user",
+                    content: [
+                    { type: "text", text: prompt },
                     {
-                      role: "user",
-                      content: [
-                        { type: "text", text: prompt },
-                        {
-                          type: "image_url",
-                          image_url: {
-                            url:
-                              imageUrl ||
-                              `data:${imageType};base64,${imageData}`,
-                          },
-                        },
-                      ],
-                    },
-                  ],
-                  max_tokens: 500,
-                }),
-              },
+                      type: "image_url",
+                      image_url: {
+                        url:
+                        imageUrl ||
+                        `data:${imageType};base64,${imageData}`
+                      }
+                    }]
+
+                  }],
+
+                  max_tokens: 500
+                })
+              }
             );
 
             if (openaiResponse.ok) {
@@ -139,7 +139,7 @@ export async function POST(req: NextRequest) {
               throw new Error("OpenAI Vision API failed");
             }
           } catch (openaiError) {
-            console.error("OpenAI Vision error:", openaiError);
+            logger.error("OpenAI Vision error:", openaiError);
             throw new Error("Vision analysis failed");
           }
         } else {
@@ -156,28 +156,28 @@ export async function POST(req: NextRequest) {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+                Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
               },
               body: JSON.stringify({
                 model: "gpt-4-vision-preview",
                 messages: [
+                {
+                  role: "user",
+                  content: [
+                  { type: "text", text: prompt },
                   {
-                    role: "user",
-                    content: [
-                      { type: "text", text: prompt },
-                      {
-                        type: "image_url",
-                        image_url: {
-                          url:
-                            imageUrl || `data:${imageType};base64,${imageData}`,
-                        },
-                      },
-                    ],
-                  },
-                ],
-                max_tokens: 500,
-              }),
-            },
+                    type: "image_url",
+                    image_url: {
+                      url:
+                      imageUrl || `data:${imageType};base64,${imageData}`
+                    }
+                  }]
+
+                }],
+
+                max_tokens: 500
+              })
+            }
           );
 
           if (openaiResponse.ok) {
@@ -188,7 +188,7 @@ export async function POST(req: NextRequest) {
             throw new Error("OpenAI Vision API failed");
           }
         } catch (error) {
-          console.error("OpenAI Vision error:", error);
+          logger.error("OpenAI Vision error:", error);
           throw new Error("Vision analysis failed");
         }
       } else {
@@ -201,30 +201,30 @@ export async function POST(req: NextRequest) {
         analysis: analysisResult,
         prompt,
         provider,
-        imageInfo: image
-          ? {
-              filename: image.name,
-              size: image.size,
-              type: image.type,
-            }
-          : { url: imageUrl },
-        timestamp: new Date().toISOString(),
+        imageInfo: image ?
+        {
+          filename: image.name,
+          size: image.size,
+          type: image.type
+        } :
+        { url: imageUrl },
+        timestamp: new Date().toISOString()
       }),
       {
-        headers: { "Content-Type": "application/json" },
-      },
+        headers: { "Content-Type": "application/json" }
+      }
     );
   } catch (error) {
-    console.error("Vision API error:", error);
+    logger.error("Vision API error:", error);
     return new Response(
       JSON.stringify({
         error:
-          error instanceof Error ? error.message : "Vision analysis failed",
+        error instanceof Error ? error.message : "Vision analysis failed"
       }),
       {
         status: 500,
-        headers: { "Content-Type": "application/json" },
-      },
+        headers: { "Content-Type": "application/json" }
+      }
     );
   }
 }

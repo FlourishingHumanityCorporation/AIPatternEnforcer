@@ -16,10 +16,10 @@ Handlebars.registerHelper("camelCase", (str) => {
 });
 
 Handlebars.registerHelper("pascalCase", (str) => {
-  return str
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join("");
+  return str.
+  split("-").
+  map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).
+  join("");
 });
 
 // Feature generator configuration
@@ -32,8 +32,8 @@ const config = {
     store: true,
     types: true,
     utils: true,
-    tests: true,
-  },
+    tests: true
+  }
 };
 
 // Template definitions
@@ -505,12 +505,12 @@ To extend this feature:
 3. Add new components in \`components/\`
 4. Create custom hooks in \`hooks/\`
 5. Add tests in \`__tests__/\`
-`,
+`
 };
 
 // Generate feature files
 async function generateFeature(name, options) {
-  console.log(chalk.blue(`\n🚀 Generating feature: ${name}\n`));
+  logger.info(chalk.blue(`\n🚀 Generating feature: ${name}\n`));
 
   // Convert to kebab-case for directory name
   const featureDirName = name.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
@@ -519,13 +519,13 @@ async function generateFeature(name, options) {
   try {
     await fs.mkdir(featureDir, { recursive: true });
   } catch (error) {
-    console.error(chalk.red(`❌ Failed to create directory: ${error.message}`));
+    logger.error(chalk.red(`❌ Failed to create directory: ${error.message}`));
     process.exit(1);
   }
 
   // Create subdirectories
   const subdirs = Object.keys(config.structure).filter(
-    (key) => config.structure[key],
+    (key) => config.structure[key]
   );
   for (const subdir of subdirs) {
     if (subdir === "tests") {
@@ -540,24 +540,24 @@ async function generateFeature(name, options) {
 
   // Files to generate
   const files = [
-    { path: "index.ts", template: templates.index },
-    { path: "README.md", template: templates.readme },
-  ];
+  { path: "index.ts", template: templates.index },
+  { path: "README.md", template: templates.readme }];
+
 
   if (config.structure.types) {
     files.push(
       {
         path: `types/${context.kebabCase}.types.ts`,
-        template: templates.types,
+        template: templates.types
       },
-      { path: "types/index.ts", template: templates.typesIndex },
+      { path: "types/index.ts", template: templates.typesIndex }
     );
   }
 
   if (config.structure.api) {
     files.push(
       { path: `api/${context.kebabCase}.api.ts`, template: templates.api },
-      { path: "api/index.ts", template: templates.apiIndex },
+      { path: "api/index.ts", template: templates.apiIndex }
     );
   }
 
@@ -565,16 +565,16 @@ async function generateFeature(name, options) {
     files.push(
       {
         path: `store/${context.kebabCase}.store.tsx`,
-        template: templates.store,
+        template: templates.store
       },
-      { path: "store/index.ts", template: templates.storeIndex },
+      { path: "store/index.ts", template: templates.storeIndex }
     );
   }
 
   if (config.structure.hooks) {
     files.push(
       { path: `hooks/use${name}.ts`, template: templates.hooks },
-      { path: "hooks/index.ts", template: templates.hooksIndex },
+      { path: "hooks/index.ts", template: templates.hooksIndex }
     );
   }
 
@@ -583,16 +583,16 @@ async function generateFeature(name, options) {
       { path: `components/${name}View.tsx`, template: templates.component },
       {
         path: `components/${name}.module.css`,
-        template: templates.componentStyles,
+        template: templates.componentStyles
       },
-      { path: "components/index.ts", template: templates.componentsIndex },
+      { path: "components/index.ts", template: templates.componentsIndex }
     );
   }
 
   if (config.structure.tests) {
     files.push({
       path: `__tests__/${context.kebabCase}.test.tsx`,
-      template: templates.test,
+      template: templates.test
     });
   }
 
@@ -604,7 +604,7 @@ async function generateFeature(name, options) {
     if (!options.force) {
       try {
         await fs.access(filePath);
-        console.log(chalk.yellow(`⚠️  Skipping ${file.path} (already exists)`));
+        logger.info(chalk.yellow(`⚠️  Skipping ${file.path} (already exists)`));
         continue;
       } catch {}
     }
@@ -615,71 +615,71 @@ async function generateFeature(name, options) {
 
     try {
       await fs.writeFile(filePath, content);
-      console.log(chalk.green(`✅ Created ${file.path}`));
+      logger.info(chalk.green(`✅ Created ${file.path}`));
     } catch (error) {
-      console.error(
-        chalk.red(`❌ Failed to create ${file.path}: ${error.message}`),
-      );
+      logger.error(
+        chalk.red(`❌ Failed to create ${file.path}: ${error.message}`));
+
     }
   }
 
   // Success message
-  console.log(chalk.green(`\n✨ Feature ${name} generated successfully!\n`));
-  console.log(chalk.cyan("📁 Structure created:"));
-  console.log(chalk.gray(`   ${featureDir}/`));
-  console.log(chalk.gray(`   ├── api/`));
-  console.log(chalk.gray(`   ├── components/`));
-  console.log(chalk.gray(`   ├── hooks/`));
-  console.log(chalk.gray(`   ├── store/`));
-  console.log(chalk.gray(`   ├── types/`));
-  console.log(chalk.gray(`   ├── __tests__/`));
-  console.log(chalk.gray(`   ├── index.ts`));
-  console.log(chalk.gray(`   └── README.md`));
+  logger.info(chalk.green(`\n✨ Feature ${name} generated successfully!\n`));
+  logger.info(chalk.cyan("📁 Structure created:"));
+  logger.info(chalk.gray(`   ${featureDir}/`));
+  logger.info(chalk.gray(`   ├── api/`));
+  logger.info(chalk.gray(`   ├── components/`));
+  logger.info(chalk.gray(`   ├── hooks/`));
+  logger.info(chalk.gray(`   ├── store/`));
+  logger.info(chalk.gray(`   ├── types/`));
+  logger.info(chalk.gray(`   ├── __tests__/`));
+  logger.info(chalk.gray(`   ├── index.ts`));
+  logger.info(chalk.gray(`   └── README.md`));
 
-  console.log(chalk.cyan("\n🎯 Next steps:"));
-  console.log(
+  logger.info(chalk.cyan("\n🎯 Next steps:"));
+  logger.info(
     chalk.gray(
-      `   1. Import feature: import { ${name}View } from '${path.relative(process.cwd(), featureDir)}';`,
-    ),
-  );
-  console.log(
-    chalk.gray(`   2. Customize types in types/${context.kebabCase}.types.ts`),
-  );
-  console.log(chalk.gray(`   3. Implement API endpoints`));
-  console.log(chalk.gray(`   4. Run tests: npm test ${context.kebabCase}`));
+      `   1. Import feature: import { ${name}View } from '${path.relative(process.cwd(), featureDir)}';`
+    ));
+
+  logger.info(
+    chalk.gray(`   2. Customize types in types/${context.kebabCase}.types.ts`));
+
+  logger.info(chalk.gray(`   3. Implement API endpoints`));
+  logger.info(chalk.gray(`   4. Run tests: npm test ${context.kebabCase}`));
 }
 
 // CLI setup
-program
-  .name("generate-feature")
-  .description(
-    "Generate a complete feature module with API, components, hooks, and state management",
-  )
-  .argument("<name>", "Feature name in PascalCase")
-  .option("-f, --force", "Overwrite existing files")
-  .option("-d, --dir <dir>", "Output directory", config.outputDir)
-  .option("--no-api", "Skip API generation")
-  .option("--no-components", "Skip components generation")
-  .option("--no-hooks", "Skip hooks generation")
-  .option("--no-store", "Skip store/context generation")
-  .option("--no-tests", "Skip tests generation")
-  .action(async (name, options) => {
-    if (options.dir) {
-      config.outputDir = options.dir;
-    }
+program.
+name("generate-feature").
+description(
+  "Generate a complete feature module with API, components, hooks, and state management"
+).
+argument("<name>", "Feature name in PascalCase").
+option("-f, --force", "Overwrite existing files").
+option("-d, --dir <dir>", "Output directory", config.outputDir).
+option("--no-api", "Skip API generation").
+option("--no-components", "Skip components generation").
+option("--no-hooks", "Skip hooks generation").
+option("--no-store", "Skip store/context generation").
+option("--no-tests", "Skip tests generation").
+action(async (name, options) => {
+  if (options.dir) {
+    config.outputDir = options.dir;
+  }
 
-    // Update structure based on options
-    Object.keys(options).forEach((key) => {
-      if (key.startsWith("no") && key !== "noHelp") {
-        const feature = key.substring(2).toLowerCase();
-        if (feature in config.structure) {
-          config.structure[feature] = false;
-        }
+  // Update structure based on options
+  Object.keys(options).forEach((key) => {
+    if (key.startsWith("no") && key !== "noHelp") {
+      const feature = key.substring(2).toLowerCase();
+      if (feature in config.structure) {
+        config.structure[feature] = false;
       }
-    });
-
-    await generateFeature(name, options);
+    }
   });
+
+  await generateFeature(name, options);
+});
 
 // Parse CLI arguments
 program.parse(process.argv);

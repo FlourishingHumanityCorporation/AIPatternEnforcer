@@ -20,9 +20,9 @@ interface MultiStepFormProps<T extends Record<string, any>> {
     clearError: (field: string) => void;
   }) => React.ReactNode;
   validateStep?: (
-    step: number,
-    data: Partial<T>,
-  ) => Record<string, string> | null;
+  step: number,
+  data: Partial<T>)
+  => Record<string, string> | null;
 }
 
 /**
@@ -42,7 +42,7 @@ export function MultiStepForm<T extends Record<string, any>>({
   initialData = {},
   onComplete,
   children,
-  validateStep,
+  validateStep
 }: MultiStepFormProps<T>) {
   const [currentStep, setCurrentStep] = useState(0);
   const [data, setData] = useState<Partial<T>>(initialData);
@@ -88,7 +88,7 @@ export function MultiStepForm<T extends Record<string, any>>({
       try {
         await onComplete(data as T);
       } catch (error) {
-        console.error("Form submission failed:", error);
+        logger.error("Form submission failed:", error);
       } finally {
         setIsSubmitting(false);
       }
@@ -121,7 +121,7 @@ export function MultiStepForm<T extends Record<string, any>>({
     }
   };
 
-  const progress = ((currentStep + 1) / steps.length) * 100;
+  const progress = (currentStep + 1) / steps.length * 100;
   const isFirstStep = currentStep === 0;
   const isLastStep = currentStep === steps.length - 1;
 
@@ -136,8 +136,8 @@ export function MultiStepForm<T extends Record<string, any>>({
           aria-valuenow={currentStep + 1}
           aria-valuemin={1}
           aria-valuemax={steps.length}
-          aria-label={`Step ${currentStep + 1} of ${steps.length}`}
-        />
+          aria-label={`Step ${currentStep + 1} of ${steps.length}`} />
+
       </div>
 
       {/* Step Indicators */}
@@ -159,25 +159,25 @@ export function MultiStepForm<T extends Record<string, any>>({
               `}
               disabled={!isClickable}
               aria-current={isActive ? "step" : undefined}
-              aria-label={`${step.title}${isCompleted ? " (completed)" : ""}${isActive ? " (current)" : ""}`}
-            >
+              aria-label={`${step.title}${isCompleted ? " (completed)" : ""}${isActive ? " (current)" : ""}`}>
+
               <span className={styles.stepNumber}>
                 {isCompleted ? "✓" : index + 1}
               </span>
               <span className={styles.stepTitle}>{step.title}</span>
-            </button>
-          );
+            </button>);
+
         })}
       </nav>
 
       {/* Current Step Content */}
       <div className={styles.stepContent}>
         <h2 className={styles.stepHeading}>{steps[currentStep].title}</h2>
-        {steps[currentStep].description && (
-          <p className={styles.stepDescription}>
+        {steps[currentStep].description &&
+        <p className={styles.stepDescription}>
             {steps[currentStep].description}
           </p>
-        )}
+        }
 
         <div className={styles.formContent}>
           {children({
@@ -186,7 +186,7 @@ export function MultiStepForm<T extends Record<string, any>>({
             updateData,
             errors,
             setError,
-            clearError,
+            clearError
           })}
         </div>
       </div>
@@ -198,8 +198,8 @@ export function MultiStepForm<T extends Record<string, any>>({
           onClick={handleBack}
           disabled={isFirstStep || isSubmitting}
           className={`${styles.button} ${styles.buttonSecondary}`}
-          aria-label="Go to previous step"
-        >
+          aria-label="Go to previous step">
+
           Back
         </button>
 
@@ -208,22 +208,22 @@ export function MultiStepForm<T extends Record<string, any>>({
           onClick={handleNext}
           disabled={isSubmitting}
           className={`${styles.button} ${styles.buttonPrimary}`}
-          aria-label={isLastStep ? "Submit form" : "Go to next step"}
-        >
-          {isSubmitting ? (
-            <>
+          aria-label={isLastStep ? "Submit form" : "Go to next step"}>
+
+          {isSubmitting ?
+          <>
               <span className={styles.spinner} aria-hidden="true" />
               <span>Submitting...</span>
-            </>
-          ) : isLastStep ? (
-            "Submit"
-          ) : (
-            "Next"
-          )}
+            </> :
+          isLastStep ?
+          "Submit" :
+
+          "Next"
+          }
         </button>
       </div>
-    </div>
-  );
+    </div>);
+
 }
 
 // Example usage with specific form data
@@ -246,27 +246,27 @@ interface OnboardingData {
 
 export const OnboardingFormExample: React.FC = () => {
   const steps: Step[] = [
-    {
-      id: "personal",
-      title: "Personal Information",
-      description: "Tell us about yourself",
-    },
-    {
-      id: "company",
-      title: "Company Details",
-      description: "Tell us about your organization",
-    },
-    {
-      id: "preferences",
-      title: "Preferences",
-      description: "Customize your experience",
-    },
-    {
-      id: "review",
-      title: "Review & Submit",
-      description: "Review your information before submitting",
-    },
-  ];
+  {
+    id: "personal",
+    title: "Personal Information",
+    description: "Tell us about yourself"
+  },
+  {
+    id: "company",
+    title: "Company Details",
+    description: "Tell us about your organization"
+  },
+  {
+    id: "preferences",
+    title: "Preferences",
+    description: "Customize your experience"
+  },
+  {
+    id: "review",
+    title: "Review & Submit",
+    description: "Review your information before submitting"
+  }];
+
 
   const validateStep = (step: number, data: Partial<OnboardingData>) => {
     const errors: Record<string, string> = {};
@@ -275,15 +275,15 @@ export const OnboardingFormExample: React.FC = () => {
       case 0: // Personal Info
         if (!data.firstName) errors.firstName = "First name is required";
         if (!data.lastName) errors.lastName = "Last name is required";
-        if (!data.email) errors.email = "Email is required";
-        else if (!/\S+@\S+\.\S+/.test(data.email))
-          errors.email = "Invalid email";
+        if (!data.email) errors.email = "Email is required";else
+        if (!/\S+@\S+\.\S+/.test(data.email))
+        errors.email = "Invalid email";
         break;
 
       case 1: // Company Info
         if (!data.companyName) errors.companyName = "Company name is required";
         if (!data.companySize)
-          errors.companySize = "Please select company size";
+        errors.companySize = "Please select company size";
         if (!data.industry) errors.industry = "Please select industry";
         break;
 
@@ -296,7 +296,7 @@ export const OnboardingFormExample: React.FC = () => {
   };
 
   const handleComplete = async (data: OnboardingData) => {
-    console.log("Form submitted:", data);
+    logger.info("Form submitted:", data);
     // API call would go here
     await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate API call
   };
@@ -305,8 +305,8 @@ export const OnboardingFormExample: React.FC = () => {
     <MultiStepForm<OnboardingData>
       steps={steps}
       validateStep={validateStep}
-      onComplete={handleComplete}
-    >
+      onComplete={handleComplete}>
+
       {({ currentStep, data, updateData, errors }) => {
         switch (currentStep) {
           case 0:
@@ -321,14 +321,14 @@ export const OnboardingFormExample: React.FC = () => {
                     onChange={(e) => updateData({ firstName: e.target.value })}
                     aria-invalid={!!errors.firstName}
                     aria-describedby={
-                      errors.firstName ? "firstName-error" : undefined
-                    }
-                  />
-                  {errors.firstName && (
-                    <span id="firstName-error" className={styles.error}>
+                    errors.firstName ? "firstName-error" : undefined
+                    } />
+
+                  {errors.firstName &&
+                  <span id="firstName-error" className={styles.error}>
                       {errors.firstName}
                     </span>
-                  )}
+                  }
                 </div>
 
                 <div className={styles.field}>
@@ -338,11 +338,11 @@ export const OnboardingFormExample: React.FC = () => {
                     type="text"
                     value={data.lastName || ""}
                     onChange={(e) => updateData({ lastName: e.target.value })}
-                    aria-invalid={!!errors.lastName}
-                  />
-                  {errors.lastName && (
-                    <span className={styles.error}>{errors.lastName}</span>
-                  )}
+                    aria-invalid={!!errors.lastName} />
+
+                  {errors.lastName &&
+                  <span className={styles.error}>{errors.lastName}</span>
+                  }
                 </div>
 
                 <div className={styles.field}>
@@ -352,14 +352,14 @@ export const OnboardingFormExample: React.FC = () => {
                     type="email"
                     value={data.email || ""}
                     onChange={(e) => updateData({ email: e.target.value })}
-                    aria-invalid={!!errors.email}
-                  />
-                  {errors.email && (
-                    <span className={styles.error}>{errors.email}</span>
-                  )}
+                    aria-invalid={!!errors.email} />
+
+                  {errors.email &&
+                  <span className={styles.error}>{errors.email}</span>
+                  }
                 </div>
-              </div>
-            );
+              </div>);
+
 
           case 1:
             return (
@@ -371,13 +371,13 @@ export const OnboardingFormExample: React.FC = () => {
                     type="text"
                     value={data.companyName || ""}
                     onChange={(e) =>
-                      updateData({ companyName: e.target.value })
+                    updateData({ companyName: e.target.value })
                     }
-                    aria-invalid={!!errors.companyName}
-                  />
-                  {errors.companyName && (
-                    <span className={styles.error}>{errors.companyName}</span>
-                  )}
+                    aria-invalid={!!errors.companyName} />
+
+                  {errors.companyName &&
+                  <span className={styles.error}>{errors.companyName}</span>
+                  }
                 </div>
 
                 <div className={styles.field}>
@@ -386,10 +386,10 @@ export const OnboardingFormExample: React.FC = () => {
                     id="companySize"
                     value={data.companySize || ""}
                     onChange={(e) =>
-                      updateData({ companySize: e.target.value })
+                    updateData({ companySize: e.target.value })
                     }
-                    aria-invalid={!!errors.companySize}
-                  >
+                    aria-invalid={!!errors.companySize}>
+
                     <option value="">Select size</option>
                     <option value="1-10">1-10 employees</option>
                     <option value="11-50">11-50 employees</option>
@@ -397,9 +397,9 @@ export const OnboardingFormExample: React.FC = () => {
                     <option value="201-1000">201-1000 employees</option>
                     <option value="1000+">1000+ employees</option>
                   </select>
-                  {errors.companySize && (
-                    <span className={styles.error}>{errors.companySize}</span>
-                  )}
+                  {errors.companySize &&
+                  <span className={styles.error}>{errors.companySize}</span>
+                  }
                 </div>
 
                 <div className={styles.field}>
@@ -408,8 +408,8 @@ export const OnboardingFormExample: React.FC = () => {
                     id="industry"
                     value={data.industry || ""}
                     onChange={(e) => updateData({ industry: e.target.value })}
-                    aria-invalid={!!errors.industry}
-                  >
+                    aria-invalid={!!errors.industry}>
+
                     <option value="">Select industry</option>
                     <option value="tech">Technology</option>
                     <option value="finance">Finance</option>
@@ -417,12 +417,12 @@ export const OnboardingFormExample: React.FC = () => {
                     <option value="retail">Retail</option>
                     <option value="other">Other</option>
                   </select>
-                  {errors.industry && (
-                    <span className={styles.error}>{errors.industry}</span>
-                  )}
+                  {errors.industry &&
+                  <span className={styles.error}>{errors.industry}</span>
+                  }
                 </div>
-              </div>
-            );
+              </div>);
+
 
           case 2:
             return (
@@ -433,9 +433,9 @@ export const OnboardingFormExample: React.FC = () => {
                       type="checkbox"
                       checked={data.notifications || false}
                       onChange={(e) =>
-                        updateData({ notifications: e.target.checked })
-                      }
-                    />
+                      updateData({ notifications: e.target.checked })
+                      } />
+
                     <span>Email notifications</span>
                   </label>
                 </div>
@@ -446,9 +446,9 @@ export const OnboardingFormExample: React.FC = () => {
                       type="checkbox"
                       checked={data.newsletter || false}
                       onChange={(e) =>
-                        updateData({ newsletter: e.target.checked })
-                      }
-                    />
+                      updateData({ newsletter: e.target.checked })
+                      } />
+
                     <span>Monthly newsletter</span>
                   </label>
                 </div>
@@ -459,15 +459,15 @@ export const OnboardingFormExample: React.FC = () => {
                     id="theme"
                     value={data.theme || "light"}
                     onChange={(e) =>
-                      updateData({ theme: e.target.value as "light" | "dark" })
-                    }
-                  >
+                    updateData({ theme: e.target.value as "light" | "dark" })
+                    }>
+
                     <option value="light">Light</option>
                     <option value="dark">Dark</option>
                   </select>
                 </div>
-              </div>
-            );
+              </div>);
+
 
           case 3:
             return (
@@ -501,13 +501,13 @@ export const OnboardingFormExample: React.FC = () => {
                   <dt>Theme</dt>
                   <dd>{data.theme || "Light"}</dd>
                 </dl>
-              </div>
-            );
+              </div>);
+
 
           default:
             return null;
         }
       }}
-    </MultiStepForm>
-  );
+    </MultiStepForm>);
+
 };

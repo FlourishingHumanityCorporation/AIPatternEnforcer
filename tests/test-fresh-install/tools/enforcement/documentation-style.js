@@ -7,61 +7,61 @@ const { loadConfig, shouldBlock, logMetrics } = require('./enforcement-config');
 
 // Banned phrases and patterns
 const bannedPhrases = [
-  {
-    pattern: /we'?re\s+excited\s+to/gi,
-    suggestion: "Use neutral announcement language",
-  },
-  {
-    pattern: /successfully\s+implemented/gi,
-    suggestion: "State what was implemented without qualifier",
-  },
-  {
-    pattern: /as\s+of\s+\w+\s+\d{4}/gi,
-    suggestion: "Remove temporal references",
-  },
-  {
-    pattern: /\b(perfect|perfectly)\b/gi,
-    suggestion: 'Use "functional" or "complete"',
-  },
-  {
-    pattern: /\b(amazing|amazingly)\b/gi,
-    suggestion: "Use descriptive technical terms",
-  },
-  {
-    pattern: /\b(excellent|excellently)\b/gi,
-    suggestion: 'Use "effective" or "robust"',
-  },
-  {
-    pattern: /\b(awesome|awesomely)\b/gi,
-    suggestion: "Use professional language",
-  },
-  { pattern: /\bcool\b/gi, suggestion: "Use technical descriptors" },
-  { pattern: /\b(best|worst)\b/gi, suggestion: "Use objective comparisons" },
-  {
-    pattern: /\bflawless(ly)?\b/gi,
-    suggestion: 'Use "functional" or "tested"',
-  },
-];
+{
+  pattern: /we'?re\s+excited\s+to/gi,
+  suggestion: "Use neutral announcement language"
+},
+{
+  pattern: /successfully\s+implemented/gi,
+  suggestion: "State what was implemented without qualifier"
+},
+{
+  pattern: /as\s+of\s+\w+\s+\d{4}/gi,
+  suggestion: "Remove temporal references"
+},
+{
+  pattern: /\b(perfect|perfectly)\b/gi,
+  suggestion: 'Use "functional" or "complete"'
+},
+{
+  pattern: /\b(amazing|amazingly)\b/gi,
+  suggestion: "Use descriptive technical terms"
+},
+{
+  pattern: /\b(excellent|excellently)\b/gi,
+  suggestion: 'Use "effective" or "robust"'
+},
+{
+  pattern: /\b(awesome|awesomely)\b/gi,
+  suggestion: "Use professional language"
+},
+{ pattern: /\bcool\b/gi, suggestion: "Use technical descriptors" },
+{ pattern: /\b(best|worst)\b/gi, suggestion: "Use objective comparisons" },
+{
+  pattern: /\bflawless(ly)?\b/gi,
+  suggestion: 'Use "functional" or "tested"'
+}];
+
 
 // Status announcements to avoid
 const statusAnnouncements = [
-  "COMPLETE",
-  "FIXED",
-  "DONE",
-  "FINISHED",
-  "FINAL",
-  "RESOLVED",
-  "SHIPPED",
-  "DELIVERED",
-  "RELEASED",
-  "READY",
-];
+"COMPLETE",
+"FIXED",
+"DONE",
+"FINISHED",
+"FINAL",
+"RESOLVED",
+"SHIPPED",
+"DELIVERED",
+"RELEASED",
+"READY"];
+
 
 // Configuration
 const config = {
   maxLineLength: 120,
   maxFileLength: 500,
-  maxCodeBlockLength: 20,
+  maxCodeBlockLength: 20
 };
 
 // Check a single markdown file
@@ -79,9 +79,9 @@ function checkMarkdownFile(filePath, content) {
           file: filePath,
           line: index + 1,
           context:
-            line.trim().substring(0, 80) + (line.length > 80 ? "..." : ""),
+          line.trim().substring(0, 80) + (line.length > 80 ? "..." : ""),
           issue: matches[0],
-          suggestion,
+          suggestion
         });
       }
     });
@@ -95,9 +95,9 @@ function checkMarkdownFile(filePath, content) {
           file: filePath,
           line: index + 1,
           context:
-            line.trim().substring(0, 80) + (line.length > 80 ? "..." : ""),
+          line.trim().substring(0, 80) + (line.length > 80 ? "..." : ""),
           issue: status,
-          suggestion: "Remove status announcements, use git commits for status",
+          suggestion: "Remove status announcements, use git commits for status"
         });
       }
     });
@@ -110,7 +110,7 @@ function checkMarkdownFile(filePath, content) {
         line: index + 1,
         context: `Line has ${line.length} characters`,
         issue: `${line.substring(0, 50)}...`,
-        suggestion: `Keep lines under ${config.maxLineLength} characters`,
+        suggestion: `Keep lines under ${config.maxLineLength} characters`
       });
     }
   });
@@ -123,7 +123,7 @@ function checkMarkdownFile(filePath, content) {
       line: lines.length,
       context: `File has ${lines.length} lines`,
       issue: "Exceeds maximum file length",
-      suggestion: `Split into multiple files (max ${config.maxFileLength} lines)`,
+      suggestion: `Split into multiple files (max ${config.maxFileLength} lines)`
     });
   }
 
@@ -137,7 +137,7 @@ function checkMarkdownFile(filePath, content) {
       line: 1,
       context: "No H1 heading found",
       issue: "Missing main title",
-      suggestion: "Add a title with # at the beginning",
+      suggestion: "Add a title with # at the beginning"
     });
   }
 
@@ -148,7 +148,7 @@ function checkMarkdownFile(filePath, content) {
       line: 1,
       context: `Long document (${lines.length} lines) without TOC`,
       issue: "No table of contents",
-      suggestion: "Add ## Table of Contents section for long documents",
+      suggestion: "Add ## Table of Contents section for long documents"
     });
   }
 
@@ -162,7 +162,7 @@ function checkMarkdownFile(filePath, content) {
         line: block.startLine,
         context: `Code block has ${block.lines} lines`,
         issue: "Exceeds maximum code block length",
-        suggestion: "Link to source file or split into smaller examples",
+        suggestion: "Link to source file or split into smaller examples"
       });
     }
 
@@ -173,7 +173,7 @@ function checkMarkdownFile(filePath, content) {
         line: block.startLine,
         context: "Code block without language",
         issue: "```",
-        suggestion: "Add language after ``` (e.g., ```javascript)",
+        suggestion: "Add language after ``` (e.g., ```javascript)"
       });
     }
   });
@@ -199,13 +199,13 @@ function analyzeStructure(content) {
     hasTitle: lines.some((line) => /^#\s+[^#]/.test(line)),
     hasTableOfContents: lines.some(
       (line) =>
-        /table of contents/i.test(line) ||
-        /## Contents/i.test(line) ||
-        /## TOC/i.test(line),
+      /table of contents/i.test(line) ||
+      /## Contents/i.test(line) ||
+      /## TOC/i.test(line)
     ),
-    headingLevels: lines
-      .filter((line) => /^#+\s/.test(line))
-      .map((line) => line.match(/^#+/)[0].length),
+    headingLevels: lines.
+    filter((line) => /^#+\s/.test(line)).
+    map((line) => line.match(/^#+/)[0].length)
   };
 }
 
@@ -229,7 +229,7 @@ function extractCodeBlocks(content) {
         blocks.push({
           startLine: blockStart,
           lines: blockLines,
-          language: language,
+          language: language
         });
         inBlock = false;
       }
@@ -244,26 +244,26 @@ function extractCodeBlocks(content) {
 // Main function
 async function checkDocumentationStyle(specificFiles = []) {
   const config = loadConfig();
-  
+
   // Get ignore patterns from config
   const baseIgnorePatterns = [
-    "node_modules/**",
-    "dist/**", 
-    "build/**",
-    ".next/**",
-    "coverage/**",
-  ];
-  
-  const ignorePatterns = config.checks.documentation.enabled 
-    ? [...baseIgnorePatterns, ...config.checks.documentation.ignorePatterns]
-    : baseIgnorePatterns;
+  "node_modules/**",
+  "dist/**",
+  "build/**",
+  ".next/**",
+  "coverage/**"];
+
+
+  const ignorePatterns = config.checks.documentation.enabled ?
+  [...baseIgnorePatterns, ...config.checks.documentation.ignorePatterns] :
+  baseIgnorePatterns;
 
   const filesToCheck =
-    specificFiles.length > 0
-      ? specificFiles.filter((f) => f.endsWith(".md"))
-      : glob.sync("**/*.md", {
-          ignore: ignorePatterns,
-        });
+  specificFiles.length > 0 ?
+  specificFiles.filter((f) => f.endsWith(".md")) :
+  glob.sync("**/*.md", {
+    ignore: ignorePatterns
+  });
 
   let allViolations = [];
 
@@ -280,12 +280,12 @@ async function checkDocumentationStyle(specificFiles = []) {
 
   // Log metrics regardless of blocking behavior
   logMetrics('documentation', allViolations, config);
-  
+
   const shouldBlockCommit = shouldBlock('documentation', config);
-  
+
   if (allViolations.length > 0) {
     const messageType = shouldBlockCommit ? "❌ Found documentation style violations:" : "⚠️  Documentation style warnings:";
-    console.error(chalk.red.bold(`\n${messageType}\n`));
+    logger.error(chalk.red.bold(`\n${messageType}\n`));
 
     // Group by file
     const byFile = allViolations.reduce((acc, v) => {
@@ -295,47 +295,47 @@ async function checkDocumentationStyle(specificFiles = []) {
     }, {});
 
     Object.entries(byFile).forEach(([file, violations]) => {
-      console.error(chalk.yellow.bold(`${file}:`));
+      logger.error(chalk.yellow.bold(`${file}:`));
       violations.forEach((v) => {
-        console.error(chalk.white(`  Line ${v.line}: ${v.type}`));
+        logger.error(chalk.white(`  Line ${v.line}: ${v.type}`));
         if (v.issue) {
-          console.error(chalk.gray(`    Issue: "${v.issue}"`));
+          logger.error(chalk.gray(`    Issue: "${v.issue}"`));
         }
         if (v.context && v.context !== v.issue) {
-          console.error(chalk.gray(`    Context: ${v.context}`));
+          logger.error(chalk.gray(`    Context: ${v.context}`));
         }
-        console.error(chalk.cyan(`    Fix: ${v.suggestion}`));
+        logger.error(chalk.cyan(`    Fix: ${v.suggestion}`));
       });
-      console.error("");
+      logger.error("");
     });
 
-    console.error(chalk.cyan.bold("📚 Documentation Best Practices:"));
-    console.error(chalk.white("  - Use neutral, professional language"));
-    console.error(
-      chalk.white("  - Avoid temporal references and status announcements"),
-    );
-    console.error(chalk.white("  - Keep lines under 120 characters"));
-    console.error(
-      chalk.white("  - Include language specifiers in code blocks"),
-    );
-    console.error(
-      chalk.white("  - Add table of contents for long documents\n"),
-    );
+    logger.error(chalk.cyan.bold("📚 Documentation Best Practices:"));
+    logger.error(chalk.white("  - Use neutral, professional language"));
+    logger.error(
+      chalk.white("  - Avoid temporal references and status announcements"));
+
+    logger.error(chalk.white("  - Keep lines under 120 characters"));
+    logger.error(
+      chalk.white("  - Include language specifiers in code blocks"));
+
+    logger.error(
+      chalk.white("  - Add table of contents for long documents\n"));
+
 
     if (shouldBlockCommit) {
-      console.error(chalk.red.bold("🚫 Commit blocked due to documentation violations."));
-      console.error(chalk.yellow("💡 To change enforcement level: npm run enforcement:config set-level WARNING"));
+      logger.error(chalk.red.bold("🚫 Commit blocked due to documentation violations."));
+      logger.error(chalk.yellow("💡 To change enforcement level: npm run enforcement:config set-level WARNING"));
       process.exit(1);
     } else {
-      console.error(chalk.yellow.bold("⏩ Commit proceeding with warnings."));
-      console.error(chalk.cyan("💡 To fix issues: Follow suggestions above"));
-      console.error(chalk.cyan("💡 To block on violations: npm run enforcement:config set-level FULL"));
+      logger.error(chalk.yellow.bold("⏩ Commit proceeding with warnings."));
+      logger.error(chalk.cyan("💡 To fix issues: Follow suggestions above"));
+      logger.error(chalk.cyan("💡 To block on violations: npm run enforcement:config set-level FULL"));
     }
   } else {
     if (!specificFiles || specificFiles.length === 0) {
-      console.log(
-        chalk.green("✅ All documentation follows style guidelines!"),
-      );
+      logger.info(
+        chalk.green("✅ All documentation follows style guidelines!"));
+
     }
   }
 }
@@ -346,7 +346,7 @@ if (require.main === module) {
   const files = args.filter((arg) => !arg.startsWith("-"));
 
   checkDocumentationStyle(files).catch((error) => {
-    console.error(chalk.red("Error checking documentation:"), error);
+    logger.error(chalk.red("Error checking documentation:"), error);
     process.exit(1);
   });
 }

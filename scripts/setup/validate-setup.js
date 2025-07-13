@@ -33,37 +33,37 @@ class SetupValidator {
 
   // Run all checks
   async validate() {
-    console.log(chalk.blue.bold('\n🔍 ProjectTemplate Setup Validator\n'));
-    
-    const categories = [...new Set(this.checks.map(c => c.category))];
-    
+    logger.info(chalk.blue.bold('\n🔍 ProjectTemplate Setup Validator\n'));
+
+    const categories = [...new Set(this.checks.map((c) => c.category))];
+
     for (const category of categories) {
-      console.log(chalk.yellow(`\n${category.toUpperCase()}`));
-      console.log(chalk.gray('─'.repeat(40)));
-      
-      const categoryChecks = this.checks.filter(c => c.category === category);
-      
+      logger.info(chalk.yellow(`\n${category.toUpperCase()}`));
+      logger.info(chalk.gray('─'.repeat(40)));
+
+      const categoryChecks = this.checks.filter((c) => c.category === category);
+
       for (const check of categoryChecks) {
         process.stdout.write(`  ${check.name}...`);
-        
+
         try {
           const result = await check.fn();
-          
+
           if (result.status === 'pass') {
-            console.log(chalk.green(' ✓'));
+            logger.info(chalk.green(' ✓'));
             this.results.passed++;
             if (result.info) {
-              console.log(chalk.gray(`    └─ ${result.info}`));
+              logger.info(chalk.gray(`    └─ ${result.info}`));
             }
           } else if (result.status === 'warning') {
-            console.log(chalk.yellow(' ⚠'));
+            logger.info(chalk.yellow(' ⚠'));
             this.results.warnings++;
-            console.log(chalk.yellow(`    └─ ${result.message}`));
+            logger.info(chalk.yellow(`    └─ ${result.message}`));
             if (result.fix) {
-              console.log(chalk.blue(`    └─ Fix: ${result.fix}`));
+              logger.info(chalk.blue(`    └─ Fix: ${result.fix}`));
             }
           } else {
-            console.log(chalk.red(' ✗'));
+            logger.info(chalk.red(' ✗'));
             this.results.failed++;
             this.results.errors.push({
               check: check.name,
@@ -71,68 +71,68 @@ class SetupValidator {
               fix: result.fix,
               critical: check.critical
             });
-            console.log(chalk.red(`    └─ ${result.message}`));
+            logger.info(chalk.red(`    └─ ${result.message}`));
             if (result.fix) {
-              console.log(chalk.blue(`    └─ Fix: ${result.fix}`));
+              logger.info(chalk.blue(`    └─ Fix: ${result.fix}`));
             }
           }
         } catch (error) {
-          console.log(chalk.red(' ✗'));
+          logger.info(chalk.red(' ✗'));
           this.results.failed++;
           this.results.errors.push({
             check: check.name,
             message: error.message,
             critical: check.critical
           });
-          console.log(chalk.red(`    └─ Error: ${error.message}`));
+          logger.info(chalk.red(`    └─ Error: ${error.message}`));
         }
       }
     }
-    
+
     this.printSummary();
   }
 
   // Print validation summary
   printSummary() {
-    console.log(chalk.blue('\n\nSUMMARY'));
-    console.log(chalk.gray('─'.repeat(40)));
-    
-    console.log(`  ${chalk.green('Passed:')} ${this.results.passed}`);
-    console.log(`  ${chalk.yellow('Warnings:')} ${this.results.warnings}`);
-    console.log(`  ${chalk.red('Failed:')} ${this.results.failed}`);
-    
+    logger.info(chalk.blue('\n\nSUMMARY'));
+    logger.info(chalk.gray('─'.repeat(40)));
+
+    logger.info(`  ${chalk.green('Passed:')} ${this.results.passed}`);
+    logger.info(`  ${chalk.yellow('Warnings:')} ${this.results.warnings}`);
+    logger.info(`  ${chalk.red('Failed:')} ${this.results.failed}`);
+
     if (this.results.errors.length > 0) {
-      console.log(chalk.red('\n\nCRITICAL ISSUES:'));
-      
-      const criticalErrors = this.results.errors.filter(e => e.critical);
+      logger.info(chalk.red('\n\nCRITICAL ISSUES:'));
+
+      const criticalErrors = this.results.errors.filter((e) => e.critical);
       if (criticalErrors.length > 0) {
-        criticalErrors.forEach(error => {
-          console.log(`  ${chalk.red('●')} ${error.check}: ${error.message}`);
+        criticalErrors.forEach((error) => {
+          logger.info(`  ${chalk.red('●')} ${error.check}: ${error.message}`);
           if (error.fix) {
-            console.log(`    ${chalk.blue('→')} ${error.fix}`);
+            logger.info(`    ${chalk.blue('→')} ${error.fix}`);
           }
         });
       }
-      
-      console.log(chalk.yellow('\n\nOTHER ISSUES:'));
-      const nonCriticalErrors = this.results.errors.filter(e => !e.critical);
-      nonCriticalErrors.forEach(error => {
-        console.log(`  ${chalk.yellow('●')} ${error.check}: ${error.message}`);
+
+      logger.info(chalk.yellow('\n\nOTHER ISSUES:'));
+      const nonCriticalErrors = this.results.errors.filter((e) => !e.critical);
+      nonCriticalErrors.forEach((error) => {
+        logger.info(`  ${chalk.yellow('●')} ${error.check}: ${error.message}`);
         if (error.fix) {
-          console.log(`    ${chalk.blue('→')} ${error.fix}`);
+          logger.info(`    ${chalk.blue('→')} ${error.fix}`);
         }
       });
     }
-    
+
     // Overall status
-    console.log('\n');
+    logger.info('\n');
     if (this.results.failed === 0) {
-      console.log(chalk.green.bold('✅ Setup validation passed! Your project is ready to use.'));
-    } else if (this.results.errors.some(e => e.critical)) {
-      console.log(chalk.red.bold('❌ Setup validation failed! Critical issues must be fixed.'));
+      logger.info(chalk.green.bold('✅ Setup validation passed! Your project is ready to use.'));
+    } else if (this.results.errors.some((e) => e.critical)) {
+      logger.info(chalk.red.bold('❌ Setup validation failed! Critical issues must be fixed.'));
       process.exit(1);
     } else {
-      console.log(chalk.yellow.bold('⚠️  Setup has minor issues but is usable.'));
+      logger.info(chalk.yellow.bold('⚠️  Setup has minor issues but is usable.'));
     }
   }
 }
@@ -144,7 +144,7 @@ const validator = new SetupValidator();
 validator.addCheck('Node.js version', () => {
   const nodeVersion = process.version;
   const major = parseInt(nodeVersion.split('.')[0].substring(1));
-  
+
   if (major >= 16) {
     return { status: 'pass', info: nodeVersion };
   } else {
@@ -160,7 +160,7 @@ validator.addCheck('npm version', () => {
   try {
     const npmVersion = execSync('npm -v', { encoding: 'utf8' }).trim();
     const major = parseInt(npmVersion.split('.')[0]);
-    
+
     if (major >= 7) {
       return { status: 'pass', info: `v${npmVersion}` };
     } else {
@@ -207,8 +207,8 @@ validator.addCheck('package.json exists', () => {
 
 validator.addCheck('Source directories', () => {
   const requiredDirs = ['src', 'scripts', 'tools', 'templates'];
-  const missing = requiredDirs.filter(dir => !fs.existsSync(dir));
-  
+  const missing = requiredDirs.filter((dir) => !fs.existsSync(dir));
+
   if (missing.length === 0) {
     return { status: 'pass' };
   } else {
@@ -222,8 +222,8 @@ validator.addCheck('Source directories', () => {
 
 validator.addCheck('Generator templates', () => {
   const templateDirs = ['templates/component', 'templates/api', 'templates/feature'];
-  const missing = templateDirs.filter(dir => !fs.existsSync(dir));
-  
+  const missing = templateDirs.filter((dir) => !fs.existsSync(dir));
+
   if (missing.length === 0) {
     return { status: 'pass' };
   } else {
@@ -238,13 +238,13 @@ validator.addCheck('Generator templates', () => {
 // CONFIGURATION CHECKS
 validator.addCheck('AI configuration', () => {
   const aiConfigs = [
-    'ai/config/.cursorrules',
-    '.ai-enforcement.json',
-    'ai/config/context-rules.json'
-  ];
-  
-  const existing = aiConfigs.filter(f => fs.existsSync(f));
-  
+  'ai/config/.cursorrules',
+  '.ai-enforcement.json',
+  'ai/config/context-rules.json'];
+
+
+  const existing = aiConfigs.filter((f) => fs.existsSync(f));
+
   if (existing.length > 0) {
     return { status: 'pass', info: `${existing.length} AI configs found` };
   } else {
@@ -307,8 +307,8 @@ validator.addCheck('Generator commands', () => {
   try {
     const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
     const generatorScripts = ['g:c', 'g:api', 'g:feature', 'g:hook'];
-    const missing = generatorScripts.filter(s => !pkg.scripts[s]);
-    
+    const missing = generatorScripts.filter((s) => !pkg.scripts[s]);
+
     if (missing.length === 0) {
       return { status: 'pass' };
     } else {
@@ -347,7 +347,7 @@ validator.addCheck('Claude context command', () => {
 
 validator.addCheck('AI ignore file', () => {
   if (fs.existsSync('.aiignore')) {
-    const lines = fs.readFileSync('.aiignore', 'utf8').split('\n').filter(l => l.trim());
+    const lines = fs.readFileSync('.aiignore', 'utf8').split('\n').filter((l) => l.trim());
     return { status: 'pass', info: `${lines.length} ignore patterns` };
   } else {
     return {
@@ -359,7 +359,7 @@ validator.addCheck('AI ignore file', () => {
 }, { category: 'ai connectivity' });
 
 // Run validation
-validator.validate().catch(error => {
-  console.error(chalk.red('Validation error:'), error);
+validator.validate().catch((error) => {
+  logger.error(chalk.red('Validation error:'), error);
   process.exit(1);
 });

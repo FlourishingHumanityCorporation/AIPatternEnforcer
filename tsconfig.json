@@ -1,55 +1,42 @@
 {
-  "extends": "./config/typescript/tsconfig.base.json",
   "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "lib": ["ES2020"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "src/*"
-      ],
-      "@components/*": [
-        "src/components/*"
-      ],
-      "@features/*": [
-        "src/features/*"
-      ],
-      "@hooks/*": [
-        "src/hooks/*"
-      ],
-      "@services/*": [
-        "src/services/*"
-      ],
-      "@utils/*": [
-        "src/utils/*"
-      ],
-      "@types/*": [
-        "src/types/*"
-      ],
-      "@config/*": [
-        "src/config/*"
-      ]
-    },
-    "strict": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "moduleResolution": "node"
+      "@/tools/*": ["./tools/*"],
+      "@/scripts/*": ["./scripts/*"],
+      "@/templates/*": ["./templates/*"]
+    }
   },
   "include": [
-    "src/App.tsx",
-    "src/main.tsx",
-    "src/components/**/[!*test*].ts",
-    "src/components/**/[!*test*].tsx",
-    "tests/example.test.ts",
-    "*.ts",
-    "*.tsx"
+    "tools/**/*.ts",
+    "tools/**/*.js",
+    "scripts/**/*.ts", 
+    "scripts/**/*.js",
+    "tests/**/*.ts",
+    "tests/**/*.js"
   ],
   "exclude": [
     "node_modules",
     "dist",
     "build",
     "coverage",
-    "extensions/**/*",
-    "tests/test-fresh-install/**/*",
-    "tools/**/*.js",
-    "scripts/**/*.js"
+    "examples/**/node_modules",
+    "templates/**/node_modules",
+    "tools/hooks/**/*",
+    ".next",
+    "**/*.test.ts",
+    "**/*.test.js"
   ]
 }

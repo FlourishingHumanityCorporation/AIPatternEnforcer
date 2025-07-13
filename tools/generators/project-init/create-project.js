@@ -7,47 +7,47 @@ const inquirer = require('inquirer');
 const chalk = require('chalk');
 
 async function createProject() {
-  console.log(chalk.blue.bold('\n🚀 Create New Project from ProjectTemplate\n'));
+  logger.info(chalk.blue.bold('\n🚀 Create New Project from ProjectTemplate\n'));
 
   // Get project details
   const answers = await inquirer.prompt([
-    {
-      type: 'input',
-      name: 'projectName',
-      message: 'Project name:',
-      validate: (input) => {
-        if (!input.trim()) return 'Project name is required';
-        if (!/^[a-z0-9-]+$/.test(input)) {
-          return 'Project name should only contain lowercase letters, numbers, and hyphens';
-        }
-        return true;
-      },
-    },
-    {
-      type: 'input',
-      name: 'projectPath',
-      message: 'Where to create the project:',
-      default: (answers) => `./${answers.projectName}`,
-    },
-    {
-      type: 'input',
-      name: 'description',
-      message: 'Project description:',
-      default: 'A new project based on ProjectTemplate',
-    },
-    {
-      type: 'confirm',
-      name: 'useGit',
-      message: 'Initialize git repository?',
-      default: true,
-    },
-    {
-      type: 'confirm',
-      name: 'installDeps',
-      message: 'Install dependencies now?',
-      default: true,
-    },
-  ]);
+  {
+    type: 'input',
+    name: 'projectName',
+    message: 'Project name:',
+    validate: (input) => {
+      if (!input.trim()) return 'Project name is required';
+      if (!/^[a-z0-9-]+$/.test(input)) {
+        return 'Project name should only contain lowercase letters, numbers, and hyphens';
+      }
+      return true;
+    }
+  },
+  {
+    type: 'input',
+    name: 'projectPath',
+    message: 'Where to create the project:',
+    default: (answers) => `./${answers.projectName}`
+  },
+  {
+    type: 'input',
+    name: 'description',
+    message: 'Project description:',
+    default: 'A new project based on ProjectTemplate'
+  },
+  {
+    type: 'confirm',
+    name: 'useGit',
+    message: 'Initialize git repository?',
+    default: true
+  },
+  {
+    type: 'confirm',
+    name: 'installDeps',
+    message: 'Install dependencies now?',
+    default: true
+  }]
+  );
 
   const { projectName, projectPath, description, useGit, installDeps } = answers;
   const targetDir = path.resolve(projectPath);
@@ -56,50 +56,50 @@ async function createProject() {
   // Check if target directory exists
   if (fs.existsSync(targetDir)) {
     const { overwrite } = await inquirer.prompt([
-      {
-        type: 'confirm',
-        name: 'overwrite',
-        message: `Directory ${targetDir} already exists. Overwrite?`,
-        default: false,
-      },
-    ]);
+    {
+      type: 'confirm',
+      name: 'overwrite',
+      message: `Directory ${targetDir} already exists. Overwrite?`,
+      default: false
+    }]
+    );
 
     if (!overwrite) {
-      console.log(chalk.yellow('✖ Operation cancelled'));
+      logger.info(chalk.yellow('✖ Operation cancelled'));
       process.exit(0);
     }
 
-    console.log(chalk.yellow(`Removing existing directory...`));
+    logger.info(chalk.yellow(`Removing existing directory...`));
     fs.rmSync(targetDir, { recursive: true, force: true });
   }
 
-  console.log(chalk.blue(`\n📁 Creating project at ${targetDir}...\n`));
+  logger.info(chalk.blue(`\n📁 Creating project at ${targetDir}...\n`));
 
   // Create target directory
   fs.mkdirSync(targetDir, { recursive: true });
 
   // Files and directories to copy
   const itemsToCopy = [
-    'src',
-    'public',
-    'config',
-    'scripts',
-    'tools',
-    'templates',
-    'ai',
-    'docs',
-    'tests',
-    '.eslintrc.json',
-    '.prettierrc',
-    'tsconfig.json',
-    'vite.config.ts',
-    'index.html',
-    '.gitignore',
-    'README.md',
-    'CLAUDE.md',
-    'QUICK-START.md',
-    'DOCS_INDEX.md',
-  ];
+  'src',
+  'public',
+  'config',
+  'scripts',
+  'tools',
+  'templates',
+  'ai',
+  'docs',
+  'tests',
+  '.eslintrc.json',
+  '.prettierrc',
+  'tsconfig.json',
+  'vite.config.ts',
+  'index.html',
+  '.gitignore',
+  'README.md',
+  'CLAUDE.md',
+  'QUICK-START.md',
+  'DOCS_INDEX.md'];
+
 
   // Copy files and directories
   itemsToCopy.forEach((item) => {
@@ -107,7 +107,7 @@ async function createProject() {
     const targetPath = path.join(targetDir, item);
 
     if (fs.existsSync(sourcePath)) {
-      console.log(chalk.gray(`  Copying ${item}...`));
+      logger.info(chalk.gray(`  Copying ${item}...`));
       copyRecursive(sourcePath, targetPath);
     }
   });
@@ -122,7 +122,7 @@ async function createProject() {
     name: projectName,
     version: '0.1.0',
     description: description,
-    private: true,
+    private: true
   };
 
   // Remove template-specific scripts
@@ -187,25 +187,25 @@ npm run build
 
   // Initialize git repository (do this before npm install to avoid husky issues)
   if (useGit) {
-    console.log(chalk.blue('\n📦 Initializing git repository...'));
+    logger.info(chalk.blue('\n📦 Initializing git repository...'));
     try {
       execSync('git init', { cwd: targetDir, stdio: 'inherit' });
-      console.log(chalk.green('✓ Git repository initialized'));
+      logger.info(chalk.green('✓ Git repository initialized'));
     } catch (error) {
-      console.warn(chalk.yellow('⚠ Git initialization failed. Continuing without git.'));
+      logger.warn(chalk.yellow('⚠ Git initialization failed. Continuing without git.'));
       useGit = false;
     }
   }
 
   // Install dependencies
   if (installDeps) {
-    console.log(chalk.blue('\n📦 Installing dependencies...'));
+    logger.info(chalk.blue('\n📦 Installing dependencies...'));
     try {
       execSync('npm install', { cwd: targetDir, stdio: 'inherit' });
-      console.log(chalk.green('✓ Dependencies installed successfully'));
+      logger.info(chalk.green('✓ Dependencies installed successfully'));
     } catch (error) {
-      console.error(chalk.red('✗ Failed to install dependencies'));
-      console.error(chalk.yellow('You can install them manually with: npm install'));
+      logger.error(chalk.red('✗ Failed to install dependencies'));
+      logger.error(chalk.yellow('You can install them manually with: npm install'));
     }
   }
 
@@ -215,22 +215,22 @@ npm run build
       execSync('git add .', { cwd: targetDir, stdio: 'inherit' });
       execSync('git commit -m "Initial commit from ProjectTemplate"', {
         cwd: targetDir,
-        stdio: 'inherit',
+        stdio: 'inherit'
       });
-      console.log(chalk.green('✓ Initial commit created'));
+      logger.info(chalk.green('✓ Initial commit created'));
     } catch (error) {
-      console.warn(chalk.yellow('⚠ Failed to create initial commit'));
+      logger.warn(chalk.yellow('⚠ Failed to create initial commit'));
     }
   }
 
-  console.log(chalk.green.bold(`\n✅ Project created successfully!\n`));
-  console.log(chalk.white('Next steps:'));
-  console.log(chalk.gray(`  cd ${projectPath}`));
+  logger.info(chalk.green.bold(`\n✅ Project created successfully!\n`));
+  logger.info(chalk.white('Next steps:'));
+  logger.info(chalk.gray(`  cd ${projectPath}`));
   if (!installDeps) {
-    console.log(chalk.gray('  npm install'));
+    logger.info(chalk.gray('  npm install'));
   }
-  console.log(chalk.gray('  npm run dev'));
-  console.log(chalk.gray('\nHappy coding! 🎉\n'));
+  logger.info(chalk.gray('  npm run dev'));
+  logger.info(chalk.gray('\nHappy coding! 🎉\n'));
 }
 
 function copyRecursive(source, target) {
@@ -243,12 +243,12 @@ function copyRecursive(source, target) {
     files.forEach((file) => {
       // Skip node_modules, dist, coverage, and other build artifacts
       if (
-        file === 'node_modules' ||
-        file === 'dist' ||
-        file === 'coverage' ||
-        file === '.git' ||
-        file === '.DS_Store'
-      ) {
+      file === 'node_modules' ||
+      file === 'dist' ||
+      file === 'coverage' ||
+      file === '.git' ||
+      file === '.DS_Store')
+      {
         return;
       }
 
@@ -261,12 +261,12 @@ function copyRecursive(source, target) {
 
 // Handle errors gracefully
 process.on('unhandledRejection', (err) => {
-  console.error(chalk.red('\n❌ Error:'), err.message);
+  logger.error(chalk.red('\n❌ Error:'), err.message);
   process.exit(1);
 });
 
 // Run the script
 createProject().catch((err) => {
-  console.error(chalk.red('\n❌ Error:'), err.message);
+  logger.error(chalk.red('\n❌ Error:'), err.message);
   process.exit(1);
 });

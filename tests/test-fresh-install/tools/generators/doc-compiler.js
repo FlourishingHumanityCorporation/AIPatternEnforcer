@@ -35,7 +35,7 @@ function parseUnifiedDoc(content) {
     patterns: [],
     examples: [],
     context: {},
-    human: [],
+    human: []
   };
 
   const lines = content.split("\n");
@@ -83,9 +83,9 @@ function parseUnifiedDoc(content) {
   // Add final section
   if (currentContent.length) {
     if (currentSection === "context") {
+
       // Context was already added
-    } else {
-      sections[currentSection].push(currentContent.join("\n"));
+    } else {sections[currentSection].push(currentContent.join("\n"));
     }
   }
 
@@ -202,7 +202,7 @@ function compileToIDEHints(sections) {
     snippets[name] = {
       prefix: name.toLowerCase(),
       body: lines.slice(1),
-      description: sections.meta.description || "Project pattern",
+      description: sections.meta.description || "Project pattern"
     };
   });
 
@@ -215,7 +215,7 @@ function compileToIDEHints(sections) {
         snippets[name] = {
           prefix: name,
           body: codeMatch[1].split("\n"),
-          description: "Code example from documentation",
+          description: "Code example from documentation"
         };
       }
     }
@@ -230,7 +230,7 @@ function processDocFile(filePath) {
   const fileName = path.basename(filePath, ".md");
   const sections = parseUnifiedDoc(content);
 
-  console.log(chalk.blue(`Processing: ${fileName}`));
+  logger.info(chalk.blue(`Processing: ${fileName}`));
 
   // Ensure output directories exist
   ensureDir(OUTPUT_DIR);
@@ -248,7 +248,7 @@ function processDocFile(filePath) {
   // Write outputs
   fs.writeFileSync(
     path.join(OUTPUT_DIR, "cursor", `${fileName}.cursorrules`),
-    cursorRules,
+    cursorRules
   );
 
   fs.writeFileSync(path.join(OUTPUT_DIR, "claude", `${fileName}.md`), claudeMd);
@@ -257,15 +257,15 @@ function processDocFile(filePath) {
 
   fs.writeFileSync(
     path.join(OUTPUT_DIR, "ide", `${fileName}.code-snippets`),
-    ideHints,
+    ideHints
   );
 
-  console.log(chalk.green(`✓ Compiled ${fileName} to all formats`));
+  logger.info(chalk.green(`✓ Compiled ${fileName} to all formats`));
 }
 
 // Merge all compiled files into final outputs
 function mergeCompiledFiles() {
-  console.log(chalk.yellow("\nMerging compiled files..."));
+  logger.info(chalk.yellow("\nMerging compiled files..."));
 
   // Merge .cursorrules
   const cursorFiles = fs.readdirSync(path.join(OUTPUT_DIR, "cursor"));
@@ -274,13 +274,13 @@ function mergeCompiledFiles() {
   cursorFiles.forEach((file) => {
     const content = fs.readFileSync(
       path.join(OUTPUT_DIR, "cursor", file),
-      "utf8",
+      "utf8"
     );
     mergedCursor += content + "\n\n";
   });
 
   fs.writeFileSync(path.join(process.cwd(), ".cursorrules"), mergedCursor);
-  console.log(chalk.green("✓ Generated .cursorrules"));
+  logger.info(chalk.green("✓ Generated .cursorrules"));
 
   // Create CLAUDE.md sections
   const claudeFiles = fs.readdirSync(path.join(OUTPUT_DIR, "claude"));
@@ -289,7 +289,7 @@ function mergeCompiledFiles() {
   claudeFiles.forEach((file) => {
     const content = fs.readFileSync(
       path.join(OUTPUT_DIR, "claude", file),
-      "utf8",
+      "utf8"
     );
     claudeSections += content + "\n\n";
   });
@@ -311,7 +311,7 @@ function mergeCompiledFiles() {
     }
 
     fs.writeFileSync(claudeMdPath, updated);
-    console.log(chalk.green("✓ Updated CLAUDE.md"));
+    logger.info(chalk.green("✓ Updated CLAUDE.md"));
   }
 
   // Copy human docs to docs directory
@@ -322,10 +322,10 @@ function mergeCompiledFiles() {
   humanFiles.forEach((file) => {
     fs.copyFileSync(
       path.join(OUTPUT_DIR, "human", file),
-      path.join(docsDir, file),
+      path.join(docsDir, file)
     );
   });
-  console.log(chalk.green("✓ Generated human documentation"));
+  logger.info(chalk.green("✓ Generated human documentation"));
 
   // Merge IDE snippets
   const ideFiles = fs.readdirSync(path.join(OUTPUT_DIR, "ide"));
@@ -333,7 +333,7 @@ function mergeCompiledFiles() {
 
   ideFiles.forEach((file) => {
     const content = JSON.parse(
-      fs.readFileSync(path.join(OUTPUT_DIR, "ide", file), "utf8"),
+      fs.readFileSync(path.join(OUTPUT_DIR, "ide", file), "utf8")
     );
     mergedSnippets = { ...mergedSnippets, ...content };
   });
@@ -341,31 +341,31 @@ function mergeCompiledFiles() {
   const snippetsPath = path.join(
     process.cwd(),
     ".vscode",
-    "project.code-snippets",
+    "project.code-snippets"
   );
   fs.writeFileSync(snippetsPath, JSON.stringify(mergedSnippets, null, 2));
-  console.log(chalk.green("✓ Generated VS Code snippets"));
+  logger.info(chalk.green("✓ Generated VS Code snippets"));
 }
 
 // Main command
-program
-  .name("doc-compiler")
-  .description("Compile unified documentation to multiple formats")
-  .version("1.0.0");
+program.
+name("doc-compiler").
+description("Compile unified documentation to multiple formats").
+version("1.0.0");
 
-program
-  .command("compile")
-  .description("Compile all documentation files")
-  .action(() => {
-    console.log(chalk.blue("Starting documentation compilation...\n"));
+program.
+command("compile").
+description("Compile all documentation files").
+action(() => {
+  logger.info(chalk.blue("Starting documentation compilation...\n"));
 
-    // Ensure source directory exists
-    if (!fs.existsSync(DOC_SOURCE)) {
-      console.log(chalk.yellow(`Creating ${DOC_SOURCE} directory...`));
-      ensureDir(DOC_SOURCE);
+  // Ensure source directory exists
+  if (!fs.existsSync(DOC_SOURCE)) {
+    logger.info(chalk.yellow(`Creating ${DOC_SOURCE} directory...`));
+    ensureDir(DOC_SOURCE);
 
-      // Create example file
-      const exampleContent = `---meta: title = API Documentation---
+    // Create example file
+    const exampleContent = `---meta: title = API Documentation---
 ---meta: description = This document defines our API patterns and rules---
 
 ---human---
@@ -419,59 +419,59 @@ Use plural nouns for collections (users, not user)
 GET for reading, POST for creating, PUT for full updates, PATCH for partial updates, DELETE for removal
 `;
 
-      fs.writeFileSync(
-        path.join(DOC_SOURCE, "api-patterns.md"),
-        exampleContent,
-      );
+    fs.writeFileSync(
+      path.join(DOC_SOURCE, "api-patterns.md"),
+      exampleContent
+    );
 
-      console.log(chalk.green("✓ Created example documentation file"));
-    }
+    logger.info(chalk.green("✓ Created example documentation file"));
+  }
 
-    // Find all .md files in source directory
-    const files = fs
-      .readdirSync(DOC_SOURCE)
-      .filter((file) => file.endsWith(".md"));
+  // Find all .md files in source directory
+  const files = fs.
+  readdirSync(DOC_SOURCE).
+  filter((file) => file.endsWith(".md"));
 
-    if (files.length === 0) {
-      console.log(chalk.red("No documentation files found in " + DOC_SOURCE));
-      process.exit(1);
-    }
+  if (files.length === 0) {
+    logger.info(chalk.red("No documentation files found in " + DOC_SOURCE));
+    process.exit(1);
+  }
 
-    // Process each file
-    files.forEach((file) => {
-      processDocFile(path.join(DOC_SOURCE, file));
-    });
+  // Process each file
+  files.forEach((file) => {
+    processDocFile(path.join(DOC_SOURCE, file));
+  });
 
-    // Merge all compiled files
+  // Merge all compiled files
+  mergeCompiledFiles();
+
+  logger.info(chalk.green("\n✨ Documentation compilation complete!"));
+});
+
+program.
+command("watch").
+description("Watch for documentation changes and recompile").
+action(() => {
+  logger.info(chalk.blue("Watching for documentation changes...\n"));
+
+  const chokidar = require("chokidar");
+
+  const watcher = chokidar.watch(path.join(DOC_SOURCE, "*.md"), {
+    persistent: true,
+    ignoreInitial: true
+  });
+
+  watcher.on("change", (filePath) => {
+    logger.info(chalk.yellow(`\nFile changed: ${path.basename(filePath)}`));
+    processDocFile(filePath);
     mergeCompiledFiles();
-
-    console.log(chalk.green("\n✨ Documentation compilation complete!"));
   });
 
-program
-  .command("watch")
-  .description("Watch for documentation changes and recompile")
-  .action(() => {
-    console.log(chalk.blue("Watching for documentation changes...\n"));
-
-    const chokidar = require("chokidar");
-
-    const watcher = chokidar.watch(path.join(DOC_SOURCE, "*.md"), {
-      persistent: true,
-      ignoreInitial: true,
-    });
-
-    watcher.on("change", (filePath) => {
-      console.log(chalk.yellow(`\nFile changed: ${path.basename(filePath)}`));
-      processDocFile(filePath);
-      mergeCompiledFiles();
-    });
-
-    watcher.on("add", (filePath) => {
-      console.log(chalk.yellow(`\nFile added: ${path.basename(filePath)}`));
-      processDocFile(filePath);
-      mergeCompiledFiles();
-    });
+  watcher.on("add", (filePath) => {
+    logger.info(chalk.yellow(`\nFile added: ${path.basename(filePath)}`));
+    processDocFile(filePath);
+    mergeCompiledFiles();
   });
+});
 
 program.parse(process.argv);

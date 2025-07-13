@@ -20,8 +20,8 @@ const config = {
   outputDir: process.env.HOOKS_DIR || "src/hooks",
   fileExtensions: {
     typescript: ".ts",
-    test: ".test.ts",
-  },
+    test: ".test.ts"
+  }
 };
 
 // Template definitions
@@ -498,33 +498,33 @@ describe('{{name}}', () => {
 
   // Index file
   index: `export { {{name}} } from './{{name}}';
-export type { {{name}}Options, {{name}}Return } from './{{name}}';`,
+export type { {{name}}Options, {{name}}Return } from './{{name}}';`
 };
 
 // Hook type templates
 const hookTypes = {
   standard: {
     template: templates.standard,
-    description: "Standard hook with state management",
+    description: "Standard hook with state management"
   },
   fetch: {
     template: templates.fetch,
-    description: "Data fetching hook with caching",
+    description: "Data fetching hook with caching"
   },
   localStorage: {
     template: templates.localStorage,
-    description: "Local storage hook with sync",
-  },
+    description: "Local storage hook with sync"
+  }
 };
 
 // Generate hook files
 async function generateHook(name, options) {
-  console.log(chalk.blue(`\n🚀 Generating hook: ${name}\n`));
+  logger.info(chalk.blue(`\n🚀 Generating hook: ${name}\n`));
 
   // Ensure hook name starts with 'use'
   if (!name.startsWith("use")) {
     name = "use" + name.charAt(0).toUpperCase() + name.slice(1);
-    console.log(chalk.yellow(`📝 Hook name adjusted to: ${name}`));
+    logger.info(chalk.yellow(`📝 Hook name adjusted to: ${name}`));
   }
 
   // Create hook directory
@@ -533,7 +533,7 @@ async function generateHook(name, options) {
   try {
     await fs.mkdir(hookDir, { recursive: true });
   } catch (error) {
-    console.error(chalk.red(`❌ Failed to create directory: ${error.message}`));
+    logger.error(chalk.red(`❌ Failed to create directory: ${error.message}`));
     process.exit(1);
   }
 
@@ -544,18 +544,18 @@ async function generateHook(name, options) {
   // Context for templates
   const context = {
     name,
-    description: options.description || hookType.description,
+    description: options.description || hookType.description
   };
 
   // Files to generate
   const files = [
-    {
-      name: `${name}${config.fileExtensions.typescript}`,
-      template: hookTemplate,
-    },
-    { name: `${name}${config.fileExtensions.test}`, template: templates.test },
-    { name: "index.ts", template: templates.index },
-  ];
+  {
+    name: `${name}${config.fileExtensions.typescript}`,
+    template: hookTemplate
+  },
+  { name: `${name}${config.fileExtensions.test}`, template: templates.test },
+  { name: "index.ts", template: templates.index }];
+
 
   // Generate each file
   for (const file of files) {
@@ -565,7 +565,7 @@ async function generateHook(name, options) {
     if (!options.force) {
       try {
         await fs.access(filePath);
-        console.log(chalk.yellow(`⚠️  Skipping ${file.name} (already exists)`));
+        logger.info(chalk.yellow(`⚠️  Skipping ${file.name} (already exists)`));
         continue;
       } catch {}
     }
@@ -576,58 +576,58 @@ async function generateHook(name, options) {
 
     try {
       await fs.writeFile(filePath, content);
-      console.log(chalk.green(`✅ Created ${file.name}`));
+      logger.info(chalk.green(`✅ Created ${file.name}`));
     } catch (error) {
-      console.error(
-        chalk.red(`❌ Failed to create ${file.name}: ${error.message}`),
-      );
+      logger.error(
+        chalk.red(`❌ Failed to create ${file.name}: ${error.message}`));
+
     }
   }
 
   // Success message
-  console.log(chalk.green(`\n✨ Hook ${name} generated successfully!\n`));
-  console.log(chalk.cyan("📁 Files created:"));
-  console.log(chalk.gray(`   ${hookDir}/`));
+  logger.info(chalk.green(`\n✨ Hook ${name} generated successfully!\n`));
+  logger.info(chalk.cyan("📁 Files created:"));
+  logger.info(chalk.gray(`   ${hookDir}/`));
   files.forEach((file) => {
-    console.log(chalk.gray(`   ├── ${file.name}`));
+    logger.info(chalk.gray(`   ├── ${file.name}`));
   });
 
-  console.log(chalk.cyan("\n🎯 Next steps:"));
-  console.log(
+  logger.info(chalk.cyan("\n🎯 Next steps:"));
+  logger.info(
     chalk.gray(
-      `   1. Import hook: import { ${name} } from '${path.relative(process.cwd(), hookDir)}';`,
-    ),
-  );
-  console.log(chalk.gray(`   2. Implement hook logic`));
-  console.log(chalk.gray(`   3. Update tests`));
-  console.log(chalk.gray(`   4. Run tests: npm test ${name}`));
+      `   1. Import hook: import { ${name} } from '${path.relative(process.cwd(), hookDir)}';`
+    ));
+
+  logger.info(chalk.gray(`   2. Implement hook logic`));
+  logger.info(chalk.gray(`   3. Update tests`));
+  logger.info(chalk.gray(`   4. Run tests: npm test ${name}`));
 
   if (options.type === "fetch") {
-    console.log(chalk.gray(`   5. Configure API endpoint in the hook`));
+    logger.info(chalk.gray(`   5. Configure API endpoint in the hook`));
   } else if (options.type === "localStorage") {
-    console.log(chalk.gray(`   5. Define storage key and data structure`));
+    logger.info(chalk.gray(`   5. Define storage key and data structure`));
   }
 }
 
 // CLI setup
-program
-  .name("generate-hook")
-  .description("Generate a React hook with TypeScript and tests")
-  .argument("<name>", 'Hook name (will be prefixed with "use" if not present)')
-  .option("-f, --force", "Overwrite existing files")
-  .option("-d, --dir <dir>", "Output directory", config.outputDir)
-  .option(
-    "-t, --type <type>",
-    "Hook type (standard, fetch, localStorage)",
-    "standard",
-  )
-  .option("--description <desc>", "Hook description")
-  .action(async (name, options) => {
-    if (options.dir) {
-      config.outputDir = options.dir;
-    }
-    await generateHook(name, options);
-  });
+program.
+name("generate-hook").
+description("Generate a React hook with TypeScript and tests").
+argument("<name>", 'Hook name (will be prefixed with "use" if not present)').
+option("-f, --force", "Overwrite existing files").
+option("-d, --dir <dir>", "Output directory", config.outputDir).
+option(
+  "-t, --type <type>",
+  "Hook type (standard, fetch, localStorage)",
+  "standard"
+).
+option("--description <desc>", "Hook description").
+action(async (name, options) => {
+  if (options.dir) {
+    config.outputDir = options.dir;
+  }
+  await generateHook(name, options);
+});
 
 // Parse CLI arguments
 program.parse(process.argv);
@@ -635,8 +635,8 @@ program.parse(process.argv);
 // Show help if no arguments
 if (!process.argv.slice(2).length) {
   program.outputHelp();
-  console.log(chalk.cyan("\nHook Types:"));
+  logger.info(chalk.cyan("\nHook Types:"));
   Object.entries(hookTypes).forEach(([type, info]) => {
-    console.log(chalk.gray(`  ${type.padEnd(15)} - ${info.description}`));
+    logger.info(chalk.gray(`  ${type.padEnd(15)} - ${info.description}`));
   });
 }

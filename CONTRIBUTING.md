@@ -1,6 +1,6 @@
-# Contributing to ProjectTemplate
+# Contributing to AIPatternEnforcer
 
-Thank you for your interest in contributing to ProjectTemplate! This guide helps you get started with 
+Thank you for your interest in contributing to AIPatternEnforcer! This guide helps you get started with 
 contributing to our AI development methodology kit.
 
 ## Table of Contents

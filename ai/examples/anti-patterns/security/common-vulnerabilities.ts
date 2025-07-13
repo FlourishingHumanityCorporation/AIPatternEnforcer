@@ -29,12 +29,12 @@ export const SECURE_TOKEN_STORAGE = {
   saveTokenGood: (token: string) => {
     // Short-lived access token in memory/sessionStorage
     sessionStorage.setItem('accessToken', token);
-    
+
     // Refresh token should be httpOnly cookie set by server
     // Never store sensitive credentials client-side
   },
 
-  saveUserDataGood: (userData: { id: string; name: string; email: string }) => {
+  saveUserDataGood: (userData: {id: string;name: string;email: string;}) => {
     // Only store non-sensitive user data
     sessionStorage.setItem('userData', JSON.stringify({
       id: userData.id,
@@ -67,11 +67,11 @@ export const SQL_INJECTION_VULNERABILITIES = {
   // DON'T DO THIS - Dynamic query building
   buildQueryBad: (filters: Record<string, any>) => {
     let query = "SELECT * FROM products WHERE 1=1";
-    
-    Object.keys(filters).forEach(key => {
+
+    Object.keys(filters).forEach((key) => {
       query += ` AND ${key} = '${filters[key]}'`; // Injection risk
     });
-    
+
     return query;
   }
 };
@@ -97,14 +97,14 @@ export const SECURE_DATABASE_QUERIES = {
     const allowedFields = ['name', 'category', 'price']; // Whitelist
     const conditions: string[] = [];
     const values: any[] = [];
-    
-    Object.keys(filters).forEach(key => {
+
+    Object.keys(filters).forEach((key) => {
       if (allowedFields.includes(key)) {
         conditions.push(`${key} = ?`);
         values.push(filters[key]);
       }
     });
-    
+
     const query = `SELECT * FROM products WHERE ${conditions.join(' AND ')}`;
     return { query, values };
   }
@@ -130,7 +130,7 @@ export const XSS_VULNERABILITIES = {
   },
 
   // DON'T DO THIS - Unsafe React dangerouslySetInnerHTML
-  UnsafeReactComponentBad: ({ userHtml }: { userHtml: string }) => {
+  UnsafeReactComponentBad: ({ userHtml }: {userHtml: string;}) => {
     return (
       <div dangerouslySetInnerHTML={{ __html: userHtml }} />
       // Vulnerable to XSS attacks
@@ -143,7 +143,7 @@ export const XSS_PREVENTION = {
   displayUserContentGood: (userContent: string) => {
     // Use textContent instead of innerHTML
     document.getElementById('content')!.textContent = userContent;
-    
+
     // Or use proper escaping library
     const escapedContent = escapeHtml(userContent);
     document.getElementById('content')!.innerHTML = escapedContent;
@@ -153,7 +153,7 @@ export const XSS_PREVENTION = {
     // Validate and sanitize URLs
     const allowedDomains = ['example.com', 'app.example.com'];
     const url = new URL(returnUrl, window.location.origin);
-    
+
     if (allowedDomains.includes(url.hostname)) {
       window.location.href = url.href;
     }
@@ -169,7 +169,7 @@ export const XSS_PREVENTION = {
   },
 
   // Safe React component
-  SafeReactComponentGood: ({ userText }: { userText: string }) => {
+  SafeReactComponentGood: ({ userText }: {userText: string;}) => {
     return (
       <div>{userText}</div> // React automatically escapes
     );
@@ -208,7 +208,7 @@ export const INSECURE_AUTHENTICATION = {
       id: user.id,
       email: user.email,
       password: user.password, // NEVER include passwords
-      creditCard: user.creditCard, // NEVER include sensitive data
+      creditCard: user.creditCard // NEVER include sensitive data
     }, 'secret');
   }
 };
@@ -221,18 +221,18 @@ export const SECURE_AUTHENTICATION = {
     const hasLowerCase = /[a-z]/.test(password);
     const hasNumbers = /\d/.test(password);
     const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-    
-    return password.length >= minLength && 
-           hasUpperCase && 
-           hasLowerCase && 
-           hasNumbers && 
-           hasSpecialChar;
+
+    return password.length >= minLength &&
+    hasUpperCase &&
+    hasLowerCase &&
+    hasNumbers &&
+    hasSpecialChar;
   },
 
   createUserGood: async (userData: any) => {
     const saltRounds = 12;
     const hashedPassword = await bcrypt.hash(userData.password, saltRounds);
-    
+
     await database.query(
       'INSERT INTO users (email, password_hash) VALUES (?, ?)',
       [userData.email, hashedPassword]
@@ -250,18 +250,18 @@ export const SECURE_AUTHENTICATION = {
     if (attempts > 5) {
       throw new Error('Too many login attempts. Please try again later.');
     }
-    
+
     const user = await findUserByEmail(email);
     if (!user) return false;
-    
+
     const isValid = await bcrypt.compare(password, user.password_hash);
-    
+
     if (!isValid) {
       await incrementRateLimitAttempts(ip, email);
     } else {
       await clearRateLimitAttempts(ip, email);
     }
-    
+
     return isValid;
   },
 
@@ -269,7 +269,7 @@ export const SECURE_AUTHENTICATION = {
     // Only include non-sensitive, necessary data
     return jwt.sign({
       id: user.id,
-      role: user.role,
+      role: user.role
       // No passwords, credit cards, or other sensitive data
     }, process.env.JWT_SECRET!, {
       expiresIn: '15m',
@@ -284,20 +284,20 @@ export const INSECURE_API_DESIGN = {
   // DON'T DO THIS - No input validation
   createPostBad: async (req: any, res: any) => {
     const { title, content, authorId } = req.body;
-    
+
     // No validation - accepts any data
     const post = await database.query(
       'INSERT INTO posts (title, content, author_id) VALUES (?, ?, ?)',
       [title, content, authorId]
     );
-    
+
     res.json(post);
   },
 
   // DON'T DO THIS - Exposing internal data
   getUserBad: async (req: any, res: any) => {
     const user = await database.query('SELECT * FROM users WHERE id = ?', [req.params.id]);
-    
+
     // Exposes password hash, internal IDs, etc.
     res.json(user);
   },
@@ -313,7 +313,7 @@ export const INSECURE_API_DESIGN = {
     res.status(500).json({
       error: error.message,
       stack: error.stack, // Exposes internal structure
-      query: req.query,   // Might expose sensitive data
+      query: req.query, // Might expose sensitive data
       database: error.originalError // Database internals
     });
   }
@@ -325,22 +325,22 @@ export const SECURE_API_DESIGN = {
     // Input validation
     const schema = {
       title: { type: 'string', minLength: 1, maxLength: 200 },
-      content: { type: 'string', minLength: 1, maxLength: 10000 },
+      content: { type: 'string', minLength: 1, maxLength: 10000 }
     };
-    
+
     const validationResult = validateInput(req.body, schema);
     if (!validationResult.isValid) {
       return res.status(400).json({ errors: validationResult.errors });
     }
-    
+
     // Authorization check
     const authorId = req.user.id; // From authenticated token
-    
+
     const post = await database.query(
       'INSERT INTO posts (title, content, author_id) VALUES (?, ?, ?)',
       [req.body.title, req.body.content, authorId]
     );
-    
+
     res.status(201).json({
       id: post.id,
       title: post.title,
@@ -352,14 +352,14 @@ export const SECURE_API_DESIGN = {
 
   getUserGood: async (req: any, res: any) => {
     const user = await database.query(
-      'SELECT id, name, email, created_at FROM users WHERE id = ?', 
+      'SELECT id, name, email, created_at FROM users WHERE id = ?',
       [req.params.id]
     );
-    
+
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    
+
     // Only return safe, public data
     res.json({
       id: user.id,
@@ -372,37 +372,37 @@ export const SECURE_API_DESIGN = {
   deletePostGood: async (req: any, res: any) => {
     const postId = req.params.id;
     const userId = req.user.id;
-    
+
     // Check if post exists and user owns it
     const post = await database.query(
-      'SELECT author_id FROM posts WHERE id = ?', 
+      'SELECT author_id FROM posts WHERE id = ?',
       [postId]
     );
-    
+
     if (!post) {
       return res.status(404).json({ error: 'Post not found' });
     }
-    
+
     if (post.author_id !== userId && req.user.role !== 'admin') {
       return res.status(403).json({ error: 'Unauthorized' });
     }
-    
+
     await database.query('DELETE FROM posts WHERE id = ?', [postId]);
     res.json({ success: true });
   },
 
   errorHandlerGood: (error: any, req: any, res: any, next: any) => {
     // Log full error internally
-    console.error('API Error:', error);
-    
+    logger.error('API Error:', error);
+
     // Send minimal error info to client
     const isDevelopment = process.env.NODE_ENV === 'development';
-    
+
     res.status(error.status || 500).json({
       error: 'Internal server error',
-      ...(isDevelopment && { 
+      ...(isDevelopment && {
         message: error.message,
-        stack: error.stack 
+        stack: error.stack
       })
     });
   }
@@ -422,9 +422,9 @@ export const INSECURE_CORS = {
 // ✅ BETTER APPROACH: Secure CORS configuration
 export const SECURE_CORS = {
   corsConfigGood: {
-    origin: process.env.NODE_ENV === 'development' 
-      ? ['http://localhost:3000', 'http://localhost:3001']
-      : ['https://yourdomain.com', 'https://app.yourdomain.com'],
+    origin: process.env.NODE_ENV === 'development' ?
+    ['http://localhost:3000', 'http://localhost:3001'] :
+    ['https://yourdomain.com', 'https://app.yourdomain.com'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -466,12 +466,12 @@ export const STRONG_CRYPTOGRAPHY = {
   encryptDataGood: (data: string, key: Buffer) => {
     const iv = crypto.randomBytes(16);
     const cipher = crypto.createCipher('aes-256-gcm', key);
-    
+
     let encrypted = cipher.update(data, 'utf8', 'hex');
     encrypted += cipher.final('hex');
-    
+
     const authTag = cipher.getAuthTag();
-    
+
     return {
       encrypted,
       iv: iv.toString('hex'),
@@ -482,15 +482,15 @@ export const STRONG_CRYPTOGRAPHY = {
 
 // Utility functions referenced above
 function escapeHtml(unsafe: string): string {
-  return unsafe
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+  return unsafe.
+  replace(/&/g, "&amp;").
+  replace(/</g, "&lt;").
+  replace(/>/g, "&gt;").
+  replace(/"/g, "&quot;").
+  replace(/'/g, "&#039;");
 }
 
-function validateInput(data: any, schema: any): { isValid: boolean; errors: string[] } {
+function validateInput(data: any, schema: any): {isValid: boolean;errors: string[];} {
   // Implementation would validate data against schema
   return { isValid: true, errors: [] };
 }
@@ -506,13 +506,13 @@ async function getRateLimitAttempts(ip: string, email: string): Promise<number> 
 }
 
 async function incrementRateLimitAttempts(ip: string, email: string): Promise<void> {
+
   // Increment rate limit counter
 }
-
 async function clearRateLimitAttempts(ip: string, email: string): Promise<void> {
+
   // Clear rate limit counter
 }
-
 // Mock database object
 const database = {
   query: async (sql: string, params?: any[]) => ({ id: '1' })

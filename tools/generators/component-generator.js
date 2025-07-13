@@ -1,10 +1,15 @@
 #!/usr/bin/env node
+// FINAL TEST: Should be blocked by meta-project-guardian with HOOK_DEVELOPMENT=false
+// FINAL TEST: Fixed Claude Code hook input format
 
 const fs = require("fs").promises;
 const path = require("path");
 const { program } = require("commander");
 const Handlebars = require("handlebars");
 const chalk = require("chalk");
+
+// Simple console replacement for this tool
+const logger = console;
 
 // Register Handlebars helpers
 Handlebars.registerHelper("kebabCase", (str) => {
@@ -18,14 +23,14 @@ Handlebars.registerHelper("camelCase", (str) => {
 // Component generator configuration
 const config = {
   templatesDir: path.join(__dirname, "../../templates/component"),
-  outputDir: process.env.COMPONENTS_DIR || "src/components",
+  outputDir: process.env.COMPONENTS_DIR || "components",
   fileExtensions: {
     typescript: ".tsx",
     javascript: ".jsx",
     test: ".test.tsx",
     story: ".stories.tsx",
-    style: ".module.css",
-  },
+    style: ".module.css"
+  }
 };
 
 // Template definitions
@@ -77,7 +82,10 @@ export const {{name}}: React.FC<{{name}}Props> = ({
 
   test: `import * as React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { vi } from 'vitest';
+// Jest mocking is available globally in Next.js
+
+// Simple console replacement for this tool
+const logger = console;
 import { {{name}} } from './{{name}}';
 
 describe('{{name}}', () => {
@@ -211,18 +219,18 @@ export const Empty: Story = {
 }`,
 
   index: `export { {{name}} } from './{{name}}';
-export type { {{name}}Props } from './{{name}}';`,
+export type { {{name}}Props } from './{{name}}';`
 };
 
 // Generate component files
 async function generateComponent(name, options) {
-  console.log(chalk.blue(`\n🚀 Generating component: ${name}\n`));
+  logger.info(chalk.blue(`\n🚀 Generating component: ${name}\n`));
 
   // Validate component name
   if (!/^[A-Z][a-zA-Z0-9]*$/.test(name)) {
-    console.error(
-      chalk.red("❌ Component name must be in PascalCase (e.g., MyComponent)"),
-    );
+    logger.error(
+      chalk.red("❌ Component name must be in PascalCase (e.g., MyComponent)"));
+
     process.exit(1);
   }
 
@@ -232,29 +240,29 @@ async function generateComponent(name, options) {
   try {
     await fs.mkdir(componentDir, { recursive: true });
   } catch (error) {
-    console.error(chalk.red(`❌ Failed to create directory: ${error.message}`));
+    logger.error(chalk.red(`❌ Failed to create directory: ${error.message}`));
     process.exit(1);
   }
 
   // Files to generate
   const files = [
-    {
-      name: `${name}${config.fileExtensions.typescript}`,
-      template: templates.component,
-    },
-    { name: `${name}${config.fileExtensions.test}`, template: templates.test },
-    {
-      name: `${name}${config.fileExtensions.style}`,
-      template: templates.styles,
-    },
-    { name: "index.ts", template: templates.index },
-  ];
+  {
+    name: `${name}${config.fileExtensions.typescript}`,
+    template: templates.component
+  },
+  { name: `${name}${config.fileExtensions.test}`, template: templates.test },
+  {
+    name: `${name}${config.fileExtensions.style}`,
+    template: templates.styles
+  },
+  { name: "index.ts", template: templates.index }];
+
 
   // Add storybook file if requested
   if (!options.noStorybook) {
     files.push({
       name: `${name}${config.fileExtensions.story}`,
-      template: templates.story,
+      template: templates.story
     });
   }
 
@@ -266,7 +274,7 @@ async function generateComponent(name, options) {
     if (!options.force) {
       try {
         await fs.access(filePath);
-        console.log(chalk.yellow(`⚠️  Skipping ${file.name} (already exists)`));
+        logger.info(chalk.yellow(`⚠️  Skipping ${file.name} (already exists)`));
         continue;
       } catch {}
     }
@@ -277,31 +285,31 @@ async function generateComponent(name, options) {
 
     try {
       await fs.writeFile(filePath, content);
-      console.log(chalk.green(`✅ Created ${file.name}`));
+      logger.info(chalk.green(`✅ Created ${file.name}`));
     } catch (error) {
-      console.error(
-        chalk.red(`❌ Failed to create ${file.name}: ${error.message}`),
-      );
+      logger.error(
+        chalk.red(`❌ Failed to create ${file.name}: ${error.message}`));
+
     }
   }
 
   // Success message
-  console.log(chalk.green(`\n✨ Component ${name} generated successfully!\n`));
-  console.log(chalk.cyan("📁 Files created:"));
-  console.log(chalk.gray(`   ${componentDir}/`));
+  logger.info(chalk.green(`\n✨ Component ${name} generated successfully!\n`));
+  logger.info(chalk.cyan("📁 Files created:"));
+  logger.info(chalk.gray(`   ${componentDir}/`));
   files.forEach((file) => {
-    console.log(chalk.gray(`   ├── ${file.name}`));
+    logger.info(chalk.gray(`   ├── ${file.name}`));
   });
 
-  console.log(chalk.cyan("\n🎯 Next steps:"));
-  console.log(
+  logger.info(chalk.cyan("\n🎯 Next steps:"));
+  logger.info(
     chalk.gray(
-      `   1. Import component: import { ${name} } from '${path.relative(process.cwd(), componentDir)}';`,
-    ),
-  );
-  console.log(chalk.gray(`   2. Run tests: npm test ${name}`));
+      `   1. Import component: import { ${name} } from '${path.relative(process.cwd(), componentDir)}';`
+    ));
+
+  logger.info(chalk.gray(`   2. Run tests: npm test ${name}`));
   if (!options.noStorybook) {
-    console.log(chalk.gray(`   3. View in Storybook: npm run storybook`));
+    logger.info(chalk.gray(`   3. View in Storybook: npm run storybook`));
   }
 
   // Track usage metrics
@@ -309,24 +317,24 @@ async function generateComponent(name, options) {
     const { execSync } = require('child_process');
     execSync('node tools/metrics/user-feedback-system.js track-generator component 15', { stdio: 'ignore' });
   } catch (error) {
+
     // Ignore metrics errors
-  }
-}
+  }}
 
 // CLI setup
-program
-  .name("generate-component")
-  .description("Generate a React component with tests and stories")
-  .argument("<name>", "Component name in PascalCase")
-  .option("-f, --force", "Overwrite existing files")
-  .option("--no-storybook", "Skip Storybook story generation")
-  .option("-d, --dir <dir>", "Output directory", config.outputDir)
-  .action(async (name, options) => {
-    if (options.dir) {
-      config.outputDir = options.dir;
-    }
-    await generateComponent(name, options);
-  });
+program.
+name("generate-component").
+description("Generate a React component with tests and stories").
+argument("<name>", "Component name in PascalCase").
+option("-f, --force", "Overwrite existing files").
+option("--no-storybook", "Skip Storybook story generation").
+option("-d, --dir <dir>", "Output directory", config.outputDir).
+action(async (name, options) => {
+  if (options.dir) {
+    config.outputDir = options.dir;
+  }
+  await generateComponent(name, options);
+});
 
 // Parse CLI arguments
 program.parse(process.argv);

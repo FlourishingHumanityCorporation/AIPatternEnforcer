@@ -17,15 +17,15 @@ function isMarkdownFile(filePath) {
 function shouldProcess(filePath) {
   // Skip node_modules, .git, and other ignored directories
   const skipPatterns = [
-    'node_modules/',
-    '.git/',
-    'dist/',
-    'build/',
-    '.next/',
-    'coverage/'
-  ];
+  'node_modules/',
+  '.git/',
+  'dist/',
+  'build/',
+  '.next/',
+  'coverage/'];
 
-  return !skipPatterns.some(pattern => filePath.includes(pattern));
+
+  return !skipPatterns.some((pattern) => filePath.includes(pattern));
 }
 
 function runFixDocs(filePath) {
@@ -61,7 +61,7 @@ function main() {
     // Read JSON input from stdin
     let inputData = '';
     process.stdin.setEncoding('utf8');
-    
+
     process.stdin.on('readable', () => {
       const chunk = process.stdin.read();
       if (chunk !== null) {
@@ -73,7 +73,7 @@ function main() {
       try {
         const hookData = JSON.parse(inputData);
         const { tool_name, tool_input, tool_response } = hookData;
-        
+
         // Only process successful file operations
         if (!['Write', 'Edit', 'MultiEdit'].includes(tool_name)) {
           process.exit(0);
@@ -102,14 +102,14 @@ function main() {
 
         // Output success message to stdout (shown in transcript mode)
         if (processedActions.length > 0) {
-          console.log(`📝 Auto-formatted: ${path.basename(filePath)}`);
-          processedActions.forEach(action => {
-            console.log(`   ✓ ${action}`);
+          logger.info(`📝 Auto-formatted: ${path.basename(filePath)}`);
+          processedActions.forEach((action) => {
+            logger.info(`   ✓ ${action}`);
           });
         }
 
         process.exit(0);
-        
+
       } catch (error) {
         // Don't fail the hook on parsing errors
         process.exit(0);

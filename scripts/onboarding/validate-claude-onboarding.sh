@@ -313,23 +313,25 @@ generate_validation_report() {
   "validationResults": {
     "onboardingCompletion": true,
     "learnPhasesCompleted": true,
-    "coreCapabilitiesValidated": true,
+    "coreCapabilitiesValidated": false,
     "practicalWorkflowsTested": false,
     "patternKnowledgeVerified": true,
-    "realComplianceScore": "$compliance_percentage%"
+    "realComplianceScore": "PENDING - Run 'npm run validate:real' for actual compliance status"
   },
   "readinessLevel": "development-only",
   "recommendations": [
-    "Monitor compliance rates during real development work",
+    "CRITICAL: Run 'npm run validate:real' to see actual project status",
+    "Fix logging violations with 'npm run fix:logs'",
+    "Fix linting errors with 'npm run lint -- --fix'",
+    "Increase test coverage from 8% to 80%",
     "Review CLAUDE.md rules regularly",
-    "Practice Arrow-Chain RCA methodology",
-    "Use generators for new component creation",
-    "Maintain 90%+ validation compliance"
+    "Practice Arrow-Chain RCA methodology"
   ],
   "nextSteps": [
-    "Begin practical development work",
+    "Fix critical compliance violations first",
+    "Run 'npm run validate:real' to track progress",
+    "Begin practical development work only after validation passes",
     "Apply learned patterns to real tasks",
-    "Contribute to pattern library improvements",
     "Monitor and improve compliance metrics"
   ]
 }
@@ -356,13 +358,13 @@ generate_completion_certificate() {
 ║  Total Duration: $(node -e "const state = JSON.parse(require('fs').readFileSync('$ONBOARDING_STATE_FILE', 'utf8')); const phases = state.phases; const total = Object.values(phases).reduce((sum, phase) => { const duration = phase.duration ? parseInt(phase.duration.replace('s', '')) : 0; return sum + duration; }, 0); console.log(total + 's');")                                          ║
 ║                                                                  ║
 ║  ✅ LEARN Framework Completed                                   ║
-║  ✅ Core Capabilities Verified                                  ║
+║  ⚠️  Core Capabilities PENDING (Check with 'npm run validate:real') ║
 ║  ✅ Pattern Recognition Trained                                 ║
-║  ✅ Workflow Integration Tested                                 ║
-║  ✅ Validation System Integrated                                ║
+║  ⚠️  Workflow Integration NEEDS COMPLIANCE FIXES               ║
+║  ✅ Real Validation System Integrated                          ║
 ║                                                                  ║
-║  The Claude Code instance is now ready for production           ║
-║  development work with ProjectTemplate patterns.                ║
+║  IMPORTANT: Project has 2,000+ compliance violations.           ║
+║  Fix issues before production development work.                 ║
 ║                                                                  ║
 ╚══════════════════════════════════════════════════════════════════╝
 EOF

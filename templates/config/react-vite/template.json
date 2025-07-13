@@ -23,13 +23,13 @@
       "description": "Package configuration with optimized scripts and dependencies"
     },
     {
-      "template": "tsconfig.json.hbs", 
+      "template": "tsconfig.json.hbs",
       "target": "tsconfig.json",
       "description": "TypeScript configuration with strict settings and path mapping"
     },
     {
       "template": "tsconfig.node.json.hbs",
-      "target": "tsconfig.node.json", 
+      "target": "tsconfig.node.json",
       "description": "Node.js specific TypeScript configuration"
     },
     {
@@ -65,7 +65,7 @@
       "default": "my-react-app"
     },
     "description": {
-      "type": "string", 
+      "type": "string",
       "description": "Project description",
       "default": "A modern React application"
     },
@@ -92,5 +92,11 @@
     "node": ">=18.0.0",
     "npm": ">=9.0.0"
   },
-  "tags": ["react", "vite", "typescript", "frontend", "spa"]
+  "tags": [
+    "react",
+    "vite",
+    "typescript",
+    "frontend",
+    "spa"
+  ]
 }

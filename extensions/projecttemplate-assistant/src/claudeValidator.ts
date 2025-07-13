@@ -25,7 +25,7 @@ export class ClaudeValidator {
     if (!workspaceFolder) {
       throw new Error("No workspace folder found");
     }
-    
+
     this.workspacePath = workspaceFolder.uri.fsPath;
     this.validatorPath = path.join(
       this.workspacePath,
@@ -44,7 +44,7 @@ export class ClaudeValidator {
   }
 
   async validateResponse(responseText: string): Promise<ValidationResult> {
-    if (!await this.isValidatorAvailable()) {
+    if (!(await this.isValidatorAvailable())) {
       throw new Error("Claude validator not found. Make sure you're in a ProjectTemplate workspace.");
     }
 
@@ -52,7 +52,7 @@ export class ClaudeValidator {
       const startTime = Date.now();
       const child = spawn("node", [this.validatorPath, "--json"], {
         cwd: this.workspacePath,
-        stdio: ["pipe", "pipe", "pipe"],
+        stdio: ["pipe", "pipe", "pipe"]
       });
 
       let stdout = "";
@@ -77,16 +77,16 @@ export class ClaudeValidator {
         try {
           // Parse the JSON output from the validator
           const result = JSON.parse(stdout);
-          
+
           // Track validation result
           this.trackValidation({
             ...result,
-            processingTime,
+            processingTime
           });
 
           resolve({
             ...result,
-            processingTime,
+            processingTime
           });
         } catch (error) {
           reject(new Error(`Failed to parse validation result: ${error}`));
@@ -105,7 +105,7 @@ export class ClaudeValidator {
 
   async validateFromClipboard(): Promise<ValidationResult> {
     const clipboardText = await vscode.env.clipboard.readText();
-    
+
     if (!clipboardText || clipboardText.trim().length === 0) {
       throw new Error("Clipboard is empty");
     }
@@ -120,7 +120,7 @@ export class ClaudeValidator {
     const icon = passed ? "✅" : "❌";
     const title = `${icon} Claude Validation ${passed ? "Passed" : "Failed"}`;
     const scoreText = `Score: ${score}/100`;
-    
+
     if (passed) {
       // Show success notification
       vscode.window.showInformationMessage(
@@ -134,11 +134,11 @@ export class ClaudeValidator {
     } else {
       // Show failure with violations
       const violationCount = violations.length;
-      const criticalCount = violations.filter(v => v.severity === "CRITICAL").length;
-      
-      const message = criticalCount > 0 
-        ? `${title} - ${criticalCount} critical violations`
-        : `${title} - ${violationCount} violations (${scoreText})`;
+      const criticalCount = violations.filter((v) => v.severity === "CRITICAL").length;
+
+      const message = criticalCount > 0 ?
+      `${title} - ${criticalCount} critical violations` :
+      `${title} - ${violationCount} violations (${scoreText})`;
 
       vscode.window.showWarningMessage(
         message,
@@ -162,7 +162,7 @@ export class ClaudeValidator {
       vscode.ViewColumn.Two,
       {
         enableScripts: true,
-        localResourceRoots: [],
+        localResourceRoots: []
       }
     );
 
@@ -171,8 +171,8 @@ export class ClaudeValidator {
 
   private getResultsHtml(result: ValidationResult): string {
     const { passed, score, violations, summary, processingTime } = result;
-    
-    const violationsHtml = violations.map(v => `
+
+    const violationsHtml = violations.map((v) => `
       <div class="violation ${v.severity.toLowerCase()}">
         <div class="violation-header">
           <span class="severity">${v.severity}</span>
@@ -309,9 +309,9 @@ export class ClaudeValidator {
 
     <div class="stats">
         <span>Processing Time: ${processingTime}ms</span>
-        <span>Critical: ${violations.filter(v => v.severity === 'CRITICAL').length}</span>
-        <span>Warnings: ${violations.filter(v => v.severity === 'WARNING').length}</span>
-        <span>Info: ${violations.filter(v => v.severity === 'INFO').length}</span>
+        <span>Critical: ${violations.filter((v) => v.severity === 'CRITICAL').length}</span>
+        <span>Warnings: ${violations.filter((v) => v.severity === 'WARNING').length}</span>
+        <span>Info: ${violations.filter((v) => v.severity === 'INFO').length}</span>
     </div>
 
     <div class="actions">
@@ -335,8 +335,8 @@ export class ClaudeValidator {
     `;
   }
 
-  private showFixSuggestions(violations: Array<{ rule: string; severity: string; description: string; context?: string }>): void {
-    const suggestions = violations.map(v => {
+  private showFixSuggestions(violations: Array<{rule: string;severity: string;description: string;context?: string;}>): void {
+    const suggestions = violations.map((v) => {
       switch (v.rule) {
         case 'promptImprovement':
           return '• Start complex requests with "**Improved Prompt**:"';
@@ -392,19 +392,19 @@ export class ClaudeValidator {
       const metricsPath = path.join(this.workspacePath, "tools", "metrics", "user-feedback-system.js");
       if (fs.existsSync(metricsPath)) {
         spawn("node", [
-          metricsPath,
-          "track-claude",
-          result.passed.toString(),
-          result.score.toString(),
-          result.processingTime.toString()
-        ], {
+        metricsPath,
+        "track-claude",
+        result.passed.toString(),
+        result.score.toString(),
+        result.processingTime.toString()],
+        {
           cwd: this.workspacePath,
           stdio: 'ignore'
         });
       }
     } catch (error) {
       // Don't break validation for tracking failures
-      console.warn("Failed to track validation:", error);
+      logger.warn("Failed to track validation:", error);
     }
   }
 

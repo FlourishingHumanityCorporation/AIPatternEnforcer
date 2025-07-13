@@ -27,8 +27,8 @@ const config = {
     javascript: ".jsx",
     test: ".test.tsx",
     story: ".stories.tsx",
-    style: ".module.css",
-  },
+    style: ".module.css"
+  }
 };
 
 // Template type definitions
@@ -36,29 +36,29 @@ const TEMPLATE_TYPES = {
   interactive: {
     name: "Interactive",
     description:
-      "Buttons, inputs, toggles - components that users interact with",
-    examples: "Button, TextField, Toggle, Select",
+    "Buttons, inputs, toggles - components that users interact with",
+    examples: "Button, TextField, Toggle, Select"
   },
   display: {
     name: "Display",
     description: "Cards, lists, badges - components that display information",
-    examples: "Card, Badge, Avatar, Chip",
+    examples: "Card, Badge, Avatar, Chip"
   },
   form: {
     name: "Form",
     description: "Form fields with built-in validation and error handling",
-    examples: "FormInput, FormSelect, FormTextarea, FormCheckbox",
+    examples: "FormInput, FormSelect, FormTextarea, FormCheckbox"
   },
   data: {
     name: "Data",
     description: "Tables, grids, charts - components that display data sets",
-    examples: "DataTable, DataGrid, Chart, List",
+    examples: "DataTable, DataGrid, Chart, List"
   },
   overlay: {
     name: "Overlay",
     description: "Modals, tooltips, popovers - components that overlay content",
-    examples: "Modal, Tooltip, Popover, Drawer",
-  },
+    examples: "Modal, Tooltip, Popover, Drawer"
+  }
 };
 
 // Load template content based on type
@@ -67,15 +67,15 @@ async function loadTemplate(templateType, fileName) {
     __dirname,
     "../../templates/component",
     templateType,
-    fileName,
+    fileName
   );
   try {
     return await fs.readFile(templatePath, "utf-8");
   } catch (error) {
     // Fall back to default template if specific one doesn't exist
-    console.warn(
-      chalk.yellow(`Template ${templatePath} not found, using default`),
-    );
+    logger.warn(
+      chalk.yellow(`Template ${templatePath} not found, using default`));
+
     return null;
   }
 }
@@ -104,37 +104,37 @@ function getDefaultComponentTemplate(templateType) {
   const baseImports = `import React from 'react';
 import styles from './{{name}}.module.css';`;
 
-  const loadingStates = ["form", "data", "interactive"].includes(templateType)
-    ? `
+  const loadingStates = ["form", "data", "interactive"].includes(templateType) ?
+  `
   /** Loading state */
   isLoading?: boolean;
   /** Error state */
   error?: string | null;
   /** Disabled state */
-  disabled?: boolean;`
-    : "";
+  disabled?: boolean;` :
+  "";
 
   const ariaProps =
-    templateType === "interactive"
-      ? `
+  templateType === "interactive" ?
+  `
   /** Accessible label */
   ariaLabel?: string;
   /** Aria described by ID */
-  ariaDescribedBy?: string;`
-      : "";
+  ariaDescribedBy?: string;` :
+  "";
 
   const dataProps =
-    templateType === "data"
-      ? `
+  templateType === "data" ?
+  `
   /** Data to display */
   data?: any[];
   /** Empty state message */
-  emptyMessage?: string;`
-      : "";
+  emptyMessage?: string;` :
+  "";
 
   const formProps =
-    templateType === "form"
-      ? `
+  templateType === "form" ?
+  `
   /** Field name */
   name: string;
   /** Field value */
@@ -144,19 +144,19 @@ import styles from './{{name}}.module.css';`;
   /** Required field */
   required?: boolean;
   /** Change handler */
-  onChange?: (value: string) => void;`
-      : "";
+  onChange?: (value: string) => void;` :
+  "";
 
   const overlayProps =
-    templateType === "overlay"
-      ? `
+  templateType === "overlay" ?
+  `
   /** Open state */
   isOpen: boolean;
   /** Close handler */
   onClose: () => void;
   /** Click outside to close */
-  closeOnClickOutside?: boolean;`
-      : "";
+  closeOnClickOutside?: boolean;` :
+  "";
 
   return `${baseImports}
 
@@ -180,29 +180,29 @@ export interface {{name}}Props {
 export const {{name}}: React.FC<{{name}}Props> = ({
   children,
   className = '',${
-    templateType === "form"
-      ? '\n  name,\n  value = "",\n  error,\n  required = false,\n  onChange,'
-      : ""
-  }${
-    templateType === "overlay"
-      ? "\n  isOpen,\n  onClose,\n  closeOnClickOutside = true,"
-      : ""
-  }${
-    ["data", "interactive"].includes(templateType)
-      ? "\n  isLoading = false,\n  error = null,\n  disabled = false,"
-      : ""
-  }${
-    templateType === "form" ? "\n  isLoading = false,\n  disabled = false," : ""
-  }${
-    templateType === "data"
-      ? '\n  data = [],\n  emptyMessage = "No data available",'
-      : ""
-  }
+  templateType === "form" ?
+  '\n  name,\n  value = "",\n  error,\n  required = false,\n  onChange,' :
+  ""}${
+
+  templateType === "overlay" ?
+  "\n  isOpen,\n  onClose,\n  closeOnClickOutside = true," :
+  ""}${
+
+  ["data", "interactive"].includes(templateType) ?
+  "\n  isLoading = false,\n  error = null,\n  disabled = false," :
+  ""}${
+
+  templateType === "form" ? "\n  isLoading = false,\n  disabled = false," : ""}${
+
+  templateType === "data" ?
+  '\n  data = [],\n  emptyMessage = "No data available",' :
+  ""}
   testId = '{{kebabCase name}}'
 }) => {
   ${
-    templateType === "overlay"
-      ? `// Handle escape key
+
+  templateType === "overlay" ?
+  `// Handle escape key
   React.useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
@@ -213,13 +213,13 @@ export const {{name}}: React.FC<{{name}}Props> = ({
     return () => document.removeEventListener('keydown', handleEscape);
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;`
-      : ""
-  }
+  if (!isOpen) return null;` :
+  ""}
 
   ${
-    ["form", "data", "interactive"].includes(templateType)
-      ? `// Loading state
+
+  ["form", "data", "interactive"].includes(templateType) ?
+  `// Loading state
   if (isLoading) {
     return (
       <div className={\`\${styles.container} \${styles.loading} \${className}\`} data-testid={\`\${testId}-loading\`}>
@@ -235,27 +235,27 @@ export const {{name}}: React.FC<{{name}}Props> = ({
         <span role="alert">{error}</span>
       </div>
     );
-  }`
-      : ""
-  }
+  }` :
+  ""}
 
   ${
-    templateType === "data"
-      ? `// Empty state
+
+  templateType === "data" ?
+  `// Empty state
   if (data.length === 0) {
     return (
       <div className={\`\${styles.container} \${styles.empty} \${className}\`} data-testid={\`\${testId}-empty\`}>
         <p>{emptyMessage}</p>
       </div>
     );
-  }`
-      : ""
-  }
+  }` :
+  ""}
 
   return (
     ${
-      templateType === "overlay"
-        ? `<>
+
+  templateType === "overlay" ?
+  `<>
       <div 
         className={styles.backdrop}
         onClick={closeOnClickOutside ? onClose : undefined}
@@ -277,9 +277,9 @@ export const {{name}}: React.FC<{{name}}Props> = ({
         </button>
         {children}
       </div>
-    </>`
-        : templateType === "form"
-          ? `<div className={\`\${styles.fieldContainer} \${className}\`}>
+    </>` :
+  templateType === "form" ?
+  `<div className={\`\${styles.fieldContainer} \${className}\`}>
       <label htmlFor={name} className={styles.label}>
         {children}
         {required && <span className={styles.required} aria-label="required">*</span>}
@@ -301,25 +301,25 @@ export const {{name}}: React.FC<{{name}}Props> = ({
           {error}
         </span>
       )}
-    </div>`
-          : `<div 
+    </div>` :
+  `<div 
       className={\`\${styles.container} \${className}\`}
       data-testid={testId}${
-        templateType === "interactive"
-          ? `
+  templateType === "interactive" ?
+  `
       role="button"
       tabIndex={disabled ? -1 : 0}
-      aria-disabled={disabled}`
-          : ""
-      }
+      aria-disabled={disabled}` :
+  ""}
     >
       {children}
-    </div>`
-    }
+    </div>`}
   );
 };
 
 {{name}}.displayName = '{{name}}';`;
+
+
 }
 
 // Default test template with type-specific tests
@@ -442,7 +442,7 @@ function getDefaultTestTemplate(templateType) {
       </{{name}}>
     );
     expect(container.firstChild).toHaveClass('custom-class');
-  });`,
+  });`
   };
 
   return `import React from 'react';
@@ -605,7 +605,7 @@ export const WithCustomClass: Story = {
     children: 'Styled content',
     className: 'custom-styling',
   },
-};`,
+};`
   };
 
   const argTypes = {
@@ -664,7 +664,7 @@ export const WithCustomClass: Story = {
     error: {
       control: 'text',
       description: 'Error message',
-    },`,
+    },`
   };
 
   return `import type { Meta, StoryObj } from '@storybook/react';
@@ -899,7 +899,7 @@ function getDefaultStylesTemplate(templateType) {
   }
 }`,
 
-    display: ``,
+    display: ``
   };
 
   return `.container {
@@ -965,22 +965,22 @@ async function ensureTemplateDirectories() {
     try {
       await fs.mkdir(dir, { recursive: true });
     } catch (error) {
+
       // Directory already exists, ignore
-    }
-  }
+    }}
 }
 
 // Generate component files
 async function generateComponent(name, options) {
-  console.log(
-    chalk.blue(`\n🚀 Generating ${options.template} component: ${name}\n`),
-  );
+  logger.info(
+    chalk.blue(`\n🚀 Generating ${options.template} component: ${name}\n`));
+
 
   // Validate component name
   if (!/^[A-Z][a-zA-Z0-9]*$/.test(name)) {
-    console.error(
-      chalk.red("❌ Component name must be in PascalCase (e.g., MyComponent)"),
-    );
+    logger.error(
+      chalk.red("❌ Component name must be in PascalCase (e.g., MyComponent)"));
+
     process.exit(1);
   }
 
@@ -993,29 +993,29 @@ async function generateComponent(name, options) {
   try {
     await fs.mkdir(componentDir, { recursive: true });
   } catch (error) {
-    console.error(chalk.red(`❌ Failed to create directory: ${error.message}`));
+    logger.error(chalk.red(`❌ Failed to create directory: ${error.message}`));
     process.exit(1);
   }
 
   // Files to generate
   const files = [
-    {
-      name: `${name}${config.fileExtensions.typescript}`,
-      template: templates.component,
-    },
-    { name: `${name}${config.fileExtensions.test}`, template: templates.test },
-    {
-      name: `${name}${config.fileExtensions.style}`,
-      template: templates.styles,
-    },
-    { name: "index.ts", template: templates.index },
-  ];
+  {
+    name: `${name}${config.fileExtensions.typescript}`,
+    template: templates.component
+  },
+  { name: `${name}${config.fileExtensions.test}`, template: templates.test },
+  {
+    name: `${name}${config.fileExtensions.style}`,
+    template: templates.styles
+  },
+  { name: "index.ts", template: templates.index }];
+
 
   // Add storybook file if requested
   if (!options.noStorybook) {
     files.push({
       name: `${name}${config.fileExtensions.story}`,
-      template: templates.story,
+      template: templates.story
     });
   }
 
@@ -1027,7 +1027,7 @@ async function generateComponent(name, options) {
     if (!options.force) {
       try {
         await fs.access(filePath);
-        console.log(chalk.yellow(`⚠️  Skipping ${file.name} (already exists)`));
+        logger.info(chalk.yellow(`⚠️  Skipping ${file.name} (already exists)`));
         continue;
       } catch {}
     }
@@ -1036,139 +1036,139 @@ async function generateComponent(name, options) {
     const compiledTemplate = Handlebars.compile(file.template);
     const content = compiledTemplate({
       name,
-      templateType: options.template,
+      templateType: options.template
     });
 
     try {
       await fs.writeFile(filePath, content);
-      console.log(chalk.green(`✅ Created ${file.name}`));
+      logger.info(chalk.green(`✅ Created ${file.name}`));
     } catch (error) {
-      console.error(
-        chalk.red(`❌ Failed to create ${file.name}: ${error.message}`),
-      );
+      logger.error(
+        chalk.red(`❌ Failed to create ${file.name}: ${error.message}`));
+
     }
   }
 
   // Success message
-  console.log(
+  logger.info(
     chalk.green(
-      `\n✨ ${TEMPLATE_TYPES[options.template].name} component ${name} generated successfully!\n`,
-    ),
-  );
-  console.log(chalk.cyan("📁 Files created:"));
-  console.log(chalk.gray(`   ${componentDir}/`));
+      `\n✨ ${TEMPLATE_TYPES[options.template].name} component ${name} generated successfully!\n`
+    ));
+
+  logger.info(chalk.cyan("📁 Files created:"));
+  logger.info(chalk.gray(`   ${componentDir}/`));
   files.forEach((file) => {
-    console.log(chalk.gray(`   ├── ${file.name}`));
+    logger.info(chalk.gray(`   ├── ${file.name}`));
   });
 
-  console.log(chalk.cyan("\n🎯 Next steps:"));
-  console.log(
+  logger.info(chalk.cyan("\n🎯 Next steps:"));
+  logger.info(
     chalk.gray(
-      `   1. Import component: import { ${name} } from '${path.relative(process.cwd(), componentDir)}';`,
-    ),
-  );
-  console.log(chalk.gray(`   2. Run tests: npm test ${name}`));
+      `   1. Import component: import { ${name} } from '${path.relative(process.cwd(), componentDir)}';`
+    ));
+
+  logger.info(chalk.gray(`   2. Run tests: npm test ${name}`));
   if (!options.noStorybook) {
-    console.log(chalk.gray(`   3. View in Storybook: npm run storybook`));
+    logger.info(chalk.gray(`   3. View in Storybook: npm run storybook`));
   }
-  console.log(chalk.gray(`\n💡 This ${options.template} component includes:`));
+  logger.info(chalk.gray(`\n💡 This ${options.template} component includes:`));
 
   const features = {
     interactive: [
-      "Loading states",
-      "Error handling",
-      "Disabled states",
-      "Keyboard navigation",
-    ],
+    "Loading states",
+    "Error handling",
+    "Disabled states",
+    "Keyboard navigation"],
+
     form: [
-      "Validation support",
-      "Error messages",
-      "Required field marking",
-      "Accessibility labels",
-    ],
+    "Validation support",
+    "Error messages",
+    "Required field marking",
+    "Accessibility labels"],
+
     data: [
-      "Loading states",
-      "Empty states",
-      "Error handling",
-      "Data prop support",
-    ],
+    "Loading states",
+    "Empty states",
+    "Error handling",
+    "Data prop support"],
+
     overlay: [
-      "Portal rendering",
-      "Escape key handling",
-      "Click outside support",
-      "Focus management",
-    ],
+    "Portal rendering",
+    "Escape key handling",
+    "Click outside support",
+    "Focus management"],
+
     display: [
-      "Responsive design",
-      "Dark mode support",
-      "Custom styling",
-      "Accessibility",
-    ],
+    "Responsive design",
+    "Dark mode support",
+    "Custom styling",
+    "Accessibility"]
+
   };
 
   features[options.template].forEach((feature) => {
-    console.log(chalk.gray(`   • ${feature}`));
+    logger.info(chalk.gray(`   • ${feature}`));
   });
 }
 
 // Interactive template selection
 async function selectTemplate() {
   const { template } = await inquirer.prompt([
-    {
-      type: "list",
-      name: "template",
-      message: "Select component template type:",
-      choices: Object.entries(TEMPLATE_TYPES).map(([key, value]) => ({
-        name: `${value.name} - ${value.description}`,
-        value: key,
-        short: value.name,
-      })),
-    },
-  ]);
-
-  console.log(
-    chalk.cyan(
-      `\n📝 Examples for ${TEMPLATE_TYPES[template].name} components: ${TEMPLATE_TYPES[template].examples}\n`,
-    ),
+  {
+    type: "list",
+    name: "template",
+    message: "Select component template type:",
+    choices: Object.entries(TEMPLATE_TYPES).map(([key, value]) => ({
+      name: `${value.name} - ${value.description}`,
+      value: key,
+      short: value.name
+    }))
+  }]
   );
+
+  logger.info(
+    chalk.cyan(
+      `\n📝 Examples for ${TEMPLATE_TYPES[template].name} components: ${TEMPLATE_TYPES[template].examples}\n`
+    ));
+
 
   return template;
 }
 
 // CLI setup
-program
-  .name("enhanced-component-generator")
-  .description(
-    "Generate React components with AI-optimized templates for different use cases",
-  )
-  .argument("<name>", "Component name in PascalCase")
-  .option("-t, --template <type>", "Component template type", "display")
-  .option("-i, --interactive", "Interactive template selection")
-  .option("-f, --force", "Overwrite existing files")
-  .option("--no-storybook", "Skip Storybook story generation")
-  .option("-d, --dir <dir>", "Output directory", config.outputDir)
-  .action(async (name, options) => {
-    // Ensure template directories exist
-    await ensureTemplateDirectories();
+program.
+name("enhanced-component-generator").
+description(
+  "Generate React components with AI-optimized templates for different use cases"
+).
+argument("<name>", "Component name in PascalCase").
+option("-t, --template <type>", "Component template type", "display").
+option("-i, --interactive", "Interactive template selection").
+option("-f, --force", "Overwrite existing files").
+option("--no-storybook", "Skip Storybook story generation").
+option("-d, --dir <dir>", "Output directory", config.outputDir).
+action(async (name, options) => {
+  // Ensure template directories exist
+  await ensureTemplateDirectories();
 
-    if (options.dir) {
-      config.outputDir = options.dir;
-    }
+  if (options.dir) {
+    config.outputDir = options.dir;
+  }
 
-    // Select template interactively or validate provided template
-    if (options.interactive) {
-      options.template = await selectTemplate();
-    } else if (!TEMPLATE_TYPES[options.template]) {
-      console.error(chalk.red(`❌ Invalid template type: ${options.template}`));
-      console.log(chalk.cyan("\nAvailable templates:"));
-      Object.entries(TEMPLATE_TYPES).forEach(([key, value]) => {
-        console.log(chalk.gray(`  - ${key}: ${value.description}`));
-      });
-      process.exit(1);
-    }
+  // Select template interactively or validate provided template
+  if (options.interactive) {
+    options.template = await selectTemplate();
+  } else if (!TEMPLATE_TYPES[options.template]) {
+    logger.error(chalk.red(`❌ Invalid template type: ${options.template}`));
+    logger.info(chalk.cyan("\nAvailable templates:"));
+    Object.entries(TEMPLATE_TYPES).forEach(([key, value]) => {
+      logger.info(chalk.gray(`  - ${key}: ${value.description}`));
+    });
+    process.exit(1);
+  }
 
-    await generateComponent(name, options);
-  });
+  await generateComponent(name, options);
+});
 
 // Parse CLI arguments
 program.parse(process.argv);
@@ -1176,9 +1176,9 @@ program.parse(process.argv);
 // Show help if no arguments
 if (!process.argv.slice(2).length) {
   program.outputHelp();
-  console.log(chalk.cyan("\n📚 Template Types:"));
+  logger.info(chalk.cyan("\n📚 Template Types:"));
   Object.entries(TEMPLATE_TYPES).forEach(([key, value]) => {
-    console.log(chalk.gray(`\n  ${chalk.bold(key)} - ${value.description}`));
-    console.log(chalk.gray(`  Examples: ${value.examples}`));
+    logger.info(chalk.gray(`\n  ${chalk.bold(key)} - ${value.description}`));
+    logger.info(chalk.gray(`  Examples: ${value.examples}`));
   });
 }

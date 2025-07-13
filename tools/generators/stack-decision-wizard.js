@@ -8,7 +8,7 @@ const { execSync } = require("child_process");
 
 const rl = readline.createInterface({
   input: process.stdin,
-  output: process.stdout,
+  output: process.stdout
 });
 
 // Stack recommendations database
@@ -19,7 +19,7 @@ const STACK_RECOMMENDATIONS = {
     frontend: "Vite + React",
     database: "SQLite + Prisma",
     deployment: "Vercel + Railway",
-    reasoning: "Fast setup, great developer experience, minimal complexity",
+    reasoning: "Fast setup, great developer experience, minimal complexity"
   },
   "web-app-complex": {
     name: "Complex Web Application",
@@ -27,7 +27,7 @@ const STACK_RECOMMENDATIONS = {
     frontend: "Next.js 14 (App Router)",
     database: "PostgreSQL + Prisma",
     deployment: "Vercel + Supabase",
-    reasoning: "Full-stack framework, excellent performance, scalable",
+    reasoning: "Full-stack framework, excellent performance, scalable"
   },
   "data-analysis": {
     name: "Data Analysis Tool",
@@ -35,7 +35,7 @@ const STACK_RECOMMENDATIONS = {
     frontend: "Streamlit or Jupyter",
     database: "SQLite + Pandas",
     deployment: "Streamlit Cloud",
-    reasoning: "Best data manipulation libraries, interactive notebooks",
+    reasoning: "Best data manipulation libraries, interactive notebooks"
   },
   "desktop-app": {
     name: "Desktop Application",
@@ -43,7 +43,7 @@ const STACK_RECOMMENDATIONS = {
     frontend: "Vite + React",
     database: "SQLite + better-sqlite3",
     deployment: "GitHub Releases",
-    reasoning: "Native feel, web technologies, cross-platform",
+    reasoning: "Native feel, web technologies, cross-platform"
   },
   "api-only": {
     name: "API Server",
@@ -51,7 +51,7 @@ const STACK_RECOMMENDATIONS = {
     frontend: "None (API only)",
     database: "PostgreSQL + Prisma",
     deployment: "Railway + Render",
-    reasoning: "Simple, fast, excellent ecosystem",
+    reasoning: "Simple, fast, excellent ecosystem"
   },
   "real-time-app": {
     name: "Real-time Application",
@@ -59,7 +59,7 @@ const STACK_RECOMMENDATIONS = {
     frontend: "Vite + React + Socket.io",
     database: "Redis + PostgreSQL",
     deployment: "Railway + Vercel",
-    reasoning: "WebSocket support, real-time updates, scalable",
+    reasoning: "WebSocket support, real-time updates, scalable"
   },
   "cli-tool": {
     name: "CLI Tool",
@@ -67,7 +67,7 @@ const STACK_RECOMMENDATIONS = {
     frontend: "Terminal UI",
     database: "SQLite or JSON files",
     deployment: "GitHub Releases",
-    reasoning: "Single binary, fast startup, cross-platform",
+    reasoning: "Single binary, fast startup, cross-platform"
   },
   "learning-project": {
     name: "Learning Project",
@@ -75,7 +75,7 @@ const STACK_RECOMMENDATIONS = {
     frontend: "Whatever you want to learn",
     database: "SQLite (simple)",
     deployment: "GitHub Pages + Netlify",
-    reasoning: "Focus on learning, not production concerns",
+    reasoning: "Focus on learning, not production concerns"
   },
   "local-ai-app": {
     name: "Local AI Application",
@@ -83,8 +83,8 @@ const STACK_RECOMMENDATIONS = {
     frontend: "Vite + React + Electron",
     database: "SQLite + file storage",
     deployment: "Desktop app distribution",
-    reasoning: "Local processing, AI integration, desktop-first",
-  },
+    reasoning: "Local processing, AI integration, desktop-first"
+  }
 };
 
 class StackDecisionWizard {
@@ -94,14 +94,14 @@ class StackDecisionWizard {
   }
 
   async start() {
-    console.log(
-      chalk.blue.bold("\n🚀 ProjectTemplate Stack Decision Wizard\n"),
-    );
-    console.log(
+    logger.info(
+      chalk.blue.bold("\n🚀 ProjectTemplate Stack Decision Wizard\n"));
+
+    logger.info(
       chalk.gray(
-        "This wizard will help you choose the right technology stack for your project.\n",
-      ),
-    );
+        "This wizard will help you choose the right technology stack for your project.\n"
+      ));
+
 
     try {
       await this.askQuestions();
@@ -109,7 +109,7 @@ class StackDecisionWizard {
       this.displayRecommendation();
       await this.offerToSaveDecision();
     } catch (error) {
-      console.error(chalk.red("Error:", error.message));
+      logger.error(chalk.red("Error:", error.message));
     } finally {
       rl.close();
     }
@@ -120,61 +120,61 @@ class StackDecisionWizard {
     this.answers.projectType = await this.askChoice(
       "What type of project are you building?",
       [
-        "Web application (frontend + backend)",
-        "API server only",
-        "Desktop application",
-        "Data analysis tool",
-        "Real-time application (chat, collaboration)",
-        "CLI tool",
-        "Learning/experimental project",
-      ],
+      "Web application (frontend + backend)",
+      "API server only",
+      "Desktop application",
+      "Data analysis tool",
+      "Real-time application (chat, collaboration)",
+      "CLI tool",
+      "Learning/experimental project"]
+
     );
 
     // Project scope
     this.answers.projectScope = await this.askChoice(
       "How would you describe your project?",
       [
-        "Simple - like a personal blog, todo list, or basic website",
-        "Medium - like an online store, team dashboard, or booking system",
-        "Complex - like a social media platform, marketplace, or enterprise tool",
-      ],
+      "Simple - like a personal blog, todo list, or basic website",
+      "Medium - like an online store, team dashboard, or booking system",
+      "Complex - like a social media platform, marketplace, or enterprise tool"]
+
     );
 
     // Team size
     this.answers.teamSize = await this.askChoice("What's your team size?", [
-      "Solo developer",
-      "Small team (2-5 people)",
-      "Large team (6+ people)",
-    ]);
+    "Solo developer",
+    "Small team (2-5 people)",
+    "Large team (6+ people)"]
+    );
 
     // Experience level
     this.answers.experience = await this.askChoice(
       "What's your coding experience?",
       [
-        "New to coding - I'm just getting started",
-        "Some experience - I can build basic apps",
-        "Experienced - I've built several projects before",
-      ],
+      "New to coding - I'm just getting started",
+      "Some experience - I can build basic apps",
+      "Experienced - I've built several projects before"]
+
     );
 
     // Performance expectations
     this.answers.performance = await this.askChoice(
       "How many people do you expect to use your project?",
       [
-        "Just me or a few friends (hobby project)",
-        "A small group or local business (dozens of users)",
-        "Many people or growing business (hundreds+ users)",
-      ],
+      "Just me or a few friends (hobby project)",
+      "A small group or local business (dozens of users)",
+      "Many people or growing business (hundreds+ users)"]
+
     );
 
     // Time constraint
     this.answers.timeConstraint = await this.askChoice(
       "What's your timeline?",
       [
-        "No rush - I'm learning and experimenting",
-        "A few months - I want to build something real",
-        "As fast as possible - I need to launch quickly",
-      ],
+      "No rush - I'm learning and experimenting",
+      "A few months - I want to build something real",
+      "As fast as possible - I need to launch quickly"]
+
     );
 
     // Data requirements
@@ -182,34 +182,34 @@ class StackDecisionWizard {
       this.answers.dataRequirements = await this.askChoice(
         "What kind of data will you store?",
         [
-          "Simple - user accounts, posts, basic lists",
-          "Moderate - products, orders, user relationships",
-          "Complex - analytics, large files, complex reports",
-        ],
+        "Simple - user accounts, posts, basic lists",
+        "Moderate - products, orders, user relationships",
+        "Complex - analytics, large files, complex reports"]
+
       );
     }
 
     // Learning goals
     this.answers.learningGoals = await this.askInput(
-      "Any specific technologies you want to learn? (optional)",
+      "Any specific technologies you want to learn? (optional)"
     );
   }
 
   async askChoice(question, choices) {
-    console.log(chalk.cyan(`\n${question}`));
+    logger.info(chalk.cyan(`\n${question}`));
     choices.forEach((choice, index) => {
-      console.log(chalk.gray(`  ${index + 1}. ${choice}`));
+      logger.info(chalk.gray(`  ${index + 1}. ${choice}`));
     });
 
     const answer = await this.askInput(
-      chalk.yellow("Your choice (1-" + choices.length + ")"),
+      chalk.yellow("Your choice (1-" + choices.length + ")")
     );
     const choiceIndex = parseInt(answer) - 1;
 
     if (choiceIndex >= 0 && choiceIndex < choices.length) {
       return choices[choiceIndex];
     } else {
-      console.log(chalk.red("Invalid choice. Please try again."));
+      logger.info(chalk.red("Invalid choice. Please try again."));
       return this.askChoice(question, choices);
     }
   }
@@ -231,7 +231,7 @@ class StackDecisionWizard {
       performance,
       timeConstraint,
       dataRequirements,
-      learningGoals,
+      learningGoals
     } = this.answers;
 
     // Decision logic
@@ -252,9 +252,9 @@ class StackDecisionWizard {
     } else if (projectType.includes("Web application")) {
       // Web app - decide between simple and complex
       if (
-        projectScope.includes("Complex") ||
-        performance.includes("hundreds+")
-      ) {
+      projectScope.includes("Complex") ||
+      performance.includes("hundreds+"))
+      {
         recommendationKey = "web-app-complex";
       } else {
         recommendationKey = "web-app-simple";
@@ -269,7 +269,7 @@ class StackDecisionWizard {
 
   customizeRecommendation() {
     const { experience, performance, dataRequirements, learningGoals } =
-      this.answers;
+    this.answers;
 
     // Adjust based on experience level
     if (experience.includes("New to coding")) {
@@ -284,7 +284,7 @@ class StackDecisionWizard {
       if (this.recommendation.backend.includes("Node.js")) {
         this.recommendation.backend = this.recommendation.backend.replace(
           "Express",
-          "Fastify (high performance)",
+          "Fastify (high performance)"
         );
       }
       this.recommendation.reasoning += ", optimized for performance";
@@ -294,7 +294,7 @@ class StackDecisionWizard {
     if (dataRequirements && dataRequirements.includes("Complex")) {
       this.recommendation.database = this.recommendation.database.replace(
         "SQLite",
-        "PostgreSQL",
+        "PostgreSQL"
       );
       this.recommendation.reasoning += ", suitable for complex data";
     }
@@ -311,19 +311,19 @@ class StackDecisionWizard {
   }
 
   async displayRecommendation() {
-    console.log(chalk.green.bold("\n🎯 RECOMMENDED STACK\n"));
-    console.log(chalk.blue.bold(`Project Type: ${this.recommendation.name}`));
-    console.log(chalk.yellow(`Backend:    ${this.recommendation.backend}`));
-    console.log(chalk.yellow(`Frontend:   ${this.recommendation.frontend}`));
-    console.log(chalk.yellow(`Database:   ${this.recommendation.database}`));
-    console.log(chalk.yellow(`Deployment: ${this.recommendation.deployment}`));
-    console.log(chalk.gray(`\nReasoning: ${this.recommendation.reasoning}`));
+    logger.info(chalk.green.bold("\n🎯 RECOMMENDED STACK\n"));
+    logger.info(chalk.blue.bold(`Project Type: ${this.recommendation.name}`));
+    logger.info(chalk.yellow(`Backend:    ${this.recommendation.backend}`));
+    logger.info(chalk.yellow(`Frontend:   ${this.recommendation.frontend}`));
+    logger.info(chalk.yellow(`Database:   ${this.recommendation.database}`));
+    logger.info(chalk.yellow(`Deployment: ${this.recommendation.deployment}`));
+    logger.info(chalk.gray(`\nReasoning: ${this.recommendation.reasoning}`));
 
     // Additional recommendations
-    console.log(chalk.blue.bold("\n📋 QUICK START STEPS\n"));
+    logger.info(chalk.blue.bold("\n📋 QUICK START STEPS\n"));
     this.displayQuickStartSteps();
 
-    console.log(chalk.blue.bold("\n🔗 HELPFUL RESOURCES\n"));
+    logger.info(chalk.blue.bold("\n🔗 HELPFUL RESOURCES\n"));
     this.displayHelpfulResources();
 
     // Ask if they want to set up the template
@@ -340,7 +340,7 @@ class StackDecisionWizard {
   displayQuickStartSteps() {
     const steps = this.getQuickStartSteps();
     steps.forEach((step, index) => {
-      console.log(chalk.gray(`  ${index + 1}. ${step}`));
+      logger.info(chalk.gray(`  ${index + 1}. ${step}`));
     });
   }
 
@@ -355,11 +355,11 @@ class StackDecisionWizard {
       steps.push("Install dependencies: npm install express cors dotenv");
       if (frontend.includes("React")) {
         steps.push(
-          "Create React app: npm create vite@latest frontend -- --template react-ts",
+          "Create React app: npm create vite@latest frontend -- --template react-ts"
         );
       } else if (frontend.includes("Next.js")) {
         steps.push(
-          "Create Next.js app: npx create-next-app@latest --typescript",
+          "Create Next.js app: npx create-next-app@latest --typescript"
         );
       }
     } else if (backend.includes("Python")) {
@@ -387,29 +387,29 @@ class StackDecisionWizard {
   }
 
   displayHelpfulResources() {
-    console.log(
-      chalk.gray("  • docs/newproject_decisions/ - Detailed decision matrices"),
-    );
-    console.log(chalk.gray("  • docs/guides/ - Setup and development guides"));
-    console.log(chalk.gray("  • examples/ - Code examples and patterns"));
-    console.log(chalk.gray("  • CLAUDE.md - AI assistant instructions"));
+    logger.info(
+      chalk.gray("  • docs/newproject_decisions/ - Detailed decision matrices"));
+
+    logger.info(chalk.gray("  • docs/guides/ - Setup and development guides"));
+    logger.info(chalk.gray("  • examples/ - Code examples and patterns"));
+    logger.info(chalk.gray("  • CLAUDE.md - AI assistant instructions"));
   }
 
   async offerToSaveDecision() {
     const save = await this.askInput(
-      chalk.cyan("\nSave this decision to your project? (y/n)"),
+      chalk.cyan("\nSave this decision to your project? (y/n)")
     );
 
     if (save.toLowerCase() === "y" || save.toLowerCase() === "yes") {
       await this.saveDecision();
     }
 
-    console.log(chalk.green("\n✅ Decision wizard complete!"));
-    console.log(
+    logger.info(chalk.green("\n✅ Decision wizard complete!"));
+    logger.info(
       chalk.gray(
-        "Run `npm run choose-stack` anytime to use this wizard again.\n",
-      ),
-    );
+        "Run `npm run choose-stack` anytime to use this wizard again.\n"
+      ));
+
   }
 
   async saveDecision() {
@@ -418,14 +418,14 @@ class StackDecisionWizard {
       project_type: this.recommendation.name,
       answers: this.answers,
       recommendation: this.recommendation,
-      quick_start_steps: this.getQuickStartSteps(),
+      quick_start_steps: this.getQuickStartSteps()
     };
 
     const decisionPath = path.join(
       process.cwd(),
       "docs",
       "decisions",
-      "stack-decision.json",
+      "stack-decision.json"
     );
 
     try {
@@ -436,18 +436,18 @@ class StackDecisionWizard {
       }
 
       fs.writeFileSync(decisionPath, JSON.stringify(decision, null, 2));
-      console.log(chalk.green(`✅ Decision saved to ${decisionPath}`));
+      logger.info(chalk.green(`✅ Decision saved to ${decisionPath}`));
     } catch (error) {
-      console.log(chalk.red(`❌ Could not save decision: ${error.message}`));
+      logger.info(chalk.red(`❌ Could not save decision: ${error.message}`));
     }
   }
 
   async setupTemplate() {
-    console.log(chalk.blue.bold("\n🚀 Setting up your template...\n"));
+    logger.info(chalk.blue.bold("\n🚀 Setting up your template...\n"));
 
     // Determine which template to use based on recommendation
     let framework = 'react'; // default
-    
+
     if (this.recommendation.frontend.includes('Next.js')) {
       framework = 'nextjs';
     } else if (this.recommendation.backend.includes('Express') && !this.recommendation.frontend.includes('React')) {
@@ -456,19 +456,19 @@ class StackDecisionWizard {
 
     try {
       // Run the template customizer
-      console.log(chalk.gray(`Running template customization for ${framework}...`));
+      logger.info(chalk.gray(`Running template customization for ${framework}...`));
       execSync(`node ${path.join(__dirname, 'template-customizer.js')} --framework ${framework}`, {
         stdio: 'inherit'
       });
 
-      console.log(chalk.green.bold("\n✅ Template setup complete!\n"));
-      console.log(chalk.white("Next steps:"));
-      console.log(chalk.gray("  npm install"));
-      console.log(chalk.gray("  npm run dev"));
+      logger.info(chalk.green.bold("\n✅ Template setup complete!\n"));
+      logger.info(chalk.white("Next steps:"));
+      logger.info(chalk.gray("  npm install"));
+      logger.info(chalk.gray("  npm run dev"));
     } catch (error) {
-      console.error(chalk.red("\n❌ Error setting up template:"), error.message);
-      console.log(chalk.yellow("\nYou can manually run:"));
-      console.log(chalk.gray(`  npm run template:${framework}`));
+      logger.error(chalk.red("\n❌ Error setting up template:"), error.message);
+      logger.info(chalk.yellow("\nYou can manually run:"));
+      logger.info(chalk.gray(`  npm run template:${framework}`));
     }
   }
 }

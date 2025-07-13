@@ -6,34 +6,34 @@ const { loadConfig, shouldBlock, logMetrics } = require('./enforcement-config');
 
 // Define patterns that violate naming rules
 const improvedPatterns = [
-  "**/*_improved.*",
-  "**/*_enhanced.*",
-  "**/*_v2.*",
-  "**/*_v[0-9]+.*",
-  "**/*_updated.*",
-  "**/*_new.*",
-  "**/*_refactored.*",
-  "**/*_final.*",
-  "**/*_copy.*",
-  "**/*_backup.*",
-  "**/*_old.*",
-  "**/*_temp.*",
-  "**/*_tmp.*",
-  "**/*_test_v[0-9]+.*",
-  "**/*_FIXED.*",
-  "**/*_COMPLETE.*",
-];
+"**/*_improved.*",
+"**/*_enhanced.*",
+"**/*_v2.*",
+"**/*_v[0-9]+.*",
+"**/*_updated.*",
+"**/*_new.*",
+"**/*_refactored.*",
+"**/*_final.*",
+"**/*_copy.*",
+"**/*_backup.*",
+"**/*_old.*",
+"**/*_temp.*",
+"**/*_tmp.*",
+"**/*_test_v[0-9]+.*",
+"**/*_FIXED.*",
+"**/*_COMPLETE.*"];
+
 
 // Directories to ignore
 const ignorePatterns = [
-  "node_modules/**",
-  "dist/**",
-  "build/**",
-  ".git/**",
-  "coverage/**",
-  ".next/**",
-  "out/**",
-];
+"node_modules/**",
+"dist/**",
+"build/**",
+".git/**",
+"coverage/**",
+".next/**",
+"out/**"];
+
 
 // Function to suggest better name
 function suggestBetterName(filePath) {
@@ -42,12 +42,12 @@ function suggestBetterName(filePath) {
   const base = path.basename(filePath, ext);
 
   // Remove common suffixes
-  let suggested = base
-    .replace(
-      /_(?:improved|enhanced|v\d+|updated|new|refactored|final|copy|backup|old|temp|tmp|test_v\d+|FIXED|COMPLETE)$/i,
-      "",
-    )
-    .replace(/\s*\(\d+\)$/, ""); // Remove (1), (2), etc.
+  let suggested = base.
+  replace(
+    /_(?:improved|enhanced|v\d+|updated|new|refactored|final|copy|backup|old|temp|tmp|test_v\d+|FIXED|COMPLETE)$/i,
+    ""
+  ).
+  replace(/\s*\(\d+\)$/, ""); // Remove (1), (2), etc.
 
   // If the suggested name is empty or just underscores, use a generic name
   if (!suggested || suggested.match(/^_+$/)) {
@@ -67,7 +67,7 @@ async function checkForImprovedFiles(specificFiles = []) {
     for (const file of filesToCheck) {
       for (const pattern of improvedPatterns) {
         const regex = new RegExp(
-          pattern.replace(/\*/g, ".*").replace(/\./g, "\\."),
+          pattern.replace(/\*/g, ".*").replace(/\./g, "\\.")
         );
         if (regex.test(file)) {
           violations.push(file);
@@ -78,10 +78,10 @@ async function checkForImprovedFiles(specificFiles = []) {
   } else {
     // Check all files
     violations = improvedPatterns.flatMap((pattern) =>
-      glob.sync(pattern, {
-        ignore: ignorePatterns,
-        nodir: true,
-      }),
+    glob.sync(pattern, {
+      ignore: ignorePatterns,
+      nodir: true
+    })
     );
   }
 
@@ -91,42 +91,42 @@ async function checkForImprovedFiles(specificFiles = []) {
   // Log metrics and check if we should block
   const config = loadConfig();
   logMetrics('fileNaming', violations, config);
-  
+
   const shouldBlockCommit = shouldBlock('fileNaming', config);
 
   if (violations.length > 0) {
     const messageType = shouldBlockCommit ? "❌ Found files violating naming rules:" : "⚠️  File naming warnings:";
-    console.error(chalk.red.bold(`\n${messageType}\n`));
+    logger.error(chalk.red.bold(`\n${messageType}\n`));
 
     violations.forEach((file, index) => {
       const suggested = suggestBetterName(file);
-      console.error(chalk.yellow(`  ${index + 1}. ${file}`));
-      console.error(chalk.green(`     → Suggested: ${suggested}`));
-      console.error("");
+      logger.error(chalk.yellow(`  ${index + 1}. ${file}`));
+      logger.error(chalk.green(`     → Suggested: ${suggested}`));
+      logger.error("");
     });
 
-    console.error(chalk.cyan.bold("💡 How to fix:"));
-    console.error(chalk.cyan("   Use git mv to rename files:"));
-    console.error(chalk.cyan("   git mv <old-name> <new-name>\n"));
+    logger.error(chalk.cyan.bold("💡 How to fix:"));
+    logger.error(chalk.cyan("   Use git mv to rename files:"));
+    logger.error(chalk.cyan("   git mv <old-name> <new-name>\n"));
 
-    console.error(chalk.red.bold("📚 Why this matters:"));
-    console.error(chalk.white("   - Prevents file proliferation"));
-    console.error(chalk.white("   - Maintains clean git history"));
-    console.error(chalk.white("   - Reduces confusion in codebase"));
-    console.error(chalk.white("   - Follows ProjectTemplate standards\n"));
+    logger.error(chalk.red.bold("📚 Why this matters:"));
+    logger.error(chalk.white("   - Prevents file proliferation"));
+    logger.error(chalk.white("   - Maintains clean git history"));
+    logger.error(chalk.white("   - Reduces confusion in codebase"));
+    logger.error(chalk.white("   - Follows ProjectTemplate standards\n"));
 
     if (shouldBlockCommit) {
-      console.error(chalk.red.bold("🚫 Commit blocked due to naming violations."));
-      console.error(chalk.yellow("💡 File naming is always enforced at PARTIAL level and above"));
+      logger.error(chalk.red.bold("🚫 Commit blocked due to naming violations."));
+      logger.error(chalk.yellow("💡 File naming is always enforced at PARTIAL level and above"));
       process.exit(1);
     } else {
-      console.error(chalk.yellow.bold("⏩ Commit proceeding with warnings."));
-      console.error(chalk.cyan("💡 To fix issues: Follow suggestions above"));
-      console.error(chalk.cyan("💡 File naming will block at PARTIAL level"));
+      logger.error(chalk.yellow.bold("⏩ Commit proceeding with warnings."));
+      logger.error(chalk.cyan("💡 To fix issues: Follow suggestions above"));
+      logger.error(chalk.cyan("💡 File naming will block at PARTIAL level"));
     }
   } else {
     if (!filesToCheck || filesToCheck.length === 0) {
-      console.log(chalk.green("✅ No naming violations found!"));
+      logger.info(chalk.green("✅ No naming violations found!"));
     }
   }
 }
@@ -145,7 +145,7 @@ if (require.main === module) {
   }
 
   checkForImprovedFiles(files).catch((error) => {
-    console.error(chalk.red("Error checking files:"), error);
+    logger.error(chalk.red("Error checking files:"), error);
     process.exit(1);
   });
 }

@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
       messages,
       model,
       preferLocal = true,
-      fallbackToAPI = true,
+      fallbackToAPI = true
     } = await req.json();
 
     if (!messages || !Array.isArray(messages)) {
@@ -52,9 +52,9 @@ export async function POST(req: NextRequest) {
                 body: JSON.stringify({
                   model: model || "llama2",
                   messages,
-                  stream: true,
-                }),
-              },
+                  stream: true
+                })
+              }
             );
 
             if (response.ok && response.body) {
@@ -77,7 +77,7 @@ export async function POST(req: NextRequest) {
                         writeSSE({ content: data.message.content });
                       }
                     } catch (e) {
-                      console.error("Failed to parse Ollama response:", e);
+                      logger.error("Failed to parse Ollama response:", e);
                     }
                   }
                 }
@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
               throw new Error("Local model not available");
             }
           } catch (error) {
-            console.error("Local model error:", error);
+            logger.error("Local model error:", error);
 
             // Fallback to API if enabled
             if (!fallbackToAPI) {
@@ -104,14 +104,14 @@ export async function POST(req: NextRequest) {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+                    Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
                   },
                   body: JSON.stringify({
                     model: model || "gpt-3.5-turbo",
                     messages,
-                    stream: true,
-                  }),
-                },
+                    stream: true
+                  })
+                }
               );
 
               if (openaiResponse.ok && openaiResponse.body) {
@@ -138,7 +138,7 @@ export async function POST(req: NextRequest) {
                           writeSSE({ content });
                         }
                       } catch (e) {
-                        console.error("Failed to parse OpenAI response:", e);
+                        logger.error("Failed to parse OpenAI response:", e);
                       }
                     }
                   }
@@ -157,31 +157,31 @@ export async function POST(req: NextRequest) {
 
         // Save to database if user is logged in
         if (userId && responseContent) {
-          const promptText = messages
-            .map((m: any) => `${m.role}: ${m.content}`)
-            .join("\n");
+          const promptText = messages.
+          map((m: any) => `${m.role}: ${m.content}`).
+          join("\n");
 
           await prisma.aIResponse.create({
             data: {
               prompt: promptText,
-              promptHash: Buffer.from(promptText)
-                .toString("base64")
-                .slice(0, 32),
+              promptHash: Buffer.from(promptText).
+              toString("base64").
+              slice(0, 32),
               response: responseContent,
               model: actualModel,
               provider: provider as any,
               promptTokens: Math.ceil(promptText.length / 4), // Rough estimate
               responseTokens: Math.ceil(responseContent.length / 4),
               totalTokens: Math.ceil(
-                (promptText.length + responseContent.length) / 4,
+                (promptText.length + responseContent.length) / 4
               ),
               latencyMs: 0, // Would need to track this properly
-              userId,
-            },
+              userId
+            }
           });
         }
       } catch (error) {
-        console.error("Streaming error:", error);
+        logger.error("Streaming error:", error);
         writeSSE({ error: "Streaming failed" });
       } finally {
         writer.close();
@@ -193,11 +193,11 @@ export async function POST(req: NextRequest) {
       headers: {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",
-        Connection: "keep-alive",
-      },
+        Connection: "keep-alive"
+      }
     });
   } catch (error) {
-    console.error("Chat API error:", error);
+    logger.error("Chat API error:", error);
     return new Response("Internal server error", { status: 500 });
   }
 }

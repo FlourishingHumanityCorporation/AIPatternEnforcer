@@ -1,6 +1,6 @@
-# 🎯 PROJECT TEMPLATE SETUP GUIDE
+# 🎯 PROJECT AIPATTERN ENFORCER SETUP GUIDE
 
-This guide helps you customize the ProjectTemplate for your specific project.
+This guide helps you customize the AIPatternEnforcer for your specific project.
 
 ## Table of Contents
 

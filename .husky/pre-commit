@@ -3,11 +3,10 @@
 
 echo "🔍 Running pre-commit checks..."
 
-# Run Claude validation on staged files
-./tools/claude-validation/pre-commit-hook.sh
-if [ $? -ne 0 ]; then
-    exit 1
-fi
+# Clean root directory first
+npm run clean:root
+
+# Claude Code hooks handle validation automatically - no additional checks needed
 
 # Run all enforcement checks
 npm run check:all

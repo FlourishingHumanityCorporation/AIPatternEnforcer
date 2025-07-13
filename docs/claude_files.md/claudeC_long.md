@@ -225,7 +225,7 @@ npm run enforcement:config set-level WARNING  # Set enforcement level
 npm run enforcement:metrics # Show violation metrics
 
 # Fix Commands
-npm run fix:docs            # Fix documentation style violations automatically
+npm run doc:create            # Fix documentation style violations automatically
 npm run fix:docs:dry-run    # Preview documentation fixes without applying them
 ```
 

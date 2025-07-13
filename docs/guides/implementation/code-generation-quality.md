@@ -108,7 +108,7 @@ npm run context               # Load project context
 
 # After AI generation  
 npm run validate             # Comprehensive validation
-npm run fix:docs             # Auto-fix documentation issues
+npm run doc:create             # Auto-fix documentation issues
 ```
 
 ### 4. Verify Quality Improvements (3 min)

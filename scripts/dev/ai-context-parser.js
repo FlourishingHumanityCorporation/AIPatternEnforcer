@@ -25,32 +25,32 @@ const importantSections = [];
 
 // Supported file extensions
 const FILE_EXTENSIONS = [
-  "**/*.js",
-  "**/*.jsx",
-  "**/*.ts",
-  "**/*.tsx",
-  "**/*.py",
-  "**/*.go",
-  "**/*.rs",
-  "**/*.java",
-  "**/*.cs",
-  "**/*.rb",
-  "**/*.php",
-  "**/*.md",
-];
+"**/*.js",
+"**/*.jsx",
+"**/*.ts",
+"**/*.tsx",
+"**/*.py",
+"**/*.go",
+"**/*.rs",
+"**/*.java",
+"**/*.cs",
+"**/*.rb",
+"**/*.php",
+"**/*.md"];
+
 
 // Exclude patterns
 const EXCLUDE_PATTERNS = [
-  "node_modules/**",
-  "dist/**",
-  "build/**",
-  ".next/**",
-  "coverage/**",
-  "*.min.js",
-  "*.bundle.js",
-  "vendor/**",
-  ".git/**",
-];
+"node_modules/**",
+"dist/**",
+"build/**",
+".next/**",
+"coverage/**",
+"*.min.js",
+"*.bundle.js",
+"vendor/**",
+".git/**"];
+
 
 // Parse AI annotations from a file
 function parseFile(filePath) {
@@ -98,7 +98,7 @@ function parseFile(filePath) {
           file: filePath,
           startLine: contextStartLine + 1,
           endLine: index,
-          code: contextCode,
+          code: contextCode
         });
       }
 
@@ -115,7 +115,7 @@ function parseFile(filePath) {
       references.get(reference).push({
         file: filePath,
         line: lineNumber,
-        context: currentContext,
+        context: currentContext
       });
     }
 
@@ -134,7 +134,7 @@ function parseFile(filePath) {
         file: filePath,
         line: lineNumber,
         code: patternCode,
-        context: currentContext,
+        context: currentContext
       });
     }
 
@@ -148,7 +148,7 @@ function parseFile(filePath) {
         file: filePath,
         line: lineNumber,
         code: importantCode,
-        context: currentContext,
+        context: currentContext
       });
     }
   });
@@ -161,7 +161,7 @@ function parseFile(filePath) {
       file: filePath,
       startLine: contextStartLine + 1,
       endLine: lines.length,
-      code: contextCode,
+      code: contextCode
     });
   }
 
@@ -184,7 +184,7 @@ function generateContextFile(contextName) {
 
   const contextData = contexts.get(contextName);
   if (!contextData || contextData.length === 0) {
-    console.log(chalk.yellow(`No context found for: ${contextName}`));
+    logger.info(chalk.yellow(`No context found for: ${contextName}`));
     return;
   }
 
@@ -202,42 +202,42 @@ function generateContextFile(contextName) {
 
   // Add related patterns
   const relatedPatterns = Array.from(patterns.entries()).filter(
-    ([_, instances]) => instances.some((inst) => inst.context === contextName),
+    ([_, instances]) => instances.some((inst) => inst.context === contextName)
   );
 
   if (relatedPatterns.length > 0) {
     output += `## Related Patterns\n\n`;
     relatedPatterns.forEach(([patternName, instances]) => {
       output += `### Pattern: ${patternName}\n\n`;
-      instances
-        .filter((inst) => inst.context === contextName)
-        .forEach((inst) => {
-          output += `Used in ${path.relative(process.cwd(), inst.file)}:${inst.line}\n\n`;
-          output += "```\n" + inst.code + "\n```\n\n";
-        });
+      instances.
+      filter((inst) => inst.context === contextName).
+      forEach((inst) => {
+        output += `Used in ${path.relative(process.cwd(), inst.file)}:${inst.line}\n\n`;
+        output += "```\n" + inst.code + "\n```\n\n";
+      });
     });
   }
 
   // Add references
   const contextReferences = Array.from(references.entries()).filter(
-    ([_, refs]) => refs.some((ref) => ref.context === contextName),
+    ([_, refs]) => refs.some((ref) => ref.context === contextName)
   );
 
   if (contextReferences.length > 0) {
     output += `## References\n\n`;
     contextReferences.forEach(([refName, refs]) => {
-      refs
-        .filter((ref) => ref.context === contextName)
-        .forEach((ref) => {
-          output += `- ${refName} (referenced in ${path.relative(process.cwd(), ref.file)}:${ref.line})\n`;
-        });
+      refs.
+      filter((ref) => ref.context === contextName).
+      forEach((ref) => {
+        output += `- ${refName} (referenced in ${path.relative(process.cwd(), ref.file)}:${ref.line})\n`;
+      });
     });
   }
 
   // Write context file
   const outputPath = path.join(outputDir, `${contextName}.context.md`);
   fs.writeFileSync(outputPath, output);
-  console.log(chalk.green(`✓ Generated context file: ${outputPath}`));
+  logger.info(chalk.green(`✓ Generated context file: ${outputPath}`));
 }
 
 // Generate AI hints file for IDE
@@ -247,41 +247,41 @@ function generateIDEHints() {
       scope: "comment.line",
       prefix: "@ai-context",
       body: "@ai-context: ${1:context-name}",
-      description: "Define AI context for the following code section",
+      description: "Define AI context for the following code section"
     },
     "ai-previous": {
       scope: "comment.line",
       prefix: "@ai-previous",
       body: "@ai-previous: ${1:reference-file}",
-      description: "Reference previous AI decisions or documentation",
+      description: "Reference previous AI decisions or documentation"
     },
     "ai-pattern": {
       scope: "comment.line",
       prefix: "@ai-pattern",
       body: "@ai-pattern: ${1:pattern-name}",
-      description: "Indicate the pattern being used in this code",
+      description: "Indicate the pattern being used in this code"
     },
     "ai-important": {
       scope: "comment.line",
       prefix: "@ai-important",
       body: "@ai-important",
-      description: "Mark this section as important for AI to understand",
+      description: "Mark this section as important for AI to understand"
     },
     "ai-ignore": {
       scope: "comment.line",
       prefix: "@ai-ignore",
       body: "@ai-ignore\n$0\n@ai-ignore-end",
-      description: "Tell AI to ignore this code section",
-    },
+      description: "Tell AI to ignore this code section"
+    }
   };
 
   const outputPath = path.join(
     process.cwd(),
     ".vscode",
-    "ai-annotations.code-snippets",
+    "ai-annotations.code-snippets"
   );
   fs.writeFileSync(outputPath, JSON.stringify(hints, null, 2));
-  console.log(chalk.green("✓ Generated VS Code AI annotation snippets"));
+  logger.info(chalk.green("✓ Generated VS Code AI annotation snippets"));
 }
 
 // Generate summary report
@@ -293,21 +293,21 @@ function generateSummaryReport() {
 
   // Context summary
   report += `## Contexts Found (${contexts.size})\n\n`;
-  Array.from(contexts.keys())
-    .sort()
-    .forEach((contextName) => {
-      const instances = contexts.get(contextName);
-      report += `- **${contextName}** (${instances.length} sections)\n`;
-    });
+  Array.from(contexts.keys()).
+  sort().
+  forEach((contextName) => {
+    const instances = contexts.get(contextName);
+    report += `- **${contextName}** (${instances.length} sections)\n`;
+  });
 
   // Pattern summary
   report += `\n## Patterns Used (${patterns.size})\n\n`;
-  Array.from(patterns.keys())
-    .sort()
-    .forEach((patternName) => {
-      const instances = patterns.get(patternName);
-      report += `- **${patternName}** (${instances.length} instances)\n`;
-    });
+  Array.from(patterns.keys()).
+  sort().
+  forEach((patternName) => {
+    const instances = patterns.get(patternName);
+    report += `- **${patternName}** (${instances.length} instances)\n`;
+  });
 
   // Important sections
   if (importantSections.length > 0) {
@@ -323,24 +323,24 @@ function generateSummaryReport() {
 
   // Write report
   fs.writeFileSync(outputPath, report);
-  console.log(chalk.green("✓ Generated summary report"));
+  logger.info(chalk.green("✓ Generated summary report"));
 }
 
 // Main execution
 function main() {
-  console.log(chalk.blue("Parsing AI context annotations...\n"));
+  logger.info(chalk.blue("Parsing AI context annotations...\n"));
 
   // Find all source files
   const files = [];
   FILE_EXTENSIONS.forEach((pattern) => {
     const matches = glob.sync(pattern, {
       ignore: EXCLUDE_PATTERNS,
-      nodir: true,
+      nodir: true
     });
     files.push(...matches);
   });
 
-  console.log(chalk.yellow(`Found ${files.length} files to parse\n`));
+  logger.info(chalk.yellow(`Found ${files.length} files to parse\n`));
 
   // Parse each file
   let processedCount = 0;
@@ -354,14 +354,14 @@ function main() {
         process.stdout.write(".");
       }
     } catch (error) {
-      console.error(chalk.red(`\nError parsing ${file}: ${error.message}`));
+      logger.error(chalk.red(`\nError parsing ${file}: ${error.message}`));
     }
   });
 
-  console.log(chalk.green(`\n\n✓ Parsed ${processedCount} files`));
+  logger.info(chalk.green(`\n\n✓ Parsed ${processedCount} files`));
 
   // Generate context files
-  console.log(chalk.blue("\nGenerating context files..."));
+  logger.info(chalk.blue("\nGenerating context files..."));
   Array.from(contexts.keys()).forEach((contextName) => {
     generateContextFile(contextName);
   });
@@ -373,21 +373,21 @@ function main() {
   generateSummaryReport();
 
   // Display summary
-  console.log(chalk.green("\n✨ AI Context Parsing Complete!\n"));
-  console.log(chalk.cyan("Summary:"));
-  console.log(`  - Contexts discovered: ${contexts.size}`);
-  console.log(`  - Patterns found: ${patterns.size}`);
-  console.log(`  - Important sections: ${importantSections.length}`);
-  console.log(`  - References tracked: ${references.size}`);
+  logger.info(chalk.green("\n✨ AI Context Parsing Complete!\n"));
+  logger.info(chalk.cyan("Summary:"));
+  logger.info(`  - Contexts discovered: ${contexts.size}`);
+  logger.info(`  - Patterns found: ${patterns.size}`);
+  logger.info(`  - Important sections: ${importantSections.length}`);
+  logger.info(`  - References tracked: ${references.size}`);
 
   // Suggest next steps
   if (contexts.size > 0) {
-    console.log(chalk.yellow("\nNext steps:"));
-    console.log(
-      '  1. Use "npm run ai:focus [context-name]" to focus on specific contexts',
-    );
-    console.log("  2. Check .ai-context/summary.md for full analysis");
-    console.log("  3. Use VS Code snippets for adding more annotations");
+    logger.info(chalk.yellow("\nNext steps:"));
+    logger.info(
+      '  1. Use "npm run ai:focus [context-name]" to focus on specific contexts');
+
+    logger.info("  2. Check .ai-context/summary.md for full analysis");
+    logger.info("  3. Use VS Code snippets for adding more annotations");
   }
 }
 
@@ -402,5 +402,5 @@ module.exports = {
   generateContextFile,
   contexts,
   patterns,
-  references,
+  references
 };

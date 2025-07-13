@@ -8,14 +8,14 @@
 // 1. Custom Error Classes for Different Error Types
 export class ApiError extends Error {
   constructor(
-    message: string,
-    public status: number,
-    public code: string,
-    public context?: Record<string, any>
-  ) {
+  message: string,
+  public status: number,
+  public code: string,
+  public context?: Record<string, any>)
+  {
     super(message);
     this.name = 'ApiError';
-    
+
     // Maintain proper stack trace in V8
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, ApiError);
@@ -36,10 +36,10 @@ export class ApiError extends Error {
 
 export class ValidationError extends ApiError {
   constructor(
-    message: string,
-    public errors: Record<string, string[]>,
-    context?: Record<string, any>
-  ) {
+  message: string,
+  public errors: Record<string, string[]>,
+  context?: Record<string, any>)
+  {
     super(message, 422, 'VALIDATION_ERROR', context);
     this.name = 'ValidationError';
   }
@@ -63,7 +63,7 @@ interface ApiResponse<T = any> {
 
 export async function handleApiResponse<T>(response: Response): Promise<T> {
   let responseData: ApiResponse<T>;
-  
+
   try {
     responseData = await response.json();
   } catch (parseError) {
@@ -77,7 +77,7 @@ export async function handleApiResponse<T>(response: Response): Promise<T> {
 
   if (!response.ok) {
     const errorMessage = responseData.error || `HTTP ${response.status}`;
-    
+
     // Handle specific error types
     switch (response.status) {
       case 422:
@@ -86,7 +86,7 @@ export async function handleApiResponse<T>(response: Response): Promise<T> {
           responseData.errors || {},
           { url: response.url }
         );
-      
+
       case 401:
         throw new ApiError(
           'Authentication required',
@@ -94,7 +94,7 @@ export async function handleApiResponse<T>(response: Response): Promise<T> {
           'UNAUTHORIZED',
           { url: response.url }
         );
-      
+
       case 403:
         throw new ApiError(
           'Access denied',
@@ -102,7 +102,7 @@ export async function handleApiResponse<T>(response: Response): Promise<T> {
           'FORBIDDEN',
           { url: response.url }
         );
-      
+
       case 404:
         throw new ApiError(
           'Resource not found',
@@ -110,7 +110,7 @@ export async function handleApiResponse<T>(response: Response): Promise<T> {
           'NOT_FOUND',
           { url: response.url }
         );
-      
+
       case 429:
         throw new ApiError(
           'Rate limit exceeded',
@@ -118,7 +118,7 @@ export async function handleApiResponse<T>(response: Response): Promise<T> {
           'RATE_LIMITED',
           { url: response.url, retryAfter: response.headers.get('Retry-After') }
         );
-      
+
       default:
         throw new ApiError(
           errorMessage,
@@ -157,12 +157,12 @@ export class ApiClient {
   }
 
   async request<T>(
-    endpoint: string,
-    options: RequestInit = {}
-  ): Promise<T> {
+  endpoint: string,
+  options: RequestInit = {})
+  : Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
     const abortController = new AbortController();
-    
+
     // Set timeout
     const timeoutId = setTimeout(() => {
       abortController.abort();
@@ -173,42 +173,42 @@ export class ApiClient {
       signal: abortController.signal,
       headers: {
         'Content-Type': 'application/json',
-        ...options.headers,
-      },
+        ...options.headers
+      }
     };
 
     let lastError: ApiError;
-    
+
     for (let attempt = 0; attempt <= this.retries; attempt++) {
       try {
         const response = await fetch(url, requestOptions);
         clearTimeout(timeoutId);
-        
+
         return await handleApiResponse<T>(response);
-        
+
       } catch (error) {
         clearTimeout(timeoutId);
-        
+
         if (error instanceof ApiError) {
           lastError = error;
-          
+
           // Don't retry for certain error types
           if (error.status === 401 || error.status === 403 || error.status === 422) {
             this.onError?.(error);
             throw error;
           }
-          
+
           // Don't retry on last attempt
           if (attempt === this.retries) {
             this.onError?.(error);
             throw error;
           }
-          
+
           // Wait before retry
           await this.delay(this.retryDelay * Math.pow(2, attempt));
           continue;
         }
-        
+
         // Handle fetch errors (network issues, timeouts)
         if (error.name === 'AbortError') {
           lastError = new NetworkError('Request timeout', { url, attempt });
@@ -218,44 +218,44 @@ export class ApiClient {
             { url, attempt, originalError: error }
           );
         }
-        
+
         // Don't retry on last attempt
         if (attempt === this.retries) {
           this.onError?.(lastError);
           throw lastError;
         }
-        
+
         await this.delay(this.retryDelay * Math.pow(2, attempt));
       }
     }
-    
+
     throw lastError!;
   }
 
   private delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   // Convenience methods
   async get<T>(endpoint: string, params?: Record<string, string>): Promise<T> {
-    const url = params 
-      ? `${endpoint}?${new URLSearchParams(params)}`
-      : endpoint;
-    
+    const url = params ?
+    `${endpoint}?${new URLSearchParams(params)}` :
+    endpoint;
+
     return this.request<T>(url, { method: 'GET' });
   }
 
   async post<T>(endpoint: string, data?: any): Promise<T> {
     return this.request<T>(endpoint, {
       method: 'POST',
-      body: data ? JSON.stringify(data) : undefined,
+      body: data ? JSON.stringify(data) : undefined
     });
   }
 
   async put<T>(endpoint: string, data?: any): Promise<T> {
     return this.request<T>(endpoint, {
       method: 'PUT',
-      body: data ? JSON.stringify(data) : undefined,
+      body: data ? JSON.stringify(data) : undefined
     });
   }
 
@@ -317,20 +317,20 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
     return {
       hasError: true,
-      error,
+      error
     };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     this.setState({
       error,
-      errorInfo,
+      errorInfo
     });
 
     this.props.onError?.(error, errorInfo);
-    
+
     // Log to monitoring service
-    console.error('Error caught by boundary:', error, errorInfo);
+    logger.error('Error caught by boundary:', error, errorInfo);
   }
 
   render() {
@@ -348,8 +348,8 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
             <br />
             {this.state.errorInfo?.componentStack}
           </details>
-        </div>
-      );
+        </div>);
+
     }
 
     return this.props.children;
@@ -364,7 +364,7 @@ export async function fetchUsers(): Promise<User[]> {
     baseURL: '/api',
     onError: (error) => {
       // Log to monitoring service
-      console.error('API Error:', error.toJSON());
+      logger.error('API Error:', error.toJSON());
     }
   });
 
@@ -373,9 +373,9 @@ export async function fetchUsers(): Promise<User[]> {
   } catch (error) {
     // Handle specific error types
     if (error instanceof ValidationError) {
-      console.error('Validation errors:', error.errors);
+      logger.error('Validation errors:', error.errors);
     } else if (error instanceof NetworkError) {
-      console.error('Network error:', error.message);
+      logger.error('Network error:', error.message);
     }
     throw error;
   }
@@ -405,31 +405,31 @@ export function UserList() {
   }, [loadUsers]);
 
   if (loading) return <div>Loading...</div>;
-  
+
   if (error) {
     return (
       <div className="error-message">
         <p>Error: {error.message}</p>
-        {error instanceof ValidationError && (
-          <ul>
-            {Object.entries(error.errors).map(([field, messages]) => (
-              <li key={field}>
+        {error instanceof ValidationError &&
+        <ul>
+            {Object.entries(error.errors).map(([field, messages]) =>
+          <li key={field}>
                 {field}: {messages.join(', ')}
               </li>
-            ))}
+          )}
           </ul>
-        )}
+        }
         <button onClick={loadUsers}>Retry</button>
         <button onClick={clearError}>Dismiss</button>
-      </div>
-    );
+      </div>);
+
   }
 
   return (
     <ul>
-      {users.map(user => (
-        <li key={user.id}>{user.name}</li>
-      ))}
-    </ul>
-  );
+      {users.map((user) =>
+      <li key={user.id}>{user.name}</li>
+      )}
+    </ul>);
+
 }

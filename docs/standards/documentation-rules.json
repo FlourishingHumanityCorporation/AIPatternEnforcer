@@ -17,7 +17,12 @@
     "newFileRequiresDocumentation": {
       "enabled": true,
       "severity": "warning",
-      "exceptions": ["test/**", "*.test.*", "*.spec.*", "tests/**"]
+      "exceptions": [
+        "test/**",
+        "*.test.*",
+        "*.spec.*",
+        "tests/**"
+      ]
     },
     "modifiedFileRequiresDocumentationUpdate": {
       "enabled": true,

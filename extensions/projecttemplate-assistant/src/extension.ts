@@ -13,34 +13,34 @@ let logEnforcer: LogEnforcer;
 let statusBarItem: vscode.StatusBarItem;
 
 export function activate(context: vscode.ExtensionContext) {
-  console.log("ProjectTemplate Assistant is now active");
+  logger.info("ProjectTemplate Assistant is now active");
 
   // Initialize components
   contextManager = new ContextManager(context);
   fileNameEnforcer = new FileNameEnforcer();
-  
+
   // Initialize log enforcer
   try {
     logEnforcer = new LogEnforcer();
   } catch (error) {
-    console.log("Log enforcer not available:", error);
+    logger.info("Log enforcer not available:", error);
   }
-  
+
   // Initialize Claude validator (with error handling for non-ProjectTemplate workspaces)
   try {
     claudeValidator = new ClaudeValidator();
   } catch (error) {
-    console.log("Claude validator not available:", error);
+    logger.info("Claude validator not available:", error);
   }
 
   // Create status bar item
   statusBarItem = vscode.window.createStatusBarItem(
     vscode.StatusBarAlignment.Right,
-    100,
+    100
   );
   statusBarItem.text = "$(rocket) PT: Active";
   statusBarItem.tooltip =
-    "ProjectTemplate Assistant is active\nClick to open dashboard";
+  "ProjectTemplate Assistant is active\nClick to open dashboard";
   statusBarItem.command = "projecttemplate.showDashboard";
   statusBarItem.show();
   context.subscriptions.push(statusBarItem);
@@ -50,27 +50,27 @@ export function activate(context: vscode.ExtensionContext) {
 
   // Set up file system watcher for auto-context
   if (
-    vscode.workspace
-      .getConfiguration("projecttemplate")
-      .get("enableAutoContext")
-  ) {
+  vscode.workspace.
+  getConfiguration("projecttemplate").
+  get("enableAutoContext"))
+  {
     setupAutoContext(context);
   }
 
   // Set up file name enforcement
   if (
-    vscode.workspace
-      .getConfiguration("projecttemplate")
-      .get("enableNamingEnforcement")
-  ) {
+  vscode.workspace.
+  getConfiguration("projecttemplate").
+  get("enableNamingEnforcement"))
+  {
     setupNamingEnforcement(context);
   }
 
   // Set up log enforcement
-  if (logEnforcer && vscode.workspace
-    .getConfiguration("projecttemplate")
-    .get("enableLogEnforcement", true)
-  ) {
+  if (logEnforcer && vscode.workspace.
+  getConfiguration("projecttemplate").
+  get("enableLogEnforcement", true))
+  {
     setupLogEnforcement(context);
   }
 
@@ -93,30 +93,30 @@ function registerCommands(context: vscode.ExtensionContext) {
         }
 
         const context = await contextManager.buildContext(
-          activeEditor.document,
+          activeEditor.document
         );
 
         // Copy to clipboard
         await vscode.env.clipboard.writeText(context);
 
         // Show notification
-        vscode.window
-          .showInformationMessage(
-            `AI context loaded (${contextManager.getTokenCount(context)} tokens). Copied to clipboard!`,
-            "View Context",
-          )
-          .then((selection) => {
-            if (selection === "View Context") {
-              showContextPreview(context);
-            }
-          });
+        vscode.window.
+        showInformationMessage(
+          `AI context loaded (${contextManager.getTokenCount(context)} tokens). Copied to clipboard!`,
+          "View Context"
+        ).
+        then((selection) => {
+          if (selection === "View Context") {
+            showContextPreview(context);
+          }
+        });
 
         // Update status bar
         updateStatusBar("Context Loaded", 2000);
       } catch (error) {
         vscode.window.showErrorMessage(`Failed to load context: ${error}`);
       }
-    }),
+    })
   );
 
   // Refresh context command
@@ -126,15 +126,15 @@ function registerCommands(context: vscode.ExtensionContext) {
       async () => {
         await contextManager.clearCache();
         vscode.commands.executeCommand("projecttemplate.loadContext");
-      },
-    ),
+      }
+    )
   );
 
   // Show dashboard command
   context.subscriptions.push(
     vscode.commands.registerCommand("projecttemplate.showDashboard", () => {
       DashboardProvider.createOrShow(context.extensionUri);
-    }),
+    })
   );
 
   // Check naming command
@@ -147,7 +147,7 @@ function registerCommands(context: vscode.ExtensionContext) {
       }
 
       const violations = await fileNameEnforcer.checkWorkspace(
-        workspaceFolder.uri.fsPath,
+        workspaceFolder.uri.fsPath
       );
 
       if (violations.length === 0) {
@@ -157,19 +157,19 @@ function registerCommands(context: vscode.ExtensionContext) {
           label: path.basename(v.file),
           description: v.suggestion,
           detail: v.file,
-          violation: v,
+          violation: v
         }));
 
         const selected = await vscode.window.showQuickPick(items, {
           placeHolder: `Found ${violations.length} naming violations. Select to rename:`,
-          canPickMany: false,
+          canPickMany: false
         });
 
         if (selected) {
           await handleFileRename(selected.violation);
         }
       }
-    }),
+    })
   );
 
   // Claude validation commands
@@ -243,7 +243,7 @@ function registerCommands(context: vscode.ExtensionContext) {
           try {
             updateStatusBar("Checking logs...", 0);
             const result = await logEnforcer.checkWorkspace();
-            
+
             if (result.success) {
               vscode.window.showInformationMessage(
                 `✅ No logging violations found! Analyzed ${result.stats.filesAnalyzed} files.`
@@ -255,13 +255,13 @@ function registerCommands(context: vscode.ExtensionContext) {
                 "Fix All",
                 "Show Problems"
               );
-              
+
               if (action === "Fix All") {
                 vscode.commands.executeCommand("projecttemplate.fixAllLogViolations");
               } else if (action === "Show Problems") {
                 vscode.commands.executeCommand("workbench.actions.view.problems");
               }
-              
+
               updateStatusBar(`Log: ${result.violations.length} issues`, 0);
             }
           } catch (error) {
@@ -280,14 +280,14 @@ function registerCommands(context: vscode.ExtensionContext) {
           try {
             updateStatusBar("Fixing logs...", 0);
             await logEnforcer.fixWorkspace();
-            
+
             // Refresh diagnostics for open documents
-            vscode.workspace.textDocuments.forEach(doc => {
+            vscode.workspace.textDocuments.forEach((doc) => {
               if (doc.languageId && ['javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'python'].includes(doc.languageId)) {
                 logEnforcer.checkDocument(doc);
               }
             });
-            
+
             updateStatusBar("Log: Fixed", 3000);
           } catch (error) {
             vscode.window.showErrorMessage(`Auto-fix failed: ${error}`);
@@ -305,10 +305,10 @@ function registerCommands(context: vscode.ExtensionContext) {
           try {
             const document = await vscode.workspace.openTextDocument(uri);
             await logEnforcer.fixDocument(document);
-            
+
             // Refresh diagnostics
             await logEnforcer.checkDocument(document);
-            
+
             vscode.window.showInformationMessage("✅ Logging violation fixed");
           } catch (error) {
             vscode.window.showErrorMessage(`Fix failed: ${error}`);
@@ -325,24 +325,24 @@ function registerCommands(context: vscode.ExtensionContext) {
           try {
             const document = await vscode.workspace.openTextDocument(uri);
             const edit = new vscode.WorkspaceEdit();
-            
+
             const line = range.start.line;
             const lineText = document.lineAt(line);
             const indent = lineText.text.match(/^\\s*/)?.[0] || '';
-            
+
             // Determine comment style based on language
-            const comment = document.languageId === 'python' 
-              ? '# log-enforcer-disable-next-line'
-              : '// log-enforcer-disable-next-line';
-            
+            const comment = document.languageId === 'python' ?
+            '# log-enforcer-disable-next-line' :
+            '// log-enforcer-disable-next-line';
+
             const disableComment = `${indent}${comment}\\n`;
             edit.insert(uri, new vscode.Position(line, 0), disableComment);
-            
+
             await vscode.workspace.applyEdit(edit);
-            
+
             // Refresh diagnostics
             setTimeout(() => logEnforcer.checkDocument(document), 100);
-            
+
             vscode.window.showInformationMessage("✅ Log enforcement disabled for this line");
           } catch (error) {
             vscode.window.showErrorMessage(`Failed to disable enforcement: ${error}`);
@@ -358,29 +358,29 @@ function registerCommands(context: vscode.ExtensionContext) {
         async () => {
           try {
             const result = await logEnforcer.checkWorkspace();
-            
+
             const items = [
-              {
-                label: "📊 Statistics",
-                description: `${result.stats.filesAnalyzed} files analyzed, ${result.violations.length} violations`,
-                detail: `Analysis completed in ${result.stats.timeElapsed}ms`
-              },
-              {
-                label: "🔧 Fix All Violations",
-                description: "Automatically fix all logging violations",
-                action: "fix"
-              },
-              {
-                label: "📋 Show Problems Panel",
-                description: "View detailed violations in Problems panel",
-                action: "problems"
-              },
-              {
-                label: "⚙️ Configure Log Enforcement",
-                description: "Open log enforcement settings",
-                action: "settings"
-              }
-            ];
+            {
+              label: "📊 Statistics",
+              description: `${result.stats.filesAnalyzed} files analyzed, ${result.violations.length} violations`,
+              detail: `Analysis completed in ${result.stats.timeElapsed}ms`
+            },
+            {
+              label: "🔧 Fix All Violations",
+              description: "Automatically fix all logging violations",
+              action: "fix"
+            },
+            {
+              label: "📋 Show Problems Panel",
+              description: "View detailed violations in Problems panel",
+              action: "problems"
+            },
+            {
+              label: "⚙️ Configure Log Enforcement",
+              description: "Open log enforcement settings",
+              action: "settings"
+            }];
+
 
             const selected = await vscode.window.showQuickPick(items, {
               placeHolder: "Log Enforcement Status"
@@ -410,11 +410,11 @@ function setupAutoContext(context: vscode.ExtensionContext) {
 
       // Check if it's a supported language
       const supportedLanguages = [
-        "javascript",
-        "typescript",
-        "javascriptreact",
-        "typescriptreact",
-      ];
+      "javascript",
+      "typescript",
+      "javascriptreact",
+      "typescriptreact"];
+
       if (!supportedLanguages.includes(editor.document.languageId)) return;
 
       // Check if AI extensions are active
@@ -424,14 +424,14 @@ function setupAutoContext(context: vscode.ExtensionContext) {
         await injectContextToAI(contextData);
         updateStatusBar("Context Auto-loaded", 1500);
       }
-    }),
+    })
   );
 
   // Track file changes for context relevance
   context.subscriptions.push(
     vscode.workspace.onDidSaveTextDocument((document) => {
       contextManager.trackFileChange(document.fileName);
-    }),
+    })
   );
 }
 
@@ -447,7 +447,7 @@ function setupNamingEnforcement(context: vscode.ExtensionContext) {
         `File "${path.basename(uri.fsPath)}" violates naming rules`,
         "Rename",
         "Ignore",
-        "Disable Warnings",
+        "Disable Warnings"
       );
 
       switch (action) {
@@ -455,9 +455,9 @@ function setupNamingEnforcement(context: vscode.ExtensionContext) {
           await handleFileRename(violation);
           break;
         case "Disable Warnings":
-          vscode.workspace
-            .getConfiguration("projecttemplate")
-            .update("enableNamingEnforcement", false, true);
+          vscode.workspace.
+          getConfiguration("projecttemplate").
+          update("enableNamingEnforcement", false, true);
           break;
       }
     }
@@ -472,12 +472,12 @@ function setupLogEnforcement(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.languages.registerCodeActionsProvider(
       [
-        { language: 'javascript' },
-        { language: 'typescript' },
-        { language: 'javascriptreact' },
-        { language: 'typescriptreact' },
-        { language: 'python' }
-      ],
+      { language: 'javascript' },
+      { language: 'typescript' },
+      { language: 'javascriptreact' },
+      { language: 'typescriptreact' },
+      { language: 'python' }],
+
       codeActionProvider
     )
   );
@@ -508,11 +508,11 @@ function setupLogEnforcement(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.workspace.onDidChangeConfiguration((event) => {
       if (event.affectsConfiguration('projecttemplate.enableLogEnforcement') ||
-          event.affectsConfiguration('projecttemplate.logEnforcementExcludeTests')) {
+      event.affectsConfiguration('projecttemplate.logEnforcementExcludeTests')) {
         logEnforcer.updateConfiguration();
-        
+
         // Re-check all open documents
-        vscode.workspace.textDocuments.forEach(doc => {
+        vscode.workspace.textDocuments.forEach((doc) => {
           logEnforcer.checkDocument(doc);
         });
       }
@@ -520,7 +520,7 @@ function setupLogEnforcement(context: vscode.ExtensionContext) {
   );
 
   // Check all currently open documents
-  vscode.workspace.textDocuments.forEach(document => {
+  vscode.workspace.textDocuments.forEach((document) => {
     logEnforcer.checkDocument(document);
   });
 }
@@ -532,7 +532,7 @@ async function handleFileRename(violation: FileViolation) {
   try {
     await vscode.workspace.fs.rename(oldUri, newUri);
     vscode.window.showInformationMessage(
-      `Renamed to: ${path.basename(violation.suggestion)}`,
+      `Renamed to: ${path.basename(violation.suggestion)}`
     );
 
     // Open the renamed file
@@ -546,15 +546,15 @@ async function handleFileRename(violation: FileViolation) {
 function isAIExtensionActive(): boolean {
   // Check for common AI extensions
   const aiExtensions = [
-    "GitHub.copilot",
-    "GitHub.copilot-chat",
-    "anysphere.cursor-ai",
-    "continue.continue",
-    "tabnine.tabnine-vscode",
-  ];
+  "GitHub.copilot",
+  "GitHub.copilot-chat",
+  "anysphere.cursor-ai",
+  "continue.continue",
+  "tabnine.tabnine-vscode"];
+
 
   return aiExtensions.some(
-    (id) => vscode.extensions.getExtension(id)?.isActive,
+    (id) => vscode.extensions.getExtension(id)?.isActive
   );
 }
 
@@ -565,16 +565,16 @@ async function injectContextToAI(context: string) {
   const contextFile = path.join(
     vscode.workspace.workspaceFolders![0].uri.fsPath,
     ".vscode",
-    "ai-context.md",
+    "ai-context.md"
   );
 
   try {
     await vscode.workspace.fs.writeFile(
       vscode.Uri.file(contextFile),
-      Buffer.from(context, "utf8"),
+      Buffer.from(context, "utf8")
     );
   } catch (error) {
-    console.error("Failed to write context file:", error);
+    logger.error("Failed to write context file:", error);
   }
 
   // Method 2: Try to inject via extension API if available
@@ -589,7 +589,7 @@ function showContextPreview(context: string) {
     "contextPreview",
     "AI Context Preview",
     vscode.ViewColumn.Two,
-    {},
+    {}
   );
 
   panel.webview.html = getContextPreviewHtml(context);
@@ -597,12 +597,12 @@ function showContextPreview(context: string) {
 
 function getContextPreviewHtml(context: string): string {
   // Escape HTML
-  const escapedContext = context
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+  const escapedContext = context.
+  replace(/&/g, "&amp;").
+  replace(/</g, "&lt;").
+  replace(/>/g, "&gt;").
+  replace(/"/g, "&quot;").
+  replace(/'/g, "&#039;");
 
   return `
 <!DOCTYPE html>
@@ -669,7 +669,7 @@ function getContextPreviewHtml(context: string): string {
     `;
 }
 
-function updateStatusBar(text: string, duration: number = 0) {
+function updateStatusBar(text: string, duration = 0) {
   const originalText = statusBarItem.text;
   statusBarItem.text = `$(check) ${text}`;
 
@@ -681,29 +681,29 @@ function updateStatusBar(text: string, duration: number = 0) {
 }
 
 function showWelcomeMessage() {
-  vscode.window
-    .showInformationMessage(
-      "Welcome to ProjectTemplate Assistant! This extension helps with AI-assisted development.",
-      "Open Dashboard",
-      "View Settings",
-    )
-    .then((selection) => {
-      if (selection === "Open Dashboard") {
-        vscode.commands.executeCommand("projecttemplate.showDashboard");
-      } else if (selection === "View Settings") {
-        vscode.commands.executeCommand(
-          "workbench.action.openSettings",
-          "projecttemplate",
-        );
-      }
-    });
+  vscode.window.
+  showInformationMessage(
+    "Welcome to ProjectTemplate Assistant! This extension helps with AI-assisted development.",
+    "Open Dashboard",
+    "View Settings"
+  ).
+  then((selection) => {
+    if (selection === "Open Dashboard") {
+      vscode.commands.executeCommand("projecttemplate.showDashboard");
+    } else if (selection === "View Settings") {
+      vscode.commands.executeCommand(
+        "workbench.action.openSettings",
+        "projecttemplate"
+      );
+    }
+  });
 }
 
 export function deactivate() {
   if (statusBarItem) {
     statusBarItem.dispose();
   }
-  
+
   if (logEnforcer) {
     logEnforcer.dispose();
   }

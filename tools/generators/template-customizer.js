@@ -13,44 +13,44 @@ const FRAMEWORK_CONFIGS = {
       react: '^19.0.0',
       'react-dom': '^19.0.0',
       vite: '^6.0.0',
-      '@vitejs/plugin-react': '^4.0.0',
+      '@vitejs/plugin-react': '^4.0.0'
     },
     devDependencies: {
       '@types/react': '^18.0.0',
-      '@types/react-dom': '^18.0.0',
+      '@types/react-dom': '^18.0.0'
     },
     scripts: {
       dev: 'vite',
       build: 'vite build',
-      preview: 'vite preview',
+      preview: 'vite preview'
     },
     files: {
       'vite.config.ts': 'vite-config',
       'src/main.tsx': 'react-main',
-      'src/App.tsx': 'react-app',
-    },
+      'src/App.tsx': 'react-app'
+    }
   },
   nextjs: {
     name: 'Next.js 14',
     dependencies: {
       next: '^14.0.0',
       react: '^19.0.0',
-      'react-dom': '^19.0.0',
+      'react-dom': '^19.0.0'
     },
     devDependencies: {
       '@types/react': '^18.0.0',
-      '@types/react-dom': '^18.0.0',
+      '@types/react-dom': '^18.0.0'
     },
     scripts: {
       dev: 'next dev',
       build: 'next build',
-      start: 'next start',
+      start: 'next start'
     },
     files: {
       'next.config.js': 'next-config',
       'app/layout.tsx': 'next-layout',
-      'app/page.tsx': 'next-page',
-    },
+      'app/page.tsx': 'next-page'
+    }
   },
   express: {
     name: 'Express API',
@@ -58,34 +58,34 @@ const FRAMEWORK_CONFIGS = {
       express: '^4.18.0',
       cors: '^2.8.5',
       helmet: '^7.0.0',
-      'express-rate-limit': '^7.0.0',
+      'express-rate-limit': '^7.0.0'
     },
     devDependencies: {
       '@types/express': '^4.17.0',
       '@types/cors': '^2.8.0',
-      nodemon: '^3.0.0',
+      nodemon: '^3.0.0'
     },
     scripts: {
       dev: 'nodemon src/server.ts',
       build: 'tsc',
-      start: 'node dist/server.js',
+      start: 'node dist/server.js'
     },
     files: {
       'src/server.ts': 'express-server',
-      'src/routes/index.ts': 'express-routes',
-    },
-  },
+      'src/routes/index.ts': 'express-routes'
+    }
+  }
 };
 
 async function customizeTemplate() {
-  console.log(chalk.blue.bold('\n🎨 Customize ProjectTemplate\n'));
+  logger.info(chalk.blue.bold('\n🎨 Customize ProjectTemplate\n'));
 
   // Check for command-line framework argument
-  const frameworkArg = process.argv.find(arg => arg.startsWith('--framework='));
+  const frameworkArg = process.argv.find((arg) => arg.startsWith('--framework='));
   const frameworkFlag = process.argv.indexOf('--framework');
-  
+
   let framework;
-  
+
   if (frameworkArg) {
     framework = frameworkArg.split('=')[1];
   } else if (frameworkFlag !== -1 && process.argv[frameworkFlag + 1]) {
@@ -93,30 +93,30 @@ async function customizeTemplate() {
   } else {
     // Interactive mode
     const response = await inquirer.prompt([
-      {
-        type: 'list',
-        name: 'framework',
-        message: 'Choose your framework:',
-        choices: [
-          { name: 'React (Vite) - Fast, modern web apps', value: 'react' },
-          { name: 'Next.js 14 - Full-stack React framework', value: 'nextjs' },
-          { name: 'Express API - Backend API server', value: 'express' },
-        ],
-      },
-    ]);
+    {
+      type: 'list',
+      name: 'framework',
+      message: 'Choose your framework:',
+      choices: [
+      { name: 'React (Vite) - Fast, modern web apps', value: 'react' },
+      { name: 'Next.js 14 - Full-stack React framework', value: 'nextjs' },
+      { name: 'Express API - Backend API server', value: 'express' }]
+
+    }]
+    );
     framework = response.framework;
   }
-  
+
   // Validate framework
   if (!FRAMEWORK_CONFIGS[framework]) {
-    console.error(chalk.red(`Error: Unknown framework "${framework}"`));
-    console.error(chalk.gray('Available frameworks: react, nextjs, express'));
+    logger.error(chalk.red(`Error: Unknown framework "${framework}"`));
+    logger.error(chalk.gray('Available frameworks: react, nextjs, express'));
     process.exit(1);
   }
 
   const config = FRAMEWORK_CONFIGS[framework];
-  
-  console.log(chalk.blue(`\n📦 Setting up ${config.name}...\n`));
+
+  logger.info(chalk.blue(`\n📦 Setting up ${config.name}...\n`));
 
   // Update package.json
   const packageJsonPath = path.resolve('package.json');
@@ -125,12 +125,12 @@ async function customizeTemplate() {
   // Merge dependencies
   packageJson.dependencies = {
     ...packageJson.dependencies,
-    ...config.dependencies,
+    ...config.dependencies
   };
 
   packageJson.devDependencies = {
     ...packageJson.devDependencies,
-    ...config.devDependencies,
+    ...config.devDependencies
   };
 
   // Update scripts
@@ -138,7 +138,7 @@ async function customizeTemplate() {
 
   // Write updated package.json
   fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
-  console.log(chalk.green('✓ Updated package.json'));
+  logger.info(chalk.green('✓ Updated package.json'));
 
   // Create framework-specific files
   for (const [targetFile, templateFile] of Object.entries(config.files)) {
@@ -153,31 +153,31 @@ async function customizeTemplate() {
     // Copy template file
     const templateContent = getTemplateContent(framework, templateFile);
     fs.writeFileSync(targetPath, templateContent);
-    console.log(chalk.green(`✓ Created ${targetFile}`));
+    logger.info(chalk.green(`✓ Created ${targetFile}`));
   }
 
   // Framework-specific setup
   if (framework === 'nextjs') {
     // Create Next.js specific directories
     const dirs = ['app', 'public', 'styles'];
-    dirs.forEach(dir => {
+    dirs.forEach((dir) => {
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });
-        console.log(chalk.green(`✓ Created ${dir}/`));
+        logger.info(chalk.green(`✓ Created ${dir}/`));
       }
     });
 
     // Create .env.local
     fs.writeFileSync('.env.local', '# Environment variables\n');
-    console.log(chalk.green('✓ Created .env.local'));
+    logger.info(chalk.green('✓ Created .env.local'));
   }
 
   // Show next steps
-  console.log(chalk.blue.bold('\n✅ Template customized successfully!\n'));
-  console.log(chalk.white('Next steps:'));
-  console.log(chalk.gray('  npm install'));
-  console.log(chalk.gray('  npm run dev'));
-  console.log(chalk.gray(`\n${getFrameworkTips(framework)}`));
+  logger.info(chalk.blue.bold('\n✅ Template customized successfully!\n'));
+  logger.info(chalk.white('Next steps:'));
+  logger.info(chalk.gray('  npm install'));
+  logger.info(chalk.gray('  npm run dev'));
+  logger.info(chalk.gray(`\n${getFrameworkTips(framework)}`));
 }
 
 function getTemplateContent(framework, filename) {
@@ -218,7 +218,7 @@ export default function App() {
       <p>Start editing src/App.tsx</p>
     </div>
   );
-}`,
+}`
     },
     nextjs: {
       'next-config': `/** @type {import('next').NextConfig} */
@@ -251,7 +251,7 @@ module.exports = nextConfig;`,
       <p>Start editing app/page.tsx</p>
     </main>
   );
-}`,
+}`
     },
     express: {
       'express-server': `import express from 'express';
@@ -299,8 +299,8 @@ router.get('/hello', (req, res) => {
   res.json({ message: 'Hello from ProjectTemplate API!' });
 });
 
-export default router;`,
-    },
+export default router;`
+    }
   };
 
   return templates[framework]?.[filename] || '';
@@ -319,7 +319,7 @@ function getFrameworkTips(framework) {
     express: `Express Tips:
   - API routes in src/routes/
   - Middleware in src/middleware/
-  - Use npm run g:api to generate endpoints`,
+  - Use npm run g:api to generate endpoints`
   };
 
   return tips[framework] || '';
@@ -327,6 +327,6 @@ function getFrameworkTips(framework) {
 
 // Run the customizer
 customizeTemplate().catch((err) => {
-  console.error(chalk.red('Error:'), err.message);
+  logger.error(chalk.red('Error:'), err.message);
   process.exit(1);
 });

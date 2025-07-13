@@ -10,8 +10,8 @@ import React, {
   useContext,
   useEffect,
   useState,
-  useCallback,
-} from "react";
+  useCallback } from
+"react";
 import { Navigate, useLocation } from "react-router-dom";
 
 // Types
@@ -58,7 +58,7 @@ export class TokenStorage {
     // For client-side demo, we'll use localStorage with encryption
     localStorage.setItem(
       this.REFRESH_TOKEN_KEY,
-      this.encrypt(tokens.refreshToken),
+      this.encrypt(tokens.refreshToken)
     );
     localStorage.setItem(this.EXPIRES_AT_KEY, tokens.expiresAt.toString());
   }
@@ -122,8 +122,8 @@ export class AuthenticatedHttpClient {
       headers: {
         "Content-Type": "application/json",
         ...(token && { Authorization: `Bearer ${token}` }),
-        ...options.headers,
-      },
+        ...options.headers
+      }
     });
 
     if (response.status === 401) {
@@ -182,15 +182,15 @@ export class AuthenticatedHttpClient {
   }
 
   private async performTokenRefresh(
-    refreshToken: string,
-  ): Promise<string | null> {
+  refreshToken: string)
+  : Promise<string | null> {
     try {
       const response = await fetch(`${this.baseURL}/auth/refresh`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify({ refreshToken }),
+        body: JSON.stringify({ refreshToken })
       });
 
       if (!response.ok) {
@@ -200,18 +200,18 @@ export class AuthenticatedHttpClient {
       const {
         accessToken,
         refreshToken: newRefreshToken,
-        expiresAt,
+        expiresAt
       } = await response.json();
 
       TokenStorage.setTokens({
         accessToken,
         refreshToken: newRefreshToken,
-        expiresAt,
+        expiresAt
       });
 
       return accessToken;
     } catch (error) {
-      console.error("Token refresh failed:", error);
+      logger.error("Token refresh failed:", error);
       TokenStorage.clearTokens();
       return null;
     }
@@ -270,7 +270,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         try {
           await refreshUser();
         } catch (error) {
-          console.error("Failed to initialize auth:", error);
+          logger.error("Failed to initialize auth:", error);
           TokenStorage.clearTokens();
         }
       }
@@ -289,9 +289,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify(credentials),
+        body: JSON.stringify(credentials)
       });
 
       if (!response.ok) {
@@ -300,7 +300,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }
 
       const { user, accessToken, refreshToken, expiresAt } =
-        await response.json();
+      await response.json();
 
       TokenStorage.setTokens({ accessToken, refreshToken, expiresAt });
       setUser(user);
@@ -327,13 +327,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           name: data.name,
           email: data.email,
-          password: data.password,
-        }),
+          password: data.password
+        })
       });
 
       if (!response.ok) {
@@ -342,7 +342,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }
 
       const { user, accessToken, refreshToken, expiresAt } =
-        await response.json();
+      await response.json();
 
       TokenStorage.setTokens({ accessToken, refreshToken, expiresAt });
       setUser(user);
@@ -362,12 +362,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
     fetch("/api/auth/logout", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${TokenStorage.getAccessToken()}`,
-      },
+        Authorization: `Bearer ${TokenStorage.getAccessToken()}`
+      }
     }).catch(() => {
+
       // Ignore errors on logout
     });
-
     TokenStorage.clearTokens();
     setUser(null);
     setError(null);
@@ -383,7 +383,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const userData = await httpClient.request<User>("/auth/me");
       setUser(userData);
     } catch (error) {
-      console.error("Failed to refresh user:", error);
+      logger.error("Failed to refresh user:", error);
       logout();
       throw error;
     }
@@ -400,7 +400,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     register,
     logout,
     refreshUser,
-    clearError,
+    clearError
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
@@ -416,7 +416,7 @@ interface ProtectedRouteProps {
 export function ProtectedRoute({
   children,
   requiredRole,
-  fallback,
+  fallback
 }: ProtectedRouteProps) {
   const { user, isLoading } = useAuth();
   const location = useLocation();
@@ -436,7 +436,7 @@ export function ProtectedRoute({
   return <>{children}</>;
 }
 
-export function PublicRoute({ children }: { children: React.ReactNode }) {
+export function PublicRoute({ children }: {children: React.ReactNode;}) {
   const { user, isLoading } = useAuth();
   const location = useLocation();
 
@@ -458,7 +458,7 @@ export function LoginForm() {
   const [formData, setFormData] = useState<LoginCredentials>({
     email: "",
     password: "",
-    rememberMe: false,
+    rememberMe: false
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -468,15 +468,15 @@ export function LoginForm() {
     try {
       await login(formData);
     } catch (error) {
+
       // Error is handled by context
-    }
-  };
+    }};
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === "checkbox" ? checked : value
     }));
   };
 
@@ -484,14 +484,14 @@ export function LoginForm() {
     <form onSubmit={handleSubmit} className="auth-form">
       <h2>Sign In</h2>
 
-      {error && (
-        <div className="error-message">
+      {error &&
+      <div className="error-message">
           {error}
           <button type="button" onClick={clearError}>
             ×
           </button>
         </div>
-      )}
+      }
 
       <div className="form-group">
         <label htmlFor="email">Email</label>
@@ -502,8 +502,8 @@ export function LoginForm() {
           value={formData.email}
           onChange={handleChange}
           required
-          autoComplete="email"
-        />
+          autoComplete="email" />
+
       </div>
 
       <div className="form-group">
@@ -515,8 +515,8 @@ export function LoginForm() {
           value={formData.password}
           onChange={handleChange}
           required
-          autoComplete="current-password"
-        />
+          autoComplete="current-password" />
+
       </div>
 
       <div className="form-group checkbox-group">
@@ -525,8 +525,8 @@ export function LoginForm() {
             name="rememberMe"
             type="checkbox"
             checked={formData.rememberMe}
-            onChange={handleChange}
-          />
+            onChange={handleChange} />
+
           Remember me
         </label>
       </div>
@@ -539,8 +539,8 @@ export function LoginForm() {
         <a href="/forgot-password">Forgot your password?</a>
         <a href="/register">Don't have an account? Sign up</a>
       </div>
-    </form>
-  );
+    </form>);
+
 }
 
 export function RegisterForm() {
@@ -549,12 +549,12 @@ export function RegisterForm() {
     name: "",
     email: "",
     password: "",
-    confirmPassword: "",
+    confirmPassword: ""
   });
 
   const [validationErrors, setValidationErrors] = useState<
-    Record<string, string>
-  >({});
+    Record<string, string>>(
+    {});
 
   const validateForm = (): boolean => {
     const errors: Record<string, string> = {};
@@ -573,7 +573,7 @@ export function RegisterForm() {
 
     if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
       errors.password =
-        "Password must contain uppercase, lowercase, and number";
+      "Password must contain uppercase, lowercase, and number";
     }
 
     if (formData.password !== formData.confirmPassword) {
@@ -595,9 +595,9 @@ export function RegisterForm() {
     try {
       await register(formData);
     } catch (error) {
+
       // Error is handled by context
-    }
-  };
+    }};
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -613,14 +613,14 @@ export function RegisterForm() {
     <form onSubmit={handleSubmit} className="auth-form">
       <h2>Create Account</h2>
 
-      {error && (
-        <div className="error-message">
+      {error &&
+      <div className="error-message">
           {error}
           <button type="button" onClick={clearError}>
             ×
           </button>
         </div>
-      )}
+      }
 
       <div className="form-group">
         <label htmlFor="name">Full Name</label>
@@ -631,11 +631,11 @@ export function RegisterForm() {
           value={formData.name}
           onChange={handleChange}
           required
-          autoComplete="name"
-        />
-        {validationErrors.name && (
-          <div className="field-error">{validationErrors.name}</div>
-        )}
+          autoComplete="name" />
+
+        {validationErrors.name &&
+        <div className="field-error">{validationErrors.name}</div>
+        }
       </div>
 
       <div className="form-group">
@@ -647,11 +647,11 @@ export function RegisterForm() {
           value={formData.email}
           onChange={handleChange}
           required
-          autoComplete="email"
-        />
-        {validationErrors.email && (
-          <div className="field-error">{validationErrors.email}</div>
-        )}
+          autoComplete="email" />
+
+        {validationErrors.email &&
+        <div className="field-error">{validationErrors.email}</div>
+        }
       </div>
 
       <div className="form-group">
@@ -663,11 +663,11 @@ export function RegisterForm() {
           value={formData.password}
           onChange={handleChange}
           required
-          autoComplete="new-password"
-        />
-        {validationErrors.password && (
-          <div className="field-error">{validationErrors.password}</div>
-        )}
+          autoComplete="new-password" />
+
+        {validationErrors.password &&
+        <div className="field-error">{validationErrors.password}</div>
+        }
       </div>
 
       <div className="form-group">
@@ -679,11 +679,11 @@ export function RegisterForm() {
           value={formData.confirmPassword}
           onChange={handleChange}
           required
-          autoComplete="new-password"
-        />
-        {validationErrors.confirmPassword && (
-          <div className="field-error">{validationErrors.confirmPassword}</div>
-        )}
+          autoComplete="new-password" />
+
+        {validationErrors.confirmPassword &&
+        <div className="field-error">{validationErrors.confirmPassword}</div>
+        }
       </div>
 
       <button type="submit" disabled={isLoading} className="submit-button">
@@ -693,8 +693,8 @@ export function RegisterForm() {
       <div className="form-links">
         <a href="/login">Already have an account? Sign in</a>
       </div>
-    </form>
-  );
+    </form>);
+
 }
 
 // 7. User Profile Component
@@ -703,7 +703,7 @@ export function UserProfile() {
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({
     name: user?.name || "",
-    email: user?.email || "",
+    email: user?.email || ""
   });
 
   if (!user) return null;
@@ -715,15 +715,15 @@ export function UserProfile() {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${TokenStorage.getAccessToken()}`,
+          Authorization: `Bearer ${TokenStorage.getAccessToken()}`
         },
-        body: JSON.stringify(editData),
+        body: JSON.stringify(editData)
       });
 
       await refreshUser();
       setIsEditing(false);
     } catch (error) {
-      console.error("Failed to update profile:", error);
+      logger.error("Failed to update profile:", error);
     }
   };
 
@@ -733,58 +733,58 @@ export function UserProfile() {
         <img
           src={user.avatar || "/default-avatar.png"}
           alt={user.name}
-          className="avatar"
-        />
-        <div className="user-info">
-          {isEditing ? (
-            <input
-              value={editData.name}
-              onChange={(e) =>
-                setEditData((prev) => ({ ...prev, name: e.target.value }))
-              }
-            />
-          ) : (
-            <h2>{user.name}</h2>
-          )}
+          className="avatar" />
 
-          {isEditing ? (
-            <input
-              value={editData.email}
-              onChange={(e) =>
-                setEditData((prev) => ({ ...prev, email: e.target.value }))
-              }
-            />
-          ) : (
-            <p>{user.email}</p>
-          )}
+        <div className="user-info">
+          {isEditing ?
+          <input
+            value={editData.name}
+            onChange={(e) =>
+            setEditData((prev) => ({ ...prev, name: e.target.value }))
+            } /> :
+
+
+          <h2>{user.name}</h2>
+          }
+
+          {isEditing ?
+          <input
+            value={editData.email}
+            onChange={(e) =>
+            setEditData((prev) => ({ ...prev, email: e.target.value }))
+            } /> :
+
+
+          <p>{user.email}</p>
+          }
 
           <span className={`role-badge ${user.role}`}>{user.role}</span>
         </div>
       </div>
 
       <div className="profile-actions">
-        {isEditing ? (
-          <>
+        {isEditing ?
+        <>
             <button onClick={handleSave}>Save</button>
             <button onClick={() => setIsEditing(false)}>Cancel</button>
-          </>
-        ) : (
-          <button onClick={() => setIsEditing(true)}>Edit Profile</button>
-        )}
+          </> :
+
+        <button onClick={() => setIsEditing(true)}>Edit Profile</button>
+        }
 
         <button onClick={logout} className="logout-button">
           Sign Out
         </button>
       </div>
 
-      {!user.emailVerified && (
-        <div className="verification-notice">
+      {!user.emailVerified &&
+      <div className="verification-notice">
           Please verify your email address to access all features.
           <button>Resend verification email</button>
         </div>
-      )}
-    </div>
-  );
+      }
+    </div>);
+
 }
 
 // 8. Utility Functions
@@ -804,25 +804,25 @@ export function validatePasswordStrength(password: string): {
   const feedback: string[] = [];
   let score = 0;
 
-  if (password.length >= 8) score += 1;
-  else feedback.push("Use at least 8 characters");
+  if (password.length >= 8) score += 1;else
+  feedback.push("Use at least 8 characters");
 
-  if (/[a-z]/.test(password)) score += 1;
-  else feedback.push("Include lowercase letters");
+  if (/[a-z]/.test(password)) score += 1;else
+  feedback.push("Include lowercase letters");
 
-  if (/[A-Z]/.test(password)) score += 1;
-  else feedback.push("Include uppercase letters");
+  if (/[A-Z]/.test(password)) score += 1;else
+  feedback.push("Include uppercase letters");
 
-  if (/\d/.test(password)) score += 1;
-  else feedback.push("Include numbers");
+  if (/\d/.test(password)) score += 1;else
+  feedback.push("Include numbers");
 
-  if (/[^a-zA-Z\d]/.test(password)) score += 1;
-  else feedback.push("Include special characters");
+  if (/[^a-zA-Z\d]/.test(password)) score += 1;else
+  feedback.push("Include special characters");
 
   return {
     isValid: score >= 4,
     score,
-    feedback,
+    feedback
   };
 }
 

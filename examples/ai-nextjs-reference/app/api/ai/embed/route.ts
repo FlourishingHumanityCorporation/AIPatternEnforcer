@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     if (!text || typeof text !== "string") {
       return new Response(JSON.stringify({ error: "No text provided" }), {
         status: 400,
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" }
       });
     }
 
@@ -22,8 +22,8 @@ export async function POST(req: NextRequest) {
         JSON.stringify({ error: "Text too long (max 8000 characters)" }),
         {
           status: 400,
-          headers: { "Content-Type": "application/json" },
-        },
+          headers: { "Content-Type": "application/json" }
+        }
       );
     }
 
@@ -41,9 +41,9 @@ export async function POST(req: NextRequest) {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               model: "nomic-embed-text", // Common embedding model in Ollama
-              prompt: text,
-            }),
-          },
+              prompt: text
+            })
+          }
         );
 
         if (response.ok) {
@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
           throw new Error("Local embedding model not available");
         }
       } catch (error) {
-        console.error("Local embedding model error:", error);
+        logger.error("Local embedding model error:", error);
 
         // Fallback to OpenAI embeddings
         if (process.env.OPENAI_API_KEY) {
@@ -66,13 +66,13 @@ export async function POST(req: NextRequest) {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
-                  Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+                  Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
                 },
                 body: JSON.stringify({
                   model: "text-embedding-3-small",
-                  input: text,
-                }),
-              },
+                  input: text
+                })
+              }
             );
 
             if (openaiResponse.ok) {
@@ -84,7 +84,7 @@ export async function POST(req: NextRequest) {
               throw new Error("OpenAI embeddings API failed");
             }
           } catch (openaiError) {
-            console.error("OpenAI embeddings error:", openaiError);
+            logger.error("OpenAI embeddings error:", openaiError);
             throw new Error("Embedding generation failed");
           }
         } else {
@@ -101,13 +101,13 @@ export async function POST(req: NextRequest) {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+                Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
               },
               body: JSON.stringify({
                 model: "text-embedding-3-small",
-                input: text,
-              }),
-            },
+                input: text
+              })
+            }
           );
 
           if (openaiResponse.ok) {
@@ -119,7 +119,7 @@ export async function POST(req: NextRequest) {
             throw new Error("OpenAI embeddings API failed");
           }
         } catch (error) {
-          console.error("OpenAI embeddings error:", error);
+          logger.error("OpenAI embeddings error:", error);
           throw new Error("Embedding generation failed");
         }
       } else {
@@ -134,25 +134,25 @@ export async function POST(req: NextRequest) {
         provider,
         dimensions: embeddings.length,
         textLength: text.length,
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       }),
       {
-        headers: { "Content-Type": "application/json" },
-      },
+        headers: { "Content-Type": "application/json" }
+      }
     );
   } catch (error) {
-    console.error("Embed API error:", error);
+    logger.error("Embed API error:", error);
     return new Response(
       JSON.stringify({
         error:
-          error instanceof Error
-            ? error.message
-            : "Embedding generation failed",
+        error instanceof Error ?
+        error.message :
+        "Embedding generation failed"
       }),
       {
         status: 500,
-        headers: { "Content-Type": "application/json" },
-      },
+        headers: { "Content-Type": "application/json" }
+      }
     );
   }
 }

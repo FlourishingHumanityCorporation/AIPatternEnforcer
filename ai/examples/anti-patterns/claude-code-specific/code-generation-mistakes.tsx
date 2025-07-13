@@ -6,10 +6,10 @@
 // ❌ BAD: Using console.log instead of proper logging
 // NEVER do this in production code:
 function badLogging() {
-  console.log("User logged in");           // ❌ Not allowed in production
-  console.error("Auth failed");           // ❌ Use proper error handling
-  console.warn("Deprecated API");         // ❌ Use logging framework
-  console.debug("Debug info");            // ❌ Use debug utilities
+  logger.info("User logged in"); // ❌ Not allowed in production
+  logger.error("Auth failed"); // ❌ Use proper error handling
+  logger.warn("Deprecated API"); // ❌ Use logging framework
+  logger.debug("Debug info"); // ❌ Use debug utilities
 }
 
 // ✅ CORRECT: Use proper logging
@@ -17,10 +17,10 @@ import { getLogger } from '../utils/logger';
 const logger = getLogger(__name__);
 
 function goodLogging() {
-  logger.info("User logged in");           // ✅ Proper logging
+  logger.info("User logged in"); // ✅ Proper logging
   logger.error("Auth failed", { error }); // ✅ Structured logging
-  logger.warn("Deprecated API usage");     // ✅ Warning level
-  logger.debug("Debug information");      // ✅ Debug level
+  logger.warn("Deprecated API usage"); // ✅ Warning level
+  logger.debug("Debug information"); // ✅ Debug level
 }
 
 // ❌ BAD: Bare except clauses without specific exception types
@@ -28,27 +28,27 @@ function goodLogging() {
 async function badErrorHandling() {
   try {
     await riskyOperation();
-  } catch (e) {                           // ❌ Too broad, hides bugs
+  } catch (e) {// ❌ Too broad, hides bugs
     return null;
   }
-  
+
   try {
     await anotherOperation();
-  } catch {                               // ❌ Even worse - ignores error
-    // Silent failure
-  }
-}
+  } catch {
 
+    // ❌ Even worse - ignores error
+    // Silent failure
+  }}
 // ✅ CORRECT: Specific exception handling
 async function goodErrorHandling() {
   try {
     await riskyOperation();
   } catch (error) {
-    if (error instanceof NetworkError) {   // ✅ Specific error type
+    if (error instanceof NetworkError) {// ✅ Specific error type
       logger.error("Network failure", { error });
       throw new UserFriendlyError("Connection lost");
     }
-    if (error instanceof ValidationError) { // ✅ Handle known errors
+    if (error instanceof ValidationError) {// ✅ Handle known errors
       return { success: false, errors: error.details };
     }
     // ✅ Re-throw unknown errors
@@ -81,12 +81,12 @@ export const UserCard = () => {
 
 // ❌ BAD: Ignoring TypeScript types and safety
 // NEVER use 'any' or skip type definitions:
-function badTyping(data: any) {           // ❌ Loses type safety
-  return data.someProperty;               // ❌ No intellisense/checking
+function badTyping(data: any) {// ❌ Loses type safety
+  return data.someProperty; // ❌ No intellisense/checking
 }
 
-const badComponent = (props: any) => {    // ❌ Props not typed
-  return <div>{props.value}</div>;        // ❌ Runtime errors possible
+const badComponent = (props: any) => {// ❌ Props not typed
+  return <div>{props.value}</div>; // ❌ Runtime errors possible
 };
 
 // ✅ CORRECT: Proper TypeScript usage
@@ -96,8 +96,8 @@ interface UserData {
   email: string;
 }
 
-function goodTyping(data: UserData): string {  // ✅ Strong types
-  return data.name;                           // ✅ Type-safe access
+function goodTyping(data: UserData): string {// ✅ Strong types
+  return data.name; // ✅ Type-safe access
 }
 
 interface UserCardProps {
@@ -109,13 +109,13 @@ const GoodComponent: React.FC<UserCardProps> = ({ user, onClick }) => {
   return (
     <div onClick={() => onClick?.(user.id)}>  {/* ✅ Type-safe */}
       {user.name}
-    </div>
-  );
+    </div>);
+
 };
 
 // ❌ BAD: Not following test-first development
 // NEVER write code without tests:
-function untested() {                     // ❌ No tests written
+function untested() {// ❌ No tests written
   // Complex logic here
   return complexCalculation();
 }
@@ -126,7 +126,7 @@ describe('calculateUserScore', () => {
   it('should calculate score correctly', () => {
     expect(calculateUserScore({ points: 100 })).toBe(100);
   });
-  
+
   it('should handle edge cases', () => {
     expect(calculateUserScore({ points: 0 })).toBe(0);
     expect(calculateUserScore({ points: -10 })).toBe(0);
@@ -134,7 +134,7 @@ describe('calculateUserScore', () => {
 });
 
 // 2. Then implement to make tests pass
-function calculateUserScore(user: { points: number }): number {
+function calculateUserScore(user: {points: number;}): number {
   return Math.max(0, user.points);
 }
 
@@ -142,8 +142,8 @@ function calculateUserScore(user: { points: number }): number {
 // NEVER create insecure code:
 function insecureAuth(token: string) {
   // ❌ No validation
-  const decoded = JSON.parse(atob(token));  // ❌ No verification
-  return decoded.userId;                    // ❌ Trusts client data
+  const decoded = JSON.parse(atob(token)); // ❌ No verification
+  return decoded.userId; // ❌ Trusts client data
 }
 
 function unsafeHTML(content: string) {
@@ -156,7 +156,7 @@ import { validateToken, sanitizeHTML } from '../utils/security';
 
 function secureAuth(token: string): string | null {
   try {
-    const decoded = validateToken(token);   // ✅ Proper validation
+    const decoded = validateToken(token); // ✅ Proper validation
     return decoded.userId;
   } catch (error) {
     logger.warn("Invalid token", { error });
@@ -173,29 +173,29 @@ function safeHTML(content: string) {
 // NEVER ignore performance implications:
 function inefficientRender() {
   const users = getUsers();
-  return users.map(user => (            // ❌ No memoization
-    <ExpensiveComponent 
-      key={user.id} 
-      data={expensiveCalculation(user)}  // ❌ Recalculates every render
-    />
-  ));
+  return users.map((user) => // ❌ No memoization
+  <ExpensiveComponent
+    key={user.id}
+    data={expensiveCalculation(user)} // ❌ Recalculates every render
+  />
+  );
 }
 
 // ✅ CORRECT: Performance-conscious code
 import { useMemo, memo } from 'react';
 
-const EfficientComponent = memo(({ users }: { users: User[] }) => {
-  const processedUsers = useMemo(() =>   // ✅ Memoized calculation
-    users.map(user => expensiveCalculation(user)),
-    [users]
+const EfficientComponent = memo(({ users }: {users: User[];}) => {
+  const processedUsers = useMemo(() => // ✅ Memoized calculation
+  users.map((user) => expensiveCalculation(user)),
+  [users]
   );
-  
-  return processedUsers.map((data, index) => (
-    <ExpensiveComponent 
-      key={users[index].id} 
-      data={data}
-    />
-  ));
+
+  return processedUsers.map((data, index) =>
+  <ExpensiveComponent
+    key={users[index].id}
+    data={data} />
+
+  );
 });
 
 // KEY REMINDERS FOR CLAUDE CODE:

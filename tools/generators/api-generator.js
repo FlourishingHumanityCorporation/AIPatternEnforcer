@@ -26,7 +26,7 @@ Handlebars.registerHelper("upperCase", (str) => {
 // API generator configuration
 const config = {
   outputDir: process.env.API_DIR || "src/api",
-  framework: "express", // Can be extended to support fastify, koa, etc.
+  framework: "express" // Can be extended to support fastify, koa, etc.
 };
 
 // Template definitions
@@ -650,12 +650,12 @@ Delete {{name}}
   "success": false,
   "message": "Internal server error"
 }
-\`\`\``,
+\`\`\``
 };
 
 // Generate API files
 async function generateApi(name, options) {
-  console.log(chalk.blue(`\n🚀 Generating API endpoint: ${name}\n`));
+  logger.info(chalk.blue(`\n🚀 Generating API endpoint: ${name}\n`));
 
   // Create API directory
   const apiDir = path.join(config.outputDir, name.toLowerCase());
@@ -663,7 +663,7 @@ async function generateApi(name, options) {
   try {
     await fs.mkdir(apiDir, { recursive: true });
   } catch (error) {
-    console.error(chalk.red(`❌ Failed to create directory: ${error.message}`));
+    logger.error(chalk.red(`❌ Failed to create directory: ${error.message}`));
     process.exit(1);
   }
 
@@ -672,20 +672,20 @@ async function generateApi(name, options) {
 
   // Files to generate
   const files = [
-    {
-      name: `${name.toLowerCase()}.route.ts`,
-      template: templates.expressRoute,
-    },
-    { name: `${name.toLowerCase()}.test.ts`, template: templates.test },
-    { name: `${name.toLowerCase()}.types.ts`, template: templates.types },
-    { name: "README.md", template: templates.openapi },
-  ];
+  {
+    name: `${name.toLowerCase()}.route.ts`,
+    template: templates.expressRoute
+  },
+  { name: `${name.toLowerCase()}.test.ts`, template: templates.test },
+  { name: `${name.toLowerCase()}.types.ts`, template: templates.types },
+  { name: "README.md", template: templates.openapi }];
+
 
   // Add service file if not using existing service
   if (!options.existingService) {
     files.push({
       name: `${name.toLowerCase()}.service.ts`,
-      template: templates.service,
+      template: templates.service
     });
   }
 
@@ -697,7 +697,7 @@ async function generateApi(name, options) {
     if (!options.force) {
       try {
         await fs.access(filePath);
-        console.log(chalk.yellow(`⚠️  Skipping ${file.name} (already exists)`));
+        logger.info(chalk.yellow(`⚠️  Skipping ${file.name} (already exists)`));
         continue;
       } catch {}
     }
@@ -708,60 +708,60 @@ async function generateApi(name, options) {
 
     try {
       await fs.writeFile(filePath, content);
-      console.log(chalk.green(`✅ Created ${file.name}`));
+      logger.info(chalk.green(`✅ Created ${file.name}`));
     } catch (error) {
-      console.error(
-        chalk.red(`❌ Failed to create ${file.name}: ${error.message}`),
-      );
+      logger.error(
+        chalk.red(`❌ Failed to create ${file.name}: ${error.message}`));
+
     }
   }
 
   // Success message
-  console.log(
-    chalk.green(`\n✨ API endpoint ${name} generated successfully!\n`),
-  );
-  console.log(chalk.cyan("📁 Files created:"));
-  console.log(chalk.gray(`   ${apiDir}/`));
+  logger.info(
+    chalk.green(`\n✨ API endpoint ${name} generated successfully!\n`));
+
+  logger.info(chalk.cyan("📁 Files created:"));
+  logger.info(chalk.gray(`   ${apiDir}/`));
   files.forEach((file) => {
-    console.log(chalk.gray(`   ├── ${file.name}`));
+    logger.info(chalk.gray(`   ├── ${file.name}`));
   });
 
-  console.log(chalk.cyan("\n🎯 Next steps:"));
-  console.log(
+  logger.info(chalk.cyan("\n🎯 Next steps:"));
+  logger.info(
     chalk.gray(
-      `   1. Register route: app.use('/api/${name.toLowerCase()}', ${name.toLowerCase()}Router);`,
-    ),
-  );
-  console.log(chalk.gray(`   2. Create database schema/model`));
-  console.log(chalk.gray(`   3. Implement service methods`));
-  console.log(chalk.gray(`   4. Run tests: npm test ${name.toLowerCase()}`));
-  console.log(chalk.gray(`   5. Update API documentation`));
+      `   1. Register route: app.use('/api/${name.toLowerCase()}', ${name.toLowerCase()}Router);`
+    ));
+
+  logger.info(chalk.gray(`   2. Create database schema/model`));
+  logger.info(chalk.gray(`   3. Implement service methods`));
+  logger.info(chalk.gray(`   4. Run tests: npm test ${name.toLowerCase()}`));
+  logger.info(chalk.gray(`   5. Update API documentation`));
 }
 
 // CLI setup
-program
-  .name("generate-api")
-  .description(
-    "Generate a RESTful API endpoint with TypeScript, validation, and tests",
-  )
-  .argument("<name>", "Resource name (e.g., User, Product)")
-  .option("-f, --force", "Overwrite existing files")
-  .option("-d, --dir <dir>", "Output directory", config.outputDir)
-  .option("--existing-service", "Use existing service layer")
-  .option(
-    "--framework <framework>",
-    "API framework (express, fastify, koa)",
-    "express",
-  )
-  .action(async (name, options) => {
-    if (options.dir) {
-      config.outputDir = options.dir;
-    }
-    if (options.framework) {
-      config.framework = options.framework;
-    }
-    await generateApi(name, options);
-  });
+program.
+name("generate-api").
+description(
+  "Generate a RESTful API endpoint with TypeScript, validation, and tests"
+).
+argument("<name>", "Resource name (e.g., User, Product)").
+option("-f, --force", "Overwrite existing files").
+option("-d, --dir <dir>", "Output directory", config.outputDir).
+option("--existing-service", "Use existing service layer").
+option(
+  "--framework <framework>",
+  "API framework (express, fastify, koa)",
+  "express"
+).
+action(async (name, options) => {
+  if (options.dir) {
+    config.outputDir = options.dir;
+  }
+  if (options.framework) {
+    config.framework = options.framework;
+  }
+  await generateApi(name, options);
+});
 
 // Parse CLI arguments
 program.parse(process.argv);

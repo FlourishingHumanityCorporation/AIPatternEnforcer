@@ -27,16 +27,16 @@ export class LogEnforcer {
   private diagnosticCollection: vscode.DiagnosticCollection;
   private statusBarItem: vscode.StatusBarItem;
   private workspaceRoot: string;
-  private isEnabled: boolean = true;
+  private isEnabled = true;
 
   constructor() {
     this.diagnosticCollection = vscode.languages.createDiagnosticCollection('projecttemplate-log-enforcement');
     this.statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 99);
     this.statusBarItem.command = 'projecttemplate.showLogEnforcementStatus';
-    
+
     const workspaceFolders = vscode.workspace.workspaceFolders;
     this.workspaceRoot = workspaceFolders ? workspaceFolders[0].uri.fsPath : '';
-    
+
     this.updateConfiguration();
     this.updateStatusBar();
   }
@@ -44,14 +44,14 @@ export class LogEnforcer {
   public updateConfiguration() {
     const config = vscode.workspace.getConfiguration('projecttemplate');
     this.isEnabled = config.get('enableLogEnforcement', true);
-    
+
     if (this.isEnabled) {
       this.statusBarItem.show();
     } else {
       this.statusBarItem.hide();
       this.diagnosticCollection.clear();
     }
-    
+
     this.updateStatusBar();
   }
 
@@ -65,7 +65,7 @@ export class LogEnforcer {
       this.updateDiagnostics(document, result.violations);
       this.updateStatusBar(result.violations.length);
     } catch (error) {
-      console.error('Log enforcement check failed:', error);
+      logger.error('Log enforcement check failed:', error);
     }
   }
 
@@ -76,7 +76,7 @@ export class LogEnforcer {
 
     return new Promise((resolve, reject) => {
       const logEnforcerPath = path.join(this.workspaceRoot, 'tools/enforcement/log-enforcer.js');
-      
+
       const child = spawn('node', [logEnforcerPath, 'check', '--format=json'], {
         cwd: this.workspaceRoot,
         stdio: ['pipe', 'pipe', 'pipe']
@@ -100,7 +100,7 @@ export class LogEnforcer {
 
           const jsonOutput = stdout.substring(jsonStart);
           const result = JSON.parse(jsonOutput);
-          
+
           // Convert to our format
           interface ViolationData {
             line: number;
@@ -110,7 +110,7 @@ export class LogEnforcer {
             message: string;
             filepath?: string;
           }
-          
+
           const violations: LogViolation[] = result.violations.map((v: ViolationData) => ({
             line: v.line,
             column: v.column,
@@ -147,7 +147,7 @@ export class LogEnforcer {
 
     return new Promise((resolve, reject) => {
       const logEnforcerPath = path.join(this.workspaceRoot, 'tools/enforcement/log-enforcer.js');
-      
+
       const child = spawn('node', [logEnforcerPath, 'fix', document.fileName], {
         cwd: this.workspaceRoot,
         stdio: ['pipe', 'pipe', 'pipe']
@@ -173,7 +173,7 @@ export class LogEnforcer {
 
     return new Promise((resolve, reject) => {
       const logEnforcerPath = path.join(this.workspaceRoot, 'tools/enforcement/log-enforcer.js');
-      
+
       const child = spawn('node', [logEnforcerPath, 'fix'], {
         cwd: this.workspaceRoot,
         stdio: ['pipe', 'pipe', 'pipe']
@@ -194,14 +194,14 @@ export class LogEnforcer {
     });
   }
 
-  private async analyzeFile(filePath: string): Promise<{ violations: LogViolation[] }> {
+  private async analyzeFile(filePath: string): Promise<{violations: LogViolation[];}> {
     if (!this.workspaceRoot) {
       return { violations: [] };
     }
 
     return new Promise((resolve, _reject) => {
       const logEnforcerPath = path.join(this.workspaceRoot, 'tools/enforcement/log-enforcer.js');
-      
+
       const child = spawn('node', [logEnforcerPath, 'check', '--format=json', filePath], {
         cwd: this.workspaceRoot,
         stdio: ['pipe', 'pipe', 'pipe']
@@ -225,7 +225,7 @@ export class LogEnforcer {
 
           const jsonOutput = stdout.substring(jsonStart);
           const result = JSON.parse(jsonOutput);
-          
+
           // Convert to our format
           interface ViolationData {
             line: number;
@@ -235,35 +235,35 @@ export class LogEnforcer {
             message: string;
             filepath?: string;
           }
-          
-          const violations: LogViolation[] = result.violations
-            .filter((v: ViolationData) => v.filepath === filePath)
-            .map((v: ViolationData) => ({
-              line: v.line,
-              column: v.column,
-              type: v.type,
-              method: v.method,
-              message: v.message,
-              severity: 'error' as const,
-              fixable: true
-            }));
+
+          const violations: LogViolation[] = result.violations.
+          filter((v: ViolationData) => v.filepath === filePath).
+          map((v: ViolationData) => ({
+            line: v.line,
+            column: v.column,
+            type: v.type,
+            method: v.method,
+            message: v.message,
+            severity: 'error' as const,
+            fixable: true
+          }));
 
           resolve({ violations });
         } catch (error) {
-          console.error('Failed to parse log enforcer output:', error);
+          logger.error('Failed to parse log enforcer output:', error);
           resolve({ violations: [] });
         }
       });
 
       child.on('error', (error) => {
-        console.error('Failed to run log enforcer:', error);
+        logger.error('Failed to run log enforcer:', error);
         resolve({ violations: [] });
       });
     });
   }
 
   private updateDiagnostics(document: vscode.TextDocument, violations: LogViolation[]) {
-    const diagnostics: vscode.Diagnostic[] = violations.map(violation => {
+    const diagnostics: vscode.Diagnostic[] = violations.map((violation) => {
       const range = new vscode.Range(
         Math.max(0, violation.line - 1),
         Math.max(0, violation.column - 1),
@@ -320,20 +320,20 @@ export class LogEnforcer {
   private isTestFile(fileName: string): boolean {
     const config = vscode.workspace.getConfiguration('projecttemplate');
     const excludeTests = config.get('logEnforcementExcludeTests', true);
-    
+
     if (!excludeTests) return false;
 
     const testPatterns = [
-      /\.test\.[jt]sx?$/,
-      /\.spec\.[jt]sx?$/,
-      /test_.*\.py$/,
-      /.*_test\.py$/,
-      /\/tests?\//,
-      /\/__tests__\//,
-      /\/testing\//
-    ];
+    /\.test\.[jt]sx?$/,
+    /\.spec\.[jt]sx?$/,
+    /test_.*\.py$/,
+    /.*_test\.py$/,
+    /\/tests?\//,
+    /\/__tests__\//,
+    /\/testing\//];
 
-    return testPatterns.some(pattern => pattern.test(fileName));
+
+    return testPatterns.some((pattern) => pattern.test(fileName));
   }
 
   public dispose() {
@@ -350,15 +350,15 @@ export class LogEnforcementCodeActionProvider implements vscode.CodeActionProvid
   }
 
   provideCodeActions(
-    document: vscode.TextDocument,
-    range: vscode.Range,
-    context: vscode.CodeActionContext
-  ): vscode.CodeAction[] {
+  document: vscode.TextDocument,
+  range: vscode.Range,
+  context: vscode.CodeActionContext)
+  : vscode.CodeAction[] {
     const actions: vscode.CodeAction[] = [];
 
     // Check if there are log enforcement diagnostics in range
     const logDiagnostics = context.diagnostics.filter(
-      diagnostic => diagnostic.source === 'ProjectTemplate Log Enforcer'
+      (diagnostic) => diagnostic.source === 'ProjectTemplate Log Enforcer'
     );
 
     if (logDiagnostics.length > 0) {

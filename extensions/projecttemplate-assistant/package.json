@@ -1,12 +1,12 @@
 {
   "name": "projecttemplate-assistant",
-  "displayName": "ProjectTemplate Assistant",
+  "displayName": "AIPatternEnforcer Assistant",
   "description": "Smart context loader and enforcement for AI-assisted development",
   "version": "0.1.0",
   "publisher": "projecttemplate",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/ProjectTemplate"
+    "url": "https://github.com/yourusername/AIPatternEnforcer"
   },
   "engines": {
     "vscode": "^1.74.0"
@@ -42,56 +42,56 @@
       {
         "command": "projecttemplate.loadContext",
         "title": "Load AI Context",
-        "category": "ProjectTemplate"
+        "category": "AIPatternEnforcer"
       },
       {
         "command": "projecttemplate.refreshContext",
         "title": "Refresh AI Context",
-        "category": "ProjectTemplate"
+        "category": "AIPatternEnforcer"
       },
       {
         "command": "projecttemplate.showDashboard",
         "title": "Show Dashboard",
-        "category": "ProjectTemplate"
+        "category": "AIPatternEnforcer"
       },
       {
         "command": "projecttemplate.checkNaming",
         "title": "Check File Naming",
-        "category": "ProjectTemplate"
+        "category": "AIPatternEnforcer"
       },
       {
         "command": "projecttemplate.validateClaude",
         "title": "Validate Claude Response",
-        "category": "ProjectTemplate"
+        "category": "AIPatternEnforcer"
       },
       {
         "command": "projecttemplate.validateClaudeFromClipboard",
         "title": "Validate Claude Response from Clipboard",
-        "category": "ProjectTemplate"
+        "category": "AIPatternEnforcer"
       },
       {
         "command": "projecttemplate.claudeConfig",
         "title": "Open Claude Validation Config",
-        "category": "ProjectTemplate"
+        "category": "AIPatternEnforcer"
       },
       {
         "command": "projecttemplate.checkLogCompliance",
         "title": "Check Log Compliance",
-        "category": "ProjectTemplate"
+        "category": "AIPatternEnforcer"
       },
       {
         "command": "projecttemplate.fixAllLogViolations",
         "title": "Fix All Log Violations",
-        "category": "ProjectTemplate"
+        "category": "AIPatternEnforcer"
       },
       {
         "command": "projecttemplate.showLogEnforcementStatus",
         "title": "Show Log Enforcement Status",
-        "category": "ProjectTemplate"
+        "category": "AIPatternEnforcer"
       }
     ],
     "configuration": {
-      "title": "ProjectTemplate Assistant",
+      "title": "AIPatternEnforcer Assistant",
       "properties": {
         "projecttemplate.enableAutoContext": {
           "type": "boolean",
@@ -135,7 +135,12 @@
         "projecttemplate.claudeValidationSeverity": {
           "type": "string",
           "default": "WARNING",
-          "enum": ["CRITICAL", "WARNING", "INFO", "DISABLED"],
+          "enum": [
+            "CRITICAL",
+            "WARNING",
+            "INFO",
+            "DISABLED"
+          ],
           "description": "Minimum severity level for Claude validation"
         },
         "projecttemplate.enableLogEnforcement": {
@@ -156,7 +161,11 @@
         "projecttemplate.logEnforcementSeverity": {
           "type": "string",
           "default": "error",
-          "enum": ["error", "warning", "info"],
+          "enum": [
+            "error",
+            "warning",
+            "info"
+          ],
           "description": "Severity level for log enforcement diagnostics"
         }
       }

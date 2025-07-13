@@ -1,6 +1,8 @@
 {
   "policy": {
-    "default-src": ["'self'"],
+    "default-src": [
+      "'self'"
+    ],
     "script-src": [
       "'self'",
       "'unsafe-inline'",
@@ -9,7 +11,11 @@
       "https://www.googletagmanager.com",
       "https://plausible.io"
     ],
-    "style-src": ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+    "style-src": [
+      "'self'",
+      "'unsafe-inline'",
+      "https://fonts.googleapis.com"
+    ],
     "img-src": [
       "'self'",
       "data:",
@@ -18,7 +24,10 @@
       "https://www.google-analytics.com",
       "https://www.gravatar.com"
     ],
-    "font-src": ["'self'", "https://fonts.gstatic.com"],
+    "font-src": [
+      "'self'",
+      "https://fonts.gstatic.com"
+    ],
     "connect-src": [
       "'self'",
       "https://api.example.com",
@@ -26,31 +35,61 @@
       "https://www.google-analytics.com",
       "https://vitals.vercel-insights.com"
     ],
-    "media-src": ["'self'", "blob:"],
-    "object-src": ["'none'"],
-    "child-src": ["'self'"],
+    "media-src": [
+      "'self'",
+      "blob:"
+    ],
+    "object-src": [
+      "'none'"
+    ],
+    "child-src": [
+      "'self'"
+    ],
     "frame-src": [
       "'self'",
       "https://www.youtube.com",
       "https://player.vimeo.com"
     ],
-    "frame-ancestors": ["'none'"],
-    "form-action": ["'self'"],
-    "base-uri": ["'self'"],
-    "manifest-src": ["'self'"],
-    "worker-src": ["'self'", "blob:"]
+    "frame-ancestors": [
+      "'none'"
+    ],
+    "form-action": [
+      "'self'"
+    ],
+    "base-uri": [
+      "'self'"
+    ],
+    "manifest-src": [
+      "'self'"
+    ],
+    "worker-src": [
+      "'self'",
+      "blob:"
+    ]
   },
   "environments": {
     "development": {
-      "script-src": ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
-      "connect-src": ["'self'", "ws://localhost:*", "http://localhost:*"],
+      "script-src": [
+        "'self'",
+        "'unsafe-inline'",
+        "'unsafe-eval'"
+      ],
+      "connect-src": [
+        "'self'",
+        "ws://localhost:*",
+        "http://localhost:*"
+      ],
       "report-uri": null
     },
     "staging": {
       "report-uri": "https://staging.example.com/api/csp-report"
     },
     "production": {
-      "script-src": ["'self'", "'strict-dynamic'", "nonce-{NONCE}"],
+      "script-src": [
+        "'self'",
+        "'strict-dynamic'",
+        "nonce-{NONCE}"
+      ],
       "report-uri": "https://api.example.com/api/csp-report",
       "report-to": "csp-endpoint"
     }
@@ -79,7 +118,10 @@
     }
   },
   "testing": {
-    "tools": ["CSP Evaluator", "Report URI CSP Wizard"],
+    "tools": [
+      "CSP Evaluator",
+      "Report URI CSP Wizard"
+    ],
     "command": "npm run test:security:csp"
   }
 }

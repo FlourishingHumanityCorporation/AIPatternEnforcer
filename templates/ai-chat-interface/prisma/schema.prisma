@@ -1,0 +1,352 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [pgvector(map: "vector")]
+}
+
+// Document storage and processing (local single-user)
+model Document {
+  id            String    @id @default(cuid())
+  filename      String
+  originalName  String
+  mimeType      String
+  size          Int
+  url           String
+  
+  // Processing status
+  status        ProcessingStatus @default(PENDING)
+  uploadedAt    DateTime  @default(now())
+  processedAt   DateTime?
+  error         String?
+  
+  // Extracted data
+  extractedText String?   @db.Text
+  summary       String?   @db.Text
+  metadata      Json?
+  entities      Json?     // Named entities, dates, etc.
+  
+  // AI embeddings for similarity search
+  embedding     Float[]
+  
+  // Relations
+  extractions   Extraction[]
+  chunks        DocumentChunk[]
+  
+  @@index([status])
+  @@index([uploadedAt])
+}
+
+// Document chunks for large files
+model DocumentChunk {
+  id            String    @id @default(cuid())
+  documentId    String
+  document      Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  
+  chunkIndex    Int
+  text          String    @db.Text
+  embedding     Float[]
+  
+  @@unique([documentId, chunkIndex])
+}
+
+// Specific data extractions
+model Extraction {
+  id            String    @id @default(cuid())
+  documentId    String
+  document      Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  
+  type          ExtractionType
+  confidence    Float
+  data          Json
+  boundingBox   Json?     // For vision extractions
+  page          Int?      // For PDFs
+  
+  createdAt     DateTime  @default(now())
+  
+  @@index([documentId, type])
+}
+
+// Chat conversations (local single-user)
+model Conversation {
+  id            String    @id @default(cuid())
+  title         String
+  description   String?   @db.Text
+  
+  // Current configuration
+  model         String
+  provider      AIProvider
+  systemPrompt  String?   @db.Text
+  temperature   Float     @default(0.7)
+  maxTokens     Int?
+  
+  // Conversation state
+  isArchived    Boolean   @default(false)
+  isFavorite    Boolean   @default(false)
+  tags          String[]
+  
+  // Sharing and export
+  isShared      Boolean   @default(false)
+  shareId       String?   @unique
+  exportUrl     String?
+  
+  // Embeddings for semantic search
+  embedding     Unsupported("vector(1536)")?
+  
+  // Timestamps
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  lastMessageAt DateTime?
+  
+  // Relations
+  messages      Message[]
+  branches      ConversationBranch[]
+  searchIndex   ConversationIndex?
+  
+  @@index([createdAt])
+  @@index([lastMessageAt])
+  @@index([provider, model])
+  @@index([isArchived, isFavorite])
+}
+
+// Conversation branches for alternative paths
+model ConversationBranch {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  
+  name           String
+  parentMessageId String?
+  
+  createdAt      DateTime     @default(now())
+  
+  messages       Message[]
+  
+  @@index([conversationId])
+}
+
+// Chat messages with enhanced features
+model Message {
+  id            String    @id @default(cuid())
+  conversationId String
+  conversation  Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  
+  branchId      String?
+  branch        ConversationBranch? @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  
+  // Content
+  role          MessageRole
+  content       String    @db.Text
+  originalContent String? @db.Text  // For edited messages
+  
+  // Message metadata
+  messageIndex  Int       // Order in conversation
+  parentId      String?   // For threading/branching
+  parent        Message?  @relation("MessageThread", fields: [parentId], references: [id])
+  children      Message[] @relation("MessageThread")
+  
+  // AI generation metadata
+  model         String?
+  provider      AIProvider?
+  temperature   Float?
+  promptTokens  Int?
+  completionTokens Int?
+  totalTokens   Int?
+  
+  // Processing state
+  isStreaming   Boolean   @default(false)
+  isComplete    Boolean   @default(true)
+  error         String?
+  
+  // File attachments and context
+  attachments   Json?
+  contextFiles  Json?     // Referenced documents
+  
+  // Message embeddings for semantic search
+  embedding     Unsupported("vector(1536)")?
+  
+  // User interactions
+  isEdited      Boolean   @default(false)
+  isFavorite    Boolean   @default(false)
+  isRegenerating Boolean  @default(false)
+  
+  // Timestamps
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt
+  
+  @@index([conversationId, messageIndex])
+  @@index([role])
+  @@index([createdAt])
+}
+
+// AI API responses for caching and analytics (local single-user)
+model AIResponse {
+  id            String    @id @default(cuid())
+  
+  // Request
+  prompt        String    @db.Text
+  promptHash    String    // For caching
+  systemPrompt  String?   @db.Text
+  parameters    Json?
+  
+  // Response
+  response      String    @db.Text
+  model         String
+  provider      AIProvider
+  
+  // Metrics
+  promptTokens  Int
+  responseTokens Int
+  totalTokens   Int
+  cost          Float?
+  latencyMs     Int
+  cached        Boolean   @default(false)
+  
+  createdAt     DateTime  @default(now())
+  
+  @@unique([promptHash, model])
+  @@index([createdAt])
+}
+
+// Usage tracking (local single-user)
+model Usage {
+  id            String    @id @default(cuid())
+  feature       String
+  model         String
+  provider      AIProvider
+  
+  tokens        Int
+  cost          Float
+  
+  timestamp     DateTime  @default(now())
+  
+  @@index([timestamp])
+  @@index([feature])
+}
+
+// Chat templates and presets
+model ChatTemplate {
+  id            String    @id @default(cuid())
+  name          String
+  description   String?   @db.Text
+  
+  // Template configuration
+  systemPrompt  String    @db.Text
+  model         String
+  provider      AIProvider
+  temperature   Float     @default(0.7)
+  maxTokens     Int?
+  
+  // Categorization
+  category      String
+  tags          String[]
+  isPublic      Boolean   @default(false)
+  
+  // Usage stats
+  useCount      Int       @default(0)
+  lastUsed      DateTime?
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  @@index([category])
+  @@index([useCount])
+}
+
+// Model configurations for different providers
+model ModelConfig {
+  id            String    @id @default(cuid())
+  name          String
+  displayName   String
+  provider      AIProvider
+  
+  // Model capabilities
+  contextLength Int
+  maxTokens     Int
+  supportsFunctions Boolean @default(false)
+  supportsVision Boolean   @default(false)
+  supportsStreaming Boolean @default(true)
+  
+  // Pricing (per 1K tokens)
+  inputCost     Float?
+  outputCost    Float?
+  
+  // Configuration
+  isAvailable   Boolean   @default(true)
+  isDefault     Boolean   @default(false)
+  apiEndpoint   String?
+  
+  // Rate limiting
+  requestsPerMinute Int?
+  tokensPerMinute   Int?
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  @@unique([provider, name])
+  @@index([provider, isAvailable])
+}
+
+// Search and conversation indexing
+model ConversationIndex {
+  id            String       @id @default(cuid())
+  conversationId String      @unique
+  conversation  Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  
+  // Full-text search content
+  searchContent String       @db.Text
+  
+  // Metadata for search
+  messageCount  Int
+  totalTokens   Int
+  avgTemperature Float?
+  
+  // Topic classification
+  topics        String[]
+  sentiment     String?
+  
+  // Search optimization
+  searchVector  Unsupported("vector(1536)")?
+  
+  lastIndexed   DateTime     @default(now())
+  
+  @@index([topics])
+  @@index([messageCount])
+}
+
+// Enums
+enum ProcessingStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum ExtractionType {
+  TEXT
+  TABLE
+  FORM_FIELD
+  IMAGE
+  SIGNATURE
+  BARCODE
+  QR_CODE
+}
+
+enum AIProvider {
+  LOCAL
+  OPENAI
+  ANTHROPIC
+  REPLICATE
+  HUGGINGFACE
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+  FUNCTION
+}

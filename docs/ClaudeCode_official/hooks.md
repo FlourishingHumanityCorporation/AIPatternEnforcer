@@ -72,7 +72,7 @@ suggestions into app-level code that executes every time it is expected to run.
   36. [Notification](#notification)
 37. [Security Considerations](#security-considerations)
   38. [Disclaimer](#disclaimer)
-  39. [Security Optimal Practices](#security-optimal-practices)
+  39. [Security Best Practices](#security-best-practices)
   40. [Configuration Safety](#configuration-safety)
 41. [Hook Execution Details](#hook-execution-details)
 42. [Debugging](#debugging)
@@ -660,3 +660,394 @@ Progress messages appear in transcript mode (Ctrl-R) showing:
 * Command being executed
 * Success/failure status
 * Output or error messages
+
+## Leveraging Hooks for AI Development Friction Points
+
+This section demonstrates how Claude Code hooks can address common friction points in AI-assisted development, particularly for the AIPatternEnforcer project.
+
+### Context Comprehension & Management
+
+#### Hook: Automatic Context Reinforcement
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cat ai/config/.cursorrules | head -20 | jq -R -s '\"Remember project rules:\\n\" + .'"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+This hook reminds Claude of project rules before any file modification.
+
+#### Hook: Context Window Management
+```json
+{
+  "hooks": {
+    "PreCompact": [
+      {
+        "matcher": "auto",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "scripts/dev/ai-context-dump.sh && echo 'Context snapshot saved before compaction'"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+Automatically saves context state before compaction to prevent information loss.
+
+### Generation Inaccuracy & Unreliability
+
+#### Hook: API Hallucination Prevention
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "scripts/quality/verify-imports.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+Validates that all imports and APIs used in generated code actually exist.
+
+#### Hook: Pattern Compliance Validation
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node tools/enforcement/claude-post-edit-formatter.js"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+Enforces project patterns and conventions after every code modification.
+
+### Code Output & Quality Degradation
+
+#### Hook: Architecture Drift Prevention
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 scripts/quality/check-architecture.py",
+            "timeout": 5000
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+Checks if new files follow architectural patterns before creation.
+
+#### Hook: Automatic Code Formatting
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "tools/enforcement/claude-post-edit-formatter.js"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+Automatically formats code after modifications to maintain consistency.
+
+### Security & Compliance
+
+#### Hook: Security Vulnerability Scanner
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "scripts/quality/security-scan.sh --quick"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+Runs security checks on modified files immediately.
+
+#### Hook: Dependency Safety Check
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r 'select(.tool_input.command | test(\"npm install|yarn add\")) | \"\\(.tool_input.command)\"' | xargs -I {} scripts/init/check-package-health.sh {}"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+Validates package safety before installation.
+
+### Testing & Debugging Support
+
+#### Hook: Test Generation Reminder
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo $CLAUDE_TOOL_INPUT | jq -r 'select(.file_path | test(\"\\\\.tsx?$\") and (test(\"\\\\.test\\\\.tsx?$\") | not)) | \"Remember to create tests for \\(.file_path)\"'"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+Reminds to create tests for new non-test TypeScript files.
+
+#### Hook: Debug Context Capture
+```json
+{
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "scripts/dev/debug-snapshot.sh > ~/.claude/debug-context-$(date +%s).log"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+Captures debug context when Claude is waiting for input.
+
+### Workflow Integration
+
+#### Hook: Logging Enforcement
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npm run lint --fix"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+Automatically converts console.log to proper logging.
+
+#### Hook: Git Commit Preparation
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "git status --porcelain | wc -l | xargs -I {} test {} -gt 0 && echo 'Changes detected. Run: npm run check:all before committing' || true"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+Reminds to run checks when session ends with uncommitted changes.
+
+### Process & Collaboration
+
+#### Hook: PR Size Control
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "git diff --cached --numstat | awk '{added+=$1; deleted+=$2} END {if (added+deleted > 500) print \"Warning: Large changes detected. Consider breaking into smaller PRs.\"}'"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+Warns about large changesets that might be hard to review.
+
+#### Hook: Documentation Update Reminder
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo $CLAUDE_TOOL_INPUT | jq -r 'select(.file_path | test(\"src/\")) | \"Consider updating documentation for changes to \\(.file_path)\"'"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+Reminds to update documentation when source files change.
+
+### Complete Hook Configuration Example
+
+Here's a comprehensive hook configuration for AIPatternEnforcer:
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node tools/enforcement/claude-hook-validator.js"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node tools/enforcement/banned-document-types.js"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node tools/enforcement/claude-post-edit-formatter.js"
+          },
+          {
+            "type": "command",
+            "command": "npm run lint --fix"
+          },
+          {
+            "type": "command",
+            "command": "npm run lint --silent -- --fix $(echo $CLAUDE_TOOL_INPUT | jq -r '.file_path')"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npm run check:all --silent && echo 'All checks passed!' || echo 'Run npm run check:all to see issues'"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "osascript -e 'display notification \"Claude needs your attention\" with title \"Claude Code\"' 2>/dev/null || notify-send 'Claude Code' 'Claude needs your attention' 2>/dev/null || echo 'Claude is waiting for input'"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Implementation Tips
+
+1. **Start Small**: Begin with one or two hooks and expand gradually
+2. **Use Project Scripts**: Leverage existing scripts in the template structure
+3. **Fast Execution**: Keep hooks fast (<5 seconds) to avoid disrupting flow
+4. **Clear Feedback**: Provide actionable messages to both Claude and the user
+5. **Safe Failures**: Design hooks to fail gracefully without blocking work
+6. **Version Control**: Keep hook configurations in version control for team sharing
+
+### Debugging Hook Issues
+
+When hooks aren't working as expected:
+
+1. Test the command manually first
+2. Check JSON escaping in settings files
+3. Use `claude --debug` to see hook execution details
+4. Verify file paths are absolute or properly resolved
+5. Check exit codes match intended behavior
+6. Review stdout vs stderr output handling

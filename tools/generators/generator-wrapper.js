@@ -12,12 +12,12 @@ const GeneratorAnalytics = require('../metrics/generator-analytics');
 async function runGeneratorWithAnalytics() {
   const analytics = new GeneratorAnalytics();
   await analytics.init();
-  
+
   // Parse command line to determine generator type
   const args = process.argv.slice(2);
   const scriptName = args[0];
   const generatorArgs = args.slice(1);
-  
+
   // Map script names to generator types
   const generatorMap = {
     'enhanced-component-generator.js': 'component-enhanced',
@@ -26,24 +26,24 @@ async function runGeneratorWithAnalytics() {
     'feature-generator.js': 'feature',
     'hook-generator.js': 'hook'
   };
-  
+
   const generatorType = generatorMap[path.basename(scriptName)] || 'unknown';
-  const componentName = generatorArgs.find(arg => !arg.startsWith('-')) || 'Unknown';
-  
+  const componentName = generatorArgs.find((arg) => !arg.startsWith('-')) || 'Unknown';
+
   // Start tracking
   const sessionId = await analytics.trackStart(generatorType, componentName);
-  
+
   // Run the actual generator
   const generatorPath = path.join(__dirname, scriptName);
   const child = spawn('node', [generatorPath, ...generatorArgs], {
     stdio: 'inherit',
     env: { ...process.env, GENERATOR_SESSION_ID: sessionId }
   });
-  
+
   // Track completion
   child.on('close', async (code) => {
     const success = code === 0;
-    
+
     // Try to determine files created (basic heuristic)
     let filesCreated = 0;
     if (success) {
@@ -58,16 +58,16 @@ async function runGeneratorWithAnalytics() {
         filesCreated = 3; // hook, test, index
       }
     }
-    
+
     await analytics.trackComplete(sessionId, {
       success,
       filesCreated,
       error: success ? null : `Process exited with code ${code}`
     });
-    
+
     process.exit(code);
   });
-  
+
   // Handle interruption
   process.on('SIGINT', async () => {
     await analytics.trackComplete(sessionId, {
@@ -79,7 +79,7 @@ async function runGeneratorWithAnalytics() {
 }
 
 // Run wrapper
-runGeneratorWithAnalytics().catch(error => {
-  console.error('Analytics wrapper error:', error);
+runGeneratorWithAnalytics().catch((error) => {
+  logger.error('Analytics wrapper error:', error);
   process.exit(1);
 });

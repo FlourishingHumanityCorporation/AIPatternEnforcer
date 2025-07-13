@@ -113,3 +113,12 @@ examples/*/build/
 .user-id
 .user-metrics.json
 .user-feedback.json
+
+# Auto-generated files
+.enforcement-metrics.json
+.config-enforcer-cache/
+.config-enforcer-backups/
+.user-id
+.user-metrics.json
+*-backup.json
+*.backup

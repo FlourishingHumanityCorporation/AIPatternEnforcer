@@ -79,12 +79,14 @@ Learning Project → Whatever you want to learn!
 ### 1. The "Just Works" Stack (Recommended for most)
 
 ```text
-Backend:    Node.js + Express/Fastify
-Frontend:   Vite + React/Vue
-Database:   SQLite (via Prisma/Drizzle)
-Auth:       Local sessions (express-session)
-Storage:    Local filesystem
-Tools:      tsx for TypeScript, nodemon for watching
+Frontend:   Next.js (App Router) + React
+UI:         Tailwind CSS + shadcn/ui + Radix UI
+State:      Zustand + TanStack Query
+Backend:    Next.js API Routes + Serverless Functions
+Database:   PostgreSQL (Neon) + Prisma + pgvector
+Auth:       Mock auth for local development
+Storage:    Local filesystem + cloud storage APIs
+AI:         OpenAI API, Anthropic Claude, vector embeddings
 ```
 
 **Why this works:**

@@ -18,38 +18,38 @@ function runEnforcementChecks() {
   };
 
   const checks = [
-    {
-      name: 'File Naming',
-      command: 'npm run check:no-improved-files --quiet',
-      required: true
-    },
-    {
-      name: 'Root Directory',
-      command: 'npm run check:root --quiet', 
-      required: true
-    },
-    {
-      name: 'Banned Documents',
-      command: 'npm run check:banned-docs --quiet',
-      required: true
-    },
-    {
-      name: 'Import Standards',
-      command: 'npm run check:imports --quiet',
-      required: false
-    },
-    {
-      name: 'Documentation Style',
-      command: 'npm run check:documentation-style --quiet',
-      required: false
-    }
-  ];
+  {
+    name: 'File Naming',
+    command: 'npm run check:no-improved-files --quiet',
+    required: true
+  },
+  {
+    name: 'Root Directory',
+    command: 'npm run check:root --quiet',
+    required: true
+  },
+  {
+    name: 'Banned Documents',
+    command: 'npm run check:banned-docs --quiet',
+    required: true
+  },
+  {
+    name: 'Import Standards',
+    command: 'npm run check:imports --quiet',
+    required: false
+  },
+  {
+    name: 'Documentation Style',
+    command: 'npm run check:documentation-style --quiet',
+    required: false
+  }];
+
 
   for (const check of checks) {
     try {
-      execSync(check.command, { 
-        cwd: process.cwd(), 
-        stdio: ['pipe', 'pipe', 'pipe'] 
+      execSync(check.command, {
+        cwd: process.cwd(),
+        stdio: ['pipe', 'pipe', 'pipe']
       });
       results.passed.push(check.name);
     } catch (error) {
@@ -74,23 +74,23 @@ function runEnforcementChecks() {
 
 function checkGitStatus() {
   try {
-    const status = execSync('git status --porcelain', { 
-      cwd: process.cwd(), 
-      encoding: 'utf8' 
+    const status = execSync('git status --porcelain', {
+      cwd: process.cwd(),
+      encoding: 'utf8'
     });
-    
+
     if (status.trim()) {
       const lines = status.trim().split('\n');
       return {
         hasChanges: true,
-        changes: lines.map(line => {
+        changes: lines.map((line) => {
           const status = line.substring(0, 2);
           const file = line.substring(3);
           return { status, file };
         })
       };
     }
-    
+
     return { hasChanges: false, changes: [] };
   } catch (error) {
     return { hasChanges: false, changes: [], error: 'Git not available' };
@@ -102,7 +102,7 @@ function main() {
     // Read JSON input from stdin
     let inputData = '';
     process.stdin.setEncoding('utf8');
-    
+
     process.stdin.on('readable', () => {
       const chunk = process.stdin.read();
       if (chunk !== null) {
@@ -114,7 +114,7 @@ function main() {
       try {
         const hookData = JSON.parse(inputData);
         const { stop_hook_active } = hookData;
-        
+
         // Prevent infinite loops
         if (stop_hook_active) {
           process.exit(0);
@@ -122,7 +122,7 @@ function main() {
 
         // Run enforcement checks
         const results = runEnforcementChecks();
-        
+
         // Check git status
         const gitStatus = checkGitStatus();
 
@@ -130,16 +130,16 @@ function main() {
         const hasErrors = results.errors.length > 0;
         const hasUncommittedChanges = gitStatus.hasChanges;
 
-        if (hasErrors || (hasUncommittedChanges && results.warnings.length > 0)) {
+        if (hasErrors || hasUncommittedChanges && results.warnings.length > 0) {
           // Block completion and provide feedback to Claude
           let feedback = [];
-          
+
           feedback.push('🚫 Cannot complete task - enforcement violations detected:');
           feedback.push('');
 
           if (hasErrors) {
             feedback.push('❌ REQUIRED FIXES:');
-            results.errors.forEach(error => {
+            results.errors.forEach((error) => {
               feedback.push(`   • ${error.name}: ${error.reason}`);
               feedback.push(`     Fix with: ${error.command}`);
             });
@@ -148,7 +148,7 @@ function main() {
 
           if (results.warnings.length > 0) {
             feedback.push('⚠️  STYLE WARNINGS:');
-            results.warnings.forEach(warning => {
+            results.warnings.forEach((warning) => {
               feedback.push(`   • ${warning.name}: ${warning.reason}`);
               feedback.push(`     Fix with: ${warning.command}`);
             });
@@ -157,7 +157,7 @@ function main() {
 
           if (hasUncommittedChanges) {
             feedback.push('📝 UNCOMMITTED CHANGES:');
-            gitStatus.changes.forEach(change => {
+            gitStatus.changes.forEach((change) => {
               feedback.push(`   ${change.status} ${change.file}`);
             });
             feedback.push('');
@@ -171,20 +171,20 @@ function main() {
           feedback.push('3. Re-run to complete the task');
 
           // Output JSON to block completion with feedback
-          console.log(JSON.stringify({
+          logger.info(JSON.stringify({
             decision: 'block',
             reason: feedback.join('\n')
           }));
-          
+
           process.exit(0);
         }
 
         // All checks passed - show success summary
         const summary = [
-          '✅ Task completion validation passed:',
-          '',
-          `   ✓ ${results.passed.length} enforcement checks passed`,
-        ];
+        '✅ Task completion validation passed:',
+        '',
+        `   ✓ ${results.passed.length} enforcement checks passed`];
+
 
         if (results.warnings.length > 0) {
           summary.push(`   ⚠️  ${results.warnings.length} style warnings (non-blocking)`);
@@ -197,9 +197,9 @@ function main() {
         summary.push('');
         summary.push('🎉 Ready to complete!');
 
-        console.log(summary.join('\n'));
+        logger.info(summary.join('\n'));
         process.exit(0);
-        
+
       } catch (error) {
         // Don't block on parsing errors
         process.exit(0);

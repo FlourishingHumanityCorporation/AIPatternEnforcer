@@ -22,6 +22,7 @@
 ```bash
 # Daily Workflow
 npm run g:c ComponentName    # Generate component
+npm run doc:create           # Create documentation from template
 npm test                     # Run tests
 npm run check:all           # Validate everything
 git add . && git commit     # Commit (auto-validated)
@@ -91,10 +92,21 @@ npm test && npm run lint && npm run type-check && npm run check:all
 # Or use: npm run validate (combines all)
 ```
 
+### Documentation Templates
+```bash
+npm run doc:create               # Interactive template selection
+npm run doc:create:readme        # Create README documentation
+npm run doc:create:feature       # Create feature specification
+npm run doc:create:api           # Create API reference
+npm run doc:create:guide         # Create step-by-step guide
+npm run doc:validate filename.md # Validate against templates
+npm run doc:templates            # View available templates
+```
+
 ### AI Context Loading
 ```bash
 npm run context                    # General context
-npm run context -- src/components # Specific directory
+npm run context -- app/components # Specific directory
 npm run debug:snapshot            # Full debug context
 ```
 

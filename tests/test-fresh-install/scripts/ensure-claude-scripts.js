@@ -41,11 +41,11 @@ class ScriptManager {
       if (!fs.existsSync(this.packageJsonPath)) {
         throw new Error('package.json not found. Run this from project root.');
       }
-      
+
       const content = fs.readFileSync(this.packageJsonPath, 'utf-8');
       return JSON.parse(content);
     } catch (error) {
-      console.error(colorize(`Error loading package.json: ${error.message}`, 'red'));
+      logger.error(colorize(`Error loading package.json: ${error.message}`, 'red'));
       process.exit(1);
     }
   }
@@ -54,31 +54,31 @@ class ScriptManager {
     try {
       const content = JSON.stringify(packageData, null, 2) + '\n';
       fs.writeFileSync(this.packageJsonPath, content);
-      console.log(colorize('✅ package.json updated successfully', 'green'));
+      logger.info(colorize('✅ package.json updated successfully', 'green'));
     } catch (error) {
-      console.error(colorize(`Error saving package.json: ${error.message}`, 'red'));
+      logger.error(colorize(`Error saving package.json: ${error.message}`, 'red'));
       process.exit(1);
     }
   }
 
   checkScripts() {
     const packageData = this.loadPackageJson();
-    
+
     if (!packageData.scripts) {
       packageData.scripts = {};
     }
 
     const missingScripts = [];
     const incorrectScripts = [];
-    
+
     Object.entries(this.requiredScripts).forEach(([name, command]) => {
       if (!packageData.scripts[name]) {
         missingScripts.push({ name, command });
       } else if (packageData.scripts[name] !== command) {
-        incorrectScripts.push({ 
-          name, 
-          expected: command, 
-          actual: packageData.scripts[name] 
+        incorrectScripts.push({
+          name,
+          expected: command,
+          actual: packageData.scripts[name]
         });
       }
     });
@@ -92,74 +92,74 @@ class ScriptManager {
   }
 
   installScripts() {
-    console.log(colorize('\n🔧 Checking claude-validation npm scripts...', 'cyan'));
-    
+    logger.info(colorize('\n🔧 Checking claude-validation npm scripts...', 'cyan'));
+
     const { packageData, missingScripts, incorrectScripts, needsUpdate } = this.checkScripts();
 
     if (!needsUpdate) {
-      console.log(colorize('✅ All claude-validation scripts are properly installed', 'green'));
+      logger.info(colorize('✅ All claude-validation scripts are properly installed', 'green'));
       return;
     }
 
-    console.log(colorize('\n📝 Installing missing/incorrect scripts:', 'blue'));
+    logger.info(colorize('\n📝 Installing missing/incorrect scripts:', 'blue'));
 
     // Add missing scripts
     missingScripts.forEach(({ name, command }) => {
       packageData.scripts[name] = command;
-      console.log(colorize(`  + Added: ${name}`, 'green'));
+      logger.info(colorize(`  + Added: ${name}`, 'green'));
     });
 
     // Fix incorrect scripts
     incorrectScripts.forEach(({ name, expected, actual }) => {
       packageData.scripts[name] = expected;
-      console.log(colorize(`  * Fixed: ${name}`, 'yellow'));
-      console.log(colorize(`    Was: ${actual}`, 'red'));
-      console.log(colorize(`    Now: ${expected}`, 'green'));
+      logger.info(colorize(`  * Fixed: ${name}`, 'yellow'));
+      logger.info(colorize(`    Was: ${actual}`, 'red'));
+      logger.info(colorize(`    Now: ${expected}`, 'green'));
     });
 
     this.savePackageJson(packageData);
-    
-    console.log(colorize(`\n✅ Installed ${missingScripts.length + incorrectScripts.length} scripts`, 'green'));
+
+    logger.info(colorize(`\n✅ Installed ${missingScripts.length + incorrectScripts.length} scripts`, 'green'));
   }
 
   listScripts() {
-    console.log(colorize('\n📋 Required claude-validation scripts:', 'cyan'));
-    
+    logger.info(colorize('\n📋 Required claude-validation scripts:', 'cyan'));
+
     Object.entries(this.requiredScripts).forEach(([name, command]) => {
-      console.log(colorize(`  ${name}:`, 'blue'));
-      console.log(`    ${command}`);
+      logger.info(colorize(`  ${name}:`, 'blue'));
+      logger.info(`    ${command}`);
     });
   }
 
   validateInstallation() {
     const { needsUpdate, missingScripts, incorrectScripts } = this.checkScripts();
-    
+
     if (needsUpdate) {
-      console.log(colorize('❌ Installation validation failed', 'red'));
-      
+      logger.info(colorize('❌ Installation validation failed', 'red'));
+
       if (missingScripts.length > 0) {
-        console.log(colorize('\nMissing scripts:', 'yellow'));
+        logger.info(colorize('\nMissing scripts:', 'yellow'));
         missingScripts.forEach(({ name }) => {
-          console.log(`  - ${name}`);
+          logger.info(`  - ${name}`);
         });
       }
-      
+
       if (incorrectScripts.length > 0) {
-        console.log(colorize('\nIncorrect scripts:', 'yellow'));
+        logger.info(colorize('\nIncorrect scripts:', 'yellow'));
         incorrectScripts.forEach(({ name }) => {
-          console.log(`  - ${name}`);
+          logger.info(`  - ${name}`);
         });
       }
-      
-      console.log(colorize('\nRun: node scripts/ensure-claude-scripts.js install', 'blue'));
+
+      logger.info(colorize('\nRun: node scripts/ensure-claude-scripts.js install', 'blue'));
       process.exit(1);
     } else {
-      console.log(colorize('✅ All scripts are properly installed', 'green'));
+      logger.info(colorize('✅ All scripts are properly installed', 'green'));
     }
   }
 
   printHelp() {
-    console.log(`
+    logger.info(`
 ${colorize('Claude Validation Script Manager', 'cyan')}
 
 ${colorize('Usage:', 'bright')}
@@ -192,11 +192,11 @@ if (require.main === module) {
     case 'check':
       const result = manager.checkScripts();
       if (result.needsUpdate) {
-        console.log(colorize('Scripts need updates:', 'yellow'));
-        result.missingScripts.forEach(s => console.log(`  Missing: ${s.name}`));
-        result.incorrectScripts.forEach(s => console.log(`  Incorrect: ${s.name}`));
+        logger.info(colorize('Scripts need updates:', 'yellow'));
+        result.missingScripts.forEach((s) => logger.info(`  Missing: ${s.name}`));
+        result.incorrectScripts.forEach((s) => logger.info(`  Incorrect: ${s.name}`));
       } else {
-        console.log(colorize('All scripts are up to date', 'green'));
+        logger.info(colorize('All scripts are up to date', 'green'));
       }
       break;
     case 'list':

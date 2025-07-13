@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
       messages,
       model,
       preferLocal = true,
-      fallbackToAPI = true,
+      fallbackToAPI = true
     } = await req.json();
 
     if (!messages || !Array.isArray(messages)) {
@@ -22,8 +22,8 @@ export async function POST(req: NextRequest) {
         JSON.stringify({ error: "Invalid messages format" }),
         {
           status: 400,
-          headers: { "Content-Type": "application/json" },
-        },
+          headers: { "Content-Type": "application/json" }
+        }
       );
     }
 
@@ -43,9 +43,9 @@ export async function POST(req: NextRequest) {
             body: JSON.stringify({
               model: model || "llama2",
               messages,
-              stream: false,
-            }),
-          },
+              stream: false
+            })
+          }
         );
 
         if (response.ok) {
@@ -57,18 +57,18 @@ export async function POST(req: NextRequest) {
           throw new Error("Local model not available");
         }
       } catch (error) {
-        console.error("Local model error:", error);
+        logger.error("Local model error:", error);
 
         // Fallback to API if enabled
         if (!fallbackToAPI) {
           return new Response(
             JSON.stringify({
-              error: "Local model unavailable and fallback disabled",
+              error: "Local model unavailable and fallback disabled"
             }),
             {
               status: 503,
-              headers: { "Content-Type": "application/json" },
-            },
+              headers: { "Content-Type": "application/json" }
+            }
           );
         }
 
@@ -81,14 +81,14 @@ export async function POST(req: NextRequest) {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
-                  Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+                  Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
                 },
                 body: JSON.stringify({
                   model: model || "gpt-3.5-turbo",
                   messages,
-                  stream: false,
-                }),
-              },
+                  stream: false
+                })
+              }
             );
 
             if (openaiResponse.ok) {
@@ -100,7 +100,7 @@ export async function POST(req: NextRequest) {
               throw new Error("OpenAI API failed");
             }
           } catch (openaiError) {
-            console.error("OpenAI fallback error:", openaiError);
+            logger.error("OpenAI fallback error:", openaiError);
 
             // Try Anthropic as final fallback
             if (process.env.ANTHROPIC_API_KEY) {
@@ -112,18 +112,18 @@ export async function POST(req: NextRequest) {
                     headers: {
                       "Content-Type": "application/json",
                       "X-API-Key": process.env.ANTHROPIC_API_KEY,
-                      "anthropic-version": "2023-06-01",
+                      "anthropic-version": "2023-06-01"
                     },
                     body: JSON.stringify({
                       model: model || "claude-3-sonnet-20240229",
                       max_tokens: 1024,
                       messages: messages.filter(
-                        (m: any) => m.role !== "system",
+                        (m: any) => m.role !== "system"
                       ),
-                      system: messages.find((m: any) => m.role === "system")
-                        ?.content,
-                    }),
-                  },
+                      system: messages.find((m: any) => m.role === "system")?.
+                      content
+                    })
+                  }
                 );
 
                 if (anthropicResponse.ok) {
@@ -135,7 +135,7 @@ export async function POST(req: NextRequest) {
                   throw new Error("Anthropic API failed");
                 }
               } catch (anthropicError) {
-                console.error("Anthropic fallback error:", anthropicError);
+                logger.error("Anthropic fallback error:", anthropicError);
                 throw new Error("All AI providers failed");
               }
             } else {
@@ -155,14 +155,14 @@ export async function POST(req: NextRequest) {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+              Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
             },
             body: JSON.stringify({
               model: model || "gpt-3.5-turbo",
               messages,
-              stream: false,
-            }),
-          },
+              stream: false
+            })
+          }
         );
 
         if (openaiResponse.ok) {
@@ -183,9 +183,9 @@ export async function POST(req: NextRequest) {
 
     // Save to database if user is logged in
     if (userId && responseContent) {
-      const promptText = messages
-        .map((m: any) => `${m.role}: ${m.content}`)
-        .join("\n");
+      const promptText = messages.
+      map((m: any) => `${m.role}: ${m.content}`).
+      join("\n");
 
       try {
         await prisma.aIResponse.create({
@@ -198,14 +198,14 @@ export async function POST(req: NextRequest) {
             promptTokens: Math.ceil(promptText.length / 4), // Rough estimate
             responseTokens: Math.ceil(responseContent.length / 4),
             totalTokens: Math.ceil(
-              (promptText.length + responseContent.length) / 4,
+              (promptText.length + responseContent.length) / 4
             ),
             latencyMs,
-            userId,
-          },
+            userId
+          }
         });
       } catch (dbError) {
-        console.error("Database save error:", dbError);
+        logger.error("Database save error:", dbError);
         // Don't fail the request if database save fails
       }
     }
@@ -215,22 +215,22 @@ export async function POST(req: NextRequest) {
         content: responseContent,
         model: actualModel,
         provider,
-        latencyMs,
+        latencyMs
       }),
       {
-        headers: { "Content-Type": "application/json" },
-      },
+        headers: { "Content-Type": "application/json" }
+      }
     );
   } catch (error) {
-    console.error("Chat API error:", error);
+    logger.error("Chat API error:", error);
     return new Response(
       JSON.stringify({
-        error: error instanceof Error ? error.message : "Internal server error",
+        error: error instanceof Error ? error.message : "Internal server error"
       }),
       {
         status: 500,
-        headers: { "Content-Type": "application/json" },
-      },
+        headers: { "Content-Type": "application/json" }
+      }
     );
   }
 }

@@ -15,25 +15,25 @@ export async function POST(req: NextRequest) {
     if (!file) {
       return new Response(JSON.stringify({ error: "No file provided" }), {
         status: 400,
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" }
       });
     }
 
     // Validate file type
     const allowedTypes = [
-      "application/pdf",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      "text/plain",
-      "image/png",
-      "image/jpeg",
-      "image/gif",
-      "image/webp",
-    ];
+    "application/pdf",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "text/plain",
+    "image/png",
+    "image/jpeg",
+    "image/gif",
+    "image/webp"];
+
 
     if (!allowedTypes.includes(file.type)) {
       return new Response(JSON.stringify({ error: "Unsupported file type" }), {
         status: 400,
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" }
       });
     }
 
@@ -43,8 +43,8 @@ export async function POST(req: NextRequest) {
         JSON.stringify({ error: "File too large (max 10MB)" }),
         {
           status: 400,
-          headers: { "Content-Type": "application/json" },
-        },
+          headers: { "Content-Type": "application/json" }
+        }
       );
     }
 
@@ -64,13 +64,13 @@ export async function POST(req: NextRequest) {
         const data = await pdfParse(buffer);
         extractedText = data.text;
       } catch (error) {
-        console.error("PDF parsing error:", error);
+        logger.error("PDF parsing error:", error);
         extractedText = `[Error extracting PDF: ${error instanceof Error ? error.message : "Unknown error"}]`;
       }
     } else if (
-      file.type ===
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    ) {
+    file.type ===
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+    {
       try {
         const mammoth = await import("mammoth");
         const arrayBuffer = await file.arrayBuffer();
@@ -78,7 +78,7 @@ export async function POST(req: NextRequest) {
         const result = await mammoth.extractRawText({ buffer });
         extractedText = result.value;
       } catch (error) {
-        console.error("DOCX parsing error:", error);
+        logger.error("DOCX parsing error:", error);
         extractedText = `[Error extracting DOCX: ${error instanceof Error ? error.message : "Unknown error"}]`;
       }
     } else if (file.type.startsWith("image/")) {
@@ -89,32 +89,32 @@ export async function POST(req: NextRequest) {
 
         const worker = await createWorker("eng");
         const {
-          data: { text },
+          data: { text }
         } = await worker.recognize(buffer);
         await worker.terminate();
 
         extractedText = text.trim();
       } catch (error) {
-        console.error("OCR error:", error);
+        logger.error("OCR error:", error);
         extractedText = `[Error extracting text from image: ${error instanceof Error ? error.message : "Unknown error"}]`;
       }
     }
 
     // If we have text, generate summary and extract entities using AI
     if (
-      extractedText &&
-      extractedText.length > 0 &&
-      !extractedText.startsWith("[Error") &&
-      !extractedText.startsWith("[PDF") &&
-      !extractedText.startsWith("[DOCX") &&
-      !extractedText.startsWith("[Image")
-    ) {
+    extractedText &&
+    extractedText.length > 0 &&
+    !extractedText.startsWith("[Error") &&
+    !extractedText.startsWith("[PDF") &&
+    !extractedText.startsWith("[DOCX") &&
+    !extractedText.startsWith("[Image"))
+    {
       try {
         // Generate summary
         const summaryPrompt = `Please provide a concise summary of the following text:\n\n${extractedText}`;
         const summaryResponse = await generateAIResponse(
           summaryPrompt,
-          preferLocal,
+          preferLocal
         );
         summary = summaryResponse.content;
 
@@ -122,7 +122,7 @@ export async function POST(req: NextRequest) {
         const entitiesPrompt = `Extract key entities (people, organizations, locations, dates, etc.) from the following text. Return as JSON array with "type" and "value" fields:\n\n${extractedText}`;
         const entitiesResponse = await generateAIResponse(
           entitiesPrompt,
-          preferLocal,
+          preferLocal
         );
 
         try {
@@ -137,18 +137,18 @@ export async function POST(req: NextRequest) {
         const tableMatches = extractedText.match(tablePattern);
         if (tableMatches && tableMatches.length > 2) {
           tables = [
-            {
-              rows: tableMatches.slice(0, 5).map((row) => ({
-                cells: row
-                  .split("|")
-                  .filter((cell) => cell.trim())
-                  .map((cell) => cell.trim()),
-              })),
-            },
-          ];
+          {
+            rows: tableMatches.slice(0, 5).map((row) => ({
+              cells: row.
+              split("|").
+              filter((cell) => cell.trim()).
+              map((cell) => cell.trim())
+            }))
+          }];
+
         }
       } catch (error) {
-        console.error("AI processing error:", error);
+        logger.error("AI processing error:", error);
         summary = "Summary generation failed";
         entities = [];
       }
@@ -164,22 +164,22 @@ export async function POST(req: NextRequest) {
         entities,
         tables,
         extractionType,
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       }),
       {
-        headers: { "Content-Type": "application/json" },
-      },
+        headers: { "Content-Type": "application/json" }
+      }
     );
   } catch (error) {
-    console.error("Extract API error:", error);
+    logger.error("Extract API error:", error);
     return new Response(
       JSON.stringify({
-        error: error instanceof Error ? error.message : "Extraction failed",
+        error: error instanceof Error ? error.message : "Extraction failed"
       }),
       {
         status: 500,
-        headers: { "Content-Type": "application/json" },
-      },
+        headers: { "Content-Type": "application/json" }
+      }
     );
   }
 }
@@ -197,9 +197,9 @@ async function generateAIResponse(prompt: string, preferLocal: boolean) {
           body: JSON.stringify({
             model: "llama2",
             prompt,
-            stream: false,
-          }),
-        },
+            stream: false
+          })
+        }
       );
 
       if (response.ok) {
@@ -207,7 +207,7 @@ async function generateAIResponse(prompt: string, preferLocal: boolean) {
         return { content: data.response };
       }
     } catch (error) {
-      console.error("Local model error:", error);
+      logger.error("Local model error:", error);
     }
   }
 
@@ -217,13 +217,13 @@ async function generateAIResponse(prompt: string, preferLocal: boolean) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
       },
       body: JSON.stringify({
         model: "gpt-3.5-turbo",
         messages: [{ role: "user", content: prompt }],
-        max_tokens: 500,
-      }),
+        max_tokens: 500
+      })
     });
 
     if (response.ok) {

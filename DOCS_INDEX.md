@@ -4,6 +4,8 @@ This index provides AI assistants with quick access to all ProjectTemplate docum
 Each entry includes the file path and a concise description to help AI tools understand and 
 navigate the documentation structure.
 
+**Last Updated**: 2025-07-12 (Post-archive cleanup)
+
 ## Table of Contents
 
 1. [🚀 Quick Start](#-quick-start)
@@ -58,7 +60,7 @@ navigate the documentation structure.
 - `docs/newproject_decisions/decision-matrix-frontend.md` - React vs Vue vs Angular vs Svelte
 
 ### Security & Performance
-- `docs/guides/security/security-standards.md` - Authentication, authorization, input validation
+- `docs/guides/security/security-best-practices.md` - Local development security standards
 - `docs/guides/performance/optimization-playbook.md` - Frontend and backend optimization
 
 ### Tools & Generators
@@ -73,7 +75,7 @@ navigate the documentation structure.
 - `docs/testing/VSCODE_EXTENSION_TEST_CHECKLIST.md` - Extension testing guide
 
 ### Code Quality & Enforcement
-- `docs/guides/enforcement/ENFORCEMENT.md` - Complete enforcement system documentation and guidelines
+- `docs/guides/enforcement/README.md` - Modern Claude Code hooks enforcement system
 - `docs/guides/enforcement/config-enforcement.md` - Configuration validation and auto-fixing
 
 ### Templates
@@ -93,7 +95,7 @@ navigate the documentation structure.
 ## 📚 Reference Documentation
 - `FRICTION-MAPPING.md` - Common AI development friction points and solutions
 - `CONTRIBUTING.md` - Contribution guidelines
-- `docs/TODO.md` - Documentation roadmap and planned content
+- `docs/archive/README.md` - Archived documentation (deprecated tools, historical reports)
 
 ## 🎯 Key NPM Scripts
 ```bash

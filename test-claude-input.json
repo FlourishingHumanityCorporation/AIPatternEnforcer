@@ -1,0 +1,9 @@
+{
+  "session_id": "test-123",
+  "hook_event_name": "PreToolUse",
+  "tool_name": "Write",
+  "tool_input": {
+    "file_path": "user-profile-manager.js",
+    "content": "this.apiKey = 'sk-1234567890abcdef';\ndocument.getElementById('bio-container').innerHTML = userBio;\neval(`this.${command}()`);"
+  }
+}

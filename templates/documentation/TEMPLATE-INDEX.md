@@ -58,6 +58,12 @@
   - Sections: Findings, Metrics, Recommendations, Action Items
   - Focus: Data-driven analysis, actionable recommendations
 
+### Plan Documentation
+- **[Plan Template](plan/PLAN-TEMPLATE.md)** - Project plans and roadmaps
+  - Use for: Implementation plans, project roadmaps, technical initiatives
+  - Sections: Goals, Timeline, Status, Phases, Resources, Risks
+  - Focus: Technical planning, implementation strategy, progress tracking
+
 ## Template Usage
 
 ### Quick Start

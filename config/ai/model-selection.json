@@ -6,7 +6,9 @@
       "model": "claude-3-haiku",
       "temperature": 0.2,
       "maxContext": 4000,
-      "includeFiles": ["current_file_only"],
+      "includeFiles": [
+        "current_file_only"
+      ],
       "systemPrompt": "You are refactoring code. Make minimal changes. Preserve all functionality."
     },
     "bug_fix": {
@@ -14,7 +16,11 @@
       "model": "claude-3-sonnet",
       "temperature": 0.3,
       "maxContext": 8000,
-      "includeFiles": ["current_file", "related_tests", "error_logs"],
+      "includeFiles": [
+        "current_file",
+        "related_tests",
+        "error_logs"
+      ],
       "systemPrompt": "You are debugging. Focus on the root cause. Provide minimal fix."
     },
     "feature_implementation": {
@@ -22,7 +28,11 @@
       "model": "claude-3-opus",
       "temperature": 0.4,
       "maxContext": 16000,
-      "includeFiles": ["feature_files", "related_patterns", "tests"],
+      "includeFiles": [
+        "feature_files",
+        "related_patterns",
+        "tests"
+      ],
       "systemPrompt": "You are implementing a new feature. Follow existing patterns. Write tests."
     },
     "architecture_design": {
@@ -42,7 +52,11 @@
       "model": "claude-3-sonnet",
       "temperature": 0.3,
       "maxContext": 12000,
-      "includeFiles": ["pr_files", "related_tests", "style_guide"],
+      "includeFiles": [
+        "pr_files",
+        "related_tests",
+        "style_guide"
+      ],
       "systemPrompt": "You are reviewing code. Look for bugs, security issues, and style violations."
     },
     "test_generation": {
@@ -50,7 +64,11 @@
       "model": "claude-3-sonnet",
       "temperature": 0.2,
       "maxContext": 8000,
-      "includeFiles": ["implementation", "existing_tests", "test_patterns"],
+      "includeFiles": [
+        "implementation",
+        "existing_tests",
+        "test_patterns"
+      ],
       "systemPrompt": "You are writing tests. Cover edge cases. Follow AAA pattern. Use existing test utilities."
     },
     "documentation": {
@@ -58,7 +76,11 @@
       "model": "claude-3-haiku",
       "temperature": 0.4,
       "maxContext": 6000,
-      "includeFiles": ["code_to_document", "existing_docs", "doc_templates"],
+      "includeFiles": [
+        "code_to_document",
+        "existing_docs",
+        "doc_templates"
+      ],
       "systemPrompt": "You are writing documentation. Be clear and concise. Include examples."
     },
     "performance_optimization": {
@@ -77,20 +99,35 @@
   "modelDefaults": {
     "claude-3-haiku": {
       "maxTokens": 4000,
-      "stopSequences": ["</result>"]
+      "stopSequences": [
+        "</result>"
+      ]
     },
     "claude-3-sonnet": {
       "maxTokens": 8000,
-      "stopSequences": ["</result>"]
+      "stopSequences": [
+        "</result>"
+      ]
     },
     "claude-3-opus": {
       "maxTokens": 16000,
-      "stopSequences": ["</result>"]
+      "stopSequences": [
+        "</result>"
+      ]
     }
   },
   "contextRules": {
-    "alwaysInclude": [".cursorrules", "tsconfig.json", "package.json"],
-    "neverInclude": ["node_modules/**", "dist/**", "coverage/**", "*.log"],
+    "alwaysInclude": [
+      ".cursorrules",
+      "tsconfig.json",
+      "package.json"
+    ],
+    "neverInclude": [
+      "node_modules/**",
+      "dist/**",
+      "coverage/**",
+      "*.log"
+    ],
     "maxFileSize": 50000,
     "preferredFileOrder": [
       "interfaces",

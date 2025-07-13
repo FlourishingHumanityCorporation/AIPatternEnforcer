@@ -117,7 +117,7 @@ npm run debug:snapshot        # Debug state capture
 
 # Enforcement integration
 npm run check:all            # Quality gates
-npm run fix:docs             # Automated remediation
+npm run doc:create           # Template-based documentation
 ```
 
 ## Navigation Effectiveness Analysis

@@ -304,13 +304,21 @@
     },
     "stateManagement": {
       "type": "string",
-      "enum": ["zustand", "redux", "context"],
+      "enum": [
+        "zustand",
+        "redux",
+        "context"
+      ],
       "default": "zustand",
       "description": "State management library to use"
     },
     "apiClient": {
       "type": "string",
-      "enum": ["axios", "fetch", "react-query"],
+      "enum": [
+        "axios",
+        "fetch",
+        "react-query"
+      ],
       "default": "axios",
       "description": "API client library to use"
     }

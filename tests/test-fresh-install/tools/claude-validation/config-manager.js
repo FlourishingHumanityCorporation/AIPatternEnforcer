@@ -36,7 +36,7 @@ class ConfigManager {
         return JSON.parse(configData);
       }
     } catch (error) {
-      console.error(colorize(`Error loading config: ${error.message}`, 'red'));
+      logger.error(colorize(`Error loading config: ${error.message}`, 'red'));
       process.exit(1);
     }
     return null;
@@ -45,9 +45,9 @@ class ConfigManager {
   saveConfig(config) {
     try {
       fs.writeFileSync(this.configPath, JSON.stringify(config, null, 2));
-      console.log(colorize('✅ Configuration saved successfully', 'green'));
+      logger.info(colorize('✅ Configuration saved successfully', 'green'));
     } catch (error) {
-      console.error(colorize(`Error saving config: ${error.message}`, 'red'));
+      logger.error(colorize(`Error saving config: ${error.message}`, 'red'));
       process.exit(1);
     }
   }
@@ -55,114 +55,114 @@ class ConfigManager {
   showStatus() {
     const config = this.loadConfig();
     if (!config) {
-      console.log(colorize('❌ No configuration file found', 'red'));
+      logger.info(colorize('❌ No configuration file found', 'red'));
       return;
     }
 
-    console.log(colorize('\n📋 Claude Validation Configuration Status', 'bright'));
-    console.log(`Version: ${config.version}`);
-    console.log(`Enabled: ${config.enabled ? colorize('Yes', 'green') : colorize('No', 'red')}`);
-    console.log(`Global Severity: ${colorize(config.severityLevels?.global || 'WARNING', 'cyan')}`);
+    logger.info(colorize('\n📋 Claude Validation Configuration Status', 'bright'));
+    logger.info(`Version: ${config.version}`);
+    logger.info(`Enabled: ${config.enabled ? colorize('Yes', 'green') : colorize('No', 'red')}`);
+    logger.info(`Global Severity: ${colorize(config.severityLevels?.global || 'WARNING', 'cyan')}`);
 
-    console.log(colorize('\n📊 Pattern Status:', 'bright'));
+    logger.info(colorize('\n📊 Pattern Status:', 'bright'));
     Object.entries(config.patterns || {}).forEach(([name, pattern]) => {
       const status = pattern.enabled ? colorize('✓', 'green') : colorize('✗', 'red');
-      const severity = colorize(pattern.severity, pattern.severity === 'CRITICAL' ? 'red' : 
-                              pattern.severity === 'WARNING' ? 'yellow' : 'blue');
-      console.log(`  ${status} ${name}: ${severity}`);
+      const severity = colorize(pattern.severity, pattern.severity === 'CRITICAL' ? 'red' :
+      pattern.severity === 'WARNING' ? 'yellow' : 'blue');
+      logger.info(`  ${status} ${name}: ${severity}`);
     });
   }
 
   setSeverity(level) {
     const config = this.loadConfig();
     if (!config) {
-      console.error(colorize('❌ Configuration file not found', 'red'));
+      logger.error(colorize('❌ Configuration file not found', 'red'));
       return;
     }
 
     const validLevels = ['CRITICAL', 'WARNING', 'INFO', 'DISABLED'];
     const upperLevel = level.toUpperCase();
-    
+
     if (!validLevels.includes(upperLevel)) {
-      console.error(colorize(`❌ Invalid severity level: ${level}`, 'red'));
-      console.log(`Valid levels: ${validLevels.join(', ')}`);
+      logger.error(colorize(`❌ Invalid severity level: ${level}`, 'red'));
+      logger.info(`Valid levels: ${validLevels.join(', ')}`);
       process.exit(1);
     }
 
     config.severityLevels.global = upperLevel;
     this.saveConfig(config);
-    console.log(colorize(`✅ Global severity level set to ${upperLevel}`, 'green'));
-    
+    logger.info(colorize(`✅ Global severity level set to ${upperLevel}`, 'green'));
+
     // Track configuration change
     try {
       const analytics = new AnalyticsTracker();
       analytics.trackConfigChange('setSeverity', null, upperLevel);
     } catch (error) {
+
       // Don't break config changes for analytics failures
-    }
-  }
+    }}
 
   enablePattern(patternName) {
     const config = this.loadConfig();
     if (!config) return;
 
     if (!config.patterns[patternName]) {
-      console.error(colorize(`❌ Pattern '${patternName}' not found`, 'red'));
-      console.log('Available patterns:', Object.keys(config.patterns).join(', '));
+      logger.error(colorize(`❌ Pattern '${patternName}' not found`, 'red'));
+      logger.info('Available patterns:', Object.keys(config.patterns).join(', '));
       process.exit(1);
     }
 
     config.patterns[patternName].enabled = true;
     this.saveConfig(config);
-    console.log(colorize(`✅ Pattern '${patternName}' enabled`, 'green'));
-    
+    logger.info(colorize(`✅ Pattern '${patternName}' enabled`, 'green'));
+
     // Track configuration change
     try {
       const analytics = new AnalyticsTracker();
       analytics.trackConfigChange('enablePattern', patternName, true);
     } catch (error) {
+
       // Don't break config changes for analytics failures
-    }
-  }
+    }}
 
   disablePattern(patternName) {
     const config = this.loadConfig();
     if (!config) return;
 
     if (!config.patterns[patternName]) {
-      console.error(colorize(`❌ Pattern '${patternName}' not found`, 'red'));
-      console.log('Available patterns:', Object.keys(config.patterns).join(', '));
+      logger.error(colorize(`❌ Pattern '${patternName}' not found`, 'red'));
+      logger.info('Available patterns:', Object.keys(config.patterns).join(', '));
       process.exit(1);
     }
 
     config.patterns[patternName].enabled = false;
     this.saveConfig(config);
-    console.log(colorize(`✅ Pattern '${patternName}' disabled`, 'green'));
-    
+    logger.info(colorize(`✅ Pattern '${patternName}' disabled`, 'green'));
+
     // Track configuration change
     try {
       const analytics = new AnalyticsTracker();
       analytics.trackConfigChange('disablePattern', patternName, false);
     } catch (error) {
+
       // Don't break config changes for analytics failures
-    }
-  }
+    }}
 
   listPatterns() {
     const config = this.loadConfig();
     if (!config) return;
 
-    console.log(colorize('\n📋 Available Patterns:', 'bright'));
+    logger.info(colorize('\n📋 Available Patterns:', 'bright'));
     Object.entries(config.patterns).forEach(([name, pattern]) => {
-      console.log(colorize(`\n${name}:`, 'cyan'));
-      console.log(`  Description: ${pattern.description}`);
-      console.log(`  Severity: ${pattern.severity}`);
-      console.log(`  Enabled: ${pattern.enabled ? 'Yes' : 'No'}`);
+      logger.info(colorize(`\n${name}:`, 'cyan'));
+      logger.info(`  Description: ${pattern.description}`);
+      logger.info(`  Severity: ${pattern.severity}`);
+      logger.info(`  Enabled: ${pattern.enabled ? 'Yes' : 'No'}`);
     });
   }
 
   printHelp() {
-    console.log(`
+    logger.info(`
 ${colorize('⚙️  Claude Validation Configuration Manager', 'cyan')}
 
 ${colorize('DESCRIPTION:', 'bright')}
@@ -227,24 +227,24 @@ if (require.main === module) {
       if (args[1]) {
         manager.setSeverity(args[1]);
       } else {
-        console.error(colorize('❌ Severity level required', 'red'));
-        console.log('Usage: config-manager set-severity <CRITICAL|WARNING|INFO|DISABLED>');
+        logger.error(colorize('❌ Severity level required', 'red'));
+        logger.info('Usage: config-manager set-severity <CRITICAL|WARNING|INFO|DISABLED>');
       }
       break;
     case 'enable':
       if (args[1]) {
         manager.enablePattern(args[1]);
       } else {
-        console.error(colorize('❌ Pattern name required', 'red'));
-        console.log('Usage: config-manager enable <pattern-name>');
+        logger.error(colorize('❌ Pattern name required', 'red'));
+        logger.info('Usage: config-manager enable <pattern-name>');
       }
       break;
     case 'disable':
       if (args[1]) {
         manager.disablePattern(args[1]);
       } else {
-        console.error(colorize('❌ Pattern name required', 'red'));
-        console.log('Usage: config-manager disable <pattern-name>');
+        logger.error(colorize('❌ Pattern name required', 'red'));
+        logger.info('Usage: config-manager disable <pattern-name>');
       }
       break;
     case 'list':

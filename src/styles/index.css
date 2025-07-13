@@ -1,9 +1,0 @@
-/**
- * Main CSS entry point for ProjectTemplate
- * Import this file in your application root
- */
-
-/* Design tokens and global styles */
-@import "./globals.css";
-
-/* Additional imports can be added here as the project grows */

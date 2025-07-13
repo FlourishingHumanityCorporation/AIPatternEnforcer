@@ -1,6 +1,6 @@
-# Project Name
+# {PROJECT_NAME}
 
-**Brief, technical description of what this project does and its primary purpose.**
+**{PROJECT_DESCRIPTION}**
 
 ## Table of Contents
 
@@ -19,18 +19,19 @@
 ## Overview
 
 ### Purpose
-Technical explanation of the problem this project solves.
+{PROJECT_PURPOSE}
 
 ### Key Features
-- Feature 1: Technical description
-- Feature 2: Technical description
-- Feature 3: Technical description
+- {FEATURE_1}
+- {FEATURE_2} 
+- {FEATURE_3}
 
 ### Technology Stack
-- Language: [e.g., TypeScript 5.0]
-- Framework: [e.g., React 18.2]
-- Build Tool: [e.g., Vite 4.3]
-- Testing: [e.g., Jest 29.5]
+- Language: {PRIMARY_LANGUAGE}
+- Framework: {FRAMEWORK}
+- Build Tool: {BUILD_TOOL}
+- Package Manager: {PACKAGE_MANAGER}
+- Testing: {TESTING_FRAMEWORK}
 
 ## Architecture
 

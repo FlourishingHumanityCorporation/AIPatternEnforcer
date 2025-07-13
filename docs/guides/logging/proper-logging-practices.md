@@ -251,15 +251,15 @@ Exclude additional files or directories:
 ### Check for Violations
 
 ```bash
-npm run check:logs          # Check all files
-npm run check:logs:status   # Show detailed status
+npm run check:all          # Check all files
+npm run check:all:status   # Show detailed status
 ```
 
 ### Auto-fix Violations
 
 ```bash
-npm run fix:logs:dry-run    # Preview fixes
-npm run fix:logs            # Apply fixes
+npm run lint --fix:dry-run    # Preview fixes
+npm run lint --fix            # Apply fixes
 ```
 
 ### Integration with Existing Workflows
@@ -307,7 +307,7 @@ Log enforcer automatically runs on pre-commit:
 
 ```bash
 # In .husky/pre-commit
-npm run check:logs
+npm run check:all
 ```
 
 ### VS Code Integration
@@ -324,7 +324,7 @@ Add to GitHub Actions:
 
 ```yaml
 - name: Check logging compliance
-  run: npm run check:logs
+  run: npm run check:all
 ```
 
 ## Troubleshooting
@@ -342,7 +342,7 @@ Add to GitHub Actions:
 
 ### Getting Help
 
-- Check configuration: `npm run check:logs:status`
+- Check configuration: `npm run check:all:status`
 - Review exclude patterns in `.log-enforcer.json`
 - Use `--verbose` flag for detailed output
 
@@ -350,9 +350,9 @@ Add to GitHub Actions:
 
 ### From Print Statements
 
-1. Run `npm run fix:logs:dry-run` to preview changes
+1. Run `npm run lint --fix:dry-run` to preview changes
 2. Review the proposed fixes
-3. Run `npm run fix:logs` to apply automatic fixes
+3. Run `npm run lint --fix` to apply automatic fixes
 4. Test your application thoroughly
 
 ### From Console Usage
@@ -362,7 +362,7 @@ JavaScript auto-fixing is planned for a future release. Currently:
 1. Choose a logging library (Winston recommended)
 2. Install and configure the logger
 3. Manually replace console statements
-4. Run `npm run check:logs` to verify compliance
+4. Run `npm run check:all` to verify compliance
 
 ## Optimal Practices
 

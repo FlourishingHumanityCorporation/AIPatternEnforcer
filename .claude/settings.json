@@ -6,8 +6,93 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node tools/enforcement/claude-hook-validator.js",
-            "timeout": 10
+            "command": "node tools/hooks/meta-project-guardian.js",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/prevent-improved-files.js",
+            "timeout": 2
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/claude-hook-adapter.js tools/hooks/context-validator.js",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/claude-hook-adapter.js tools/hooks/scope-limiter.js",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/claude-hook-adapter.js tools/hooks/security-scan.js",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/claude-hook-adapter.js tools/hooks/test-first-enforcer.js",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/enterprise-antibody.js",
+            "timeout": 2
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/ai-integration-validator.js",
+            "timeout": 2
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/mock-data-enforcer.js",
+            "timeout": 2
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/localhost-enforcer.js",
+            "timeout": 2
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/vector-db-hygiene.js",
+            "timeout": 2
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/token-economics-guardian.js",
+            "timeout": 2
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/streaming-pattern-enforcer.js",
+            "timeout": 2
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/code-bloat-detector.js",
+            "timeout": 2
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/performance-budget-keeper.js",
+            "timeout": 2
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node tools/hooks/block-root-mess.js",
+            "timeout": 2
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/enforce-nextjs-structure.js",
+            "timeout": 2
           }
         ]
       }
@@ -17,21 +102,34 @@
         "matcher": "Write|Edit|MultiEdit",
         "hooks": [
           {
-            "type": "command", 
-            "command": "node tools/enforcement/claude-post-edit-formatter.js",
-            "timeout": 30
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
+            "type": "command",
+            "command": "node tools/hooks/fix-console-logs.js",
+            "timeout": 3
+          },
           {
             "type": "command",
-            "command": "node tools/enforcement/claude-completion-validator.js",
-            "timeout": 30
+            "command": "node tools/hooks/validate-prisma.js",
+            "timeout": 2
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/claude-hook-adapter.js tools/hooks/api-validator.js",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/claude-hook-adapter.js tools/hooks/performance-checker.js",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/template-integrity-validator.js",
+            "timeout": 2
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/import-janitor.js",
+            "timeout": 3
           }
         ]
       }

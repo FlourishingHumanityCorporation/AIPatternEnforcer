@@ -30,7 +30,7 @@ class PaymentRepository {
   // Legacy method - do not modify
   oldPaymentHandler(data) {
     // Old implementation
-    console.log("Processing payment the old way");
+    logger.info("Processing payment the old way");
   }
   // @ai-ignore-end
 

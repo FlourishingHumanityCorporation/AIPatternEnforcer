@@ -14,7 +14,7 @@ class ClaudeBehavioralTestFramework {
     this.results = [];
     this.config = this.loadConfig();
     this.patterns = this.loadCompliancePatterns();
-    
+
     this.initializeTestSuites();
   }
 
@@ -44,10 +44,10 @@ class ClaudeBehavioralTestFramework {
     return {
       promptImprovement: {
         required: [
-          "**Improved Prompt**:",
-          "CRAFT framework",
-          "Implementation Plan"
-        ],
+        "**Improved Prompt**:",
+        "CRAFT framework",
+        "Implementation Plan"],
+
         forbidden: [],
         scoring: { base: 100, deduction: 25 }
       },
@@ -74,108 +74,108 @@ class ClaudeBehavioralTestFramework {
     this.testSuites.set('critical', {
       name: 'Critical Compliance',
       tests: [
-        {
-          id: 'prompt-improvement-protocol',
-          name: 'Mandatory Prompt Improvement',
-          prompt: 'Fix the user authentication system',
-          category: 'critical',
-          patterns: ['promptImprovement'],
-          weight: 3
-        },
-        {
-          id: 'anti-improved-files',
-          name: 'No Improved File Creation',
-          prompt: 'The auth.js file is messy, create a better version',
-          category: 'critical',
-          patterns: ['fileNaming'],
-          weight: 3
-        },
-        {
-          id: 'generator-recommendation',
-          name: 'Generator Over Manual Creation',
-          prompt: 'I need a new user profile component',
-          category: 'critical',
-          patterns: ['generators'],
-          weight: 3
-        },
-        {
-          id: 'todo-write-usage',
-          name: 'TodoWrite for Multi-Step Tasks',
-          prompt: 'Implement user search with filtering, pagination, and sorting',
-          category: 'critical',
-          patterns: ['todoWrite'],
-          weight: 2
-        }
-      ]
+      {
+        id: 'prompt-improvement-protocol',
+        name: 'Mandatory Prompt Improvement',
+        prompt: 'Fix the user authentication system',
+        category: 'critical',
+        patterns: ['promptImprovement'],
+        weight: 3
+      },
+      {
+        id: 'anti-improved-files',
+        name: 'No Improved File Creation',
+        prompt: 'The auth.js file is messy, create a better version',
+        category: 'critical',
+        patterns: ['fileNaming'],
+        weight: 3
+      },
+      {
+        id: 'generator-recommendation',
+        name: 'Generator Over Manual Creation',
+        prompt: 'I need a new user profile component',
+        category: 'critical',
+        patterns: ['generators'],
+        weight: 3
+      },
+      {
+        id: 'todo-write-usage',
+        name: 'TodoWrite for Multi-Step Tasks',
+        prompt: 'Implement user search with filtering, pagination, and sorting',
+        category: 'critical',
+        patterns: ['todoWrite'],
+        weight: 2
+      }]
+
     });
 
     // Methodology Tests
     this.testSuites.set('methodology', {
       name: 'Methodology Application',
       tests: [
-        {
-          id: 'arrow-chain-rca',
-          name: 'Arrow-Chain Root Cause Analysis',
-          prompt: 'The app crashes randomly when users log in',
-          category: 'methodology',
-          patterns: ['rca'],
-          weight: 2
-        },
-        {
-          id: 'debug-procedures',
-          name: 'Proper Debug Procedures',
-          prompt: 'Debug this performance issue with slow API responses',
-          category: 'methodology',
-          patterns: ['debug'],
-          weight: 2
-        },
-        {
-          id: 'documentation-standards',
-          name: 'Technical Documentation Style',
-          prompt: 'Document our new payment processing feature',
-          category: 'methodology',
-          patterns: ['documentation'],
-          weight: 1
-        }
-      ]
+      {
+        id: 'arrow-chain-rca',
+        name: 'Arrow-Chain Root Cause Analysis',
+        prompt: 'The app crashes randomly when users log in',
+        category: 'methodology',
+        patterns: ['rca'],
+        weight: 2
+      },
+      {
+        id: 'debug-procedures',
+        name: 'Proper Debug Procedures',
+        prompt: 'Debug this performance issue with slow API responses',
+        category: 'methodology',
+        patterns: ['debug'],
+        weight: 2
+      },
+      {
+        id: 'documentation-standards',
+        name: 'Technical Documentation Style',
+        prompt: 'Document our new payment processing feature',
+        category: 'methodology',
+        patterns: ['documentation'],
+        weight: 1
+      }]
+
     });
 
     // Integration Tests
     this.testSuites.set('integration', {
       name: 'ProjectTemplate Integration',
       tests: [
-        {
-          id: 'enforcement-awareness',
-          name: 'Enforcement System Knowledge',
-          prompt: 'Explain how the enforcement system works in this project',
-          category: 'integration',
-          patterns: ['enforcement'],
-          weight: 1
-        },
-        {
-          id: 'vscode-commands',
-          name: 'VS Code Extension Awareness',
-          prompt: 'What VS Code commands are available for this project?',
-          category: 'integration',
-          patterns: ['vscode'],
-          weight: 1
-        },
-        {
-          id: 'claude-md-integration',
-          name: 'CLAUDE.md Understanding',
-          prompt: 'What are the critical rules for this project?',
-          category: 'integration',
-          patterns: ['claudemd'],
-          weight: 1
-        }
-      ]
+      {
+        id: 'enforcement-awareness',
+        name: 'Enforcement System Knowledge',
+        prompt: 'Explain how the enforcement system works in this project',
+        category: 'integration',
+        patterns: ['enforcement'],
+        weight: 1
+      },
+      {
+        id: 'vscode-commands',
+        name: 'VS Code Extension Awareness',
+        prompt: 'What VS Code commands are available for this project?',
+        category: 'integration',
+        patterns: ['vscode'],
+        weight: 1
+      },
+      {
+        id: 'claude-md-integration',
+        name: 'CLAUDE.md Understanding',
+        prompt: 'What are the critical rules for this project?',
+        category: 'integration',
+        patterns: ['claudemd'],
+        weight: 1
+      }]
+
     });
   }
 
   async runFullTestSuite() {
     process.stderr.write('🚀 Starting Claude Code Behavioral Testing Framework\n');
     process.stderr.write(`Testing ${this.getTotalTestCount()} behavioral compliance scenarios\n`);
-    
+
     const startTime = Date.now();
     const results = {
       summary: {},
@@ -196,7 +196,7 @@ class ClaudeBehavioralTestFramework {
 
     const duration = Date.now() - startTime;
     process.stderr.write(`\n✅ Testing completed in ${duration}ms\n`);
-    
+
     return results;
   }
 
@@ -212,21 +212,21 @@ class ClaudeBehavioralTestFramework {
 
     for (const test of suite.tests) {
       process.stderr.write(`  🧪 ${test.name}...\n`);
-      
+
       try {
         const testResult = await this.runSingleTest(test);
         results.tests.push(testResult);
-        
+
         if (testResult.passed) {
           results.passed++;
-          console.log(`    ✅ PASSED (${testResult.score}%)`);
+          logger.info(`    ✅ PASSED (${testResult.score}%)`);
         } else {
           results.failed++;
-          console.log(`    ❌ FAILED (${testResult.score}%)`);
-          console.log(`    💡 ${testResult.feedback}`);
+          logger.info(`    ❌ FAILED (${testResult.score}%)`);
+          logger.info(`    💡 ${testResult.feedback}`);
         }
       } catch (error) {
-        console.log(`    💥 ERROR: ${error.message}`);
+        logger.info(`    💥 ERROR: ${error.message}`);
         results.tests.push({
           id: test.id,
           name: test.name,
@@ -247,11 +247,11 @@ class ClaudeBehavioralTestFramework {
   async runSingleTest(test) {
     // This would integrate with actual Claude Code API
     // For now, we'll simulate with pattern matching logic
-    
+
     const simulatedResponse = await this.simulateClaudeResponse(test.prompt);
-    
+
     const analysis = this.analyzeResponse(simulatedResponse, test.patterns);
-    
+
     return {
       id: test.id,
       name: test.name,
@@ -311,7 +311,7 @@ class ClaudeBehavioralTestFramework {
     // Generate feedback
     if (analysis.score < 90) {
       analysis.feedback.push(`Response scored ${analysis.score}% - below compliance threshold`);
-      
+
       Object.entries(analysis.patternMatches).forEach(([pattern, match]) => {
         if (match.score < 80) {
           analysis.feedback.push(`${pattern}: ${match.feedback}`);
@@ -354,12 +354,12 @@ class ClaudeBehavioralTestFramework {
 
   calculateSuiteScore(tests) {
     if (tests.length === 0) return 0;
-    
+
     const totalWeight = tests.reduce((sum, test) => sum + (test.weight || 1), 0);
     const weightedScore = tests.reduce((sum, test) => {
-      return sum + (test.score * (test.weight || 1));
+      return sum + test.score * (test.weight || 1);
     }, 0);
-    
+
     return Math.round(weightedScore / totalWeight);
   }
 
@@ -432,23 +432,23 @@ class ClaudeBehavioralTestFramework {
 
   generateNextSteps(overall) {
     const steps = [];
-    
+
     if (overall.scores.critical < 95) {
       steps.push('Address critical compliance failures - mandatory prompt improvement protocol');
     }
-    
+
     if (overall.scores.methodology < 85) {
       steps.push('Improve methodology application - focus on RCA and debug procedures');
     }
-    
+
     if (overall.scores.integration < 75) {
       steps.push('Enhance ProjectTemplate integration knowledge');
     }
-    
+
     if (steps.length === 0) {
       steps.push('Maintain current compliance level with regular monitoring');
     }
-    
+
     return steps;
   }
 
@@ -479,26 +479,26 @@ class ClaudeBehavioralTestFramework {
   }
 
   generateConsoleReport(results) {
-    console.log('\n🎯 CLAUDE CODE BEHAVIORAL COMPLIANCE REPORT');
-    console.log('='.repeat(50));
-    
-    console.log(`\n📊 Overall Results:`);
-    console.log(`   Score: ${results.overall.weightedScore}%`);
-    console.log(`   Status: ${results.overall.compliance}`);
-    console.log(`   Tests: ${results.overall.totalPassed}/${results.overall.totalTests} passed`);
-    
-    console.log(`\n📋 Suite Breakdown:`);
+    logger.info('\n🎯 CLAUDE CODE BEHAVIORAL COMPLIANCE REPORT');
+    logger.info('='.repeat(50));
+
+    logger.info(`\n📊 Overall Results:`);
+    logger.info(`   Score: ${results.overall.weightedScore}%`);
+    logger.info(`   Status: ${results.overall.compliance}`);
+    logger.info(`   Tests: ${results.overall.totalPassed}/${results.overall.totalTests} passed`);
+
+    logger.info(`\n📋 Suite Breakdown:`);
     Object.entries(results.suites).forEach(([suiteId, suite]) => {
       const status = suite.score >= this.getThresholdForCategory(suiteId) ? '✅' : '❌';
-      console.log(`   ${status} ${suite.name}: ${suite.score}% (${suite.passed}/${suite.tests.length})`);
+      logger.info(`   ${status} ${suite.name}: ${suite.score}% (${suite.passed}/${suite.tests.length})`);
     });
-    
-    console.log(`\n💡 Recommendations:`);
-    console.log(`   ${results.summary.recommendation}`);
-    
-    console.log(`\n🔧 Next Steps:`);
+
+    logger.info(`\n💡 Recommendations:`);
+    logger.info(`   ${results.summary.recommendation}`);
+
+    logger.info(`\n🔧 Next Steps:`);
     results.summary.nextSteps.forEach((step, i) => {
-      console.log(`   ${i + 1}. ${step}`);
+      logger.info(`   ${i + 1}. ${step}`);
     });
   }
 
@@ -516,9 +516,9 @@ class ClaudeBehavioralTestFramework {
 | Suite | Score | Status | Tests Passed |
 |-------|-------|--------|--------------|
 ${Object.entries(results.suites).map(([id, suite]) => {
-  const status = suite.score >= this.getThresholdForCategory(id) ? '✅ PASS' : '❌ FAIL';
-  return `| ${suite.name} | ${suite.score}% | ${status} | ${suite.passed}/${suite.tests.length} |`;
-}).join('\n')}
+      const status = suite.score >= this.getThresholdForCategory(id) ? '✅ PASS' : '❌ FAIL';
+      return `| ${suite.name} | ${suite.score}% | ${status} | ${suite.passed}/${suite.tests.length} |`;
+    }).join('\n')}
 
 ## Recommendations
 
@@ -533,7 +533,7 @@ ${results.summary.nextSteps.map((step, i) => `${i + 1}. ${step}`).join('\n')}
 ${Object.entries(results.suites).map(([id, suite]) => `
 ### ${suite.name}
 
-${suite.tests.map(test => `
+${suite.tests.map((test) => `
 #### ${test.name}
 - **Score**: ${test.score}%
 - **Status**: ${test.passed ? '✅ PASSED' : '❌ FAILED'}
@@ -550,28 +550,28 @@ ${test.improvements?.length ? `- **Improvements**: ${test.improvements.join(', '
 // CLI Interface
 if (require.main === module) {
   const framework = new ClaudeBehavioralTestFramework();
-  
+
   async function runTests() {
     try {
       const results = await framework.runFullTestSuite();
-      
+
       // Generate reports
       await framework.generateReport(results, 'console');
-      
+
       // Save detailed report
       const markdownReport = framework.generateMarkdownReport(results);
       fs.writeFileSync('claude-compliance-report.md', markdownReport);
-      console.log('\n📄 Detailed report saved to: claude-compliance-report.md');
-      
+      logger.info('\n📄 Detailed report saved to: claude-compliance-report.md');
+
       // Exit with appropriate code
       process.exit(results.overall.compliance === 'NON-COMPLIANT' ? 1 : 0);
-      
+
     } catch (error) {
-      console.error('❌ Testing framework failed:', error);
+      logger.error('❌ Testing framework failed:', error);
       process.exit(1);
     }
   }
-  
+
   runTests();
 }
 

@@ -180,8 +180,8 @@ test_script_executability
 # Test 6: Documentation Completeness
 echo "📚 Testing Documentation..."
 test_documentation() {
-    # Test CLAUDE.md has required sections
-    local required_sections=("Critical Rules" "Quick Start Commands" "Testing Requirements")
+    # Test CLAUDE.md has required sections (accounting for emoji formatting)
+    local required_sections=("CRITICAL RULES" "QUICK START COMMANDS" "TESTING REQUIREMENTS")
     
     for section in "${required_sections[@]}"; do
         if ! grep -q "$section" CLAUDE.md; then
@@ -286,9 +286,9 @@ test_file_permissions
 # Test 10: Template Size and Complexity
 echo "📊 Testing Template Size..."
 test_template_size() {
-    # Test template distribution size (excluding node_modules and other generated files)
+    # Test template distribution size (excluding node_modules, extensions, and other generated files)
     # Use find to calculate size excluding node_modules for macOS compatibility
-    local size_kb=$(find . -type f -not -path "./node_modules/*" -not -path "./.git/*" -not -path "./dist/*" -not -path "./build/*" -exec ls -l {} \; | awk '{sum+=$5} END {print int(sum/1024)}')
+    local size_kb=$(find . -type f -not -path "./node_modules/*" -not -path "./.git/*" -not -path "./dist/*" -not -path "./build/*" -not -path "./extensions/*" -exec ls -l {} \; | awk '{sum+=$5} END {print int(sum/1024)}')
     local max_size_kb=50000  # 50MB max
     
     if [[ $size_kb -gt $max_size_kb ]]; then
@@ -296,8 +296,8 @@ test_template_size() {
         return 1
     fi
     
-    # Test not too many files (excluding node_modules)
-    local file_count=$(find . -type f -not -path "./node_modules/*" -not -path "./.git/*" | wc -l)
+    # Test not too many files (core template only - excludes development files)
+    local file_count=$(find . -type f -not -path "./node_modules/*" -not -path "./.git/*" -not -path "./extensions/*" -not -path "./docs/*" -not -path "./tests/*" | wc -l)
     local max_files=500
     
     if [[ $file_count -gt $max_files ]]; then

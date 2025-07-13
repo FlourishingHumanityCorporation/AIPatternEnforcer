@@ -53,7 +53,7 @@ export const userAPI = {
     const response = await fetch('/api/users', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(userData),
+      body: JSON.stringify(userData)
     });
     if (!response.ok) throw new Error('Failed to create user');
     return response.json();
@@ -63,7 +63,7 @@ export const userAPI = {
     const response = await fetch(`/api/users/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(userData),
+      body: JSON.stringify(userData)
     });
     if (!response.ok) throw new Error('Failed to update user');
     return response.json();
@@ -71,10 +71,10 @@ export const userAPI = {
 
   deleteUser: async (id: string): Promise<void> => {
     const response = await fetch(`/api/users/${id}`, {
-      method: 'DELETE',
+      method: 'DELETE'
     });
     if (!response.ok) throw new Error('Failed to delete user');
-  },
+  }
 };
 
 export const postAPI = {
@@ -89,7 +89,7 @@ export const postAPI = {
     const response = await fetch(`/api/posts/${id}`);
     if (!response.ok) throw new Error('Failed to fetch post');
     return response.json();
-  },
+  }
 };
 
 // Query Keys Factory - Centralized query key management
@@ -97,19 +97,19 @@ export const queryKeys = {
   users: {
     all: ['users'] as const,
     lists: () => [...queryKeys.users.all, 'list'] as const,
-    list: (page: number, limit: number) => 
-      [...queryKeys.users.lists(), { page, limit }] as const,
+    list: (page: number, limit: number) =>
+    [...queryKeys.users.lists(), { page, limit }] as const,
     details: () => [...queryKeys.users.all, 'detail'] as const,
-    detail: (id: string) => [...queryKeys.users.details(), id] as const,
+    detail: (id: string) => [...queryKeys.users.details(), id] as const
   },
   posts: {
     all: ['posts'] as const,
     lists: () => [...queryKeys.posts.all, 'list'] as const,
-    list: (authorId?: string) => 
-      [...queryKeys.posts.lists(), { authorId }] as const,
+    list: (authorId?: string) =>
+    [...queryKeys.posts.lists(), { authorId }] as const,
     details: () => [...queryKeys.posts.all, 'detail'] as const,
-    detail: (id: string) => [...queryKeys.posts.details(), id] as const,
-  },
+    detail: (id: string) => [...queryKeys.posts.details(), id] as const
+  }
 } as const;
 
 // 1. Basic Data Fetching Hook
@@ -120,7 +120,7 @@ export function useUsers(page = 1, limit = 20) {
     staleTime: 5 * 60 * 1000, // 5 minutes
     cacheTime: 10 * 60 * 1000, // 10 minutes
     retry: 3,
-    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000)
   });
 }
 
@@ -130,7 +130,7 @@ export function useUser(id: string, options?: UseQueryOptions<User>) {
     queryFn: () => userAPI.getUser(id),
     enabled: !!id,
     staleTime: 5 * 60 * 1000,
-    ...options,
+    ...options
   });
 }
 
@@ -145,7 +145,7 @@ export function useInfiniteUsers(limit = 20) {
       const { page, totalPages } = lastPage.pagination;
       return page < totalPages ? page + 1 : undefined;
     },
-    staleTime: 5 * 60 * 1000,
+    staleTime: 5 * 60 * 1000
   });
 }
 
@@ -158,27 +158,27 @@ export function useCreateUser() {
     onSuccess: (newUser) => {
       // Invalidate and refetch user lists
       queryClient.invalidateQueries({ queryKey: queryKeys.users.lists() });
-      
+
       // Optimistically add to existing queries
       queryClient.setQueriesData(
         { queryKey: queryKeys.users.lists() },
         (oldData: PaginatedResponse<User> | undefined) => {
           if (!oldData) return oldData;
-          
+
           return {
             ...oldData,
             data: [newUser, ...oldData.data],
             pagination: {
               ...oldData.pagination,
-              total: oldData.pagination.total + 1,
-            },
+              total: oldData.pagination.total + 1
+            }
           };
         }
       );
     },
     onError: (error) => {
-      console.error('Failed to create user:', error);
-    },
+      logger.error('Failed to create user:', error);
+    }
   });
 }
 
@@ -186,8 +186,8 @@ export function useUpdateUser() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, ...userData }: { id: string } & Partial<User>) =>
-      userAPI.updateUser(id, userData),
+    mutationFn: ({ id, ...userData }: {id: string;} & Partial<User>) =>
+    userAPI.updateUser(id, userData),
     onMutate: async ({ id, ...newData }) => {
       // Cancel outgoing refetches
       await queryClient.cancelQueries({ queryKey: queryKeys.users.detail(id) });
@@ -198,7 +198,7 @@ export function useUpdateUser() {
       // Optimistically update
       queryClient.setQueryData(queryKeys.users.detail(id), (old: User | undefined) => ({
         ...old!,
-        ...newData,
+        ...newData
       }));
 
       return { previousUser };
@@ -213,7 +213,7 @@ export function useUpdateUser() {
       // Always refetch after mutation
       queryClient.invalidateQueries({ queryKey: queryKeys.users.detail(id) });
       queryClient.invalidateQueries({ queryKey: queryKeys.users.lists() });
-    },
+    }
   });
 }
 
@@ -225,45 +225,45 @@ export function useDeleteUser() {
     onSuccess: (_, deletedId) => {
       // Remove from cache
       queryClient.removeQueries({ queryKey: queryKeys.users.detail(deletedId) });
-      
+
       // Update lists
       queryClient.setQueriesData(
         { queryKey: queryKeys.users.lists() },
         (oldData: PaginatedResponse<User> | undefined) => {
           if (!oldData) return oldData;
-          
+
           return {
             ...oldData,
-            data: oldData.data.filter(user => user.id !== deletedId),
+            data: oldData.data.filter((user) => user.id !== deletedId),
             pagination: {
               ...oldData.pagination,
-              total: oldData.pagination.total - 1,
-            },
+              total: oldData.pagination.total - 1
+            }
           };
         }
       );
-      
+
       queryClient.invalidateQueries({ queryKey: queryKeys.users.lists() });
-    },
+    }
   });
 }
 
 // 4. Dependent Queries
 export function useUserWithPosts(userId: string) {
   const userQuery = useUser(userId);
-  
+
   const postsQuery = useQuery({
     queryKey: queryKeys.posts.list(userId),
     queryFn: () => postAPI.getPosts(userId),
     enabled: !!userQuery.data, // Only fetch posts if user exists
-    staleTime: 5 * 60 * 1000,
+    staleTime: 5 * 60 * 1000
   });
 
   return {
     user: userQuery.data,
     posts: postsQuery.data,
     isLoading: userQuery.isLoading || postsQuery.isLoading,
-    error: userQuery.error || postsQuery.error,
+    error: userQuery.error || postsQuery.error
   };
 }
 
@@ -285,13 +285,13 @@ export function useUserSearch() {
     queryKey: ['users', 'search', debouncedQuery],
     queryFn: async () => {
       if (!debouncedQuery.trim()) return [];
-      
+
       const response = await fetch(`/api/users/search?q=${encodeURIComponent(debouncedQuery)}`);
       if (!response.ok) throw new Error('Search failed');
       return response.json();
     },
     enabled: debouncedQuery.trim().length > 0,
-    staleTime: 30 * 1000, // 30 seconds
+    staleTime: 30 * 1000 // 30 seconds
   });
 
   return {
@@ -299,7 +299,7 @@ export function useUserSearch() {
     setSearchQuery,
     results: searchResults.data || [],
     isSearching: searchResults.isFetching,
-    error: searchResults.error,
+    error: searchResults.error
   };
 }
 
@@ -311,7 +311,7 @@ export function usePrefetchUser() {
     queryClient.prefetchQuery({
       queryKey: queryKeys.users.detail(userId),
       queryFn: () => userAPI.getUser(userId),
-      staleTime: 5 * 60 * 1000,
+      staleTime: 5 * 60 * 1000
     });
   }, [queryClient]);
 }
@@ -326,14 +326,14 @@ export function useUserWithBackground(id: string) {
     refetchInterval: 30 * 1000, // Refetch every 30 seconds
     refetchIntervalInBackground: true, // Keep refetching in background
     refetchOnWindowFocus: true,
-    refetchOnReconnect: true,
+    refetchOnReconnect: true
   });
 }
 
 // 8. Error Boundary Integration
 export function useQueryErrorReset() {
   const queryClient = useQueryClient();
-  
+
   return useCallback(() => {
     queryClient.resetQueries();
   }, [queryClient]);
@@ -345,7 +345,7 @@ export function useUserSuspense(id: string) {
     queryKey: queryKeys.users.detail(id),
     queryFn: () => userAPI.getUser(id),
     enabled: !!id,
-    suspense: true,
+    suspense: true
   });
 }
 
@@ -362,32 +362,32 @@ export function UserList() {
   return (
     <div>
       <ul>
-        {data?.data.map(user => (
-          <li key={user.id}>
+        {data?.data.map((user) =>
+        <li key={user.id}>
             {user.name} ({user.email})
           </li>
-        ))}
+        )}
       </ul>
       
       <div>
-        <button 
-          onClick={() => setPage(p => Math.max(1, p - 1))}
-          disabled={page === 1}
-        >
+        <button
+          onClick={() => setPage((p) => Math.max(1, p - 1))}
+          disabled={page === 1}>
+
           Previous
         </button>
         
         <span>Page {page} of {data?.pagination.totalPages}</span>
         
-        <button 
-          onClick={() => setPage(p => p + 1)}
-          disabled={page === data?.pagination.totalPages}
-        >
+        <button
+          onClick={() => setPage((p) => p + 1)}
+          disabled={page === data?.pagination.totalPages}>
+
           Next
         </button>
       </div>
-    </div>
-  );
+    </div>);
+
 }
 
 // Infinite scroll component
@@ -398,34 +398,34 @@ export function InfiniteUserList() {
     hasNextPage,
     isFetchingNextPage,
     isLoading,
-    error,
+    error
   } = useInfiniteUsers();
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
-  const allUsers = data?.pages.flatMap(page => page.data) || [];
+  const allUsers = data?.pages.flatMap((page) => page.data) || [];
 
   return (
     <div>
       <ul>
-        {allUsers.map(user => (
-          <li key={user.id}>
+        {allUsers.map((user) =>
+        <li key={user.id}>
             {user.name} ({user.email})
           </li>
-        ))}
+        )}
       </ul>
       
-      {hasNextPage && (
-        <button 
-          onClick={() => fetchNextPage()}
-          disabled={isFetchingNextPage}
-        >
+      {hasNextPage &&
+      <button
+        onClick={() => fetchNextPage()}
+        disabled={isFetchingNextPage}>
+
           {isFetchingNextPage ? 'Loading more...' : 'Load More'}
         </button>
-      )}
-    </div>
-  );
+      }
+    </div>);
+
 }
 
 // Search component
@@ -438,26 +438,26 @@ export function UserSearch() {
         type="text"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        placeholder="Search users..."
-      />
+        placeholder="Search users..." />
+
       
       {isSearching && <div>Searching...</div>}
       
       {error && <div>Search error: {error.message}</div>}
       
       <ul>
-        {results.map(user => (
-          <li key={user.id}>
+        {results.map((user) =>
+        <li key={user.id}>
             {user.name} ({user.email})
           </li>
-        ))}
+        )}
       </ul>
-    </div>
-  );
+    </div>);
+
 }
 
 // User detail with mutations
-export function UserDetail({ userId }: { userId: string }) {
+export function UserDetail({ userId }: {userId: string;}) {
   const { data: user, isLoading, error } = useUser(userId);
   const updateUser = useUpdateUser();
   const deleteUser = useDeleteUser();
@@ -470,7 +470,7 @@ export function UserDetail({ userId }: { userId: string }) {
   const handleUpdate = () => {
     updateUser.mutate({
       id: userId,
-      name: 'Updated Name',
+      name: 'Updated Name'
     });
   };
 
@@ -496,10 +496,10 @@ export function UserDetail({ userId }: { userId: string }) {
       {/* Prefetch on hover */}
       <button
         onMouseEnter={() => prefetchUser('other-user-id')}
-        onClick={() => window.location.href = '/users/other-user-id'}
-      >
+        onClick={() => window.location.href = '/users/other-user-id'}>
+
         Go to Other User
       </button>
-    </div>
-  );
+    </div>);
+
 }

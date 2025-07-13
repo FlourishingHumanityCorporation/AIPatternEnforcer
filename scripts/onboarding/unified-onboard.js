@@ -7,45 +7,48 @@ const chalk = require('chalk');
 const ora = require('ora');
 const inquirer = require('inquirer');
 
+// Simple logger for onboarding
+const logger = console;
+
 class UnifiedOnboardingWizard {
   constructor() {
     this.projectRoot = process.cwd();
     this.startTime = Date.now();
     this.steps = [
-      { name: 'Dependencies', command: 'npm install', essential: true },
-      { name: 'Git hooks', command: 'npm run setup:hooks', essential: true },
-      { name: 'AI context', command: 'npm run context', essential: false },
-      { name: 'Enforcement', command: 'npm run check:config', essential: false }
-    ];
+    { name: 'Dependencies', command: 'npm install', essential: true },
+    { name: 'Git hooks', command: 'npm run setup:hooks', essential: true },
+    { name: 'AI context', command: 'npm run context', essential: false },
+    { name: 'Enforcement', command: 'npm run check:config', essential: false }];
+
   }
 
   async run() {
-    console.log(chalk.cyan.bold('\n🚀 ProjectTemplate Unified Onboarding'));
-    console.log(chalk.gray('Get to your first working component in <5 minutes\n'));
+    logger.info(chalk.cyan.bold('\n🚀 ProjectTemplate Unified Onboarding'));
+    logger.info(chalk.gray('Get to your first working component in <5 minutes\n'));
 
     try {
       // Step 1: Essential setup
       await this.runEssentialSetup();
-      
+
       // Step 2: First component generation
       await this.generateFirstComponent();
-      
+
       // Step 3: Validate everything works
       await this.validateSetup();
-      
+
       // Step 4: Show success and next steps
       this.showSuccess();
-      
+
     } catch (error) {
-      console.error(chalk.red('\n❌ Onboarding failed:'), error.message);
-      console.log(chalk.yellow('💡 Run `npm run onboard` again to retry'));
+      logger.error(chalk.red('\n❌ Onboarding failed:'), error.message);
+      logger.info(chalk.yellow('💡 Run `npm run onboard` again to retry'));
       process.exit(1);
     }
   }
 
   async runEssentialSetup() {
-    console.log(chalk.blue('\n📦 Step 1/3: Essential Setup\n'));
-    
+    logger.info(chalk.blue('\n📦 Step 1/3: Essential Setup\n'));
+
     for (const step of this.steps) {
       const spinner = ora(`${step.name}...`).start();
       try {
@@ -63,8 +66,8 @@ class UnifiedOnboardingWizard {
   }
 
   async generateFirstComponent() {
-    console.log(chalk.blue('\n🎨 Step 2/3: Generate Your First Component\n'));
-    
+    logger.info(chalk.blue('\n🎨 Step 2/3: Generate Your First Component\n'));
+
     const { componentName } = await inquirer.prompt([{
       type: 'input',
       name: 'componentName',
@@ -78,8 +81,8 @@ class UnifiedOnboardingWizard {
       }
     }]);
 
-    console.log(chalk.gray(`\nGenerating ${componentName} with tests, stories, and styles...`));
-    
+    logger.info(chalk.gray(`\nGenerating ${componentName} with tests, stories, and styles...`));
+
     return new Promise((resolve, reject) => {
       const child = spawn('npm', ['run', 'g:c', componentName], {
         stdio: 'inherit',
@@ -88,7 +91,7 @@ class UnifiedOnboardingWizard {
 
       child.on('close', (code) => {
         if (code === 0) {
-          console.log(chalk.green(`\n✅ ${componentName} component generated successfully!`));
+          logger.info(chalk.green(`\n✅ ${componentName} component generated successfully!`));
           this.generatedComponent = componentName;
           resolve();
         } else {
@@ -103,17 +106,17 @@ class UnifiedOnboardingWizard {
   }
 
   async validateSetup() {
-    console.log(chalk.blue('\n✓ Step 3/3: Validating Setup\n'));
-    
+    logger.info(chalk.blue('\n✓ Step 3/3: Validating Setup\n'));
+
     const validations = [
-      { name: 'Tests', command: 'npm test -- --run', critical: true },
-      { name: 'Linting', command: 'npm run lint', critical: false },
-      { name: 'Type checking', command: 'npm run type-check', critical: false },
-      { name: 'Enforcement rules', command: 'npm run check:all', critical: false }
-    ];
+    { name: 'Tests', command: 'npm test -- --run', critical: true },
+    { name: 'Linting', command: 'npm run lint', critical: false },
+    { name: 'Type checking', command: 'npm run type-check', critical: false },
+    { name: 'Enforcement rules', command: 'npm run check:all', critical: false }];
+
 
     let allPassed = true;
-    
+
     for (const validation of validations) {
       const spinner = ora(`${validation.name}...`).start();
       try {
@@ -131,7 +134,7 @@ class UnifiedOnboardingWizard {
     }
 
     if (!allPassed) {
-      console.log(chalk.yellow('\n⚠️  Some validations failed, but your setup is functional'));
+      logger.info(chalk.yellow('\n⚠️  Some validations failed, but your setup is functional'));
     }
   }
 
@@ -139,25 +142,26 @@ class UnifiedOnboardingWizard {
     const elapsedTime = Math.round((Date.now() - this.startTime) / 1000);
     const minutes = Math.floor(elapsedTime / 60);
     const seconds = elapsedTime % 60;
-    
-    console.log(chalk.green.bold(`\n🎉 Onboarding Complete! (${minutes}m ${seconds}s)`));
-    console.log(chalk.gray('You now have a working component with tests!\n'));
-    
+
+    logger.info(chalk.green.bold(`\n🎉 Onboarding Complete! (${minutes}m ${seconds}s)`));
+    logger.info(chalk.gray('You now have a working component with tests!\n'));
+
     if (this.generatedComponent) {
-      console.log(chalk.cyan('📁 Your component files:'));
-      console.log(`  • src/components/${this.generatedComponent}/${this.generatedComponent}.tsx`);
-      console.log(`  • src/components/${this.generatedComponent}/${this.generatedComponent}.test.tsx`);
-      console.log(`  • src/components/${this.generatedComponent}/${this.generatedComponent}.stories.tsx`);
-      console.log(`  • src/components/${this.generatedComponent}/${this.generatedComponent}.module.css\n`);
+      logger.info(chalk.cyan('📁 Your component files:'));
+      logger.info(`  • src/components/${this.generatedComponent}/${this.generatedComponent}.tsx`);
+      logger.info(`  • src/components/${this.generatedComponent}/${this.generatedComponent}.test.tsx`);
+      logger.info(`  • src/components/${this.generatedComponent}/${this.generatedComponent}.stories.tsx`);
+      logger.info(`  • src/components/${this.generatedComponent}/${this.generatedComponent}.module.css\n`);
     }
-    
-    console.log(chalk.yellow('🚀 Next Steps:'));
-    console.log('  1. Run: npm run dev              (start development server)');
-    console.log('  2. Run: npm run g:c NewComponent (generate more components)');
-    console.log('  3. Run: npm run demo:generators  (explore all generators)');
-    console.log('  4. Read: CLAUDE.md               (AI assistant guidelines)\n');
-    
-    console.log(chalk.gray('💡 Tip: Use `npm run check:all` before commits to ensure quality'));
+
+    logger.info(chalk.yellow('🚀 Next Steps:'));
+    logger.info('  1. Run: npm run dev              (start development server)');
+    logger.info('  2. Run: npm run g:c NewComponent (generate more components)');
+    logger.info('  3. Run: npm run demo:generators  (explore all generators)');
+    logger.info('  4. Read: CLAUDE.md               (AI assistant guidelines)\n');
+
+    logger.info(chalk.gray('💡 Tip: Use `npm run check:all` before commits to ensure quality'));
+    logger.info(chalk.gray('🔍 Validate setup: npm run validate:complete (comprehensive check)'));
   }
 }
 
@@ -167,7 +171,7 @@ const options = {};
 
 // Run the wizard
 const wizard = new UnifiedOnboardingWizard(options);
-wizard.run().catch(error => {
-  console.error(chalk.red('Fatal error:'), error);
+wizard.run().catch((error) => {
+  logger.error(chalk.red('Fatal error:'), error);
   process.exit(1);
 });

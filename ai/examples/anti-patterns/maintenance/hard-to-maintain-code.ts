@@ -48,23 +48,23 @@ export const POOR_NAMING = {
     const data = processTemp(temp);
     const result = flag ? data : temp;
     return result;
-  },
+  }
 };
 
 // ✅ BETTER APPROACH: Clear, descriptive naming
 export const CLEAR_NAMING = {
   // Clear function name and parameters
   filterUsersByName: (
-    users: User[],
-    filterText: string,
-    isPartialMatch: boolean,
-  ): User[] => {
+  users: User[],
+  filterText: string,
+  isPartialMatch: boolean)
+  : User[] => {
     const filteredUsers = [];
 
     for (const user of users) {
-      const nameMatches = isPartialMatch
-        ? user.name.includes(filterText)
-        : user.name === filterText;
+      const nameMatches = isPartialMatch ?
+      user.name.includes(filterText) :
+      user.name === filterText;
 
       if (nameMatches) {
         filteredUsers.push(user);
@@ -83,12 +83,12 @@ export const CLEAR_NAMING = {
   applyStatusBasedMultiplier: (data: any): number => {
     const STATUS = {
       ACTIVE: 1,
-      INACTIVE: 2,
+      INACTIVE: 2
     } as const;
 
     const MULTIPLIER = {
       ACTIVE_TAX_RATE: 1.08,
-      INACTIVE_DISCOUNT_RATE: 0.95,
+      INACTIVE_DISCOUNT_RATE: 0.95
     } as const;
 
     switch (data.status) {
@@ -108,12 +108,12 @@ export const CLEAR_NAMING = {
     const shouldSendWelcomeEmail = true;
     const validatedUserData = validateUserData(rawUserData);
 
-    const registrationResult = shouldSendWelcomeEmail
-      ? processWithWelcomeEmail(validatedUserData)
-      : processWithoutWelcomeEmail(rawUserData);
+    const registrationResult = shouldSendWelcomeEmail ?
+    processWithWelcomeEmail(validatedUserData) :
+    processWithoutWelcomeEmail(rawUserData);
 
     return registrationResult;
-  },
+  }
 };
 
 // ❌ ANTI-PATTERN 2: Massive, monolithic functions
@@ -123,7 +123,7 @@ export const MONOLITHIC_FUNCTIONS = {
     // Validation (20 lines)
     if (!orderData) throw new Error("Order data required");
     if (!orderData.items || orderData.items.length === 0)
-      throw new Error("Items required");
+    throw new Error("Items required");
     if (!orderData.customerId) throw new Error("Customer ID required");
     if (!orderData.paymentMethod) throw new Error("Payment method required");
 
@@ -132,7 +132,7 @@ export const MONOLITHIC_FUNCTIONS = {
     if (!customer) throw new Error("Customer not found");
     if (customer.status === "banned") throw new Error("Customer banned");
     if (customer.paymentMethods.length === 0)
-      throw new Error("No payment methods");
+    throw new Error("No payment methods");
 
     // Inventory check (20 lines)
     for (const item of orderData.items) {
@@ -164,7 +164,7 @@ export const MONOLITHIC_FUNCTIONS = {
     const paymentResult = await paymentProcessor.charge({
       amount: total,
       customerId: customer.id,
-      paymentMethodId: orderData.paymentMethod,
+      paymentMethodId: orderData.paymentMethod
     });
 
     if (!paymentResult.success) {
@@ -185,7 +185,7 @@ export const MONOLITHIC_FUNCTIONS = {
       tax,
       shipping,
       total,
-      paymentId: paymentResult.id,
+      paymentId: paymentResult.id
     });
 
     // Notification (10 lines)
@@ -193,7 +193,7 @@ export const MONOLITHIC_FUNCTIONS = {
     await smsService.sendOrderUpdate(customer.phone, order.id);
 
     return order;
-  },
+  }
 };
 
 // ✅ BETTER APPROACH: Decomposed, single-responsibility functions
@@ -207,7 +207,7 @@ export const DECOMPOSED_FUNCTIONS = {
     const payment = await processPayment(
       pricing.total,
       customer,
-      orderData.paymentMethod,
+      orderData.paymentMethod
     );
 
     await updateInventory(orderData.items);
@@ -216,7 +216,7 @@ export const DECOMPOSED_FUNCTIONS = {
     await sendOrderNotifications(customer, order);
 
     return order;
-  },
+  }
 };
 
 // ❌ ANTI-PATTERN 3: Deep nesting and complex conditions
@@ -308,7 +308,7 @@ export const DEEP_NESTING = {
     } else {
       throw new Error("Items required");
     }
-  },
+  }
 };
 
 // ✅ BETTER APPROACH: Early returns and clear logic
@@ -347,18 +347,18 @@ export const CLEAR_LOGIC = {
       premium: {
         freeThreshold: 50,
         domesticRate: 5.99,
-        internationalRate: 15.99,
+        internationalRate: 15.99
       },
       standard: {
         freeThreshold: 100,
         domesticRate: 8.99,
-        internationalRate: 19.99,
+        internationalRate: 19.99
       },
       basic: {
         freeThreshold: Infinity,
         domesticRate: 12.99,
-        internationalRate: 25.99,
-      },
+        internationalRate: 25.99
+      }
     };
 
     const rule = shippingRules[membershipLevel] || shippingRules.basic;
@@ -368,7 +368,7 @@ export const CLEAR_LOGIC = {
     }
 
     return isUS ? rule.domesticRate : rule.internationalRate;
-  },
+  }
 };
 
 // ❌ ANTI-PATTERN 4: No error handling or poor error handling
@@ -397,7 +397,7 @@ export const POOR_ERROR_HANDLING = {
   badErrorPropagation: (data: any) => {
     const result = JSON.parse(data); // Can throw, but not handled
     return result.value.nested.property; // Can throw, but not handled
-  },
+  }
 };
 
 // ✅ BETTER APPROACH: Proper error handling
@@ -407,10 +407,10 @@ export const PROPER_ERROR_HANDLING = {
       const data = await api.getData(id);
       return { success: true, data };
     } catch (error) {
-      console.error(`Failed to get data for ID ${id}:`, error);
+      logger.error(`Failed to get data for ID ${id}:`, error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: error instanceof Error ? error.message : "Unknown error"
       };
     }
   },
@@ -422,7 +422,7 @@ export const PROPER_ERROR_HANDLING = {
     } catch (error) {
       // Preserve original error while adding context
       const enhancedError = new Error(
-        `Failed to process user input: ${error.message}`,
+        `Failed to process user input: ${error.message}`
       );
       enhancedError.cause = error;
       throw enhancedError;
@@ -444,7 +444,7 @@ export const PROPER_ERROR_HANDLING = {
       }
       throw error; // Re-throw other errors
     }
-  },
+  }
 };
 
 // ❌ ANTI-PATTERN 5: Tight coupling and hard dependencies
@@ -455,14 +455,14 @@ export const TIGHT_COUPLING = {
       // Tightly coupled to specific database
       const result = await MySQL.query(
         "INSERT INTO users (name, email) VALUES (?, ?)",
-        [userData.name, userData.email],
+        [userData.name, userData.email]
       );
 
       // Tightly coupled to specific email service
       await SendGrid.sendEmail({
         to: userData.email,
         subject: "Welcome",
-        body: "Welcome to our app!",
+        body: "Welcome to our app!"
       });
 
       return result;
@@ -476,14 +476,14 @@ export const TIGHT_COUPLING = {
       const response = await fetch("https://api.stripe.com/v1/charges", {
         method: "POST",
         headers: {
-          Authorization: "Bearer sk_test_hardcoded_key", // Hardcoded!
+          Authorization: "Bearer sk_test_hardcoded_key" // Hardcoded!
         },
-        body: JSON.stringify({ amount }),
+        body: JSON.stringify({ amount })
       });
 
       return response.json();
     }
-  },
+  }
 };
 
 // ✅ BETTER APPROACH: Loose coupling and dependency injection
@@ -491,17 +491,17 @@ export const LOOSE_COUPLING = {
   // Use dependency injection
   UserService: class {
     constructor(
-      private db: DatabaseRepository,
-      private emailService: EmailService,
-      private logger: Logger,
-    ) {}
+    private db: DatabaseRepository,
+    private emailService: EmailService,
+    private logger: Logger)
+    {}
 
     async createUser(userData: any) {
       try {
         // Use abstracted database interface
         const user = await this.db.users.create({
           name: userData.name,
-          email: userData.email,
+          email: userData.email
         });
 
         // Use abstracted email service
@@ -519,26 +519,26 @@ export const LOOSE_COUPLING = {
   // Use configuration and environment variables
   PaymentService: class {
     constructor(
-      private config: PaymentConfig,
-      private httpClient: HttpClient,
-    ) {}
+    private config: PaymentConfig,
+    private httpClient: HttpClient)
+    {}
 
     async processPayment(amount: number) {
       const response = await this.httpClient.post(
         this.config.apiUrl + "/charges",
         {
-          amount,
+          amount
         },
         {
           headers: {
-            Authorization: `Bearer ${this.config.apiKey}`,
-          },
-        },
+            Authorization: `Bearer ${this.config.apiKey}`
+          }
+        }
       );
 
       return response.data;
     }
-  },
+  }
 };
 
 // ❌ ANTI-PATTERN 6: No documentation and unclear interfaces
@@ -556,9 +556,9 @@ export const NO_DOCUMENTATION = {
     return data.map((item: any) => ({
       id: item.id,
       value: item.amount * 1.2,
-      status: item.active ? "live" : "inactive",
+      status: item.active ? "live" : "inactive"
     }));
-  },
+  }
 };
 
 // ✅ BETTER APPROACH: Well-documented, typed interfaces
@@ -578,10 +578,10 @@ export const WELL_DOCUMENTED = {
    * ```
    */
   calculateTotalCost: (
-    baseAmount: number,
-    taxRate: number,
-    additionalFees?: number,
-  ): number => {
+  baseAmount: number,
+  taxRate: number,
+  additionalFees?: number)
+  : number => {
     const tax = baseAmount * taxRate;
     const fees = additionalFees || 0;
     return baseAmount + tax + fees;
@@ -594,14 +594,14 @@ export const WELL_DOCUMENTED = {
    * @returns Array of formatted transaction display objects
    */
   processTransactionData: (
-    transactions: RawTransaction[],
-  ): FormattedTransaction[] => {
+  transactions: RawTransaction[])
+  : FormattedTransaction[] => {
     return transactions.map((transaction) => ({
       id: transaction.id,
       displayAmount: transaction.amount * 1.2, // Include 20% markup
-      status: transaction.active ? "live" : "inactive",
+      status: transaction.active ? "live" : "inactive"
     }));
-  },
+  }
 };
 
 // Type definitions for better documentation
@@ -647,15 +647,15 @@ const validateCustomer = async (id: string) => ({ id });
 const validateInventory = async (items: any[]) => {};
 const calculateOrderPricing = (items: any[], customer: any) => ({ total: 100 });
 const processPayment = async (total: number, customer: any, method: any) => ({
-  id: "123",
+  id: "123"
 });
 const updateInventory = async (items: any[]) => {};
 const createOrder = async (
-  data: any,
-  customer: any,
-  pricing: any,
-  payment: any,
-) => ({ id: "456" });
+data: any,
+customer: any,
+pricing: any,
+payment: any) => (
+{ id: "456" });
 const sendOrderNotifications = async (customer: any, order: any) => {};
 const getUserRegistrationData = () => ({});
 const validateUserData = (data: any) => data;
@@ -669,34 +669,34 @@ const db = {
     id,
     price: 10,
     stock: 5,
-    active: true,
+    active: true
   }),
   updateProductStock: async (id: string, change: number) => {},
-  createOrder: async (data: any) => ({ id: "789" }),
+  createOrder: async (data: any) => ({ id: "789" })
 };
 
 const paymentProcessor = {
-  charge: async (data: any) => ({ success: true, id: "payment-123" }),
+  charge: async (data: any) => ({ success: true, id: "payment-123" })
 };
 
 const emailService = {
-  sendOrderConfirmation: async (email: string, order: any) => {},
+  sendOrderConfirmation: async (email: string, order: any) => {}
 };
 
 const smsService = {
-  sendOrderUpdate: async (phone: string, orderId: string) => {},
+  sendOrderUpdate: async (phone: string, orderId: string) => {}
 };
 
 const api = {
-  getData: async (id: string) => ({ id, data: "test" }),
+  getData: async (id: string) => ({ id, data: "test" })
 };
 
 const MySQL = {
-  query: async (sql: string, params: any[]) => ({ id: 1 }),
+  query: async (sql: string, params: any[]) => ({ id: 1 })
 };
 
 const SendGrid = {
-  sendEmail: async (data: any) => {},
+  sendEmail: async (data: any) => {}
 };
 
 interface User {

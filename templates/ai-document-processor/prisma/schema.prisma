@@ -1,0 +1,258 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Document storage and OCR processing (local single-user)
+model Document {
+  id            String    @id @default(cuid())
+  filename      String
+  originalName  String
+  mimeType      String
+  size          Int
+  url           String
+  thumbnailUrl  String?   // Preview image for documents
+  
+  // OCR Processing status
+  status        ProcessingStatus @default(PENDING)
+  uploadedAt    DateTime  @default(now())
+  processedAt   DateTime?
+  error         String?
+  
+  // OCR Results
+  extractedText String?   @db.Text
+  ocrConfidence Float?    // Overall OCR confidence score
+  language      String?   // Detected language
+  pageCount     Int?      // Number of pages processed
+  
+  // Document Analysis
+  summary       String?   @db.Text
+  keywords      String[]  // Extracted keywords
+  entities      Json?     // Named entities, dates, etc.
+  documentType  String?   // Invoice, receipt, contract, etc.
+  
+  // AI embeddings for similarity search
+  embedding     Float[]
+  
+  // Relations
+  extractions   Extraction[]
+  chunks        DocumentChunk[]
+  pages         DocumentPage[]
+  
+  @@index([status])
+  @@index([uploadedAt])
+  @@index([documentType])
+}
+
+// Document pages for multi-page documents
+model DocumentPage {
+  id            String    @id @default(cuid())
+  documentId    String
+  document      Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  
+  pageNumber    Int
+  imageUrl      String    // URL to page image
+  extractedText String?   @db.Text
+  ocrConfidence Float?
+  boundingBoxes Json?     // Text bounding boxes
+  
+  // OCR metadata for this page
+  width         Int?      // Image dimensions
+  height        Int?
+  dpi           Int?      // Image resolution
+  
+  @@unique([documentId, pageNumber])
+  @@index([documentId])
+}
+
+// Document chunks for large files and embeddings
+model DocumentChunk {
+  id            String    @id @default(cuid())
+  documentId    String
+  document      Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  
+  chunkIndex    Int
+  text          String    @db.Text
+  embedding     Float[]
+  pageNumber    Int?      // Which page this chunk came from
+  
+  @@unique([documentId, chunkIndex])
+}
+
+// Specific OCR data extractions
+model Extraction {
+  id            String    @id @default(cuid())
+  documentId    String
+  document      Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  
+  type          ExtractionType
+  confidence    Float
+  data          Json      // Extracted structured data
+  boundingBox   Json?     // Coordinates of extracted element
+  page          Int?      // Page number where found
+  
+  createdAt     DateTime  @default(now())
+  
+  @@index([documentId, type])
+}
+
+// Chat conversations about documents
+model Chat {
+  id            String    @id @default(cuid())
+  title         String
+  model         String
+  provider      AIProvider
+  
+  // Document context for this chat
+  documentIds   String[]  // Referenced documents
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  messages      Message[]
+  
+  @@index([createdAt])
+}
+
+// Chat messages
+model Message {
+  id            String    @id @default(cuid())
+  chatId        String
+  chat          Chat      @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  
+  role          MessageRole
+  content       String    @db.Text
+  
+  // File attachments
+  attachments   Json?
+  
+  // AI metadata
+  model         String?
+  tokens        Int?
+  
+  createdAt     DateTime  @default(now())
+  
+  @@index([chatId])
+}
+
+// AI API responses for caching and analytics
+model AIResponse {
+  id            String    @id @default(cuid())
+  
+  // Request
+  prompt        String    @db.Text
+  promptHash    String    // For caching
+  systemPrompt  String?   @db.Text
+  parameters    Json?
+  
+  // Response
+  response      String    @db.Text
+  model         String
+  provider      AIProvider
+  
+  // Metrics
+  promptTokens  Int
+  responseTokens Int
+  totalTokens   Int
+  cost          Float?
+  latencyMs     Int
+  cached        Boolean   @default(false)
+  
+  createdAt     DateTime  @default(now())
+  
+  @@unique([promptHash, model])
+  @@index([createdAt])
+}
+
+// OCR Processing jobs and queue
+model ProcessingJob {
+  id            String    @id @default(cuid())
+  documentId    String    @unique
+  
+  status        JobStatus @default(QUEUED)
+  priority      Int       @default(0)
+  retryCount    Int       @default(0)
+  maxRetries    Int       @default(3)
+  
+  // Job configuration
+  ocrOptions    Json?     // Tesseract options
+  extractTypes  ExtractionType[]
+  
+  // Progress tracking
+  progress      Float     @default(0.0)
+  statusMessage String?
+  
+  startedAt     DateTime?
+  completedAt   DateTime?
+  createdAt     DateTime  @default(now())
+  
+  @@index([status, priority])
+  @@index([createdAt])
+}
+
+// Usage tracking for local analytics
+model Usage {
+  id            String    @id @default(cuid())
+  feature       String
+  model         String?
+  provider      AIProvider?
+  
+  tokens        Int?
+  cost          Float?
+  processingTime Int?     // milliseconds
+  
+  timestamp     DateTime  @default(now())
+  
+  @@index([timestamp])
+  @@index([feature])
+}
+
+// Enums
+enum ProcessingStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum JobStatus {
+  QUEUED
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum ExtractionType {
+  TEXT
+  TABLE
+  FORM_FIELD
+  IMAGE
+  SIGNATURE
+  BARCODE
+  QR_CODE
+  INVOICE_DATA
+  RECEIPT_DATA
+  CONTRACT_DATA
+  HANDWRITING
+}
+
+enum AIProvider {
+  LOCAL
+  OPENAI
+  ANTHROPIC
+  REPLICATE
+  HUGGINGFACE
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+  FUNCTION
+}

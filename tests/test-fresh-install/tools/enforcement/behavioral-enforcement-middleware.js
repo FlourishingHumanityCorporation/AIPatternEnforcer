@@ -454,10 +454,10 @@ This ensures proper structure, testing, and ProjectTemplate compliance.
 
 <function_calls>
 <invoke name="TodoWrite">
-<parameter name="todos">${JSON.stringify(todos)}
-      priority: i === 0 ? 'high' : 'medium'
-    }));
+<parameter name="todos">${JSON.stringify(todos)}</parameter>
+</invoke>
+</function_calls>`;
+  }
+}
 
-    return `<function_calls>
-<invoke name="TodoWrite">
-<parameter name="todos">${JSON.stringify(todos)}
+module.exports = BehavioralEnforcementMiddleware;

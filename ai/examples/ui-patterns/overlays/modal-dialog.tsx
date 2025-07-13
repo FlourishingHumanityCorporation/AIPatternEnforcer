@@ -48,7 +48,7 @@ export const Modal: React.FC<ModalProps> = ({
   initialFocus,
   returnFocus = true,
   role = "dialog",
-  className = "",
+  className = ""
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);
@@ -77,7 +77,7 @@ export const Modal: React.FC<ModalProps> = ({
       } else {
         // Find first focusable element
         const focusableElements = modalElement.querySelectorAll<HTMLElement>(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
         );
         if (focusableElements.length > 0) {
           focusableElements[0].focus();
@@ -123,7 +123,7 @@ export const Modal: React.FC<ModalProps> = ({
       if (e.key !== "Tab") return;
 
       const focusableElements = modalElement.querySelectorAll<HTMLElement>(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
       );
 
       if (focusableElements.length === 0) return;
@@ -153,7 +153,7 @@ export const Modal: React.FC<ModalProps> = ({
 
     // Calculate scrollbar width
     const scrollbarWidth =
-      window.innerWidth - document.documentElement.clientWidth;
+    window.innerWidth - document.documentElement.clientWidth;
 
     document.body.style.overflow = "hidden";
     if (scrollbarWidth > 0) {
@@ -172,60 +172,60 @@ export const Modal: React.FC<ModalProps> = ({
         onClose();
       }
     },
-    [closeOnClickOutside, onClose],
+    [closeOnClickOutside, onClose]
   );
 
   if (!isOpen) return null;
 
-  const modalContent = (
-    <div className={styles.backdrop} onClick={handleBackdropClick}>
+  const modalContent =
+  <div className={styles.backdrop} onClick={handleBackdropClick}>
       <div
-        ref={modalRef}
-        role={role}
-        aria-modal="true"
-        aria-labelledby={title ? "modal-title" : undefined}
-        aria-describedby={description ? "modal-description" : undefined}
-        className={`${styles.modal} ${styles[`modal-${size}`]} ${className}`}
-      >
+      ref={modalRef}
+      role={role}
+      aria-modal="true"
+      aria-labelledby={title ? "modal-title" : undefined}
+      aria-describedby={description ? "modal-description" : undefined}
+      className={`${styles.modal} ${styles[`modal-${size}`]} ${className}`}>
+
         {/* Header */}
-        {(title || showCloseButton) && (
-          <div className={styles.header}>
-            {title && (
-              <h2 id="modal-title" className={styles.title}>
+        {(title || showCloseButton) &&
+      <div className={styles.header}>
+            {title &&
+        <h2 id="modal-title" className={styles.title}>
                 {title}
               </h2>
-            )}
-            {showCloseButton && (
-              <button
-                type="button"
-                onClick={onClose}
-                className={styles.closeButton}
-                aria-label="Close modal"
-              >
+        }
+            {showCloseButton &&
+        <button
+          type="button"
+          onClick={onClose}
+          className={styles.closeButton}
+          aria-label="Close modal">
+
                 <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round">
+
                   <line x1="18" y1="6" x2="6" y2="18" />
                   <line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
               </button>
-            )}
+        }
           </div>
-        )}
+      }
 
         {/* Description */}
-        {description && (
-          <p id="modal-description" className={styles.description}>
+        {description &&
+      <p id="modal-description" className={styles.description}>
             {description}
           </p>
-        )}
+      }
 
         {/* Content */}
         <div className={styles.content}>{children}</div>
@@ -233,8 +233,8 @@ export const Modal: React.FC<ModalProps> = ({
         {/* Footer */}
         {footer && <div className={styles.footer}>{footer}</div>}
       </div>
-    </div>
-  );
+    </div>;
+
 
   // Render into portal
   return createPortal(modalContent, document.body);
@@ -260,7 +260,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   message,
   confirmText = "Confirm",
   cancelText = "Cancel",
-  variant = "info",
+  variant = "info"
 }) => {
   const confirmButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -273,28 +273,28 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
       role="alertdialog"
       initialFocus={confirmButtonRef}
       footer={
-        <div className={styles.confirmFooter}>
+      <div className={styles.confirmFooter}>
           <button
-            type="button"
-            onClick={onCancel}
-            className={`${styles.button} ${styles.buttonSecondary}`}
-          >
+          type="button"
+          onClick={onCancel}
+          className={`${styles.button} ${styles.buttonSecondary}`}>
+
             {cancelText}
           </button>
           <button
-            ref={confirmButtonRef}
-            type="button"
-            onClick={onConfirm}
-            className={`${styles.button} ${styles.buttonPrimary} ${styles[`button-${variant}`]}`}
-          >
+          ref={confirmButtonRef}
+          type="button"
+          onClick={onConfirm}
+          className={`${styles.button} ${styles.buttonPrimary} ${styles[`button-${variant}`]}`}>
+
             {confirmText}
           </button>
         </div>
-      }
-    >
+      }>
+
       <p className={styles.confirmMessage}>{message}</p>
-    </Modal>
-  );
+    </Modal>);
+
 };
 
 // Drawer Pattern (slides from side)
@@ -313,7 +313,7 @@ export const Drawer: React.FC<DrawerProps> = ({
   title,
   position = "right",
   width = "400px",
-  children,
+  children
 }) => {
   const drawerRef = useRef<HTMLDivElement>(null);
 
@@ -331,27 +331,27 @@ export const Drawer: React.FC<DrawerProps> = ({
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
-        aria-labelledby={title ? "drawer-title" : undefined}
-      >
-        {title && (
-          <div className={styles.drawerHeader}>
+        aria-labelledby={title ? "drawer-title" : undefined}>
+
+        {title &&
+        <div className={styles.drawerHeader}>
             <h2 id="drawer-title" className={styles.drawerTitle}>
               {title}
             </h2>
             <button
-              type="button"
-              onClick={onClose}
-              className={styles.closeButton}
-              aria-label="Close drawer"
-            >
+            type="button"
+            onClick={onClose}
+            className={styles.closeButton}
+            aria-label="Close drawer">
+
               ×
             </button>
           </div>
-        )}
+        }
         <div className={styles.drawerContent}>{children}</div>
       </div>
     </div>,
-    document.body,
+    document.body
   );
 };
 
@@ -372,8 +372,8 @@ export const ModalExamples: React.FC = () => {
         isOpen={showBasic}
         onClose={() => setShowBasic(false)}
         title="Basic Modal"
-        description="This is a basic modal with all accessibility features."
-      >
+        description="This is a basic modal with all accessibility features.">
+
         <p>Modal content goes here. Press Escape to close.</p>
       </Modal>
 
@@ -381,15 +381,15 @@ export const ModalExamples: React.FC = () => {
       <ConfirmDialog
         isOpen={showConfirm}
         onConfirm={() => {
-          console.log("Confirmed!");
+          logger.info("Confirmed!");
           setShowConfirm(false);
         }}
         onCancel={() => setShowConfirm(false)}
         title="Delete Item?"
         message="This action cannot be undone. Are you sure you want to delete this item?"
         confirmText="Delete"
-        variant="danger"
-      />
+        variant="danger" />
+
 
       {/* Form Modal */}
       <Modal
@@ -398,30 +398,30 @@ export const ModalExamples: React.FC = () => {
         title="Edit Profile"
         size="medium"
         footer={
-          <div className={styles.formFooter}>
+        <div className={styles.formFooter}>
             <button
-              type="button"
-              onClick={() => setShowForm(false)}
-              className={`${styles.button} ${styles.buttonSecondary}`}
-            >
+            type="button"
+            onClick={() => setShowForm(false)}
+            className={`${styles.button} ${styles.buttonSecondary}`}>
+
               Cancel
             </button>
             <button
-              type="submit"
-              className={`${styles.button} ${styles.buttonPrimary}`}
-            >
+            type="submit"
+            className={`${styles.button} ${styles.buttonPrimary}`}>
+
               Save Changes
             </button>
           </div>
-        }
-      >
+        }>
+
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            console.log("Form submitted");
+            logger.info("Form submitted");
             setShowForm(false);
-          }}
-        >
+          }}>
+
           <div className={styles.formField}>
             <label htmlFor="name">Name</label>
             <input id="name" type="text" required />
@@ -432,6 +432,6 @@ export const ModalExamples: React.FC = () => {
           </div>
         </form>
       </Modal>
-    </div>
-  );
+    </div>);
+
 };

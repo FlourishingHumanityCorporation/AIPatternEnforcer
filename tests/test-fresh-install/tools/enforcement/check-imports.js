@@ -15,31 +15,31 @@ const importPatterns = {
 
   // Default imports from libraries that don't have them
   problematicDefaults: [
-    {
-      pattern: /import\s+React\s+from\s+['"]react['"]/,
-      correct: "import * as React from 'react'",
-    },
-    {
-      pattern: /import\s+lodash\s+from\s+['"]lodash['"]/,
-      correct:
-        "import * as _ from 'lodash' or import { specific } from 'lodash'",
-    },
-  ],
+  {
+    pattern: /import\s+React\s+from\s+['"]react['"]/,
+    correct: "import * as React from 'react'"
+  },
+  {
+    pattern: /import\s+lodash\s+from\s+['"]lodash['"]/,
+    correct:
+    "import * as _ from 'lodash' or import { specific } from 'lodash'"
+  }],
+
 
   // Banned imports
   bannedImports: [
-    {
-      pattern: /import.*from\s+['"]fs['"]/,
-      message: "Use fs/promises instead of fs for async operations",
-    },
-    {
-      pattern: /console\.(log|error|warn)/,
-      message: "Use projectLogger instead of console",
-    },
-  ],
+  {
+    pattern: /import.*from\s+['"]fs['"]/,
+    message: "Use fs/promises instead of fs for async operations"
+  },
+  {
+    pattern: /console\.(log|error|warn)/,
+    message: "Use projectLogger instead of console"
+  }],
+
 
   // Circular dependency check patterns
-  parentImports: /from\s+['"]\.\.[\/\.].*['"]/g,
+  parentImports: /from\s+['"]\.\.[\/\.].*['"]/g
 };
 
 // Check a single file for import issues
@@ -69,7 +69,7 @@ function checkFile(filePath, content) {
           file: filePath,
           line: lineNum,
           issue: match,
-          suggestion: "Use relative imports for project files",
+          suggestion: "Use relative imports for project files"
         });
       }
     });
@@ -80,23 +80,23 @@ function checkFile(filePath, content) {
   wildcardMatches.forEach((match) => {
     // Allow common wildcard patterns and tool-specific patterns
     const allowedWildcards = [
-      "React", "lodash", "vscode", "path", "fs", 
-      "chalk", "glob", // Common in build tools
-      "_" // Lodash convention
+    "React", "lodash", "vscode", "path", "fs",
+    "chalk", "glob", // Common in build tools
+    "_" // Lodash convention
     ];
-    
-    const hasAllowedPattern = allowedWildcards.some(pattern => match.includes(pattern));
-    
+
+    const hasAllowedPattern = allowedWildcards.some((pattern) => match.includes(pattern));
+
     // Allow wildcards for specific file types
     const allowedWildcardFiles = [
-      "extensions/", // VS Code extensions commonly use wildcards
-      "tools/", // Build and dev tools
-      "scripts/", // Dev scripts
-      "webpack.config", "vite.config", // Build configs
+    "extensions/", // VS Code extensions commonly use wildcards
+    "tools/", // Build and dev tools
+    "scripts/", // Dev scripts
+    "webpack.config", "vite.config" // Build configs
     ];
-    
-    const isAllowedFile = allowedWildcardFiles.some(pattern => filePath.includes(pattern));
-    
+
+    const isAllowedFile = allowedWildcardFiles.some((pattern) => filePath.includes(pattern));
+
     if (!hasAllowedPattern && !isAllowedFile) {
       const lineNum = lines.findIndex((line) => line.includes(match)) + 1;
       violations.push({
@@ -104,7 +104,7 @@ function checkFile(filePath, content) {
         file: filePath,
         line: lineNum,
         issue: match,
-        suggestion: "Import specific items instead of using wildcard",
+        suggestion: "Import specific items instead of using wildcard"
       });
     }
   });
@@ -113,13 +113,13 @@ function checkFile(filePath, content) {
   importPatterns.problematicDefaults.forEach(({ pattern, correct }) => {
     if (pattern.test(content)) {
       // Skip React import checks for template generators (they generate React code)
-      if (pattern.toString().includes("React") && 
-          (filePath.includes("tools/generators/") || 
-           filePath.includes("templates/") ||
-           filePath.includes("examples/"))) {
+      if (pattern.toString().includes("React") && (
+      filePath.includes("tools/generators/") ||
+      filePath.includes("templates/") ||
+      filePath.includes("examples/"))) {
         return;
       }
-      
+
       const match = content.match(pattern)[0];
       const lineNum = lines.findIndex((line) => line.includes(match)) + 1;
       violations.push({
@@ -127,7 +127,7 @@ function checkFile(filePath, content) {
         file: filePath,
         line: lineNum,
         issue: match,
-        suggestion: correct,
+        suggestion: correct
       });
     }
   });
@@ -137,21 +137,21 @@ function checkFile(filePath, content) {
     // Skip console checks for legitimate use cases
     if (pattern.toString().includes("console")) {
       const allowedConsolePatterns = [
-        "tools/enforcement/",
-        "tools/generators/",
-        "tools/testing/", // Testing framework output
-        "tools/claude-validation/", // Validation tool output
-        "scripts/", // All development scripts (not just scripts/dev/)
-        "extensions/", // VS Code extensions legitimately use console
-        "examples/", // Example files show usage patterns
-        "ExampleApp", // Demo components
-        "src/components/Example", // Demo components
-        "test/", // Test files
-        "spec/", // Test files
-        "__tests__/", // Test files
+      "tools/enforcement/",
+      "tools/generators/",
+      "tools/testing/", // Testing framework output
+      "tools/claude-validation/", // Validation tool output
+      "scripts/", // All development scripts (not just scripts/dev/)
+      "extensions/", // VS Code extensions legitimately use console
+      "examples/", // Example files show usage patterns
+      "ExampleApp", // Demo components
+      "src/components/Example", // Demo components
+      "test/", // Test files
+      "spec/", // Test files
+      "__tests__/" // Test files
       ];
-      
-      if (allowedConsolePatterns.some(pattern => filePath.includes(pattern))) {
+
+      if (allowedConsolePatterns.some((pattern) => filePath.includes(pattern))) {
         return;
       }
     }
@@ -159,14 +159,14 @@ function checkFile(filePath, content) {
     // Skip fs imports for VS Code extensions and legitimate system tools
     if (pattern.toString().includes("fs")) {
       const allowedFsPatterns = [
-        "extensions/", // VS Code extensions need direct fs access
-        "tools/", // Build and generator tools
-        "scripts/", // Development scripts
-        "webpack.config", // Build configs
-        "vite.config", // Build configs
+      "extensions/", // VS Code extensions need direct fs access
+      "tools/", // Build and generator tools
+      "scripts/", // Development scripts
+      "webpack.config", // Build configs
+      "vite.config" // Build configs
       ];
-      
-      if (allowedFsPatterns.some(allowedPattern => filePath.includes(allowedPattern))) {
+
+      if (allowedFsPatterns.some((allowedPattern) => filePath.includes(allowedPattern))) {
         return;
       }
     }
@@ -179,7 +179,7 @@ function checkFile(filePath, content) {
         file: filePath,
         line: lineNum,
         issue: match,
-        suggestion: message,
+        suggestion: message
       });
     });
   });
@@ -195,7 +195,7 @@ function checkFile(filePath, content) {
         file: filePath,
         line: lineNum,
         issue: match,
-        suggestion: "Consider restructuring to avoid deep parent imports",
+        suggestion: "Consider restructuring to avoid deep parent imports"
       });
     }
   });
@@ -206,23 +206,23 @@ function checkFile(filePath, content) {
 // Main function
 async function checkImports(specificFiles = []) {
   const filesToCheck =
-    specificFiles.length > 0
-      ? specificFiles
-      : glob.sync("**/*.{js,jsx,ts,tsx}", {
-          ignore: [
-            "node_modules/**",
-            "dist/**",
-            "build/**",
-            ".next/**",
-            "coverage/**",
-            "extensions/*/node_modules/**",
-            "extensions/*/out/**",
-            "ai/examples/**", // Examples show patterns, including anti-patterns
-            "examples/**", // Example projects have their own patterns
-            "**/*.d.ts", // Type definition files
-            "**/*.min.js", // Minified files
-          ],
-        });
+  specificFiles.length > 0 ?
+  specificFiles :
+  glob.sync("**/*.{js,jsx,ts,tsx}", {
+    ignore: [
+    "node_modules/**",
+    "dist/**",
+    "build/**",
+    ".next/**",
+    "coverage/**",
+    "extensions/*/node_modules/**",
+    "extensions/*/out/**",
+    "ai/examples/**", // Examples show patterns, including anti-patterns
+    "examples/**", // Example projects have their own patterns
+    "**/*.d.ts", // Type definition files
+    "**/*.min.js" // Minified files
+    ]
+  });
 
   let allViolations = [];
 
@@ -240,12 +240,12 @@ async function checkImports(specificFiles = []) {
   // Log metrics regardless of blocking behavior
   const config = loadConfig();
   logMetrics('imports', allViolations, config);
-  
+
   const shouldBlockCommit = shouldBlock('imports', config);
-  
+
   if (allViolations.length > 0) {
     const messageType = shouldBlockCommit ? "❌ Found import violations:" : "⚠️  Import warnings:";
-    console.error(chalk.red.bold(`\n${messageType}\n`));
+    logger.error(chalk.red.bold(`\n${messageType}\n`));
 
     // Group by type
     const byType = allViolations.reduce((acc, v) => {
@@ -255,33 +255,33 @@ async function checkImports(specificFiles = []) {
     }, {});
 
     Object.entries(byType).forEach(([type, violations]) => {
-      console.error(chalk.yellow.bold(`${type}:`));
+      logger.error(chalk.yellow.bold(`${type}:`));
       violations.forEach((v) => {
-        console.error(chalk.white(`  ${v.file}:${v.line}`));
-        console.error(chalk.gray(`    Issue: ${v.issue}`));
-        console.error(chalk.cyan(`    Fix: ${v.suggestion}`));
+        logger.error(chalk.white(`  ${v.file}:${v.line}`));
+        logger.error(chalk.gray(`    Issue: ${v.issue}`));
+        logger.error(chalk.cyan(`    Fix: ${v.suggestion}`));
       });
-      console.error("");
+      logger.error("");
     });
 
-    console.error(chalk.cyan.bold("📚 Import Best Practices:"));
-    console.error(chalk.white("  - Use relative imports for project files"));
-    console.error(chalk.white("  - Import specific functions/components"));
-    console.error(chalk.white("  - Use path aliases (@/) for deep imports"));
-    console.error(chalk.white("  - Avoid circular dependencies\n"));
+    logger.error(chalk.cyan.bold("📚 Import Best Practices:"));
+    logger.error(chalk.white("  - Use relative imports for project files"));
+    logger.error(chalk.white("  - Import specific functions/components"));
+    logger.error(chalk.white("  - Use path aliases (@/) for deep imports"));
+    logger.error(chalk.white("  - Avoid circular dependencies\n"));
 
     if (shouldBlockCommit) {
-      console.error(chalk.red.bold("🚫 Commit blocked due to import violations."));
-      console.error(chalk.yellow("💡 To change enforcement level: npm run enforcement:config set-level WARNING"));
+      logger.error(chalk.red.bold("🚫 Commit blocked due to import violations."));
+      logger.error(chalk.yellow("💡 To change enforcement level: npm run enforcement:config set-level WARNING"));
       process.exit(1);
     } else {
-      console.error(chalk.yellow.bold("⏩ Commit proceeding with warnings."));
-      console.error(chalk.cyan("💡 To fix issues: Follow suggestions above"));
-      console.error(chalk.cyan("💡 To block on violations: npm run enforcement:config set-level FULL"));
+      logger.error(chalk.yellow.bold("⏩ Commit proceeding with warnings."));
+      logger.error(chalk.cyan("💡 To fix issues: Follow suggestions above"));
+      logger.error(chalk.cyan("💡 To block on violations: npm run enforcement:config set-level FULL"));
     }
   } else {
     if (!specificFiles || specificFiles.length === 0) {
-      console.log(chalk.green("✅ All imports are valid!"));
+      logger.info(chalk.green("✅ All imports are valid!"));
     }
   }
 }
@@ -292,7 +292,7 @@ if (require.main === module) {
   const files = args.filter((arg) => !arg.startsWith("-"));
 
   checkImports(files).catch((error) => {
-    console.error(chalk.red("Error checking imports:"), error);
+    logger.error(chalk.red("Error checking imports:"), error);
     process.exit(1);
   });
 }

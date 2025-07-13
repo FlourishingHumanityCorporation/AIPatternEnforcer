@@ -27,8 +27,8 @@ const config = {
     javascript: ".jsx",
     test: ".test.tsx",
     story: ".stories.tsx",
-    style: ".module.css",
-  },
+    style: ".module.css"
+  }
 };
 
 // Template type definitions
@@ -36,29 +36,29 @@ const TEMPLATE_TYPES = {
   interactive: {
     name: "Interactive",
     description:
-      "Buttons, inputs, toggles - components that users interact with",
-    examples: "Button, TextField, Toggle, Select",
+    "Buttons, inputs, toggles - components that users interact with",
+    examples: "Button, TextField, Toggle, Select"
   },
   display: {
     name: "Display",
     description: "Cards, lists, badges - components that display information",
-    examples: "Card, Badge, Avatar, Chip",
+    examples: "Card, Badge, Avatar, Chip"
   },
   form: {
     name: "Form",
     description: "Form fields with built-in validation and error handling",
-    examples: "FormInput, FormSelect, FormTextarea, FormCheckbox",
+    examples: "FormInput, FormSelect, FormTextarea, FormCheckbox"
   },
   data: {
     name: "Data",
     description: "Tables, grids, charts - components that display data sets",
-    examples: "DataTable, DataGrid, Chart, List",
+    examples: "DataTable, DataGrid, Chart, List"
   },
   overlay: {
     name: "Overlay",
     description: "Modals, tooltips, popovers - components that overlay content",
-    examples: "Modal, Tooltip, Popover, Drawer",
-  },
+    examples: "Modal, Tooltip, Popover, Drawer"
+  }
 };
 
 // UI Pattern definitions (rich, complete examples)
@@ -67,32 +67,32 @@ const UI_PATTERNS = {
     name: "Login Form",
     description: "Complete login form with validation, error handling, and accessibility",
     category: "forms",
-    file: "login-form.tsx",
+    file: "login-form.tsx"
   },
   "multi-step-form": {
     name: "Multi-Step Form",
-    description: "Wizard-style form with progress tracking and step validation", 
+    description: "Wizard-style form with progress tracking and step validation",
     category: "forms",
-    file: "multi-step-form.tsx",
+    file: "multi-step-form.tsx"
   },
   "data-table": {
     name: "Data Table",
     description: "Feature-rich table with sorting, pagination, and search",
-    category: "data-display", 
-    file: "data-table.tsx",
+    category: "data-display",
+    file: "data-table.tsx"
   },
   "modal-dialog": {
     name: "Modal Dialog",
     description: "Accessible modal with focus trapping and escape handling",
     category: "overlays",
-    file: "modal-dialog.tsx",
+    file: "modal-dialog.tsx"
   },
   "loading-skeletons": {
-    name: "Loading Skeletons", 
+    name: "Loading Skeletons",
     description: "Smooth loading states with multiple variants",
     category: "feedback",
-    file: "loading-skeletons.tsx",
-  },
+    file: "loading-skeletons.tsx"
+  }
 };
 
 // Load template content based on type
@@ -101,14 +101,14 @@ async function loadTemplate(templateType, fileName) {
     __dirname,
     "../../templates/component",
     templateType,
-    fileName,
+    fileName
   );
   try {
     return await fs.readFile(templatePath, "utf-8");
   } catch (error) {
-    console.error(
-      chalk.red(`❌ Template ${templatePath} not found. All templates must exist.`),
-    );
+    logger.error(
+      chalk.red(`❌ Template ${templatePath} not found. All templates must exist.`));
+
     throw error;
   }
 }
@@ -124,32 +124,32 @@ async function loadUIPattern(patternKey) {
     __dirname,
     "../../ai/examples/ui-patterns",
     pattern.category,
-    pattern.file,
+    pattern.file
   );
-  
+
   const cssPath = path.join(
     __dirname,
-    "../../ai/examples/ui-patterns", 
+    "../../ai/examples/ui-patterns",
     pattern.category,
-    pattern.file.replace('.tsx', '.module.css'),
+    pattern.file.replace('.tsx', '.module.css')
   );
 
   try {
     const componentContent = await fs.readFile(componentPath, "utf-8");
     let cssContent = "";
-    
+
     try {
       cssContent = await fs.readFile(cssPath, "utf-8");
     } catch {
       // CSS file optional for patterns
-      console.warn(chalk.yellow(`⚠️ CSS file not found for pattern ${patternKey}`));
+      logger.warn(chalk.yellow(`⚠️ CSS file not found for pattern ${patternKey}`));
     }
 
     return { component: componentContent, css: cssContent, pattern };
   } catch (error) {
-    console.error(
-      chalk.red(`❌ Pattern ${patternKey} not found at ${componentPath}`),
-    );
+    logger.error(
+      chalk.red(`❌ Pattern ${patternKey} not found at ${componentPath}`));
+
     throw error;
   }
 }
@@ -171,39 +171,39 @@ function adaptPatternToComponent(patternContent, newComponentName, originalName)
   // Replace all instances of the original component name with the new one
   const originalPattern = originalName.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
   const newPattern = newComponentName.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
-  
+
   let adapted = patternContent
-    // Replace component names in imports and exports
-    .replace(new RegExp(`export const ${originalName}`, 'g'), `export const ${newComponentName}`)
-    .replace(new RegExp(`${originalName}Props`, 'g'), `${newComponentName}Props`)
-    .replace(new RegExp(`interface ${originalName}Props`, 'g'), `interface ${newComponentName}Props`)
-    .replace(new RegExp(`${originalName}: React.FC`, 'g'), `${newComponentName}: React.FC`)
-    // Replace CSS module imports - USE CORRECT FILENAME FORMAT
-    .replace(new RegExp(`from "\\.\/${originalPattern}\\.module\\.css"`, 'g'), `from "./${newComponentName}.module.css"`)
-    .replace(new RegExp(`from '\\.\/${originalPattern}\\.module\\.css'`, 'g'), `from './${newComponentName}.module.css'`)
-    // Replace component displayName
-    .replace(new RegExp(`${originalName}\\.displayName`, 'g'), `${newComponentName}.displayName`)
-    // Replace story titles and component references
-    .replace(new RegExp(`title: ".*/${originalName}"`, 'g'), `title: "Generated/${newComponentName}"`)
-    .replace(new RegExp(`component: ${originalName}`, 'g'), `component: ${newComponentName}`)
-    .replace(new RegExp(`import { ${originalName} }`, 'g'), `import { ${newComponentName} }`)
-    .replace(new RegExp(`<${originalName}`, 'g'), `<${newComponentName}`)
-    .replace(new RegExp(`</${originalName}>`, 'g'), `</${newComponentName}>`)
-    // Replace CSS class references
-    .replace(new RegExp(`data-testid="${originalPattern}"`, 'g'), `data-testid="${newPattern}"`);
+  // Replace component names in imports and exports
+  .replace(new RegExp(`export const ${originalName}`, 'g'), `export const ${newComponentName}`).
+  replace(new RegExp(`${originalName}Props`, 'g'), `${newComponentName}Props`).
+  replace(new RegExp(`interface ${originalName}Props`, 'g'), `interface ${newComponentName}Props`).
+  replace(new RegExp(`${originalName}: React.FC`, 'g'), `${newComponentName}: React.FC`)
+  // Replace CSS module imports - USE CORRECT FILENAME FORMAT
+  .replace(new RegExp(`from "\\.\/${originalPattern}\\.module\\.css"`, 'g'), `from "./${newComponentName}.module.css"`).
+  replace(new RegExp(`from '\\.\/${originalPattern}\\.module\\.css'`, 'g'), `from './${newComponentName}.module.css'`)
+  // Replace component displayName
+  .replace(new RegExp(`${originalName}\\.displayName`, 'g'), `${newComponentName}.displayName`)
+  // Replace story titles and component references
+  .replace(new RegExp(`title: ".*/${originalName}"`, 'g'), `title: "Generated/${newComponentName}"`).
+  replace(new RegExp(`component: ${originalName}`, 'g'), `component: ${newComponentName}`).
+  replace(new RegExp(`import { ${originalName} }`, 'g'), `import { ${newComponentName} }`).
+  replace(new RegExp(`<${originalName}`, 'g'), `<${newComponentName}`).
+  replace(new RegExp(`</${originalName}>`, 'g'), `</${newComponentName}>`)
+  // Replace CSS class references
+  .replace(new RegExp(`data-testid="${originalPattern}"`, 'g'), `data-testid="${newPattern}"`);
 
   return adapted;
 }
 
 // Generate from UI pattern
 async function generateFromPattern(name, patternKey, options) {
-  console.log(
-    chalk.blue(`\n🎨 Generating component from pattern: ${UI_PATTERNS[patternKey].name}\n`),
-  );
+  logger.info(
+    chalk.blue(`\n🎨 Generating component from pattern: ${UI_PATTERNS[patternKey].name}\n`));
+
 
   const patternData = await loadUIPattern(patternKey);
-  const originalName = patternData.pattern.file.replace('.tsx', '').split('-').map(word => 
-    word.charAt(0).toUpperCase() + word.slice(1)
+  const originalName = patternData.pattern.file.replace('.tsx', '').split('-').map((word) =>
+  word.charAt(0).toUpperCase() + word.slice(1)
   ).join('');
 
   // Adapt pattern content to new component name
@@ -256,7 +256,7 @@ export type { ${name}Props } from './${name}';`;
     test: basicTest,
     story: basicStory,
     styles: adaptedCss,
-    index: basicIndex,
+    index: basicIndex
   };
 }
 
@@ -269,30 +269,30 @@ async function ensureTemplateDirectories() {
     try {
       await fs.mkdir(dir, { recursive: true });
     } catch (error) {
+
       // Directory already exists, ignore
-    }
-  }
+    }}
 }
 
 // Generate component files
 async function generateComponent(name, options) {
   // Validate component name
   if (!/^[A-Z][a-zA-Z0-9]*$/.test(name)) {
-    console.error(
-      chalk.red("❌ Component name must be in PascalCase (e.g., MyComponent)"),
-    );
+    logger.error(
+      chalk.red("❌ Component name must be in PascalCase (e.g., MyComponent)"));
+
     process.exit(1);
   }
 
   let templates;
-  
+
   // Generate from pattern or template
   if (options.pattern) {
     templates = await generateFromPattern(name, options.pattern, options);
   } else {
-    console.log(
-      chalk.blue(`\n🚀 Generating ${options.template} component: ${name}\n`),
-    );
+    logger.info(
+      chalk.blue(`\n🚀 Generating ${options.template} component: ${name}\n`));
+
     templates = await getTemplates(name, options.template);
   }
 
@@ -302,29 +302,29 @@ async function generateComponent(name, options) {
   try {
     await fs.mkdir(componentDir, { recursive: true });
   } catch (error) {
-    console.error(chalk.red(`❌ Failed to create directory: ${error.message}`));
+    logger.error(chalk.red(`❌ Failed to create directory: ${error.message}`));
     process.exit(1);
   }
 
   // Files to generate
   const files = [
-    {
-      name: `${name}${config.fileExtensions.typescript}`,
-      template: templates.component,
-    },
-    { name: `${name}${config.fileExtensions.test}`, template: templates.test },
-    {
-      name: `${name}${config.fileExtensions.style}`,
-      template: templates.styles,
-    },
-    { name: "index.ts", template: templates.index },
-  ];
+  {
+    name: `${name}${config.fileExtensions.typescript}`,
+    template: templates.component
+  },
+  { name: `${name}${config.fileExtensions.test}`, template: templates.test },
+  {
+    name: `${name}${config.fileExtensions.style}`,
+    template: templates.styles
+  },
+  { name: "index.ts", template: templates.index }];
+
 
   // Add storybook file if requested
   if (!options.noStorybook) {
     files.push({
       name: `${name}${config.fileExtensions.story}`,
-      template: templates.story,
+      template: templates.story
     });
   }
 
@@ -336,13 +336,13 @@ async function generateComponent(name, options) {
     if (!options.force) {
       try {
         await fs.access(filePath);
-        console.log(chalk.yellow(`⚠️  Skipping ${file.name} (already exists)`));
+        logger.info(chalk.yellow(`⚠️  Skipping ${file.name} (already exists)`));
         continue;
       } catch {}
     }
 
     let content;
-    
+
     // For patterns, content is already adapted - don't use Handlebars
     if (options.pattern) {
       content = file.template;
@@ -351,102 +351,102 @@ async function generateComponent(name, options) {
       const compiledTemplate = Handlebars.compile(file.template);
       content = compiledTemplate({
         name,
-        templateType: options.template,
+        templateType: options.template
       });
     }
 
     try {
       await fs.writeFile(filePath, content);
-      console.log(chalk.green(`✅ Created ${file.name}`));
+      logger.info(chalk.green(`✅ Created ${file.name}`));
     } catch (error) {
-      console.error(
-        chalk.red(`❌ Failed to create ${file.name}: ${error.message}`),
-      );
+      logger.error(
+        chalk.red(`❌ Failed to create ${file.name}: ${error.message}`));
+
     }
   }
 
   // Success message
-  console.log(
+  logger.info(
     chalk.green(
-      `\n✨ ${TEMPLATE_TYPES[options.template].name} component ${name} generated successfully!\n`,
-    ),
-  );
-  console.log(chalk.cyan("📁 Files created:"));
-  console.log(chalk.gray(`   ${componentDir}/`));
+      `\n✨ ${TEMPLATE_TYPES[options.template].name} component ${name} generated successfully!\n`
+    ));
+
+  logger.info(chalk.cyan("📁 Files created:"));
+  logger.info(chalk.gray(`   ${componentDir}/`));
   files.forEach((file) => {
-    console.log(chalk.gray(`   ├── ${file.name}`));
+    logger.info(chalk.gray(`   ├── ${file.name}`));
   });
 
-  console.log(chalk.cyan("\n🎯 Next steps:"));
-  console.log(
+  logger.info(chalk.cyan("\n🎯 Next steps:"));
+  logger.info(
     chalk.gray(
-      `   1. Import component: import { ${name} } from '${path.relative(process.cwd(), componentDir)}';`,
-    ),
-  );
-  console.log(chalk.gray(`   2. Run tests: npm test ${name}`));
+      `   1. Import component: import { ${name} } from '${path.relative(process.cwd(), componentDir)}';`
+    ));
+
+  logger.info(chalk.gray(`   2. Run tests: npm test ${name}`));
   if (!options.noStorybook) {
-    console.log(chalk.gray(`   3. View in Storybook: npm run storybook`));
+    logger.info(chalk.gray(`   3. View in Storybook: npm run storybook`));
   }
-  console.log(chalk.gray(`\n💡 This ${options.template} component includes:`));
+  logger.info(chalk.gray(`\n💡 This ${options.template} component includes:`));
 
   const features = {
     interactive: [
-      "Loading states",
-      "Error handling",
-      "Disabled states",
-      "Keyboard navigation",
-    ],
+    "Loading states",
+    "Error handling",
+    "Disabled states",
+    "Keyboard navigation"],
+
     form: [
-      "Validation support",
-      "Error messages",
-      "Required field marking",
-      "Accessibility labels",
-    ],
+    "Validation support",
+    "Error messages",
+    "Required field marking",
+    "Accessibility labels"],
+
     data: [
-      "Loading states",
-      "Empty states",
-      "Error handling",
-      "Data prop support",
-    ],
+    "Loading states",
+    "Empty states",
+    "Error handling",
+    "Data prop support"],
+
     overlay: [
-      "Portal rendering",
-      "Escape key handling",
-      "Click outside support",
-      "Focus management",
-    ],
+    "Portal rendering",
+    "Escape key handling",
+    "Click outside support",
+    "Focus management"],
+
     display: [
-      "Responsive design",
-      "Dark mode support",
-      "Custom styling",
-      "Accessibility",
-    ],
+    "Responsive design",
+    "Dark mode support",
+    "Custom styling",
+    "Accessibility"]
+
   };
 
   features[options.template].forEach((feature) => {
-    console.log(chalk.gray(`   • ${feature}`));
+    logger.info(chalk.gray(`   • ${feature}`));
   });
 }
 
 // Interactive template selection
 async function selectTemplate() {
   const { template } = await inquirer.prompt([
-    {
-      type: "list",
-      name: "template",
-      message: "Select component template type:",
-      choices: Object.entries(TEMPLATE_TYPES).map(([key, value]) => ({
-        name: `${value.name} - ${value.description}`,
-        value: key,
-        short: value.name,
-      })),
-    },
-  ]);
-
-  console.log(
-    chalk.cyan(
-      `\n📝 Examples for ${TEMPLATE_TYPES[template].name} components: ${TEMPLATE_TYPES[template].examples}\n`,
-    ),
+  {
+    type: "list",
+    name: "template",
+    message: "Select component template type:",
+    choices: Object.entries(TEMPLATE_TYPES).map(([key, value]) => ({
+      name: `${value.name} - ${value.description}`,
+      value: key,
+      short: value.name
+    }))
+  }]
   );
+
+  logger.info(
+    chalk.cyan(
+      `\n📝 Examples for ${TEMPLATE_TYPES[template].name} components: ${TEMPLATE_TYPES[template].examples}\n`
+    ));
+
 
   return template;
 }
@@ -454,113 +454,113 @@ async function selectTemplate() {
 // Interactive pattern selection
 async function selectPattern() {
   const { pattern } = await inquirer.prompt([
-    {
-      type: "list",
-      name: "pattern",
-      message: "Select UI pattern to use as base:",
-      choices: Object.entries(UI_PATTERNS).map(([key, value]) => ({
-        name: `${value.name} - ${value.description}`,
-        value: key,
-        short: value.name,
-      })),
-    },
-  ]);
-
-  console.log(
-    chalk.cyan(
-      `\n🎨 Using ${UI_PATTERNS[pattern].name} pattern from ${UI_PATTERNS[pattern].category} category\n`,
-    ),
+  {
+    type: "list",
+    name: "pattern",
+    message: "Select UI pattern to use as base:",
+    choices: Object.entries(UI_PATTERNS).map(([key, value]) => ({
+      name: `${value.name} - ${value.description}`,
+      value: key,
+      short: value.name
+    }))
+  }]
   );
+
+  logger.info(
+    chalk.cyan(
+      `\n🎨 Using ${UI_PATTERNS[pattern].name} pattern from ${UI_PATTERNS[pattern].category} category\n`
+    ));
+
 
   return pattern;
 }
 
 // CLI setup
-program
-  .name("enhanced-component-generator")
-  .description(
-    "Generate React components with AI-optimized templates or UI patterns",
-  )
-  .argument("<name>", "Component name in PascalCase")
-  .option("-t, --template <type>", "Component template type", "display")
-  .option("-p, --pattern <pattern>", "UI pattern to use as base")
-  .option("-i, --interactive", "Interactive template/pattern selection")
-  .option("-f, --force", "Overwrite existing files")
-  .option("--no-storybook", "Skip Storybook story generation")
-  .option("-d, --dir <dir>", "Output directory", config.outputDir)
-  .action(async (name, options) => {
-    // Ensure template directories exist
-    await ensureTemplateDirectories();
+program.
+name("enhanced-component-generator").
+description(
+  "Generate React components with AI-optimized templates or UI patterns"
+).
+argument("<name>", "Component name in PascalCase").
+option("-t, --template <type>", "Component template type", "display").
+option("-p, --pattern <pattern>", "UI pattern to use as base").
+option("-i, --interactive", "Interactive template/pattern selection").
+option("-f, --force", "Overwrite existing files").
+option("--no-storybook", "Skip Storybook story generation").
+option("-d, --dir <dir>", "Output directory", config.outputDir).
+action(async (name, options) => {
+  // Ensure template directories exist
+  await ensureTemplateDirectories();
 
-    if (options.dir) {
-      config.outputDir = options.dir;
+  if (options.dir) {
+    config.outputDir = options.dir;
+  }
+
+  // Handle interactive selection
+  if (options.interactive) {
+    const { choice } = await inquirer.prompt([
+    {
+      type: "list",
+      name: "choice",
+      message: "What would you like to generate?",
+      choices: [
+      { name: "Basic Template - Simple, scaffolded component", value: "template" },
+      { name: "UI Pattern - Rich, complete component from patterns", value: "pattern" }]
+
+    }]
+    );
+
+    if (choice === "template") {
+      options.template = await selectTemplate();
+    } else {
+      options.pattern = await selectPattern();
     }
+  }
 
-    // Handle interactive selection
-    if (options.interactive) {
-      const { choice } = await inquirer.prompt([
-        {
-          type: "list",
-          name: "choice",
-          message: "What would you like to generate?",
-          choices: [
-            { name: "Basic Template - Simple, scaffolded component", value: "template" },
-            { name: "UI Pattern - Rich, complete component from patterns", value: "pattern" },
-          ],
-        },
-      ]);
-
-      if (choice === "template") {
-        options.template = await selectTemplate();
-      } else {
-        options.pattern = await selectPattern();
-      }
-    }
-
-    // Validate options
-    if (options.pattern) {
-      if (!UI_PATTERNS[options.pattern]) {
-        console.error(chalk.red(`❌ Invalid pattern: ${options.pattern}`));
-        console.log(chalk.cyan("\nAvailable patterns:"));
-        Object.entries(UI_PATTERNS).forEach(([key, value]) => {
-          console.log(chalk.gray(`  - ${key}: ${value.description}`));
-        });
-        process.exit(1);
-      }
-    } else if (!TEMPLATE_TYPES[options.template]) {
-      console.error(chalk.red(`❌ Invalid template type: ${options.template}`));
-      console.log(chalk.cyan("\nAvailable templates:"));
-      Object.entries(TEMPLATE_TYPES).forEach(([key, value]) => {
-        console.log(chalk.gray(`  - ${key}: ${value.description}`));
+  // Validate options
+  if (options.pattern) {
+    if (!UI_PATTERNS[options.pattern]) {
+      logger.error(chalk.red(`❌ Invalid pattern: ${options.pattern}`));
+      logger.info(chalk.cyan("\nAvailable patterns:"));
+      Object.entries(UI_PATTERNS).forEach(([key, value]) => {
+        logger.info(chalk.gray(`  - ${key}: ${value.description}`));
       });
       process.exit(1);
     }
+  } else if (!TEMPLATE_TYPES[options.template]) {
+    logger.error(chalk.red(`❌ Invalid template type: ${options.template}`));
+    logger.info(chalk.cyan("\nAvailable templates:"));
+    Object.entries(TEMPLATE_TYPES).forEach(([key, value]) => {
+      logger.info(chalk.gray(`  - ${key}: ${value.description}`));
+    });
+    process.exit(1);
+  }
 
-    await generateComponent(name, options);
-  });
+  await generateComponent(name, options);
+});
 
 // Show help if no arguments
 if (!process.argv.slice(2).length) {
   program.outputHelp();
-  console.log(chalk.cyan("\n📚 Template Types:"));
+  logger.info(chalk.cyan("\n📚 Template Types:"));
   Object.entries(TEMPLATE_TYPES).forEach(([key, value]) => {
-    console.log(chalk.gray(`\n  ${chalk.bold(key)} - ${value.description}`));
-    console.log(chalk.gray(`  Examples: ${value.examples}`));
+    logger.info(chalk.gray(`\n  ${chalk.bold(key)} - ${value.description}`));
+    logger.info(chalk.gray(`  Examples: ${value.examples}`));
   });
-  
-  console.log(chalk.cyan("\n🎨 UI Patterns:"));
+
+  logger.info(chalk.cyan("\n🎨 UI Patterns:"));
   Object.entries(UI_PATTERNS).forEach(([key, value]) => {
-    console.log(chalk.gray(`\n  ${chalk.bold(key)} - ${value.description}`));
-    console.log(chalk.gray(`  Category: ${value.category}`));
+    logger.info(chalk.gray(`\n  ${chalk.bold(key)} - ${value.description}`));
+    logger.info(chalk.gray(`  Category: ${value.category}`));
   });
-  
-  console.log(chalk.cyan("\n💡 Usage Examples:"));
-  console.log(chalk.gray("  # Basic template"));
-  console.log(chalk.gray("  enhanced-component-generator MyButton --template interactive"));
-  console.log(chalk.gray("\n  # Rich UI pattern"));
-  console.log(chalk.gray("  enhanced-component-generator UserLogin --pattern login-form"));
-  console.log(chalk.gray("\n  # Interactive selection"));
-  console.log(chalk.gray("  enhanced-component-generator MyComponent --interactive"));
+
+  logger.info(chalk.cyan("\n💡 Usage Examples:"));
+  logger.info(chalk.gray("  # Basic template"));
+  logger.info(chalk.gray("  enhanced-component-generator MyButton --template interactive"));
+  logger.info(chalk.gray("\n  # Rich UI pattern"));
+  logger.info(chalk.gray("  enhanced-component-generator UserLogin --pattern login-form"));
+  logger.info(chalk.gray("\n  # Interactive selection"));
+  logger.info(chalk.gray("  enhanced-component-generator MyComponent --interactive"));
   process.exit(0);
 }
 

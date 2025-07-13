@@ -101,8 +101,8 @@ Each rule reduces specific friction:
 
 ## Getting Help
 
-- **See all rules:** `docs/guides/enforcement/ENFORCEMENT.md`
-- **Fix violations:** `npm run fix:docs`
+- **See all rules:** `docs/guides/enforcement/README.md`
+- **Fix violations:** `npm run doc:create`
 - **Check status:** `npm run check:all`
 - **Emergency override:** Contact project maintainer
 

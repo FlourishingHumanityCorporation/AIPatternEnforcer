@@ -51,7 +51,7 @@ export function DataTable<T extends Record<string, any>>({
   selectable = false,
   onRowClick,
   onSelectionChange,
-  getRowId = (item) => item.id,
+  getRowId = (item) => item.id
 }: DataTableProps<T>) {
   const [currentPage, setCurrentPage] = useState(0);
   const [sortColumn, setSortColumn] = useState<string | null>(null);
@@ -67,9 +67,9 @@ export function DataTable<T extends Record<string, any>>({
     return data.filter((item) => {
       return columns.some((column) => {
         const value =
-          typeof column.accessor === "function"
-            ? column.accessor(item)
-            : item[column.accessor];
+        typeof column.accessor === "function" ?
+        column.accessor(item) :
+        item[column.accessor];
 
         return String(value).toLowerCase().includes(query);
       });
@@ -85,13 +85,13 @@ export function DataTable<T extends Record<string, any>>({
 
     return [...filteredData].sort((a, b) => {
       const aValue =
-        typeof column.accessor === "function"
-          ? column.accessor(a)
-          : a[column.accessor];
+      typeof column.accessor === "function" ?
+      column.accessor(a) :
+      a[column.accessor];
       const bValue =
-        typeof column.accessor === "function"
-          ? column.accessor(b)
-          : b[column.accessor];
+      typeof column.accessor === "function" ?
+      column.accessor(b) :
+      b[column.accessor];
 
       if (aValue === bValue) return 0;
 
@@ -145,7 +145,7 @@ export function DataTable<T extends Record<string, any>>({
         return next;
       });
     },
-    [data, getRowId, onSelectionChange],
+    [data, getRowId, onSelectionChange]
   );
 
   const handleSelectAll = useCallback(() => {
@@ -165,7 +165,7 @@ export function DataTable<T extends Record<string, any>>({
 
     if (onSelectionChange) {
       const selectedItems = data.filter((item) =>
-        selectedRows.has(getRowId(item)),
+      selectedRows.has(getRowId(item))
       );
       onSelectionChange(selectedItems);
     }
@@ -183,8 +183,8 @@ export function DataTable<T extends Record<string, any>>({
       <div className={styles.loadingContainer}>
         <div className={styles.spinner} aria-label="Loading data..." />
         <p>Loading data...</p>
-      </div>
-    );
+      </div>);
+
   }
 
   // Error state
@@ -192,8 +192,8 @@ export function DataTable<T extends Record<string, any>>({
     return (
       <div className={styles.errorContainer} role="alert">
         <p>{error}</p>
-      </div>
-    );
+      </div>);
+
   }
 
   const getSortIcon = (columnId: string) => {
@@ -204,140 +204,140 @@ export function DataTable<T extends Record<string, any>>({
   };
 
   const allPageRowsSelected =
-    paginatedData.length > 0 &&
-    paginatedData.every((item) => selectedRows.has(getRowId(item)));
+  paginatedData.length > 0 &&
+  paginatedData.every((item) => selectedRows.has(getRowId(item)));
 
   return (
     <div className={styles.container}>
       {/* Search Bar */}
-      {searchable && (
-        <div className={styles.searchContainer}>
+      {searchable &&
+      <div className={styles.searchContainer}>
           <label htmlFor="table-search" className={styles.srOnly}>
             Search table
           </label>
           <input
-            id="table-search"
-            type="search"
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={(e) => handleSearch(e.target.value)}
-            className={styles.searchInput}
-            aria-label="Search table data"
-          />
+          id="table-search"
+          type="search"
+          placeholder="Search..."
+          value={searchQuery}
+          onChange={(e) => handleSearch(e.target.value)}
+          className={styles.searchInput}
+          aria-label="Search table data" />
+
         </div>
-      )}
+      }
 
       {/* Table */}
       <div className={styles.tableWrapper}>
         <table className={styles.table} role="table">
           <thead>
             <tr role="row">
-              {selectable && (
-                <th role="columnheader" className={styles.checkboxColumn}>
+              {selectable &&
+              <th role="columnheader" className={styles.checkboxColumn}>
                   <input
-                    type="checkbox"
-                    checked={allPageRowsSelected}
-                    onChange={handleSelectAll}
-                    aria-label="Select all rows on this page"
-                  />
+                  type="checkbox"
+                  checked={allPageRowsSelected}
+                  onChange={handleSelectAll}
+                  aria-label="Select all rows on this page" />
+
                 </th>
-              )}
-              {columns.map((column) => (
-                <th
-                  key={column.id}
-                  role="columnheader"
-                  style={{
-                    width: column.width,
-                    textAlign: column.align || "left",
-                  }}
-                  className={column.sortable ? styles.sortable : ""}
-                  onClick={() => handleSort(column.id)}
-                  aria-sort={
-                    sortColumn === column.id
-                      ? sortDirection === "asc"
-                        ? "ascending"
-                        : "descending"
-                      : "none"
-                  }
-                >
+              }
+              {columns.map((column) =>
+              <th
+                key={column.id}
+                role="columnheader"
+                style={{
+                  width: column.width,
+                  textAlign: column.align || "left"
+                }}
+                className={column.sortable ? styles.sortable : ""}
+                onClick={() => handleSort(column.id)}
+                aria-sort={
+                sortColumn === column.id ?
+                sortDirection === "asc" ?
+                "ascending" :
+                "descending" :
+                "none"
+                }>
+
                   <span className={styles.headerContent}>
                     {column.header}
-                    {column.sortable && (
-                      <span className={styles.sortIcon} aria-hidden="true">
+                    {column.sortable &&
+                  <span className={styles.sortIcon} aria-hidden="true">
                         {getSortIcon(column.id)}
                       </span>
-                    )}
+                  }
                   </span>
                 </th>
-              ))}
+              )}
             </tr>
           </thead>
           <tbody>
-            {paginatedData.length === 0 ? (
-              <tr>
+            {paginatedData.length === 0 ?
+            <tr>
                 <td
-                  colSpan={columns.length + (selectable ? 1 : 0)}
-                  className={styles.emptyMessage}
-                >
+                colSpan={columns.length + (selectable ? 1 : 0)}
+                className={styles.emptyMessage}>
+
                   {emptyMessage}
                 </td>
-              </tr>
-            ) : (
-              paginatedData.map((item, index) => {
-                const rowId = getRowId(item);
-                const isSelected = selectedRows.has(rowId);
+              </tr> :
 
-                return (
-                  <tr
-                    key={rowId}
-                    role="row"
-                    className={`
+            paginatedData.map((item, index) => {
+              const rowId = getRowId(item);
+              const isSelected = selectedRows.has(rowId);
+
+              return (
+                <tr
+                  key={rowId}
+                  role="row"
+                  className={`
                       ${onRowClick ? styles.clickableRow : ""}
                       ${isSelected ? styles.selectedRow : ""}
                     `}
-                    onClick={() => onRowClick?.(item)}
-                    tabIndex={onRowClick ? 0 : undefined}
-                    onKeyDown={(e) => {
-                      if (onRowClick && (e.key === "Enter" || e.key === " ")) {
-                        e.preventDefault();
-                        onRowClick(item);
-                      }
-                    }}
-                    aria-rowindex={currentPage * pageSize + index + 2}
-                  >
-                    {selectable && (
-                      <td role="cell" className={styles.checkboxColumn}>
+                  onClick={() => onRowClick?.(item)}
+                  tabIndex={onRowClick ? 0 : undefined}
+                  onKeyDown={(e) => {
+                    if (onRowClick && (e.key === "Enter" || e.key === " ")) {
+                      e.preventDefault();
+                      onRowClick(item);
+                    }
+                  }}
+                  aria-rowindex={currentPage * pageSize + index + 2}>
+
+                    {selectable &&
+                  <td role="cell" className={styles.checkboxColumn}>
                         <input
-                          type="checkbox"
-                          checked={isSelected}
-                          onChange={() => handleRowSelect(rowId)}
-                          onClick={(e) => e.stopPropagation()}
-                          aria-label={`Select row ${index + 1}`}
-                        />
+                      type="checkbox"
+                      checked={isSelected}
+                      onChange={() => handleRowSelect(rowId)}
+                      onClick={(e) => e.stopPropagation()}
+                      aria-label={`Select row ${index + 1}`} />
+
                       </td>
-                    )}
-                    {columns.map((column) => (
-                      <td
-                        key={column.id}
-                        role="cell"
-                        style={{ textAlign: column.align || "left" }}
-                      >
-                        {typeof column.accessor === "function"
-                          ? column.accessor(item)
-                          : item[column.accessor]}
+                  }
+                    {columns.map((column) =>
+                  <td
+                    key={column.id}
+                    role="cell"
+                    style={{ textAlign: column.align || "left" }}>
+
+                        {typeof column.accessor === "function" ?
+                    column.accessor(item) :
+                    item[column.accessor]}
                       </td>
-                    ))}
-                  </tr>
-                );
-              })
-            )}
+                  )}
+                  </tr>);
+
+            })
+            }
           </tbody>
         </table>
       </div>
 
       {/* Pagination */}
-      {totalPages > 1 && (
-        <div className={styles.pagination}>
+      {totalPages > 1 &&
+      <div className={styles.pagination}>
           <div className={styles.pageInfo}>
             Showing {currentPage * pageSize + 1} to{" "}
             {Math.min((currentPage + 1) * pageSize, sortedData.length)} of{" "}
@@ -346,20 +346,20 @@ export function DataTable<T extends Record<string, any>>({
 
           <nav className={styles.pageControls} aria-label="Table pagination">
             <button
-              onClick={() => setCurrentPage(0)}
-              disabled={currentPage === 0}
-              className={styles.pageButton}
-              aria-label="Go to first page"
-            >
+            onClick={() => setCurrentPage(0)}
+            disabled={currentPage === 0}
+            className={styles.pageButton}
+            aria-label="Go to first page">
+
               First
             </button>
 
             <button
-              onClick={() => setCurrentPage((prev) => prev - 1)}
-              disabled={currentPage === 0}
-              className={styles.pageButton}
-              aria-label="Go to previous page"
-            >
+            onClick={() => setCurrentPage((prev) => prev - 1)}
+            disabled={currentPage === 0}
+            className={styles.pageButton}
+            aria-label="Go to previous page">
+
               Previous
             </button>
 
@@ -368,34 +368,34 @@ export function DataTable<T extends Record<string, any>>({
             </span>
 
             <button
-              onClick={() => setCurrentPage((prev) => prev + 1)}
-              disabled={currentPage >= totalPages - 1}
-              className={styles.pageButton}
-              aria-label="Go to next page"
-            >
+            onClick={() => setCurrentPage((prev) => prev + 1)}
+            disabled={currentPage >= totalPages - 1}
+            className={styles.pageButton}
+            aria-label="Go to next page">
+
               Next
             </button>
 
             <button
-              onClick={() => setCurrentPage(totalPages - 1)}
-              disabled={currentPage >= totalPages - 1}
-              className={styles.pageButton}
-              aria-label="Go to last page"
-            >
+            onClick={() => setCurrentPage(totalPages - 1)}
+            disabled={currentPage >= totalPages - 1}
+            className={styles.pageButton}
+            aria-label="Go to last page">
+
               Last
             </button>
           </nav>
         </div>
-      )}
+      }
 
       {/* Selection info */}
-      {selectable && selectedRows.size > 0 && (
-        <div className={styles.selectionInfo} role="status" aria-live="polite">
+      {selectable && selectedRows.size > 0 &&
+      <div className={styles.selectionInfo} role="status" aria-live="polite">
           {selectedRows.size} row{selectedRows.size !== 1 ? "s" : ""} selected
         </div>
-      )}
-    </div>
-  );
+      }
+    </div>);
+
 }
 
 // Example usage
@@ -410,73 +410,73 @@ interface User {
 
 export const UserTableExample: React.FC = () => {
   const users: User[] = [
-    {
-      id: "1",
-      name: "John Doe",
-      email: "john@example.com",
-      role: "Admin",
-      createdAt: new Date("2023-01-15"),
-      status: "active",
-    },
-    {
-      id: "2",
-      name: "Jane Smith",
-      email: "jane@example.com",
-      role: "User",
-      createdAt: new Date("2023-02-20"),
-      status: "active",
-    },
-    {
-      id: "3",
-      name: "Bob Johnson",
-      email: "bob@example.com",
-      role: "User",
-      createdAt: new Date("2023-03-10"),
-      status: "inactive",
-    },
-    // ... more users
+  {
+    id: "1",
+    name: "John Doe",
+    email: "john@example.com",
+    role: "Admin",
+    createdAt: new Date("2023-01-15"),
+    status: "active"
+  },
+  {
+    id: "2",
+    name: "Jane Smith",
+    email: "jane@example.com",
+    role: "User",
+    createdAt: new Date("2023-02-20"),
+    status: "active"
+  },
+  {
+    id: "3",
+    name: "Bob Johnson",
+    email: "bob@example.com",
+    role: "User",
+    createdAt: new Date("2023-03-10"),
+    status: "inactive"
+  }
+  // ... more users
   ];
 
   const columns: Column<User>[] = [
-    {
-      id: "name",
-      header: "Name",
-      accessor: "name",
-      sortable: true,
-    },
-    {
-      id: "email",
-      header: "Email",
-      accessor: "email",
-      sortable: true,
-    },
-    {
-      id: "role",
-      header: "Role",
-      accessor: "role",
-      sortable: true,
-      width: "120px",
-    },
-    {
-      id: "status",
-      header: "Status",
-      accessor: (user) => (
-        <span className={`${styles.badge} ${styles[`badge-${user.status}`]}`}>
+  {
+    id: "name",
+    header: "Name",
+    accessor: "name",
+    sortable: true
+  },
+  {
+    id: "email",
+    header: "Email",
+    accessor: "email",
+    sortable: true
+  },
+  {
+    id: "role",
+    header: "Role",
+    accessor: "role",
+    sortable: true,
+    width: "120px"
+  },
+  {
+    id: "status",
+    header: "Status",
+    accessor: (user) =>
+    <span className={`${styles.badge} ${styles[`badge-${user.status}`]}`}>
           {user.status}
-        </span>
-      ),
-      sortable: true,
-      width: "100px",
-      align: "center",
-    },
-    {
-      id: "createdAt",
-      header: "Created",
-      accessor: (user) => user.createdAt.toLocaleDateString(),
-      sortable: true,
-      width: "120px",
-    },
-  ];
+        </span>,
+
+    sortable: true,
+    width: "100px",
+    align: "center"
+  },
+  {
+    id: "createdAt",
+    header: "Created",
+    accessor: (user) => user.createdAt.toLocaleDateString(),
+    sortable: true,
+    width: "120px"
+  }];
+
 
   return (
     <DataTable
@@ -485,8 +485,8 @@ export const UserTableExample: React.FC = () => {
       pageSize={5}
       searchable
       selectable
-      onRowClick={(user) => console.log("Clicked:", user)}
-      onSelectionChange={(selected) => console.log("Selected:", selected)}
-    />
-  );
+      onRowClick={(user) => logger.info("Clicked:", user)}
+      onSelectionChange={(selected) => logger.info("Selected:", selected)} />);
+
+
 };

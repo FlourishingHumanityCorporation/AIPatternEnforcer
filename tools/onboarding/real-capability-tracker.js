@@ -112,7 +112,7 @@ class RealCapabilityTracker {
     generateRealMetrics() {
         const validationReport = this.getRealValidationStatus();
         if (!validationReport) {
-            console.error('Failed to get validation report');
+            process.stderr.write('Failed to get validation report\n');
             return null;
         }
         
@@ -197,40 +197,40 @@ class RealCapabilityTracker {
     }
     
     displayStatus() {
-        console.log('\n═══════════════════════════════════════════════════════');
-        console.log('          REAL CAPABILITY STATUS REPORT');
-        console.log('═══════════════════════════════════════════════════════\n');
+        process.stdout.write('\n═══════════════════════════════════════════════════════\n');
+        process.stdout.write('          REAL CAPABILITY STATUS REPORT\n');
+        process.stdout.write('═══════════════════════════════════════════════════════\n\n');
         
         const realMetrics = this.generateRealMetrics();
         if (!realMetrics) {
-            console.error('Failed to generate real metrics');
+            process.stderr.write('Failed to generate real metrics\n');
             return;
         }
         
-        console.log(`Current Level: ${realMetrics.realLevel} - ${realMetrics.levelName}`);
-        console.log(`Description: ${realMetrics.levelDescription}`);
-        console.log(`\nCompliance Status:`);
-        console.log(`  ✓ Passed Checks: ${realMetrics.compliance.passedChecks}/${realMetrics.compliance.totalChecks}`);
-        console.log(`  ✗ Critical Failures: ${realMetrics.compliance.criticalFailures}`);
-        console.log(`  ⚠ Total Violations: ${realMetrics.compliance.totalViolations}`);
-        console.log(`  📊 Test Coverage: ${realMetrics.compliance.testCoverage}`);
+        process.stdout.write(`Current Level: ${realMetrics.realLevel} - ${realMetrics.levelName}\n`);
+        process.stdout.write(`Description: ${realMetrics.levelDescription}\n`);
+        process.stdout.write(`\nCompliance Status:\n`);
+        process.stdout.write(`  ✓ Passed Checks: ${realMetrics.compliance.passedChecks}/${realMetrics.compliance.totalChecks}\n`);
+        process.stdout.write(`  ✗ Critical Failures: ${realMetrics.compliance.criticalFailures}\n`);
+        process.stdout.write(`  ⚠ Total Violations: ${realMetrics.compliance.totalViolations}\n`);
+        process.stdout.write(`  📊 Test Coverage: ${realMetrics.compliance.testCoverage}\n`);
         
-        console.log(`\nViolation Breakdown:`);
-        console.log(`  - Logging: ${realMetrics.violations.logging}`);
-        console.log(`  - Linting: ${realMetrics.violations.linting}`);
-        console.log(`  - Documentation: ${realMetrics.violations.documentation}`);
-        console.log(`  - Imports: ${realMetrics.violations.imports}`);
+        process.stdout.write(`\nViolation Breakdown:\n`);
+        process.stdout.write(`  - Logging: ${realMetrics.violations.logging}\n`);
+        process.stdout.write(`  - Linting: ${realMetrics.violations.linting}\n`);
+        process.stdout.write(`  - Documentation: ${realMetrics.violations.documentation}\n`);
+        process.stdout.write(`  - Imports: ${realMetrics.violations.imports}\n`);
         
-        console.log(`\nReadiness: ${realMetrics.readinessLevel.toUpperCase()}`);
+        process.stdout.write(`\nReadiness: ${realMetrics.readinessLevel.toUpperCase()}\n`);
         
         if (realMetrics.recommendations.length > 0) {
-            console.log(`\nTop Recommendations:`);
+            process.stdout.write(`\nTop Recommendations:\n`);
             realMetrics.recommendations.slice(0, 3).forEach((rec, i) => {
-                console.log(`  ${i + 1}. [${rec.priority.toUpperCase()}] ${rec.action}`);
+                process.stdout.write(`  ${i + 1}. [${rec.priority.toUpperCase()}] ${rec.action}\n`);
             });
         }
         
-        console.log('\n═══════════════════════════════════════════════════════\n');
+        process.stdout.write('\n═══════════════════════════════════════════════════════\n\n');
     }
 }
 
@@ -245,15 +245,15 @@ if (require.main === module) {
             break;
         case 'compare':
             const comparison = tracker.compareWithFakeMetrics();
-            console.log('\nFAKE vs REAL Comparison:');
-            console.log(JSON.stringify(comparison, null, 2));
+            process.stdout.write('\nFAKE vs REAL Comparison:\n');
+            process.stdout.write(JSON.stringify(comparison, null, 2) + '\n');
             break;
         case 'metrics':
             const metrics = tracker.generateRealMetrics();
-            console.log(JSON.stringify(metrics, null, 2));
+            process.stdout.write(JSON.stringify(metrics, null, 2) + '\n');
             break;
         default:
-            console.log('Usage: node real-capability-tracker.js [status|compare|metrics]');
+            process.stdout.write('Usage: node real-capability-tracker.js [status|compare|metrics]\n');
     }
 }
 

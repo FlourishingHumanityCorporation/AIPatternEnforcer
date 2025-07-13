@@ -18,7 +18,7 @@
     },
     "staged_files": {
       "enabled": true,
-      "weight": 2.0
+      "weight": 2
     },
     "frequently_imported": {
       "enabled": true,
@@ -51,7 +51,12 @@
     },
     "generated_files": {
       "enabled": true,
-      "patterns": ["*.generated.*", "*.auto.*", "*-lock.json", "*.lock"]
+      "patterns": [
+        "*.generated.*",
+        "*.auto.*",
+        "*-lock.json",
+        "*.lock"
+      ]
     }
   },
   "limits": {
@@ -100,21 +105,45 @@
   },
   "presets": {
     "debugging": {
-      "limits": { "max_context_tokens": 16000 },
-      "include": { "recent_files": { "days": 1 } },
-      "relevance_scoring": { "factors": { "in_error_stack": 80 } }
+      "limits": {
+        "max_context_tokens": 16000
+      },
+      "include": {
+        "recent_files": {
+          "days": 1
+        }
+      },
+      "relevance_scoring": {
+        "factors": {
+          "in_error_stack": 80
+        }
+      }
     },
     "feature_development": {
-      "limits": { "max_context_tokens": 24000 },
-      "extraction": { "include_implementation_details": false }
+      "limits": {
+        "max_context_tokens": 24000
+      },
+      "extraction": {
+        "include_implementation_details": false
+      }
     },
     "code_review": {
-      "include": { "staged_files": { "weight": 3.0 } },
-      "extraction": { "include_implementation_details": true }
+      "include": {
+        "staged_files": {
+          "weight": 3
+        }
+      },
+      "extraction": {
+        "include_implementation_details": true
+      }
     },
     "documentation": {
-      "extraction": { "exclude_implementation_details": true },
-      "output": { "include_file_tree": true }
+      "extraction": {
+        "exclude_implementation_details": true
+      },
+      "output": {
+        "include_file_tree": true
+      }
     }
   }
 }

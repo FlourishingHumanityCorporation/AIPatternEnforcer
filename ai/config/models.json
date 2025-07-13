@@ -67,7 +67,11 @@
   },
   "fallback": {
     "enabled": true,
-    "order": ["ollama", "localai", "lmstudio"],
+    "order": [
+      "ollama",
+      "localai",
+      "lmstudio"
+    ],
     "cloud_fallback": false
   },
   "hardware": {

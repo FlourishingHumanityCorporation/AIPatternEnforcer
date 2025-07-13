@@ -61,7 +61,7 @@ git add . && git commit           # Auto-validated commit
 
 # 3. Debug & Iterate (as needed)
 npm run debug:snapshot            # Capture debug context
-npm run fix:docs                  # Auto-fix violations
+npm run check:all                # Validate all (lint + type + test)
 npm run context -- src/path/     # Focused context reload
 ```
 
@@ -129,32 +129,36 @@ npm run check:all                 # Runs before every commit
 # Blocks commits with violations
 
 # Real-time feedback (manual)
-npm run check:imports             # Check import patterns
-npm run check:logs               # Validate logging usage
-npm run check:documentation-style # Documentation quality
+npm run check:all                # All validations (lint + type + test)
+npm run lint                     # ESLint validation
+npm run type-check               # TypeScript validation
 ```
 
-### Enforcement Levels for Different Workflows
+### Modern Enforcement (Claude Code Hooks)
 ```bash
-# Development (forgiving)
-npm run enforcement:config set-level BASIC
+# Real-time prevention (automatic during AI interactions)
+# - Prevents _improved files from being created
+# - Blocks root directory violations
+# - Auto-fixes console.log → logger.info
+# - Enforces Next.js structure
+# See .claude/settings.json for active hooks
 
-# Code Review (standard)  
-npm run enforcement:config set-level STANDARD
-
-# CI/CD (strict)
-npm run enforcement:config set-level FULL
+# Manual validation when needed
+npm run check:all                 # All checks (lint + type + test)
+npm run test                      # Run tests
+npm run lint                      # ESLint with auto-fix
 ```
 
-### Auto-Fix Integration
+### Hook-Based Auto-Fix
 ```bash
-# Preview fixes before applying
-npm run fix:docs:dry-run          # Preview doc fixes
-npm run fix:logs:dry-run          # Preview logging fixes
-npm run fix:config:dry-run        # Preview config fixes
+# Real-time fixes (automatic via Claude Code)
+# - console.log → logger.info (fix-console-logs.js)
+# - Immediate feedback on violations
+# - Zero friction for legitimate development
 
-# Apply fixes
-npm run fix:docs && npm run fix:logs && npm run fix:config
+# Template-based prevention
+npm run doc:create                # Start with proper documentation templates
+npm run g:c ComponentName         # Generate components with proper structure
 ```
 
 ## Generator Integration
@@ -380,6 +384,119 @@ npm run enforcement:config set-selective    # Only critical checks
 
 # Parallel validation
 npm run validate:parallel                   # Run validations in parallel
+```
+
+## Advanced Troubleshooting
+
+### Tool-Specific Issues
+
+#### Cursor Problems
+```bash
+# Cursor not following project patterns
+cp ai/config/.cursorrules .cursorrules
+# Restart Cursor
+
+# Cursor running slowly
+# 1. Check system resources
+# 2. Reduce context window size
+# 3. Disable unnecessary extensions
+
+# Cursor generating incorrect code
+# 1. Update .cursorrules with specific patterns
+# 2. Use more descriptive prompts
+# 3. Provide example code in requests
+```
+
+#### Claude Code Problems  
+```bash
+# Claude losing context
+npm run context                    # Reload project context
+# Paste context output in new Claude conversation
+
+# Claude providing outdated suggestions
+# 1. Specify current technology versions
+# 2. Include recent code examples
+# 3. Reference latest documentation
+
+# Claude responses too generic
+npm run debug:snapshot             # Capture specific state
+# Include snapshot in Claude request for specific context
+```
+
+#### GitHub Copilot Problems
+```bash
+# Copilot suggestions not relevant
+# 1. Write more descriptive comments
+# 2. Use consistent naming patterns
+# 3. Update .copilot configuration
+
+# Copilot not working in specific files
+# 1. Check file type associations
+# 2. Verify Copilot is enabled for language
+# 3. Restart VS Code
+
+# Copilot suggesting vulnerable code
+npm run security:scan              # Check for security issues
+npm run check:all                  # Validate with enforcement
+```
+
+### Integration Conflicts
+
+#### Multiple AI Tools Interfering
+```bash
+# Configure tool priorities
+# Edit VS Code settings:
+{
+  "ai.tool.priority": ["cursor", "copilot"],
+  "ai.tool.fallback": true
+}
+
+# Or use tools in sequence
+# 1. Cursor for main development
+# 2. Copilot for quick completions
+# 3. Claude for debugging/review
+```
+
+#### Performance Degradation
+```bash
+# Monitor performance
+npm run monitor:integration-performance
+
+# Common solutions:
+# 1. Reduce context window sizes
+# 2. Disable unused AI features
+# 3. Use selective enforcement
+npm run enforcement:config set-level BASIC
+
+# 4. Clear AI tool caches
+# Cursor: Cmd+Shift+P → "Clear Cache"
+# VS Code: Reload window
+```
+
+### Workflow Recovery
+
+#### After Integration Failure
+```bash
+# Reset to known good state
+git status                         # Check for uncommitted changes
+npm run integration:reset          # Reset configurations
+npm run setup:verify-ai           # Verify tools working
+
+# Validate everything works
+npm run validate:complete
+```
+
+#### Emergency Workflow
+```bash
+# When AI tools are unavailable
+# 1. Use manual development workflow
+npm run g:component ComponentName  # Basic generator
+npm test                          # Manual testing
+npm run lint                      # Manual validation
+
+# 2. Document issues for later AI assistance
+echo "Issue: [description]" >> .debug-notes.md
+npm run debug:snapshot            # Capture state for later
 ```
 
 This integration approach transforms individual tools into a cohesive development system, maximizing productivity while

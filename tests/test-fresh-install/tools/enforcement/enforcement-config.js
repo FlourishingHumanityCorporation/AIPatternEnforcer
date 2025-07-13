@@ -4,10 +4,10 @@ const path = require('path');
 
 // Enforcement levels
 const ENFORCEMENT_LEVELS = {
-  SILENT: 0,    // No enforcement, just collect metrics
-  WARNING: 1,   // Show violations but don't block commits
-  PARTIAL: 2,   // Block file naming only (proven reliable)
-  FULL: 3       // Block all violations
+  SILENT: 0, // No enforcement, just collect metrics
+  WARNING: 1, // Show violations but don't block commits
+  PARTIAL: 2, // Block file naming only (proven reliable)
+  FULL: 3 // Block all violations
 };
 
 // Default configuration
@@ -29,23 +29,23 @@ const DEFAULT_CONFIG = {
       blockOnFailure: false, // Start with warnings
       level: ENFORCEMENT_LEVELS.WARNING,
       ignorePatterns: [
-        'node_modules/**',
-        'examples/**',
-        'ai/examples/**',
-        'ai/prompts/**',        // AI prompt templates have different standards
-        'templates/**',
-        'extensions/*/node_modules/**',
-        'docs/testing/**',       // Test documentation can be informal
-        'scripts/**',            // Script documentation can be brief
-        '**/README.md',          // READMEs often have informal language
-        '**/*_TEMPLATE.md',      // Template files are examples
-        'docs/pilot-testing/**', // Pilot docs can be informal for usability
-        'CLAUDE.md',             // Project instructions file has different standards
+      'node_modules/**',
+      'examples/**',
+      'ai/examples/**',
+      'ai/prompts/**', // AI prompt templates have different standards
+      'templates/**',
+      'extensions/*/node_modules/**',
+      'docs/testing/**', // Test documentation can be informal
+      'scripts/**', // Script documentation can be brief
+      '**/README.md', // READMEs often have informal language
+      '**/*_TEMPLATE.md', // Template files are examples
+      'docs/pilot-testing/**', // Pilot docs can be informal for usability
+      'CLAUDE.md' // Project instructions file has different standards
       ]
     },
     bannedDocs: {
       enabled: true,
-      blockOnFailure: true,    // Always block these
+      blockOnFailure: true, // Always block these
       level: ENFORCEMENT_LEVELS.FULL,
       description: 'Prevents creation of status/completion/summary documents'
     }
@@ -59,17 +59,17 @@ const DEFAULT_CONFIG = {
 // Load configuration from project
 function loadConfig() {
   const configPath = path.join(process.cwd(), '.enforcement-config.json');
-  
+
   if (fs.existsSync(configPath)) {
     try {
       const userConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
       return { ...DEFAULT_CONFIG, ...userConfig };
     } catch (error) {
-      console.warn('Warning: Invalid .enforcement-config.json, using defaults');
+      logger.warn('Warning: Invalid .enforcement-config.json, using defaults');
       return DEFAULT_CONFIG;
     }
   }
-  
+
   return DEFAULT_CONFIG;
 }
 
@@ -83,21 +83,21 @@ function saveConfig(config) {
 function shouldBlock(checkName, config = null) {
   const conf = config || loadConfig();
   const check = conf.checks[checkName];
-  
+
   if (!check || !check.enabled) {
     return false;
   }
-  
+
   // Global level override - below PARTIAL means no blocking
   if (conf.level < ENFORCEMENT_LEVELS.PARTIAL) {
     return false;
   }
-  
+
   // At FULL level, all enabled checks block
   if (conf.level >= ENFORCEMENT_LEVELS.FULL) {
     return true;
   }
-  
+
   // Otherwise, check-specific blocking based on level
   return check.blockOnFailure && conf.level >= check.level;
 }
@@ -105,14 +105,14 @@ function shouldBlock(checkName, config = null) {
 // Log metrics
 function logMetrics(checkName, violations, config = null) {
   const conf = config || loadConfig();
-  
+
   if (!conf.metrics.enabled) {
     return;
   }
-  
+
   const metricsPath = path.join(process.cwd(), conf.metrics.logPath);
   let metrics = {};
-  
+
   if (fs.existsSync(metricsPath)) {
     try {
       metrics = JSON.parse(fs.readFileSync(metricsPath, 'utf8'));
@@ -121,49 +121,49 @@ function logMetrics(checkName, violations, config = null) {
       metrics = {};
     }
   }
-  
+
   const today = new Date().toISOString().split('T')[0];
-  
+
   if (!metrics[today]) {
     metrics[today] = {};
   }
-  
+
   if (!metrics[today][checkName]) {
     metrics[today][checkName] = { runs: 0, violations: 0 };
   }
-  
+
   metrics[today][checkName].runs++;
   metrics[today][checkName].violations += violations.length;
-  
+
   // Keep only last 30 days
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-  
-  Object.keys(metrics).forEach(date => {
+
+  Object.keys(metrics).forEach((date) => {
     if (new Date(date) < thirtyDaysAgo) {
       delete metrics[date];
     }
   });
-  
+
   fs.writeFileSync(metricsPath, JSON.stringify(metrics, null, 2));
 }
 
 // Get enforcement level name
 function getLevelName(level) {
-  return Object.keys(ENFORCEMENT_LEVELS).find(key => ENFORCEMENT_LEVELS[key] === level) || 'UNKNOWN';
+  return Object.keys(ENFORCEMENT_LEVELS).find((key) => ENFORCEMENT_LEVELS[key] === level) || 'UNKNOWN';
 }
 
 // CLI commands
 function cli() {
   const args = process.argv.slice(2);
   const command = args[0];
-  
+
   switch (command) {
     case 'status':
       const config = loadConfig();
-      console.log('🔧 Enforcement Configuration:');
-      console.log(`Global Level: ${getLevelName(config.level)}`);
-      console.log('\nCheck Status:');
+      logger.info('🔧 Enforcement Configuration:');
+      logger.info(`Global Level: ${getLevelName(config.level)}`);
+      logger.info('\nCheck Status:');
       Object.entries(config.checks).forEach(([name, check]) => {
         let status;
         if (!check.enabled) {
@@ -173,84 +173,84 @@ function cli() {
         } else {
           status = '🟡 WARNING';
         }
-        console.log(`  ${name}: ${status} (level: ${getLevelName(check.level)})`);
+        logger.info(`  ${name}: ${status} (level: ${getLevelName(check.level)})`);
       });
       break;
-      
+
     case 'set-level':
       const level = args[1];
       if (!level || !ENFORCEMENT_LEVELS[level.toUpperCase()]) {
-        console.error('Usage: node enforcement-config.js set-level <SILENT|WARNING|PARTIAL|FULL>');
+        logger.error('Usage: node enforcement-config.js set-level <SILENT|WARNING|PARTIAL|FULL>');
         process.exit(1);
       }
       const newConfig = loadConfig();
       newConfig.level = ENFORCEMENT_LEVELS[level.toUpperCase()];
       saveConfig(newConfig);
-      console.log(`✅ Set enforcement level to ${level.toUpperCase()}`);
+      logger.info(`✅ Set enforcement level to ${level.toUpperCase()}`);
       break;
-      
+
     case 'enable':
       const checkToEnable = args[1];
       if (!checkToEnable) {
-        console.error('Usage: node enforcement-config.js enable <fileNaming|imports|documentation>');
+        logger.error('Usage: node enforcement-config.js enable <fileNaming|imports|documentation>');
         process.exit(1);
       }
       const enableConfig = loadConfig();
       if (enableConfig.checks[checkToEnable]) {
         enableConfig.checks[checkToEnable].enabled = true;
         saveConfig(enableConfig);
-        console.log(`✅ Enabled ${checkToEnable} check`);
+        logger.info(`✅ Enabled ${checkToEnable} check`);
       } else {
-        console.error(`Unknown check: ${checkToEnable}`);
+        logger.error(`Unknown check: ${checkToEnable}`);
         process.exit(1);
       }
       break;
-      
+
     case 'disable':
       const checkToDisable = args[1];
       if (!checkToDisable) {
-        console.error('Usage: node enforcement-config.js disable <fileNaming|imports|documentation>');
+        logger.error('Usage: node enforcement-config.js disable <fileNaming|imports|documentation>');
         process.exit(1);
       }
       const disableConfig = loadConfig();
       if (disableConfig.checks[checkToDisable]) {
         disableConfig.checks[checkToDisable].enabled = false;
         saveConfig(disableConfig);
-        console.log(`✅ Disabled ${checkToDisable} check`);
+        logger.info(`✅ Disabled ${checkToDisable} check`);
       } else {
-        console.error(`Unknown check: ${checkToDisable}`);
+        logger.error(`Unknown check: ${checkToDisable}`);
         process.exit(1);
       }
       break;
-      
+
     case 'metrics':
       const metricsPath = path.join(process.cwd(), loadConfig().metrics.logPath);
       if (fs.existsSync(metricsPath)) {
         const metrics = JSON.parse(fs.readFileSync(metricsPath, 'utf8'));
-        console.log('📊 Enforcement Metrics (Last 30 Days):');
+        logger.info('📊 Enforcement Metrics (Last 30 Days):');
         Object.entries(metrics).forEach(([date, checks]) => {
-          console.log(`\n${date}:`);
+          logger.info(`\n${date}:`);
           Object.entries(checks).forEach(([check, data]) => {
-            console.log(`  ${check}: ${data.runs} runs, ${data.violations} violations`);
+            logger.info(`  ${check}: ${data.runs} runs, ${data.violations} violations`);
           });
         });
       } else {
-        console.log('No metrics collected yet');
+        logger.info('No metrics collected yet');
       }
       break;
-      
+
     default:
-      console.log('Usage: node enforcement-config.js <status|set-level|enable|disable|metrics>');
-      console.log('');
-      console.log('Commands:');
-      console.log('  status                    Show current configuration');
-      console.log('  set-level <level>         Set global enforcement level');
-      console.log('  enable <check>           Enable specific check');
-      console.log('  disable <check>          Disable specific check');
-      console.log('  metrics                  Show enforcement metrics');
-      console.log('');
-      console.log('Levels: SILENT, WARNING, PARTIAL, FULL');
-      console.log('Checks: fileNaming, imports, documentation');
+      logger.info('Usage: node enforcement-config.js <status|set-level|enable|disable|metrics>');
+      logger.info('');
+      logger.info('Commands:');
+      logger.info('  status                    Show current configuration');
+      logger.info('  set-level <level>         Set global enforcement level');
+      logger.info('  enable <check>           Enable specific check');
+      logger.info('  disable <check>          Disable specific check');
+      logger.info('  metrics                  Show enforcement metrics');
+      logger.info('');
+      logger.info('Levels: SILENT, WARNING, PARTIAL, FULL');
+      logger.info('Checks: fileNaming, imports, documentation');
   }
 }
 

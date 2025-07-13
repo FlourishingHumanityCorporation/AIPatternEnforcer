@@ -1,4 +1,4 @@
-# 🚀 ProjectTemplate: Start Here
+# 🚀 AIPatternEnforcer: Start Here
 
 **One entry point. Clear decisions. Immediate action.**
 
@@ -11,7 +11,7 @@
   5. [🟢 New to AI Development (15 min)](#-new-to-ai-development-15-min)
   6. [🟡 Experienced with AI (30 min) ](#-experienced-with-ai-30-min-)
   7. [🔴 AI Development Expert (60 min)](#-ai-development-expert-60-min)
-8. [🎯 What is ProjectTemplate?](#-what-is-projecttemplate)
+8. [🎯 What is AIPatternEnforcer?](#-what-is-aipatternforcer)
 9. [🆘 Having Issues?](#-having-issues)
   10. [Quick Fixes](#quick-fixes)
   11. [Get Help By Category](#get-help-by-category)
@@ -106,7 +106,7 @@ Docs](docs/architecture/)
 
 **You'll build**: Custom generators, team adoption strategies, advanced automation
 
-## 🎯 What is ProjectTemplate?
+## 🎯 What is AIPatternEnforcer?
 
 **Solves Real AI Development Friction**:
 - ❌ AI forgets project rules → ✅ Persistent context via CLAUDE.md
@@ -142,5 +142,5 @@ Docs](docs/architecture/)
 **🎯 Next Action**: Choose your path above and click the link. Each path is optimized for your experience level and time
 available.
 
-> 💡 **Tip**: Bookmark this page. It's designed to be your consistent starting point for all ProjectTemplate
+> 💡 **Tip**: Bookmark this page. It's designed to be your consistent starting point for all AIPatternEnforcer
 interactions.

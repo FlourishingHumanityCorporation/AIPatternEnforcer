@@ -26,7 +26,7 @@ function colorize(text, color) {
 }
 
 function printHelp() {
-  console.log(`
+  logger.info(`
 ${colorize('🤖 ProjectTemplate Claude Code Validator', 'cyan')}
 
 ${colorize('DESCRIPTION:', 'bright')}
@@ -85,14 +85,14 @@ ${colorize('MORE INFO:', 'bright')}
 
 async function main() {
   const args = process.argv.slice(2);
-  
+
   if (args.includes('--help') || args.length === 0) {
     printHelp();
     process.exit(0);
   }
-  
+
   const validator = new ComplianceValidator();
-  
+
   // Show stats
   if (args.includes('--stats')) {
     const statsFile = path.join(__dirname, '.compliance-stats.json');
@@ -101,26 +101,26 @@ async function main() {
       process.stderr.write(colorize('\n📊 Compliance Statistics:', 'bright') + '\n');
       process.stderr.write(`Total Validations: ${stats.totalValidations || 0}\n`);
       process.stderr.write(`Passed: ${stats.passedValidations || 0}\n`);
-      process.stderr.write(`Compliance Rate: ${((stats.passedValidations / stats.totalValidations) * 100 || 0).toFixed(1)}%\n`);
-      
+      process.stderr.write(`Compliance Rate: ${(stats.passedValidations / stats.totalValidations * 100 || 0).toFixed(1)}%\n`);
+
       if (stats.violations && Object.keys(stats.violations).length > 0) {
         process.stderr.write(colorize('\nTop Violations:', 'yellow') + '\n');
-        Object.entries(stats.violations)
-          .sort((a, b) => b[1] - a[1])
-          .forEach(([rule, count]) => {
-            process.stderr.write(`  ${rule}: ${count} times\n`);
-          });
+        Object.entries(stats.violations).
+        sort((a, b) => b[1] - a[1]).
+        forEach(([rule, count]) => {
+          process.stderr.write(`  ${rule}: ${count} times\n`);
+        });
       }
     } else {
       process.stderr.write(colorize('No statistics available yet.', 'yellow') + '\n');
     }
     process.exit(0);
   }
-  
+
   // Read response text
   const inputFile = args[0];
   let responseText;
-  
+
   try {
     if (inputFile === '-') {
       // Read from stdin
@@ -130,26 +130,26 @@ async function main() {
       responseText = fs.readFileSync(inputFile, 'utf-8');
     }
   } catch (error) {
-    console.error(colorize(`Error reading input: ${error.message}`, 'red'));
+    logger.error(colorize(`Error reading input: ${error.message}`, 'red'));
     process.exit(2);
   }
-  
+
   // Set context
   const context = {
     isComplexRequest: args.includes('--complex'),
     isSimpleQuery: args.includes('--simple')
   };
-  
+
   // Track validation start time
   const startTime = process.hrtime.bigint();
-  
+
   // Validate
   const results = validator.validate(responseText, context);
-  
+
   // Calculate processing time
   const endTime = process.hrtime.bigint();
   const processingTime = Number(endTime - startTime) / 1000000; // Convert to milliseconds
-  
+
   // Save legacy stats
   const statsFile = path.join(__dirname, '.compliance-stats.json');
   try {
@@ -160,9 +160,9 @@ async function main() {
     fs.writeFileSync(statsFile, JSON.stringify(validator.stats, null, 2));
   } catch (error) {
     // Ignore stats errors for now
-    console.error(colorize(`Warning: Could not save stats: ${error.message}`, 'yellow'));
+    logger.error(colorize(`Warning: Could not save stats: ${error.message}`, 'yellow'));
   }
-  
+
   // Track analytics
   try {
     const analytics = new AnalyticsTracker();
@@ -176,86 +176,86 @@ async function main() {
     });
   } catch (error) {
     // Analytics failures should not break validation
-    console.error(colorize(`Warning: Analytics tracking failed: ${error.message}`, 'yellow'));
+    logger.error(colorize(`Warning: Analytics tracking failed: ${error.message}`, 'yellow'));
   }
-  
+
   // Output results
   if (!args.includes('--quiet')) {
-    console.log(colorize('\n🔍 Validation Results:', 'bright'));
-    console.log(`Score: ${results.score}%`);
-    
+    logger.info(colorize('\n🔍 Validation Results:', 'bright'));
+    logger.info(`Score: ${results.score}%`);
+
     if (results.passed) {
-      console.log(colorize('✅ PASSED', 'green'));
+      logger.info(colorize('✅ PASSED', 'green'));
     } else {
-      console.log(colorize('❌ FAILED', 'red'));
+      logger.info(colorize('❌ FAILED', 'red'));
     }
-    
+
     if (results.violations.length > 0) {
-      console.log(colorize('\nViolations:', 'red'));
-      results.violations.forEach(v => {
-        console.log(`  • ${v.description} (${v.severity})`);
+      logger.info(colorize('\nViolations:', 'red'));
+      results.violations.forEach((v) => {
+        logger.info(`  • ${v.description} (${v.severity})`);
       });
     }
-    
+
     if (results.warnings.length > 0) {
-      console.log(colorize('\nWarnings:', 'yellow'));
-      results.warnings.forEach(w => {
-        console.log(`  • ${w.description}`);
+      logger.info(colorize('\nWarnings:', 'yellow'));
+      results.warnings.forEach((w) => {
+        logger.info(`  • ${w.description}`);
       });
     }
-    
+
     // Show actionable tips
     const tips = [];
-    
+
     if (!context.isComplexRequest && !context.isSimpleQuery) {
       tips.push('Use --complex for implementation requests or --simple for quick questions');
     }
-    
-    if (results.violations.some(v => v.rule === 'noImprovedFiles')) {
+
+    if (results.violations.some((v) => v.rule === 'noImprovedFiles')) {
       tips.push('Edit original files instead of creating new versions (e.g., edit auth.js, not auth_improved.js)');
     }
-    
-    if (results.violations.some(v => v.rule === 'promptImprovement')) {
+
+    if (results.violations.some((v) => v.rule === 'promptImprovement')) {
       tips.push('Start complex requests with "**Improved Prompt**: [clear description of task]"');
     }
-    
-    if (results.violations.some(v => v.rule === 'generatorUsage')) {
+
+    if (results.violations.some((v) => v.rule === 'generatorUsage')) {
       tips.push('Use component generators: npm run g:c ComponentName');
     }
-    
-    if (results.violations.some(v => v.rule === 'todoWriteUsage')) {
+
+    if (results.violations.some((v) => v.rule === 'todoWriteUsage')) {
       tips.push('Use TodoWrite tool for multi-step tasks to track progress');
     }
-    
+
     if (results.score < 70) {
       tips.push('Review CLAUDE.md for detailed rules and patterns');
       tips.push('Run "npm run claude:dashboard" to see compliance patterns');
     }
-    
+
     if (tips.length > 0) {
-      console.log(colorize('\n💡 How to Fix:', 'cyan'));
-      tips.forEach(tip => console.log(`  • ${tip}`));
+      logger.info(colorize('\n💡 How to Fix:', 'cyan'));
+      tips.forEach((tip) => logger.info(`  • ${tip}`));
     }
-    
+
     // Show additional resources if needed
     if (!results.passed) {
-      console.log(colorize('\n📚 Resources:', 'blue'));
-      console.log('  • Config: npm run claude:config:status');
-      console.log('  • Dashboard: npm run claude:dashboard');
-      console.log('  • Test patterns: npm run claude:test');
+      logger.info(colorize('\n📚 Resources:', 'blue'));
+      logger.info('  • Config: npm run claude:config:status');
+      logger.info('  • Dashboard: npm run claude:dashboard');
+      logger.info('  • Test patterns: npm run claude:test');
     }
   } else {
     // Quiet mode - just show pass/fail
-    console.log(results.passed ? colorize('PASSED', 'green') : colorize('FAILED', 'red'));
+    logger.info(results.passed ? colorize('PASSED', 'green') : colorize('FAILED', 'red'));
   }
-  
+
   process.exit(results.passed ? 0 : 1);
 }
 
 // Run if called directly
 if (require.main === module) {
-  main().catch(error => {
-    console.error(colorize(`Error: ${error.message}`, 'red'));
+  main().catch((error) => {
+    logger.error(colorize(`Error: ${error.message}`, 'red'));
     process.exit(2);
   });
 }

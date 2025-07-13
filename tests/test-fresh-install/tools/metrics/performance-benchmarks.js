@@ -12,6 +12,13 @@ const chalk = require('chalk');
 const { performance } = require('perf_hooks');
 const { execSync } = require('child_process');
 
+const logger = {
+  info: console.log,
+  error: console.error,
+  warn: console.warn,
+  debug: console.debug
+};
+
 class PerformanceBenchmarks {
   constructor() {
     this.projectRoot = process.cwd();
@@ -20,8 +27,8 @@ class PerformanceBenchmarks {
   }
 
   async benchmark(name, fn, iterations = 3) {
-    console.log(chalk.gray(`🔄 Benchmarking ${name}...`));
-    
+    logger.info(chalk.gray(`🔄 Benchmarking ${name}...`));
+
     const times = [];
     for (let i = 0; i < iterations; i++) {
       const start = performance.now();
@@ -29,11 +36,11 @@ class PerformanceBenchmarks {
       const end = performance.now();
       times.push(end - start);
     }
-    
+
     const avg = times.reduce((a, b) => a + b, 0) / times.length;
     const min = Math.min(...times);
     const max = Math.max(...times);
-    
+
     this.results[name] = {
       average: Math.round(avg),
       min: Math.round(min),
@@ -41,50 +48,50 @@ class PerformanceBenchmarks {
       iterations,
       timestamp: new Date().toISOString()
     };
-    
-    console.log(chalk.green(`   ✓ ${name}: ${Math.round(avg)}ms avg`));
+
+    logger.info(chalk.green(`   ✓ ${name}: ${Math.round(avg)}ms avg`));
     return this.results[name];
   }
 
   async benchmarkGenerators() {
-    console.log(chalk.cyan.bold('\n🔧 Generator Performance Benchmarks\n'));
-    
+    logger.info(chalk.cyan.bold('\n🔧 Generator Performance Benchmarks\n'));
+
     // Component Generator
     await this.benchmark('Component Generator', async () => {
       try {
-        execSync('npm run g:component TestBenchmarkComponent', { 
+        execSync('npm run g:component TestBenchmarkComponent', {
           stdio: 'pipe',
           cwd: this.projectRoot
         });
         // Clean up
         execSync('rm -rf src/components/TestBenchmarkComponent', { stdio: 'pipe' });
       } catch (error) {
+
         // Expected if directory structure doesn't exist
-      }
-    });
+      }});
 
     // API Generator
     await this.benchmark('API Generator', async () => {
       try {
-        execSync('npm run g:api testbenchmark', { 
+        execSync('npm run g:api testbenchmark', {
           stdio: 'pipe',
           cwd: this.projectRoot
         });
         // Clean up
         execSync('rm -rf src/api/testbenchmark', { stdio: 'pipe' });
       } catch (error) {
+
         // Expected if directory structure doesn't exist
-      }
-    });
+      }});
   }
 
   async benchmarkEnforcement() {
-    console.log(chalk.cyan.bold('\n🛡️  Enforcement Performance Benchmarks\n'));
+    logger.info(chalk.cyan.bold('\n🛡️  Enforcement Performance Benchmarks\n'));
 
     // Create temporary test files
     const testDir = path.join(this.projectRoot, '.temp-benchmark');
     const testFiles = [];
-    
+
     try {
       if (!fs.existsSync(testDir)) {
         fs.mkdirSync(testDir);
@@ -116,28 +123,28 @@ class PerformanceBenchmarks {
       });
 
     } catch (error) {
-      console.log(chalk.yellow(`Warning: Enforcement benchmarks limited: ${error.message}`));
+      logger.info(chalk.yellow(`Warning: Enforcement benchmarks limited: ${error.message}`));
     } finally {
       // Clean up
       try {
         execSync(`rm -rf ${testDir}`, { stdio: 'pipe' });
       } catch (error) {
+
         // Ignore cleanup errors
-      }
-    }
+      }}
   }
 
   async benchmarkSetup() {
-    console.log(chalk.cyan.bold('\n⚙️  Setup Performance Benchmarks\n'));
+    logger.info(chalk.cyan.bold('\n⚙️  Setup Performance Benchmarks\n'));
 
     // Git hooks setup
     await this.benchmark('Git Hooks Setup', async () => {
       try {
         execSync('npm run setup:hooks', { stdio: 'pipe' });
       } catch (error) {
+
         // May fail if already set up
-      }
-    });
+      }});
 
     // Documentation validation
     await this.benchmark('Documentation Validation', async () => {
@@ -157,7 +164,7 @@ class PerformanceBenchmarks {
     };
 
     fs.writeFileSync(this.benchmarkFile, JSON.stringify(benchmarkData, null, 2));
-    console.log(chalk.green(`\n💾 Benchmarks saved to: ${this.benchmarkFile}`));
+    logger.info(chalk.green(`\n💾 Benchmarks saved to: ${this.benchmarkFile}`));
   }
 
   loadPreviousBenchmarks() {
@@ -174,30 +181,30 @@ class PerformanceBenchmarks {
   showComparison() {
     const previous = this.loadPreviousBenchmarks();
     if (!previous) {
-      console.log(chalk.yellow('\n📊 No previous benchmarks for comparison'));
+      logger.info(chalk.yellow('\n📊 No previous benchmarks for comparison'));
       return;
     }
 
-    console.log(chalk.cyan.bold('\n📈 Performance Comparison\n'));
-    
+    logger.info(chalk.cyan.bold('\n📈 Performance Comparison\n'));
+
     Object.entries(this.results).forEach(([name, current]) => {
       const prev = previous.results[name];
       if (prev) {
         const diff = current.average - prev.average;
-        const percentChange = ((diff / prev.average) * 100);
+        const percentChange = diff / prev.average * 100;
         const trend = diff > 0 ? '📈' : '📉';
         const color = diff > 0 ? 'red' : 'green';
-        
-        console.log(`${name.padEnd(30)} | ${current.average}ms | ${trend} ${Math.abs(Math.round(percentChange))}%`);
+
+        logger.info(`${name.padEnd(30)} | ${current.average}ms | ${trend} ${Math.abs(Math.round(percentChange))}%`);
       } else {
-        console.log(`${name.padEnd(30)} | ${current.average}ms | 🆕 New`);
+        logger.info(`${name.padEnd(30)} | ${current.average}ms | 🆕 New`);
       }
     });
   }
 
   showSummary() {
-    console.log(chalk.cyan.bold('\n📊 Performance Summary\n'));
-    
+    logger.info(chalk.cyan.bold('\n📊 Performance Summary\n'));
+
     const categories = {
       'Generator Performance': ['Component Generator', 'API Generator'],
       'Enforcement Performance': ['Import Check (10 files)', 'Documentation Style Check', 'No Improved Files Check'],
@@ -205,14 +212,14 @@ class PerformanceBenchmarks {
     };
 
     Object.entries(categories).forEach(([category, benchmarks]) => {
-      console.log(chalk.blue.bold(category));
-      benchmarks.forEach(benchmark => {
+      logger.info(chalk.blue.bold(category));
+      benchmarks.forEach((benchmark) => {
         const result = this.results[benchmark];
         if (result) {
-          console.log(`   ${benchmark.padEnd(25)} | ${result.average}ms`);
+          logger.info(`   ${benchmark.padEnd(25)} | ${result.average}ms`);
         }
       });
-      console.log('');
+      logger.info('');
     });
 
     // Performance insights
@@ -220,51 +227,51 @@ class PerformanceBenchmarks {
   }
 
   showPerformanceInsights() {
-    console.log(chalk.yellow.bold('🔍 Performance Insights\n'));
-    
+    logger.info(chalk.yellow.bold('🔍 Performance Insights\n'));
+
     const insights = [];
-    
+
     // Generator performance analysis
     const componentTime = this.results['Component Generator']?.average;
     const apiTime = this.results['API Generator']?.average;
-    
+
     if (componentTime && componentTime > 3000) {
       insights.push('Component generator is slower than expected (>3s). Consider optimizing template compilation.');
     }
-    
+
     if (apiTime && apiTime > 5000) {
       insights.push('API generator is slower than expected (>5s). Consider caching template processing.');
     }
-    
+
     // Enforcement performance analysis
     const importCheck = this.results['Import Check (10 files)']?.average;
     if (importCheck && importCheck > 2000) {
       insights.push('Import checking is slow for 10 files. Consider parallel processing or file filtering.');
     }
-    
+
     // Setup performance
     const docsValidation = this.results['Documentation Validation']?.average;
     if (docsValidation && docsValidation > 30000) {
       insights.push('Documentation validation is very slow (>30s). Consider incremental validation.');
     }
-    
+
     if (insights.length === 0) {
-      console.log(chalk.green('✅ All performance metrics within expected ranges!'));
+      logger.info(chalk.green('✅ All performance metrics within expected ranges!'));
     } else {
       insights.forEach((insight, i) => {
-        console.log(`${i + 1}. ${insight}`);
+        logger.info(`${i + 1}. ${insight}`);
       });
     }
   }
 
   async runFullBenchmark() {
-    console.log(chalk.cyan.bold('🚀 ProjectTemplate Performance Benchmark Suite\n'));
-    console.log(chalk.gray('This will test performance of key operations...\n'));
+    logger.info(chalk.cyan.bold('🚀 ProjectTemplate Performance Benchmark Suite\n'));
+    logger.info(chalk.gray('This will test performance of key operations...\n'));
 
     await this.benchmarkGenerators();
     await this.benchmarkEnforcement();
     await this.benchmarkSetup();
-    
+
     this.saveBenchmarks();
     this.showComparison();
     this.showSummary();
@@ -275,34 +282,34 @@ class PerformanceBenchmarks {
 if (require.main === module) {
   const benchmarks = new PerformanceBenchmarks();
   const command = process.argv[2];
-  
+
   switch (command) {
     case 'generators':
       benchmarks.benchmarkGenerators().then(() => benchmarks.saveBenchmarks());
       break;
-      
+
     case 'enforcement':
       benchmarks.benchmarkEnforcement().then(() => benchmarks.saveBenchmarks());
       break;
-      
+
     case 'setup':
       benchmarks.benchmarkSetup().then(() => benchmarks.saveBenchmarks());
       break;
-      
+
     case 'summary':
       const previous = benchmarks.loadPreviousBenchmarks();
       if (previous) {
         benchmarks.results = previous.results;
         benchmarks.showSummary();
       } else {
-        console.log(chalk.yellow('No benchmark data found. Run benchmarks first.'));
+        logger.info(chalk.yellow('No benchmark data found. Run benchmarks first.'));
       }
       break;
-      
+
     case 'compare':
       benchmarks.showComparison();
       break;
-      
+
     default:
       benchmarks.runFullBenchmark();
   }

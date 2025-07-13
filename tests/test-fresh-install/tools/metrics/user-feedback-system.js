@@ -25,15 +25,15 @@ class UserFeedbackSystem {
 
   getUserId() {
     const userFile = path.join(this.projectRoot, '.user-id');
-    
+
     if (fs.existsSync(userFile)) {
       return fs.readFileSync(userFile, 'utf8').trim();
     }
-    
+
     // Generate anonymous user ID
     const userId = crypto.randomBytes(16).toString('hex');
     fs.writeFileSync(userFile, userId);
-    
+
     // Add to .gitignore to keep it local
     const gitignorePath = path.join(this.projectRoot, '.gitignore');
     if (fs.existsSync(gitignorePath)) {
@@ -42,7 +42,7 @@ class UserFeedbackSystem {
         fs.appendFileSync(gitignorePath, '\n# User analytics (local only)\n.user-id\n.user-metrics.json\n.user-feedback.json\n');
       }
     }
-    
+
     return userId;
   }
 
@@ -88,14 +88,14 @@ class UserFeedbackSystem {
   trackGeneratorUsage(generatorType, timeSaved = 0) {
     const metrics = this.loadMetrics();
     const generator = metrics.generators[generatorType];
-    
+
     if (generator) {
       generator.usage++;
       generator.timeSaved += timeSaved;
       generator.lastUsed = new Date().toISOString();
-      
+
       metrics.productivity.totalTimeSaved += timeSaved;
-      
+
       if (!metrics.experience.firstGeneratorUsed) {
         metrics.experience.firstGeneratorUsed = {
           type: generatorType,
@@ -103,22 +103,22 @@ class UserFeedbackSystem {
         };
       }
     }
-    
+
     this.saveMetrics(metrics);
-    console.log(chalk.gray(`📊 Tracked: ${generatorType} generator used (+${timeSaved}min saved)`));
+    logger.info(chalk.gray(`📊 Tracked: ${generatorType} generator used (+${timeSaved}min saved)`));
   }
 
   trackEnforcementViolation(ruleType, resolved = false) {
     const metrics = this.loadMetrics();
-    
+
     metrics.enforcement.violations.total++;
     if (resolved) metrics.enforcement.violations.resolved++;
-    
+
     if (!metrics.enforcement.rulesTriggered[ruleType]) {
       metrics.enforcement.rulesTriggered[ruleType] = 0;
     }
     metrics.enforcement.rulesTriggered[ruleType]++;
-    
+
     this.saveMetrics(metrics);
   }
 
@@ -144,13 +144,13 @@ class UserFeedbackSystem {
     if (metrics.currentSession) {
       const duration = Date.now() - metrics.currentSession.startTime;
       const durationMinutes = Math.round(duration / (1000 * 60));
-      
+
       // Update average session length
       const totalSessions = metrics.productivity.sessionsCount;
       const currentAvg = metrics.productivity.averageSessionLength || 0;
-      metrics.productivity.averageSessionLength = 
-        Math.round((currentAvg * (totalSessions - 1) + durationMinutes) / totalSessions);
-      
+      metrics.productivity.averageSessionLength =
+      Math.round((currentAvg * (totalSessions - 1) + durationMinutes) / totalSessions);
+
       delete metrics.currentSession;
       this.saveMetrics(metrics);
     }
@@ -158,7 +158,7 @@ class UserFeedbackSystem {
 
   collectFeedback(type, data) {
     const feedback = this.loadFeedback();
-    
+
     feedback.entries.push({
       id: crypto.randomBytes(8).toString('hex'),
       type,
@@ -167,7 +167,7 @@ class UserFeedbackSystem {
       sessionId: this.sessionId,
       userId: this.getUserId()
     });
-    
+
     this.saveFeedback(feedback);
   }
 
@@ -192,38 +192,38 @@ class UserFeedbackSystem {
 
   showProductivityReport() {
     const metrics = this.loadMetrics();
-    
-    console.log(chalk.cyan.bold('\n📊 Your ProjectTemplate Productivity Report\n'));
-    
+
+    logger.info(chalk.cyan.bold('\n📊 Your ProjectTemplate Productivity Report\n'));
+
     // Generator usage
-    console.log(chalk.blue('🔧 Generator Usage:'));
+    logger.info(chalk.blue('🔧 Generator Usage:'));
     Object.entries(metrics.generators).forEach(([type, data]) => {
       if (data.usage > 0) {
-        console.log(`   ${type.padEnd(12)} | ${data.usage.toString().padEnd(8)} uses | ${data.timeSaved}min saved`);
+        logger.info(`   ${type.padEnd(12)} | ${data.usage.toString().padEnd(8)} uses | ${data.timeSaved}min saved`);
       }
     });
-    
+
     // Overall productivity
-    console.log(chalk.green(`\n💡 Total Time Saved: ${metrics.productivity.totalTimeSaved} minutes`));
-    console.log(chalk.green(`📈 Sessions: ${metrics.productivity.sessionsCount}`));
-    console.log(chalk.green(`⏱️  Avg Session: ${metrics.productivity.averageSessionLength}min`));
-    
+    logger.info(chalk.green(`\n💡 Total Time Saved: ${metrics.productivity.totalTimeSaved} minutes`));
+    logger.info(chalk.green(`📈 Sessions: ${metrics.productivity.sessionsCount}`));
+    logger.info(chalk.green(`⏱️  Avg Session: ${metrics.productivity.averageSessionLength}min`));
+
     // Enforcement effectiveness
     const enforcement = metrics.enforcement;
     if (enforcement.violations.total > 0) {
-      const resolutionRate = Math.round((enforcement.resolved / enforcement.total) * 100);
-      console.log(chalk.yellow(`\n🛡️  Enforcement: ${enforcement.violations.resolved}/${enforcement.violations.total} violations resolved (${resolutionRate}%)`));
+      const resolutionRate = Math.round(enforcement.resolved / enforcement.total * 100);
+      logger.info(chalk.yellow(`\n🛡️  Enforcement: ${enforcement.violations.resolved}/${enforcement.violations.total} violations resolved (${resolutionRate}%)`));
     }
-    
+
     // Weekly projection
     const weeksUsed = Math.max(1, Math.ceil(metrics.productivity.sessionsCount / 5));
     const weeklyTimeSaved = Math.round(metrics.productivity.totalTimeSaved / weeksUsed);
-    console.log(chalk.cyan(`\n🚀 Weekly Average: ~${weeklyTimeSaved} minutes saved per week`));
-    
+    logger.info(chalk.cyan(`\n🚀 Weekly Average: ~${weeklyTimeSaved} minutes saved per week`));
+
     if (weeklyTimeSaved > 60) {
       const hours = Math.floor(weeklyTimeSaved / 60);
       const minutes = weeklyTimeSaved % 60;
-      console.log(chalk.green(`   That's ${hours}h ${minutes}m returned to your week! 🎯`));
+      logger.info(chalk.green(`   That's ${hours}h ${minutes}m returned to your week! 🎯`));
     }
   }
 
@@ -231,7 +231,7 @@ class UserFeedbackSystem {
   detectFrictionPoints() {
     const metrics = this.loadMetrics();
     const frictionPoints = [];
-    
+
     // Low generator adoption
     Object.entries(metrics.generators).forEach(([type, data]) => {
       if (data.usage === 0 && metrics.productivity.sessionsCount > 3) {
@@ -243,7 +243,7 @@ class UserFeedbackSystem {
         });
       }
     });
-    
+
     // High enforcement overrides
     const overrideRate = metrics.enforcement.userOverrides / Math.max(1, metrics.enforcement.violations.total);
     if (overrideRate > 0.3) {
@@ -254,7 +254,7 @@ class UserFeedbackSystem {
         suggestion: 'Consider adjusting enforcement level - rules may be too strict'
       });
     }
-    
+
     // Short sessions (indicating frustration)
     if (metrics.productivity.averageSessionLength < 5 && metrics.productivity.sessionsCount > 5) {
       frictionPoints.push({
@@ -264,14 +264,14 @@ class UserFeedbackSystem {
         suggestion: 'Sessions are very short - are there blocking issues preventing productive work?'
       });
     }
-    
+
     return frictionPoints;
   }
 
   exportAnonymizedData() {
     const metrics = this.loadMetrics();
     const feedback = this.loadFeedback();
-    
+
     // Remove identifying information
     const anonymized = {
       metrics: {
@@ -279,19 +279,19 @@ class UserFeedbackSystem {
         userId: 'anonymized',
         createdAt: null
       },
-      feedback: feedback.entries.map(entry => ({
+      feedback: feedback.entries.map((entry) => ({
         ...entry,
         userId: 'anonymized'
       })),
       exportedAt: new Date().toISOString()
     };
-    
+
     const exportFile = path.join(this.projectRoot, '.anonymous-usage-data.json');
     fs.writeFileSync(exportFile, JSON.stringify(anonymized, null, 2));
-    
-    console.log(chalk.green(`📤 Anonymous usage data exported to: ${exportFile}`));
-    console.log(chalk.gray('This data helps improve ProjectTemplate for everyone!'));
-    
+
+    logger.info(chalk.green(`📤 Anonymous usage data exported to: ${exportFile}`));
+    logger.info(chalk.gray('This data helps improve ProjectTemplate for everyone!'));
+
     return exportFile;
   }
 }
@@ -300,56 +300,56 @@ class UserFeedbackSystem {
 if (require.main === module) {
   const feedback = new UserFeedbackSystem();
   const command = process.argv[2];
-  
+
   switch (command) {
     case 'track-generator':
-      const [, , , generatorType, timeSaved] = process.argv;
+      const [,,, generatorType, timeSaved] = process.argv;
       feedback.trackGeneratorUsage(generatorType, parseInt(timeSaved) || 0);
       break;
-      
+
     case 'track-violation':
-      const [, , , ruleType, resolved] = process.argv;
+      const [,,, ruleType, resolved] = process.argv;
       feedback.trackEnforcementViolation(ruleType, resolved === 'true');
       break;
-      
+
     case 'start-session':
       feedback.startSession();
       break;
-      
+
     case 'end-session':
       feedback.endSession();
       break;
-      
+
     case 'report':
       feedback.showProductivityReport();
       break;
-      
+
     case 'friction':
       const frictionPoints = feedback.detectFrictionPoints();
       if (frictionPoints.length > 0) {
-        console.log(chalk.yellow.bold('\n⚠️  Potential Friction Points Detected:\n'));
+        logger.info(chalk.yellow.bold('\n⚠️  Potential Friction Points Detected:\n'));
         frictionPoints.forEach((point, i) => {
-          console.log(`${i + 1}. ${point.suggestion}`);
+          logger.info(`${i + 1}. ${point.suggestion}`);
         });
       } else {
-        console.log(chalk.green('\n✅ No significant friction points detected!'));
+        logger.info(chalk.green('\n✅ No significant friction points detected!'));
       }
       break;
-      
+
     case 'export':
       feedback.exportAnonymizedData();
       break;
-      
+
     default:
-      console.log(chalk.cyan.bold('ProjectTemplate User Feedback System\n'));
-      console.log('Commands:');
-      console.log('  track-generator <type> [timeSaved]  - Track generator usage');
-      console.log('  track-violation <rule> [resolved]   - Track enforcement violations');
-      console.log('  start-session                      - Start tracking session');
-      console.log('  end-session                        - End tracking session');
-      console.log('  report                             - Show productivity report');
-      console.log('  friction                           - Detect friction points');
-      console.log('  export                             - Export anonymous data');
+      logger.info(chalk.cyan.bold('ProjectTemplate User Feedback System\n'));
+      logger.info('Commands:');
+      logger.info('  track-generator <type> [timeSaved]  - Track generator usage');
+      logger.info('  track-violation <rule> [resolved]   - Track enforcement violations');
+      logger.info('  start-session                      - Start tracking session');
+      logger.info('  end-session                        - End tracking session');
+      logger.info('  report                             - Show productivity report');
+      logger.info('  friction                           - Detect friction points');
+      logger.info('  export                             - Export anonymous data');
   }
 }
 

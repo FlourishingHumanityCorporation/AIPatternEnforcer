@@ -18,21 +18,21 @@ function validateFilePath(filePath) {
 
   // Check for banned filename patterns  
   const bannedPatterns = [
-    /_improved\./,
-    /_enhanced\./,
-    /_v\d+\./,
-    /_updated\./,
-    /_new\./,
-    /_refactored\./,
-    /_final\./,
-    /_copy\./,
-    /_backup\./,
-    /_old\./,
-    /_temp\./,
-    /_tmp\./,
-    /_FIXED\./,
-    /_COMPLETE\./,
-  ];
+  /_improved\./,
+  /_enhanced\./,
+  /_v\d+\./,
+  /_updated\./,
+  /_new\./,
+  /_refactored\./,
+  /_final\./,
+  /_copy\./,
+  /_backup\./,
+  /_old\./,
+  /_temp\./,
+  /_tmp\./,
+  /_FIXED\./,
+  /_COMPLETE\./];
+
 
   for (const pattern of bannedPatterns) {
     if (pattern.test(fileName)) {
@@ -47,10 +47,10 @@ function validateFilePath(filePath) {
   // Check for banned document types
   if (fileName.endsWith('.md')) {
     const bannedEndings = [
-      'SUMMARY.md', 'REPORT.md', 'COMPLETE.md', 'COMPLETION.md',
-      'FIXED.md', 'DONE.md', 'FINISHED.md', 'STATUS.md', 'FINAL.md'
-    ];
-    
+    'SUMMARY.md', 'REPORT.md', 'COMPLETE.md', 'COMPLETION.md',
+    'FIXED.md', 'DONE.md', 'FINISHED.md', 'STATUS.md', 'FINAL.md'];
+
+
     for (const ending of bannedEndings) {
       if (fileName.toUpperCase().endsWith(ending.toUpperCase())) {
         violations.push({
@@ -64,16 +64,16 @@ function validateFilePath(filePath) {
 
   // Check for root directory violations
   const allowedRootFiles = [
-    'README.md', 'LICENSE', 'CLAUDE.md', 'CONTRIBUTING.md', 'SETUP.md', 'FRICTION-MAPPING.md',
-    'QUICK-START.md', 'USER-JOURNEY.md', 'FULL-GUIDE.md', 'DOCS_INDEX.md', // Progressive documentation
-    'package.json', 'package-lock.json', 'requirements.txt', 'go.mod', 'cargo.toml',
-    'tsconfig.json', 'vite.config.js', 'webpack.config.js', '.eslintrc.json', '.prettierrc',
-    '.env.example', 'Dockerfile', 'docker-compose.yml'
-  ];
+  'README.md', 'LICENSE', 'CLAUDE.md', 'CONTRIBUTING.md', 'SETUP.md', 'FRICTION-MAPPING.md',
+  'QUICK-START.md', 'USER-JOURNEY.md', 'FULL-GUIDE.md', 'DOCS_INDEX.md', // Progressive documentation
+  'package.json', 'package-lock.json', 'requirements.txt', 'go.mod', 'cargo.toml',
+  'tsconfig.json', 'vite.config.js', 'webpack.config.js', '.eslintrc.json', '.prettierrc',
+  '.env.example', 'Dockerfile', 'docker-compose.yml'];
+
 
   const relativePath = path.relative(process.cwd(), filePath);
   const isInRoot = !relativePath.includes('/') && !relativePath.startsWith('..');
-  
+
   if (isInRoot && !allowedRootFiles.includes(fileName)) {
     violations.push({
       type: 'root-directory',
@@ -87,7 +87,7 @@ function validateFilePath(filePath) {
 
 function validateFileContent(content, filePath) {
   const violations = [];
-  
+
   if (!content || typeof content !== 'string') {
     return violations;
   }
@@ -96,13 +96,13 @@ function validateFileContent(content, filePath) {
   if (filePath.endsWith('.md')) {
     const lines = content.split('\n').slice(0, 10);
     const bannedContentPatterns = [
-      /^#\s*✅.*Complete/i,
-      /^#.*Implementation Complete/i,
-      /^#.*Audit Complete/i,
-      /^#.*Final Report/i,
-      /^##\s*✅\s*Completed Tasks/i,
-      /^##\s*What Was Accomplished/i,
-    ];
+    /^#\s*✅.*Complete/i,
+    /^#.*Implementation Complete/i,
+    /^#.*Audit Complete/i,
+    /^#.*Final Report/i,
+    /^##\s*✅\s*Completed Tasks/i,
+    /^##\s*What Was Accomplished/i];
+
 
     for (const line of lines) {
       for (const pattern of bannedContentPatterns) {
@@ -126,7 +126,7 @@ function main() {
     // Read JSON input from stdin
     let inputData = '';
     process.stdin.setEncoding('utf8');
-    
+
     process.stdin.on('readable', () => {
       const chunk = process.stdin.read();
       if (chunk !== null) {
@@ -138,7 +138,7 @@ function main() {
       try {
         const hookData = JSON.parse(inputData);
         const { tool_name, tool_input } = hookData;
-        
+
         // Only validate file operations
         if (!['Write', 'Edit', 'MultiEdit'].includes(tool_name)) {
           process.exit(0);
@@ -151,7 +151,7 @@ function main() {
 
         // Validate file path
         const pathViolations = validateFilePath(filePath);
-        
+
         // Validate content for Write operations
         let contentViolations = [];
         if (tool_name === 'Write' && tool_input.content) {
@@ -162,35 +162,35 @@ function main() {
 
         if (allViolations.length > 0) {
           // Output violations to stderr (will be shown to Claude)
-          console.error('🚫 ProjectTemplate Enforcement Violations:');
-          console.error('');
-          
+          logger.error('🚫 ProjectTemplate Enforcement Violations:');
+          logger.error('');
+
           allViolations.forEach((violation, index) => {
-            console.error(`${index + 1}. ${violation.reason}`);
-            console.error(`   💡 ${violation.suggestion}`);
+            logger.error(`${index + 1}. ${violation.reason}`);
+            logger.error(`   💡 ${violation.suggestion}`);
             if (violation.line) {
-              console.error(`   📍 "${violation.line}"`);
+              logger.error(`   📍 "${violation.line}"`);
             }
-            console.error('');
+            logger.error('');
           });
 
-          console.error('See docs/guides/enforcement/ENFORCEMENT.md for detailed guidance.');
-          
+          logger.error('See docs/guides/enforcement/ENFORCEMENT.md for detailed guidance.');
+
           // Exit code 2 blocks the tool call and shows stderr to Claude
           process.exit(2);
         }
 
         // No violations found
         process.exit(0);
-        
+
       } catch (error) {
-        console.error('Error parsing hook input:', error.message);
+        logger.error('Error parsing hook input:', error.message);
         process.exit(1);
       }
     });
 
   } catch (error) {
-    console.error('Hook execution error:', error.message);
+    logger.error('Hook execution error:', error.message);
     process.exit(1);
   }
 }

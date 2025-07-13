@@ -44,7 +44,11 @@
     }
   },
   "testing": {
-    "tools": ["securityheaders.com", "Mozilla Observatory", "SSL Labs"],
+    "tools": [
+      "securityheaders.com",
+      "Mozilla Observatory",
+      "SSL Labs"
+    ],
     "command": "npm run test:security:headers"
   },
   "exceptions": {
@@ -54,7 +58,10 @@
     },
     "embed": {
       "X-Frame-Options": "SAMEORIGIN for embed routes",
-      "routes": ["/embed/*", "/widget/*"]
+      "routes": [
+        "/embed/*",
+        "/widget/*"
+      ]
     }
   }
 }

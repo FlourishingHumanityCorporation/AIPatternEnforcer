@@ -18,61 +18,61 @@ const path = require('path');
 const BANNED_PATTERNS = {
   // Filename endings (case-insensitive)
   endings: [
-    'SUMMARY.md',
-    'REPORT.md',
-    'COMPLETE.md',
-    'COMPLETION.md',
-    'FIXED.md',
-    'DONE.md',
-    'FINISHED.md',
-    'STATUS.md',
-    'FINAL.md'
-  ],
-  
+  'SUMMARY.md',
+  'REPORT.md',
+  'COMPLETE.md',
+  'COMPLETION.md',
+  'FIXED.md',
+  'DONE.md',
+  'FINISHED.md',
+  'STATUS.md',
+  'FINAL.md'],
+
+
   // Filename patterns (case-insensitive)
   patterns: [
-    /^COMPLETE[-_]/i,
-    /^DONE[-_]/i,
-    /^FIXED[-_]/i,
-    /^FINISHED[-_]/i,
-    /^FINAL[-_]/i,
-    /[-_]COMPLETE$/i,
-    /[-_]SUMMARY$/i,
-    /[-_]REPORT$/i,
-    /[-_]STATUS$/i,
-    /[-_]FINAL$/i
-  ],
-  
+  /^COMPLETE[-_]/i,
+  /^DONE[-_]/i,
+  /^FIXED[-_]/i,
+  /^FINISHED[-_]/i,
+  /^FINAL[-_]/i,
+  /[-_]COMPLETE$/i,
+  /[-_]SUMMARY$/i,
+  /[-_]REPORT$/i,
+  /[-_]STATUS$/i,
+  /[-_]FINAL$/i],
+
+
   // Content patterns that indicate completion docs
   contentPatterns: [
-    /^#\s*✅.*Complete/i,
-    /^#.*Implementation Complete/i,
-    /^#.*Audit Complete/i,
-    /^#.*Audit Summary$/i,
-    /^#.*Final Report/i,
-    /^#.*Project.*Summary$/i,
-    /^#.*Enhancement.*Summary$/i,
-    /^##\s*✅\s*Completed Tasks/i,
-    /^##\s*What Was Accomplished/i,
-    /^##\s*Audit Completed/i
-  ]
+  /^#\s*✅.*Complete/i,
+  /^#.*Implementation Complete/i,
+  /^#.*Audit Complete/i,
+  /^#.*Audit Summary$/i,
+  /^#.*Final Report/i,
+  /^#.*Project.*Summary$/i,
+  /^#.*Enhancement.*Summary$/i,
+  /^##\s*✅\s*Completed Tasks/i,
+  /^##\s*What Was Accomplished/i,
+  /^##\s*Audit Completed/i]
+
 };
 
 // Directories to skip
 const SKIP_DIRS = [
-  'node_modules',
-  '.git',
-  'dist',
-  'build',
-  '.next',
-  'coverage',
-  '.turbo'
-];
+'node_modules',
+'.git',
+'dist',
+'build',
+'.next',
+'coverage',
+'.turbo'];
+
 
 function isBannedFilename(filename) {
   const basename = path.basename(filename);
   const upperBase = basename.toUpperCase();
-  
+
   // Check exact endings
   for (const ending of BANNED_PATTERNS.endings) {
     if (upperBase.endsWith(ending.toUpperCase())) {
@@ -83,7 +83,7 @@ function isBannedFilename(filename) {
       };
     }
   }
-  
+
   // Check patterns
   for (const pattern of BANNED_PATTERNS.patterns) {
     if (pattern.test(basename)) {
@@ -94,7 +94,7 @@ function isBannedFilename(filename) {
       };
     }
   }
-  
+
   return { banned: false };
 }
 
@@ -102,7 +102,7 @@ function checkFileContent(filePath) {
   try {
     const content = fs.readFileSync(filePath, 'utf8');
     const lines = content.split('\n').slice(0, 10); // Check first 10 lines
-    
+
     for (const line of lines) {
       for (const pattern of BANNED_PATTERNS.contentPatterns) {
         if (pattern.test(line)) {
@@ -116,20 +116,20 @@ function checkFileContent(filePath) {
       }
     }
   } catch (error) {
+
     // Can't read file, skip content check
   }
-  
   return { banned: false };
 }
 
 function findBannedDocuments(dir = '.', violations = []) {
   try {
     const items = fs.readdirSync(dir);
-    
+
     for (const item of items) {
       const fullPath = path.join(dir, item);
       const stat = fs.statSync(fullPath);
-      
+
       if (stat.isDirectory()) {
         const dirname = path.basename(fullPath);
         if (!SKIP_DIRS.includes(dirname) && !dirname.startsWith('.')) {
@@ -146,7 +146,7 @@ function findBannedDocuments(dir = '.', violations = []) {
             suggestion: filenameCheck.suggestion
           });
         }
-        
+
         // Check content for markdown files
         const contentCheck = checkFileContent(fullPath);
         if (contentCheck.banned) {
@@ -161,9 +161,9 @@ function findBannedDocuments(dir = '.', violations = []) {
       }
     }
   } catch (error) {
-    console.error(`Error scanning directory ${dir}:`, error.message);
+    logger.error(`Error scanning directory ${dir}:`, error.message);
   }
-  
+
   return violations;
 }
 
@@ -171,59 +171,59 @@ function main() {
   const args = process.argv.slice(2);
   const isQuiet = args.includes('--quiet');
   const isFix = args.includes('--fix');
-  
+
   const violations = findBannedDocuments();
-  
+
   if (violations.length === 0) {
     if (!isQuiet) {
-      console.log('✅ No banned document types found');
+      logger.info('✅ No banned document types found');
     }
     process.exit(0);
   }
-  
+
   // Report violations
   if (!isQuiet) {
-    console.error('\n❌ Found banned document types:\n');
-    
+    logger.error('\n❌ Found banned document types:\n');
+
     const byType = {
-      filename: violations.filter(v => v.type === 'filename'),
-      content: violations.filter(v => v.type === 'content')
+      filename: violations.filter((v) => v.type === 'filename'),
+      content: violations.filter((v) => v.type === 'content')
     };
-    
+
     if (byType.filename.length > 0) {
-      console.error('📄 Banned Filenames:');
-      byType.filename.forEach(v => {
-        console.error(`  ${v.file}`);
-        console.error(`    ❌ ${v.reason}`);
-        console.error(`    💡 ${v.suggestion}\n`);
+      logger.error('📄 Banned Filenames:');
+      byType.filename.forEach((v) => {
+        logger.error(`  ${v.file}`);
+        logger.error(`    ❌ ${v.reason}`);
+        logger.error(`    💡 ${v.suggestion}\n`);
       });
     }
-    
+
     if (byType.content.length > 0) {
-      console.error('📝 Banned Content Patterns:');
-      byType.content.forEach(v => {
-        console.error(`  ${v.file}`);
-        console.error(`    ❌ ${v.reason}`);
+      logger.error('📝 Banned Content Patterns:');
+      byType.content.forEach((v) => {
+        logger.error(`  ${v.file}`);
+        logger.error(`    ❌ ${v.reason}`);
         if (v.line) {
-          console.error(`    📍 "${v.line}"`);
+          logger.error(`    📍 "${v.line}"`);
         }
-        console.error(`    💡 ${v.suggestion}\n`);
+        logger.error(`    💡 ${v.suggestion}\n`);
       });
     }
-    
-    console.error(`Total violations: ${violations.length}\n`);
-    console.error('🚫 These document types are banned by CLAUDE.md standards:');
-    console.error('   - Status/completion announcements');
-    console.error('   - Summary documents');
-    console.error('   - Report documents (except in docs/reports/ for specific purposes)');
-    console.error('   - Any document indicating "done" or "complete"\n');
-    console.error('💡 Fix: Delete these files or convert to proper technical documentation\n');
+
+    logger.error(`Total violations: ${violations.length}\n`);
+    logger.error('🚫 These document types are banned by CLAUDE.md standards:');
+    logger.error('   - Status/completion announcements');
+    logger.error('   - Summary documents');
+    logger.error('   - Report documents (except in docs/reports/ for specific purposes)');
+    logger.error('   - Any document indicating "done" or "complete"\n');
+    logger.error('💡 Fix: Delete these files or convert to proper technical documentation\n');
   }
-  
+
   if (isFix && !isQuiet) {
-    console.log('--fix option would delete these files (not implemented for safety)');
+    logger.info('--fix option would delete these files (not implemented for safety)');
   }
-  
+
   // Always exit with error when violations found
   process.exit(1);
 }
