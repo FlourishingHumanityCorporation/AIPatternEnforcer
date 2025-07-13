@@ -1,0 +1,11 @@
+{
+  "timestamp": "2025-07-13T03:50:46.105Z",
+  "toolName": "Edit",
+  "filePath": "/Users/paulrohde/CodeProjects/AIPatternEnforcer/tools/generators/component-generator.js",
+  "protection": {
+    "protected": true,
+    "type": "generator"
+  },
+  "hookDev": "true",
+  "blocking": true
+}

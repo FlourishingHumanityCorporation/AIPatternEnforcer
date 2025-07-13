@@ -356,11 +356,20 @@ process.stdin.on('end', () => {
   try {
     const input = JSON.parse(inputData);
     const toolInput = input.tool_input || {};
-    const filePath = toolInput.file_path || toolInput.filePath || '';
-    const content = toolInput.content || toolInput.new_string || '';
+    const toolResponse = input.tool_response || {};
     
-    // Skip if no file path or content
-    if (!filePath || !content) {
+    // Get file path from input or response (PostToolUse pattern)
+    const filePath = toolInput.file_path || toolInput.filePath || 
+                    toolResponse.filePath || toolResponse.file_path || '';
+    
+    // Skip if no file path
+    if (!filePath) {
+      process.exit(0);
+    }
+    
+    // Skip if file is in hooks or scripts directory to prevent self-modification
+    if (filePath.includes('/hooks/') || filePath.includes('\\hooks\\') ||
+        filePath.includes('/scripts/') || filePath.includes('\\scripts\\')) {
       process.exit(0);
     }
     
@@ -369,6 +378,13 @@ process.stdin.on('end', () => {
       process.exit(0);
     }
     
+    // Skip if file doesn't exist (PostToolUse should only work on existing files)
+    if (!fs.existsSync(filePath)) {
+      process.exit(0);
+    }
+    
+    // Read the actual file content from disk
+    const content = fs.readFileSync(filePath, 'utf8');
     const result = cleanupImports(content, filePath);
     
     if (result.cleaned) {
@@ -376,19 +392,20 @@ process.stdin.on('end', () => {
       try {
         fs.writeFileSync(filePath, result.content, 'utf8');
         
-        // Log cleanup actions
+        // Log cleanup actions to stdout (PostToolUse pattern)
         const messages = [];
         if (result.removedCount > 0) {
-          messages.push(`Removed ${result.removedCount} unused imports`);
+          messages.push(`removed ${result.removedCount} unused imports`);
         }
         if (result.consolidatedCount > 0) {
-          messages.push(`Consolidated ${result.consolidatedCount} duplicate imports`);
+          messages.push(`consolidated ${result.consolidatedCount} duplicate imports`);
         }
         
-        console.error(`🧹 Import Janitor: ${messages.join(', ')} in ${path.basename(filePath)}`);
+        const fileName = path.basename(filePath);
+        process.stdout.write(`🧹 Import cleanup: ${messages.join(', ')} in ${fileName}\n`);
       } catch (writeError) {
         // Log error but don't fail the operation
-        console.error(`Import Janitor warning: Could not write to ${filePath}: ${writeError.message}`);
+        process.stderr.write(`Import Janitor warning: Could not write to ${filePath}: ${writeError.message}\n`);
       }
     }
     
@@ -396,7 +413,7 @@ process.stdin.on('end', () => {
     
   } catch (error) {
     // Always allow operation if hook fails - fail open
-    console.error(`Import Janitor error: ${error.message}`);
+    process.stderr.write(`Import Janitor error: ${error.message}\n`);
     process.exit(0);
   }
 });

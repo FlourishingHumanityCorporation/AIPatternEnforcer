@@ -130,7 +130,7 @@ function analyzeCodeBloat(content, filePath) {
   const ext = path.extname(filePath).toLowerCase();
   const isCodeFile = ['.js', '.jsx', '.ts', '.tsx', '.py', '.java', '.cpp', '.c'].includes(ext);
   
-  if (\!isCodeFile) {
+  if (!isCodeFile) {
     return { hasBloat: false };
   }
   
@@ -196,7 +196,7 @@ process.stdin.on('end', () => {
     const filePath = toolInput.file_path || toolInput.filePath || '';
     const content = toolInput.content || toolInput.new_string || '';
     
-    if (\!filePath || \!content) {
+    if (!filePath || !content) {
       process.exit(0);
     }
     
@@ -247,4 +247,3 @@ setTimeout(() => {
 }, 2000);
 
 module.exports = { BLOAT_THRESHOLDS, analyzeCodeBloat, countLines };
-EOF < /dev/null

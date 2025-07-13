@@ -38,10 +38,32 @@ process.stdin.on('end', () => {
     const input = JSON.parse(inputData);
     const toolInput = input.tool_input || {};
     const filePath = toolInput.file_path || toolInput.filePath || '';
+    const content = toolInput.content || toolInput.new_string || '';
     
     // Allow operations without file paths
     if (!filePath) {
       process.exit(0);
+    }
+    
+    // Protect HOOK_DEVELOPMENT setting in .env file
+    if (filePath.endsWith('.env') && content) {
+      const lines = content.split('\n');
+      for (const line of lines) {
+        if (line.trim().startsWith('HOOK_DEVELOPMENT=')) {
+          console.error(
+            `🔒 Environment Protection Active\n` +
+            `\n` +
+            `❌ Cannot modify HOOK_DEVELOPMENT setting\n` +
+            `📁 Protected: Hook development control\n` +
+            `\n` +
+            `ℹ️ This setting controls AI's ability to modify hooks\n` +
+            `✅ Only humans can enable/disable hook development mode\n` +
+            `\n` +
+            `💡 This prevents AI from disabling its own constraints`
+          );
+          process.exit(2);
+        }
+      }
     }
     
     const fileName = path.basename(filePath);

@@ -79,4 +79,3 @@ setTimeout(() => {
 }, 2000);
 
 module.exports = { STREAMING_PATTERNS, REQUIRED_PATTERNS, hasStreamingOperations };
-EOF < /dev/null

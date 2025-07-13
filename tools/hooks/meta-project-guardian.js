@@ -48,6 +48,8 @@ function loadEnvFile() {
 // Load environment variables at startup
 loadEnvFile();
 
+// Test comment added during hook development
+
 
 
 // Critical infrastructure paths that must not be modified by AI
