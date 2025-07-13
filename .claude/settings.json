@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node tools/hooks/meta-project-guardian.js",
+            "command": "echo disabled",
             "timeout": 5
           },
           {

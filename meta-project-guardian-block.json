@@ -1,11 +1,11 @@
 {
-  "timestamp": "2025-07-13T03:50:53.630Z",
+  "timestamp": "2025-07-13T04:04:20.384Z",
   "toolName": "MultiEdit",
-  "filePath": "/Users/paulrohde/CodeProjects/AIPatternEnforcer/tools/generators/enhanced-component-generator.js",
+  "filePath": "/Users/paulrohde/CodeProjects/AIPatternEnforcer/.claude/settings.json",
   "protection": {
     "protected": true,
-    "type": "generator"
+    "type": "infrastructure"
   },
-  "hookDev": "true",
+  "hookDev": "false",
   "blocking": true
 }

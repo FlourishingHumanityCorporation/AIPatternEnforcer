@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// Test
 // FINAL TEST: Should be blocked by meta-project-guardian with HOOK_DEVELOPMENT=false
 // FINAL TEST: Fixed Claude Code hook input format
 
@@ -29,8 +30,8 @@ const config = {
     javascript: ".jsx",
     test: ".test.tsx",
     story: ".stories.tsx",
-    style: ".module.css"
-  }
+    style: ".module.css",
+  },
 };
 
 // Template definitions
@@ -219,7 +220,7 @@ export const Empty: Story = {
 }`,
 
   index: `export { {{name}} } from './{{name}}';
-export type { {{name}}Props } from './{{name}}';`
+export type { {{name}}Props } from './{{name}}';`,
 };
 
 // Generate component files
@@ -229,7 +230,8 @@ async function generateComponent(name, options) {
   // Validate component name
   if (!/^[A-Z][a-zA-Z0-9]*$/.test(name)) {
     logger.error(
-      chalk.red("❌ Component name must be in PascalCase (e.g., MyComponent)"));
+      chalk.red("❌ Component name must be in PascalCase (e.g., MyComponent)"),
+    );
 
     process.exit(1);
   }
@@ -246,23 +248,23 @@ async function generateComponent(name, options) {
 
   // Files to generate
   const files = [
-  {
-    name: `${name}${config.fileExtensions.typescript}`,
-    template: templates.component
-  },
-  { name: `${name}${config.fileExtensions.test}`, template: templates.test },
-  {
-    name: `${name}${config.fileExtensions.style}`,
-    template: templates.styles
-  },
-  { name: "index.ts", template: templates.index }];
-
+    {
+      name: `${name}${config.fileExtensions.typescript}`,
+      template: templates.component,
+    },
+    { name: `${name}${config.fileExtensions.test}`, template: templates.test },
+    {
+      name: `${name}${config.fileExtensions.style}`,
+      template: templates.styles,
+    },
+    { name: "index.ts", template: templates.index },
+  ];
 
   // Add storybook file if requested
   if (!options.noStorybook) {
     files.push({
       name: `${name}${config.fileExtensions.story}`,
-      template: templates.story
+      template: templates.story,
     });
   }
 
@@ -288,8 +290,8 @@ async function generateComponent(name, options) {
       logger.info(chalk.green(`✅ Created ${file.name}`));
     } catch (error) {
       logger.error(
-        chalk.red(`❌ Failed to create ${file.name}: ${error.message}`));
-
+        chalk.red(`❌ Failed to create ${file.name}: ${error.message}`),
+      );
     }
   }
 
@@ -304,8 +306,9 @@ async function generateComponent(name, options) {
   logger.info(chalk.cyan("\n🎯 Next steps:"));
   logger.info(
     chalk.gray(
-      `   1. Import component: import { ${name} } from '${path.relative(process.cwd(), componentDir)}';`
-    ));
+      `   1. Import component: import { ${name} } from '${path.relative(process.cwd(), componentDir)}';`,
+    ),
+  );
 
   logger.info(chalk.gray(`   2. Run tests: npm test ${name}`));
   if (!options.noStorybook) {
@@ -314,27 +317,30 @@ async function generateComponent(name, options) {
 
   // Track usage metrics
   try {
-    const { execSync } = require('child_process');
-    execSync('node tools/metrics/user-feedback-system.js track-generator component 15', { stdio: 'ignore' });
+    const { execSync } = require("child_process");
+    execSync(
+      "node tools/metrics/user-feedback-system.js track-generator component 15",
+      { stdio: "ignore" },
+    );
   } catch (error) {
-
     // Ignore metrics errors
-  }}
+  }
+}
 
 // CLI setup
-program.
-name("generate-component").
-description("Generate a React component with tests and stories").
-argument("<name>", "Component name in PascalCase").
-option("-f, --force", "Overwrite existing files").
-option("--no-storybook", "Skip Storybook story generation").
-option("-d, --dir <dir>", "Output directory", config.outputDir).
-action(async (name, options) => {
-  if (options.dir) {
-    config.outputDir = options.dir;
-  }
-  await generateComponent(name, options);
-});
+program
+  .name("generate-component")
+  .description("Generate a React component with tests and stories")
+  .argument("<name>", "Component name in PascalCase")
+  .option("-f, --force", "Overwrite existing files")
+  .option("--no-storybook", "Skip Storybook story generation")
+  .option("-d, --dir <dir>", "Output directory", config.outputDir)
+  .action(async (name, options) => {
+    if (options.dir) {
+      config.outputDir = options.dir;
+    }
+    await generateComponent(name, options);
+  });
 
 // Parse CLI arguments
 program.parse(process.argv);

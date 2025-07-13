@@ -1,6 +1,0 @@
-{
-  "tool_input": {
-    "file_path": "/test.js",
-    "content": "import unused from 'lib';\nfunction test() { return 1; }"
-  }
-}
