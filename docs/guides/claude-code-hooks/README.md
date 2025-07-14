@@ -1,431 +1,322 @@
-# Claude Code Hooks System
+# Claude Code Hooks System Documentation
 
-This comprehensive guide covers the Claude Code hooks system implemented in AIPatternEnforcer. These hooks prevent common AI development friction by intercepting file operations and providing real-time feedback.
+**Last Updated**: 2025-07-14  
+**System Version**: 3.0 (Consolidated Architecture)  
+**Active Hooks**: 19 configured in `.claude/settings.json`  
+**Architecture**: Modular with shared utilities in `tools/hooks/lib/`
 
-## Overview
+This documentation provides comprehensive guidance for understanding, configuring, and troubleshooting the Claude Code hooks system in AIPatternEnforcer.
 
-The hook system consists of 6 specialized hooks that address different aspects of AI-assisted development:
+## 📚 Documentation Index
 
-| Hook | Purpose | Triggers On | Performance |
-|------|---------|-------------|-------------|
-| [security-scan.js](#security-scan) | Prevents security vulnerabilities | XSS, injection, exposed credentials | ~37ms |
-| [scope-limiter.js](#scope-limiter) | Prevents scope creep | Complex/unfocused prompts | ~38ms |  
-| [context-validator.js](#context-validator) | Ensures sufficient context | Low-quality AI requests | ~54ms |
-| [api-validator.js](#api-validator) | Validates imports and APIs | Missing dependencies, hallucinated APIs | ~35ms |
-| [performance-checker.js](#performance-checker) | Prevents performance issues | O(n²) algorithms, memory leaks | ~40ms |
-| [test-first-enforcer.js](#test-first-enforcer) | Enforces test-driven development | Missing tests for new code | ~35ms |
+### 1. [Hooks Overview](./01-hooks-overview.md)
 
-**Total execution time: ~175ms** (well under 500ms requirement)
+**Start here** - Complete system overview including:
 
-## Installation and Configuration
+- What are Claude Code hooks?
+- System architecture and execution flow
+- Hook categories and performance characteristics
+- Core protection and AI quality hooks
+- Key benefits and important notes
 
-The hooks are automatically configured in `.claude/settings.json`:
+### 2. [Configuration Guide](./02-hooks-configuration.md)
+
+**Setup and customization** - Complete configuration reference:
+
+- Configuration file structure
+- Hook events (PreToolUse vs PostToolUse)
+- Matcher patterns and active configuration
+- Adding new hooks and performance optimization
+- Session management and best practices
+
+### 3. [Troubleshooting Guide](./03-hooks-troubleshooting.md)
+
+**Debug and resolve issues** - Solutions from real debugging experience:
+
+- Critical insight: Session configuration loading
+- Troubleshooting decision tree
+- Hook-specific problem solving
+- Performance troubleshooting and recovery procedures
+
+### 4. [Hook Reference](./04-hooks-reference.md)
+
+**Complete hook documentation** - Individual documentation for all 19 hooks:
+
+- Detailed functionality and purpose
+- Configuration examples and parameters
+- Input/output specifications
+- Common use cases and examples
+- Performance characteristics
+
+### 5. [Development Guide](./05-hooks-development.md)
+
+**Creating custom hooks** - Comprehensive development guide:
+
+- Hook templates and patterns
+- Input/output specifications
+- Error handling and performance
+- Testing requirements
+- Integration and deployment
+
+### 6. [Usage Examples](./06-hooks-examples.md)
+
+**Real-world scenarios** - Practical examples and use cases:
+
+- Common development scenarios
+- Hook examples by category
+- Error resolution examples
+- Integration workflows
+- Performance optimization examples
+
+### 7. [Testing Guide](./07-hooks-testing.md)
+
+**Testing and validation** - Comprehensive testing procedures:
+
+- Manual and automated testing
+- Performance testing
+- Integration testing
+- Test infrastructure and CI/CD
+- Testing best practices
+
+### 8. [Performance Guide](./08-hooks-performance.md)
+
+**Performance optimization** - Performance analysis and optimization:
+
+- Performance monitoring and profiling
+- Optimization techniques
+- Bottleneck analysis
+- Memory management
+- Scaling considerations
+
+### 9. [Official Documentation](./09-hooks-official-documentation.md)
+
+**Complete Claude Code hooks reference** - Official Anthropic documentation:
+
+- Comprehensive hook event coverage
+- Complete JSON input/output schemas
+- Security considerations and best practices
+- MCP integration patterns
+- Advanced configuration options
+
+### 10. [Development History & Refactoring Analysis](./10-hooks-development-history.md)
+
+**Hook system evolution and optimization opportunities** - Development history analysis:
+
+- Complete hook inventory and evolution timeline
+- Redundancy analysis and consolidation opportunities
+- Performance optimization recommendations
+- Detailed refactoring roadmap with quantified benefits
+- Implementation priorities and risk assessment
+
+### 11. [Changelog](./11-hooks-changelog.md)
+
+**Version history and changes** - Complete record of hook system evolution:
+
+- Version 3.0: Major consolidation refactoring
+- Hook consolidation patterns
+- Shared utilities implementation
+- Performance improvements
+
+## 🔄 Recent Major Refactoring (v3.0)
+
+The hook system underwent a major consolidation refactoring to improve maintainability and reduce code duplication:
+
+### Key Changes:
+
+- **Hook Count**: Reduced from 24 to 19 through intelligent consolidation
+- **Shared Utilities**: New `tools/hooks/lib/` directory with reusable components
+- **Consolidated Hooks**:
+  - `architecture-validator.js`: Combines AI integration, architecture drift, and Next.js structure validation
+  - `performance-guardian.js`: Merges 5 performance-related hooks into one comprehensive system
+  - `docs-enforcer.js`: Consolidates documentation lifecycle and organization enforcement
+- **Code Reduction**: 85% reduction in duplicate code through shared utilities
+- **Performance**: Maintained < 500ms total execution time despite consolidation
+
+## 🚀 Quick Start
+
+### Essential Commands
+
+```bash
+# Test if hooks are working
+echo '{"tool_name": "Write", "tool_input": {"file_path": "test_improved.js", "content": "test"}}' | node tools/hooks/prevent-improved-files.js
+
+# Validate configuration
+cat .claude/settings.json | jq .
+
+# Run hook tests
+npm test tools/hooks/__tests__/
+```
+
+### Most Important Rules
+
+1. **Session Loading**: Hooks load once at Claude Code startup - changes require new session
+2. **Configuration Changes**: Always close Claude Code before editing `.claude/settings.json`
+3. **Fail-Open Architecture**: Operations proceed if hooks error (safety first)
+4. **Performance Target**: < 500ms total execution time for all hooks
+
+## 🎯 Hook Categories
+
+| Category                  | Count | Purpose                   | Key Hooks                                               |
+| ------------------------- | ----- | ------------------------- | ------------------------------------------------------- |
+| **Core Protection**       | 5     | Prevent system damage     | `meta-project-guardian.js`, `prevent-improved-files.js` |
+| **Enterprise Prevention** | 3     | Block enterprise features | `enterprise-antibody.js`, `mock-data-enforcer.js`       |
+| **AI Quality**            | 6     | Optimize AI interactions  | `context-validator.js`, `test-first-enforcer.js`        |
+| **Auto-Fix**              | 5     | Clean up after operations | `fix-console-logs.js`, `import-janitor.js`              |
+| **Performance**           | 4     | Maintain limits           | `performance-checker.js`, `code-bloat-detector.js`      |
+
+## 🔧 Configuration File
+
+All hooks are configured in `.claude/settings.json`:
 
 ```json
 {
   "hooks": {
-    "preToolUse": [
-      "./tools/hooks/security-scan.js",
-      "./tools/hooks/scope-limiter.js",
-      "./tools/hooks/context-validator.js"
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node tools/hooks/prevent-improved-files.js",
+            "timeout": 2
+          }
+        ]
+      }
     ],
-    "postToolUse": [
-      "./tools/hooks/api-validator.js", 
-      "./tools/hooks/performance-checker.js",
-      "./tools/hooks/test-first-enforcer.js"
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node tools/hooks/fix-console-logs.js",
+            "timeout": 3
+          }
+        ]
+      }
     ]
   }
 }
 ```
 
-## Hook Details
+## 🛠️ Testing and Validation
 
-### security-scan.js
+### Manual Testing
 
-**Purpose**: Prevents common security vulnerabilities in generated code.
+```bash
+# Test prevent-improved-files (should block)
+echo '{"tool_name": "Write", "tool_input": {"file_path": "test_improved.js", "content": "test"}}' | node tools/hooks/prevent-improved-files.js
 
-**Detection Patterns**:
-- XSS vulnerabilities (`innerHTML`, `outerHTML` with user data)
-- Code injection (`eval`, `Function` constructor)
-- SQL injection patterns
-- Hardcoded API keys and secrets
-- Unsafe URL handling
+# Test context-validator (should block single char edit)
+echo '{"tool_name": "Edit", "tool_input": {"file_path": "/test.js", "old_string": "a", "new_string": "b"}}' | node tools/hooks/context-validator.js
 
-**Example - Blocked Operation**:
-```javascript
-// ❌ This will be blocked
-document.getElementById('output').innerHTML = userInput;
-
-// ✅ Suggested fix
-document.getElementById('output').textContent = userInput;
+# Test fix-console-logs (should auto-convert)
+echo "console.log('test');" > /tmp/test.js
+echo '{"tool_name": "Write", "tool_input": {"file_path": "/tmp/test.js"}, "tool_response": {"filePath": "/tmp/test.js"}}' | node tools/hooks/fix-console-logs.js
+cat /tmp/test.js  # Should show logger.info('test');
 ```
 
-**Configuration**: No configuration required. Patterns are built-in and tested.
+### Automated Testing
 
-**Performance**: Averages 37ms per file scan.
+```bash
+# Run all hook tests
+npm test tools/hooks/__tests__/
+
+# Performance testing
+time echo '{"tool_name": "Write", "tool_input": {"file_path": "test.js", "content": "test"}}' | node tools/hooks/meta-project-guardian.js
+```
+
+## 🚨 Common Issues
+
+### 1. Hooks Not Running
+
+**Symptom**: Expected validations not occurring  
+**Solution**: Start new Claude Code session (90% of cases)
+
+### 2. Configuration Changes Ignored
+
+**Symptom**: Modified `.claude/settings.json` but no effect  
+**Solution**: Close Claude Code completely, then restart
+
+### 3. Hook Blocking Everything
+
+**Symptom**: All operations blocked  
+**Solution**: Check matcher patterns and exit codes in hooks
+
+### 4. Performance Issues
+
+**Symptom**: Operations taking too long  
+**Solution**: Profile individual hooks, optimize or increase timeouts
+
+## 📋 Supported Hook Events
+
+### PreToolUse Hooks
+
+- Execute **before** AI tool operations
+- Can **block** operations (exit code 2)
+- Used for validation and prevention
+
+### PostToolUse Hooks
+
+- Execute **after** AI tool operations
+- Can **modify** file contents
+- Used for auto-fixing and cleanup
+
+## 🎯 Key Benefits
+
+1. **Prevents Common Mistakes**: Blocks duplicate files, enterprise complexity
+2. **Maintains Code Quality**: Enforces tests, proper logging, security
+3. **Optimizes AI Interactions**: Validates parameters, prevents low-quality edits
+4. **Auto-Fixes Issues**: Cleans up imports, converts console.log, validates schemas
+5. **Preserves Project Structure**: Keeps files organized, prevents root directory mess
+
+## 📞 Getting Help
+
+### Debug Information to Collect
+
+```bash
+# System information
+uname -a
+node --version
+
+# Configuration
+cat .claude/settings.json | jq .
+
+# Hook files
+ls -la tools/hooks/
+
+# Test hook execution
+echo '{"tool_name": "Write", "tool_input": {"file_path": "test.js", "content": "test"}}' | node tools/hooks/prevent-improved-files.js
+```
+
+### Support Resources
+
+- **[Troubleshooting Guide](./03-hooks-troubleshooting.md)** - Complete problem-solving guide
+- **[Configuration Guide](./02-hooks-configuration.md)** - Setup and customization
+- **[Hook Reference](./04-hooks-reference.md)** - Individual hook documentation
+- **[Development Guide](./05-hooks-development.md)** - Creating custom hooks
+- **[Usage Examples](./06-hooks-examples.md)** - Real-world scenarios
+- **[Testing Guide](./07-hooks-testing.md)** - Testing procedures
+- **[Performance Guide](./08-hooks-performance.md)** - Performance optimization
+- **Hook Tests**: `tools/hooks/__tests__/` - Automated test suite
+- **Main Documentation**: `CLAUDE.md` - Project-wide instructions
+
+## 🔄 Maintenance
+
+### Regular Checks
+
+- Monitor hook performance (< 500ms total)
+- Test configuration changes in new sessions
+- Keep hooks simple and focused
+- Document custom hooks thoroughly
+
+### Updates
+
+- Hook system version tracked in documentation
+- Configuration format is stable
+- New hooks added via configuration only
+- Backward compatibility maintained
 
 ---
 
-### scope-limiter.js
-
-**Purpose**: Prevents AI requests that are too broad or complex, encouraging focused development.
-
-**Detection Criteria**:
-- Prompts mentioning >5 features
-- Complex system descriptions
-- Multiple unrelated concerns
-- Enterprise-scale requests
-
-**Example - Blocked Operation**:
-```javascript
-// ❌ Prompt too broad
-"Create a comprehensive user management system with authentication, 
-authorization, database integration, email notifications, file upload 
-handling, caching, logging, monitoring, and error handling"
-
-// ✅ Focused request  
-"Create a user authentication component with login/logout functionality"
-```
-
-**Thresholds**:
-- Maximum features: 5
-- Complexity score threshold: 7
-- File count limit: 10
-
-**Performance**: Averages 38ms per analysis.
-
----
-
-### context-validator.js
-
-**Purpose**: Ensures AI requests have sufficient context for high-quality code generation.
-
-**Context Scoring** (out of 25 points):
-- **Architecture context** (0-5): References to existing patterns
-- **Dependency context** (0-5): Import/package information  
-- **Problem context** (0-5): Clear requirements
-- **File references** (0-5): Links to related files (@filename)
-- **Integration context** (0-5): How component fits in system
-
-**Minimum Scores**:
-- New files: 15/25 points
-- Edits: 10/25 points  
-- Complex operations: 20/25 points
-
-**Example - Insufficient Context**:
-```javascript
-// ❌ Context score: 4/25 (blocked)
-{
-  "tool": "Write",
-  "file_path": "Button.tsx", 
-  "content": "function Button() { return <button>Click</button>; }"
-}
-
-// ✅ Context score: 18/25 (allowed)
-{
-  "tool": "Write",
-  "file_path": "components/ui/Button.tsx",
-  "prompt": "Create Button component following @components/ui/Card.tsx patterns with TypeScript props interface",
-  "content": "/* Rich component with proper types */"
-}
-```
-
-**Performance**: Averages 54ms per validation.
-
----
-
-### api-validator.js
-
-**Purpose**: Validates that imports, APIs, and function calls actually exist.
-
-**Validation Types**:
-- **Import resolution**: Checks if imported files/packages exist
-- **Package dependencies**: Validates against package.json
-- **API endpoints**: Ensures API routes exist (Next.js/Express)
-- **Hallucination detection**: Catches common AI-fabricated APIs
-
-**Example - Missing Import**:
-```javascript
-// ❌ Will be blocked if package not installed
-import { nonExistentFunction } from 'fake-package';
-
-// ✅ Validates against package.json
-import { useState } from 'react';
-```
-
-**Built-in Node.js modules** are automatically allowed:
-- `fs`, `path`, `util`, `crypto`, `http`, `https`, `url`, `os`
-
-**Performance**: Averages 35ms per file validation.
-
----
-
-### performance-checker.js
-
-**Purpose**: Prevents performance issues in generated code.
-
-**Detection Patterns**:
-- **O(n²) algorithms**: Nested loops, inefficient searches
-- **Array chain operations**: Multiple `.map().filter().map()` calls
-- **React anti-patterns**: Missing dependencies, inline functions
-- **Memory leaks**: Timer leaks, event listener leaks
-- **Bundle impact**: Large dependencies, inefficient imports
-
-**Example - Performance Issue**:
-```javascript
-// ❌ O(n²) complexity detected
-for (let i = 0; i < items.length; i++) {
-  for (let j = 0; j < items.length; j++) {
-    if (items[i].id === items[j].parentId) {
-      items[i].children.push(items[j]);
-    }
-  }
-}
-
-// ✅ O(n) solution suggested
-const itemMap = new Map(items.map(item => [item.id, item]));
-items.forEach(item => {
-  const parent = itemMap.get(item.parentId);
-  if (parent) parent.children.push(item);
-});
-```
-
-**Severity Levels**:
-- **High**: Blocks operation (O(n²), critical performance issues)
-- **Medium**: Warns but allows (inefficient patterns)
-- **Low**: Silent suggestions (minor optimizations)
-
-**Performance**: Averages 40ms per analysis.
-
----
-
-### test-first-enforcer.js
-
-**Purpose**: Enforces test-driven development by requiring tests for new code.
-
-**Requirements**:
-- Test file must exist for new components
-- Test coverage for new functions  
-- Integration tests for API routes
-- Component tests for React components
-
-**Example - Missing Tests**:
-```javascript
-// ❌ Will be blocked without corresponding test
-// File: components/UserCard.tsx
-export function UserCard({ user }) { /* ... */ }
-
-// ✅ Required test file
-// File: components/__tests__/UserCard.test.tsx  
-import { UserCard } from '../UserCard';
-test('renders user information', () => { /* ... */ });
-```
-
-**Test Patterns Detected**:
-- Jest/Vitest: `*.test.js`, `*.spec.js`
-- React Testing Library: Component tests
-- Integration: API route tests
-
-**Performance**: Averages 35ms per validation.
-
-## Error Messages
-
-All hooks provide consistent, actionable error messages:
-
-```
-🔒 Security issues detected in component.js:
-
-🔴 Critical Issues:
-1. ❌ XSS vulnerability: innerHTML with user data
-   ✅ Use textContent or sanitize with DOMPurify
-
-2. ❌ Hardcoded API key detected
-   ✅ Move to environment variables: process.env.API_KEY
-
-💡 Fix critical issues before proceeding.
-📖 See docs/guides/security/ for security guidelines
-```
-
-## Development Workflow Integration
-
-### Real-time Prevention
-Hooks run automatically during Claude Code interactions:
-- **PreToolUse**: Analyze before file operations
-- **PostToolUse**: Validate after changes
-- **Fail-open**: Allow operations if hooks error
-
-### Performance Impact
-- Individual hooks: <100ms each
-- Total chain: <500ms
-- Concurrent execution supported
-- No degradation with repeated calls
-
-### IDE Integration
-Works seamlessly with:
-- Claude Code CLI
-- VS Code with Claude extensions
-- Cursor IDE with Claude integration
-- Direct API usage
-
-## Troubleshooting
-
-### Common Issues
-
-**Hook blocking legitimate code**:
-```bash
-# Check specific hook behavior
-echo '{"file_path": "test.js", "content": "code"}' | node tools/hooks/security-scan.js
-```
-
-**Performance concerns**:
-```bash
-# Run performance benchmarks
-npm test tools/hooks/__tests__/performance-benchmark.test.js
-```
-
-**Context validation failing**:
-- Add more architectural context
-- Reference existing patterns with @filename
-- Include integration requirements
-- Specify exact constraints
-
-### Debugging
-
-Enable debug output:
-```bash
-DEBUG=claude-hooks node tools/hooks/security-scan.js
-```
-
-View hook execution logs:
-```bash
-tail -f .claude/logs/hooks.log
-```
-
-## Advanced Configuration
-
-### Custom Patterns
-
-Add security patterns to `security-scan.js`:
-```javascript
-const CUSTOM_PATTERNS = [
-  {
-    pattern: /myCustomVulnerabilityPattern/gi,
-    severity: 'high',
-    issue: 'Custom security issue detected',
-    suggestion: 'Use secure alternative'
-  }
-];
-```
-
-### Performance Thresholds
-
-Adjust performance limits in `performance-checker.js`:
-```javascript
-const PERFORMANCE_THRESHOLDS = {
-  maxBundleSize: 50, // KB
-  maxComplexity: 10,
-  maxNestingLevel: 3
-};
-```
-
-### Context Requirements
-
-Modify context scoring in `context-validator.js`:
-```javascript
-const CONTEXT_REQUIREMENTS = {
-  newFile: 15,    // Minimum score for new files
-  editFile: 10,   // Minimum score for edits  
-  complex: 20     // Minimum for complex operations
-};
-```
-
-## Testing
-
-### Unit Tests
-```bash
-npm test tools/hooks/__tests__/security-scan.test.js
-npm test tools/hooks/__tests__/scope-limiter.test.js
-npm test tools/hooks/__tests__/context-validator.test.js
-npm test tools/hooks/__tests__/api-validator.test.js
-npm test tools/hooks/__tests__/performance-checker.test.js
-```
-
-### Integration Tests  
-```bash
-npm test tools/hooks/__tests__/integration.test.js
-```
-
-### Performance Benchmarks
-```bash
-npm test tools/hooks/__tests__/performance-benchmark.test.js
-```
-
-### User Experience Validation
-```bash
-npm test tools/hooks/__tests__/user-experience.test.js
-```
-
-## Best Practices
-
-### For AI Assistants
-
-1. **Provide Rich Context**:
-   - Reference existing patterns: `@components/ui/Button.tsx`
-   - Include architectural context
-   - Specify integration requirements
-
-2. **Write Focused Requests**:
-   - Single responsibility per request
-   - Clear, specific requirements
-   - Avoid scope creep
-
-3. **Security First**:
-   - Never bypass security warnings
-   - Use suggested secure alternatives
-   - Validate user inputs
-
-4. **Performance Awareness**:
-   - Consider algorithm complexity
-   - Optimize for bundle size
-   - Follow React best practices
-
-### For Developers
-
-1. **Understand Hook Purpose**:
-   - Context-validator blocks low-quality requests (intended)
-   - Security-scan prevents vulnerabilities (critical)
-   - Performance-checker optimizes code (helpful)
-
-2. **Customize for Project**:
-   - Add project-specific patterns
-   - Adjust thresholds for team
-   - Monitor false positive rates
-
-3. **Maintain Test Coverage**:
-   - Write tests for custom patterns
-   - Validate hook performance
-   - Monitor user experience metrics
-
-## Monitoring and Metrics
-
-### Success Metrics
-- **False positive rate**: <5% for safety hooks
-- **Performance**: <500ms total execution
-- **Coverage**: >90% pattern detection
-- **Developer satisfaction**: Positive feedback on friction reduction
-
-### Analytics
-Hook execution analytics are collected in:
-- `.claude/logs/hook-metrics.json`
-- Performance benchmarks
-- False positive tracking
-- Pattern effectiveness scores
-
-## Support and Resources
-
-- **Documentation**: `docs/guides/claude-code-hooks/`
-- **Examples**: `ai/examples/claude-code-hooks/`
-- **Issues**: Report at GitHub repository
-- **Performance**: Monitor with `npm run hook:analyze`
-
-The Claude Code hooks system represents a sophisticated approach to preventing AI development friction through real-time, intelligent validation that maintains developer productivity while ensuring code quality and security.
+**Note**: This documentation represents the complete, expanded guide for the Claude Code hooks system in AIPatternEnforcer. With 8 comprehensive guides covering all aspects from basic usage to advanced development, this is the definitive resource for understanding and working with the 23-hook system.

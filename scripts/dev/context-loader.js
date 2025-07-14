@@ -6,19 +6,27 @@ const chalk = require("chalk");
 const ora = require("ora");
 const { execSync } = require("child_process");
 
+// Simple logger for when module is not available
+const logger = {
+  info: console.log,
+  error: console.error,
+  warn: console.warn,
+};
+
 class ContextLoader {
   constructor() {
     this.projectRoot = this.findProjectRoot();
     this.contextSources = [
-    ".cursorrules",
-    "ai/config/.cursorrules",
-    "CLAUDE.md",
-    "docs/architecture/README.md"];
+      ".cursorrules",
+      "ai/config/.cursorrules",
+      "CLAUDE.md",
+      "docs/architecture/README.md",
+    ];
 
     this.recentFilesCache = path.join(
       this.projectRoot,
       ".context-cache",
-      "recent-files.json"
+      "recent-files.json",
     );
     this.maxTokens = 4000;
     this.recentFilesCount = 5;
@@ -28,9 +36,9 @@ class ContextLoader {
     let currentDir = process.cwd();
     while (currentDir !== "/") {
       if (
-      fs.existsSync(path.join(currentDir, "package.json")) ||
-      fs.existsSync(path.join(currentDir, ".git")))
-      {
+        fs.existsSync(path.join(currentDir, "package.json")) ||
+        fs.existsSync(path.join(currentDir, ".git"))
+      ) {
         return currentDir;
       }
       currentDir = path.dirname(currentDir);
@@ -52,7 +60,7 @@ class ContextLoader {
         contextParts.push({
           title: "# Project Rules and Context",
           content: rules,
-          tokens: this.estimateTokens(rules)
+          tokens: this.estimateTokens(rules),
         });
         tokenCount += this.estimateTokens(rules);
       }
@@ -65,7 +73,7 @@ class ContextLoader {
           contextParts.push({
             title: "## Current File",
             content: fileContext,
-            tokens: this.estimateTokens(fileContext)
+            tokens: this.estimateTokens(fileContext),
           });
           tokenCount += this.estimateTokens(fileContext);
         }
@@ -78,7 +86,7 @@ class ContextLoader {
         contextParts.push({
           title: "## Recent Context",
           content: recentFiles,
-          tokens: this.estimateTokens(recentFiles)
+          tokens: this.estimateTokens(recentFiles),
         });
         tokenCount += this.estimateTokens(recentFiles);
       }
@@ -90,7 +98,7 @@ class ContextLoader {
         contextParts.push({
           title: "## Current Git State",
           content: gitContext,
-          tokens: this.estimateTokens(gitContext)
+          tokens: this.estimateTokens(gitContext),
         });
         tokenCount += this.estimateTokens(gitContext);
       }
@@ -103,25 +111,25 @@ class ContextLoader {
           contextParts.push({
             title: "## Architecture Context",
             content: archContext,
-            tokens: this.estimateTokens(archContext)
+            tokens: this.estimateTokens(archContext),
           });
           tokenCount += this.estimateTokens(archContext);
         }
       }
 
       // Build final context
-      const finalContext = contextParts.
-      map((part) => `${part.title}\n\n${part.content}`).
-      join("\n\n---\n\n");
+      const finalContext = contextParts
+        .map((part) => `${part.title}\n\n${part.content}`)
+        .join("\n\n---\n\n");
 
       spinner.succeed(
-        chalk.green(`Context built successfully (${tokenCount} tokens)`)
+        chalk.green(`Context built successfully (${tokenCount} tokens)`),
       );
 
       return {
         context: finalContext,
         tokenCount,
-        parts: contextParts.length
+        parts: contextParts.length,
       };
     } catch (error) {
       spinner.fail(chalk.red("Failed to build context"));
@@ -142,9 +150,9 @@ class ContextLoader {
           return content;
         }
       } catch {
-
         // Continue to next source
-      }}
+      }
+    }
     return null;
   }
 
@@ -153,7 +161,7 @@ class ContextLoader {
 
     // Extract critical rules
     const criticalMatch = content.match(
-      /## [🛑🚨]*\s*CRITICAL RULES[\s\S]*?(?=\n##|$)/i
+      /## [🛑🚨]*\s*CRITICAL RULES[\s\S]*?(?=\n##|$)/i,
     );
     if (criticalMatch) {
       sections.push(criticalMatch[0]);
@@ -161,7 +169,7 @@ class ContextLoader {
 
     // Extract quick reference
     const quickRefMatch = content.match(
-      /## [🎯]*\s*QUICK REFERENCE[\s\S]*?(?=\n##|$)/i
+      /## [🎯]*\s*QUICK REFERENCE[\s\S]*?(?=\n##|$)/i,
     );
     if (quickRefMatch) {
       sections.push(quickRefMatch[0].substring(0, 1000) + "...");
@@ -169,7 +177,7 @@ class ContextLoader {
 
     // Extract architecture section
     const archMatch = content.match(
-      /##\s*(?:TECHNICAL\s+)?ARCHITECTURE[\s\S]*?(?=\n##|$)/i
+      /##\s*(?:TECHNICAL\s+)?ARCHITECTURE[\s\S]*?(?=\n##|$)/i,
     );
     if (archMatch) {
       sections.push(archMatch[0].substring(0, 800) + "...");
@@ -273,26 +281,24 @@ class ContextLoader {
         return context.join("\n");
       }
     } catch {
-
       // Cache not available
     }
     // Fallback to git
     try {
       const recentFiles = execSync(
         'git log --name-only --pretty=format: -n 20 | grep -v "^$" | sort | uniq | head -10',
-        { cwd: this.projectRoot, encoding: "utf8" }
-      ).
-      trim().
-      split("\n").
-      filter(Boolean);
+        { cwd: this.projectRoot, encoding: "utf8" },
+      )
+        .trim()
+        .split("\n")
+        .filter(Boolean);
 
       if (recentFiles.length > 0) {
         return (
-          "Recently changed files (from git):\n- " + recentFiles.join("\n- "));
-
+          "Recently changed files (from git):\n- " + recentFiles.join("\n- ")
+        );
       }
     } catch {
-
       // Git not available
     }
     return null;
@@ -302,17 +308,17 @@ class ContextLoader {
     try {
       const branch = execSync("git branch --show-current", {
         cwd: this.projectRoot,
-        encoding: "utf8"
+        encoding: "utf8",
       }).trim();
 
       const status = execSync("git status --short", {
         cwd: this.projectRoot,
-        encoding: "utf8"
+        encoding: "utf8",
       }).trim();
 
       const recentCommits = execSync("git log --oneline -5", {
         cwd: this.projectRoot,
-        encoding: "utf8"
+        encoding: "utf8",
       }).trim();
 
       let context = `- **Current Branch**: ${branch}\n`;
@@ -334,10 +340,10 @@ class ContextLoader {
   async getArchitectureContext(filePath) {
     const component = this.detectComponent(filePath);
     const possibleDocs = [
-    `docs/architecture/patterns/${component}.md`,
-    `docs/architecture/decisions/*${component}*.md`,
-    `docs/guides/${component}/*.md`];
-
+      `docs/architecture/patterns/${component}.md`,
+      `docs/architecture/decisions/*${component}*.md`,
+      `docs/guides/${component}/*.md`,
+    ];
 
     for (const pattern of possibleDocs) {
       const files = await this.findFiles(pattern);
@@ -358,9 +364,9 @@ class ContextLoader {
 
           return firstSection.join("\n") + "\n...";
         } catch {
-
           // Continue to next
-        }}
+        }
+      }
     }
 
     return null;
@@ -373,10 +379,10 @@ class ContextLoader {
     // Look for feature/component indicators
     for (let i = 0; i < parts.length - 1; i++) {
       if (
-      ["components", "features", "services", "api", "modules"].includes(
-        parts[i]
-      ))
-      {
+        ["components", "features", "services", "api", "modules"].includes(
+          parts[i],
+        )
+      ) {
         return parts[i + 1];
       }
     }
@@ -431,7 +437,7 @@ class ContextLoader {
       // Add to front
       cache.files.unshift({
         path: filePath,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
 
       // Keep only recent
@@ -439,18 +445,18 @@ class ContextLoader {
 
       // Ensure directory exists
       await fsPromises.mkdir(path.dirname(this.recentFilesCache), {
-        recursive: true
+        recursive: true,
       });
 
       // Save
       await fsPromises.writeFile(
         this.recentFilesCache,
-        JSON.stringify(cache, null, 2)
+        JSON.stringify(cache, null, 2),
       );
     } catch {
-
       // Cache update failed, not critical
-    }}
+    }
+  }
 
   estimateTokens(text) {
     return Math.ceil(text.length / 4);
@@ -530,9 +536,9 @@ async function main() {
     // Show stats
     logger.info(
       chalk.gray(
-        `\n📊 Stats: ${result.tokenCount} tokens, ${result.parts} sections`
-      ));
-
+        `\n📊 Stats: ${result.tokenCount} tokens, ${result.parts} sections`,
+      ),
+    );
   } catch (error) {
     logger.error(chalk.red("Error:"), error.message);
     process.exit(1);

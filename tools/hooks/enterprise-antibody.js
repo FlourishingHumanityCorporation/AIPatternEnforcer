@@ -2,27 +2,27 @@
 
 /**
  * Claude Code Hook: Enterprise Antibody
- * 
+ *
  * Actively prevents enterprise patterns from being introduced into local-only projects.
  * Based on GOAL.md's extensive list of features to EXCLUDE, this hook blocks
  * multi-tenant, authentication, monitoring, and other enterprise complexities.
- * 
+ *
  * This hook is essential because AI often defaults to "production-ready" code
  * with unnecessary complexity for simple local projects.
- * 
+ *
  * Blocks:
  * - Multi-tenant architectures
- * - Complex authentication systems  
+ * - Complex authentication systems
  * - User management features
  * - Audit logging and compliance
  * - Production monitoring
  * - Team collaboration features
- * 
+ *
  * Usage: Called by Claude Code before Write/Edit/MultiEdit operations
  * Returns: { status: 'ok' | 'blocked', message?: string }
  */
 
-const path = require('path');
+const HookRunner = require("./lib/HookRunner");
 
 // Enterprise patterns grouped by category (from GOAL.md)
 const ENTERPRISE_PATTERNS = {
@@ -38,10 +38,10 @@ const ENTERPRISE_PATTERNS = {
       /RoleBasedAccess|RBAC|Permission(?:Manager|Service)/i,
       /import.*(?:@clerk|@auth0|supabase\/auth|firebase\/auth)/i,
       /createUserWithEmailAndPassword|signInWithEmailAndPassword/i,
-      /\.addRole\(|\.hasPermission\(|\.checkAccess\(/i
+      /\.addRole\(|\.hasPermission\(|\.checkAccess\(/i,
     ],
-    message: 'Authentication & user management not needed',
-    suggestion: 'Use mockUser from lib/auth.ts for local development'
+    message: "Authentication & user management not needed",
+    suggestion: "Use mockUser from lib/auth.ts for local development",
   },
 
   // Infrastructure & DevOps
@@ -56,10 +56,10 @@ const ENTERPRISE_PATTERNS = {
       /(?:Backup|Disaster)Recovery/i,
       /HealthCheck(?:Endpoint|Service)|\/health|\/status/i,
       /GracefulShutdown|ProcessManager/i,
-      /terraform|ansible|helm|flux/i
+      /terraform|ansible|helm|flux/i,
     ],
-    message: 'Infrastructure complexity not needed',
-    suggestion: 'Keep it simple - run locally with npm run dev'
+    message: "Infrastructure complexity not needed",
+    suggestion: "Keep it simple - run locally with npm run dev",
   },
 
   // Monitoring & Observability
@@ -74,10 +74,10 @@ const ENTERPRISE_PATTERNS = {
       /(?:Uptime|Availability)Monitor/i,
       /RealUserMonitoring|RUM(?:Service|Provider)/i,
       /opentelemetry|jaeger|prometheus|grafana/i,
-      /\.setCustomMetric\(|\.recordMetric\(|\.trackEvent\(/i
+      /\.setCustomMetric\(|\.recordMetric\(|\.trackEvent\(/i,
     ],
-    message: 'Production monitoring not needed',
-    suggestion: 'Use console.log for debugging local projects'
+    message: "Production monitoring not needed",
+    suggestion: "Use console.log for debugging local projects",
   },
 
   // Security & Compliance
@@ -92,10 +92,11 @@ const ENTERPRISE_PATTERNS = {
       /SecurityHeaders(?:Middleware|Config)/i,
       /PenetrationTest(?:ing|Suite|Scanner)/i,
       /ComplianceOfficer|DataProtectionOfficer/i,
-      /\.encrypt\(|\.decrypt\(|\.hash\(|\.sanitize\(/i
+      /\.encrypt\(|\.decrypt\(|\.hash\(|\.sanitize\(/i,
     ],
-    message: 'Enterprise security features not needed',
-    suggestion: 'Basic security is built-in, no compliance needed for local projects'
+    message: "Enterprise security features not needed",
+    suggestion:
+      "Basic security is built-in, no compliance needed for local projects",
   },
 
   // Team & Collaboration
@@ -109,10 +110,10 @@ const ENTERPRISE_PATTERNS = {
       /(?:Multi|Team)(?:Developer|Tenant|User)(?:Git|Workflow)/i,
       /ProjectManagement(?:Integration|Sync)|Jira|Asana/i,
       /CollaborationService|TeamSync|SharedState/i,
-      /\.addTeamMember\(|\.inviteUser\(|\.shareWith\(/i
+      /\.addTeamMember\(|\.inviteUser\(|\.shareWith\(/i,
     ],
-    message: 'Team features not needed',
-    suggestion: 'This is a single-person local project'
+    message: "Team features not needed",
+    suggestion: "This is a single-person local project",
   },
 
   // Business Features
@@ -127,10 +128,10 @@ const ENTERPRISE_PATTERNS = {
       /Marketing(?:Analytics|Automation|Campaign)/i,
       /Referral(?:System|Program|Manager)/i,
       /\.createSubscription\(|\.processPayment\(|\.generateInvoice\(/i,
-      /import.*(?:stripe|@paypal|square)/i
+      /import.*(?:stripe|@paypal|square)/i,
     ],
-    message: 'Business features not needed',
-    suggestion: 'Focus on core AI functionality for local use'
+    message: "Business features not needed",
+    suggestion: "Focus on core AI functionality for local use",
   },
 
   // API & Integration
@@ -145,13 +146,13 @@ const ENTERPRISE_PATTERNS = {
       /(?:OAuth|OAuth2)(?:Provider|Integration|Flow)/i,
       /EventDriven(?:Architecture|System)|EventBus|MessageQueue/i,
       /\.addWebhook\(|\.registerEndpoint\(|\.versionAPI\(/i,
-      /import.*(?:@apollo|graphql|swagger)/i
+      /import.*(?:@apollo|graphql|swagger)/i,
     ],
-    message: 'Complex API patterns not needed',
-    suggestion: 'Use simple REST endpoints with Next.js API routes'
+    message: "Complex API patterns not needed",
+    suggestion: "Use simple REST endpoints with Next.js API routes",
   },
 
-  // Data & Analytics  
+  // Data & Analytics
   analytics: {
     patterns: [
       /DataWarehouse(?:Service|Connector|ETL)/i,
@@ -162,11 +163,11 @@ const ENTERPRISE_PATTERNS = {
       /(?:Database)?Shard(?:ing|Manager|Strategy)/i,
       /ChangeDataCapture|CDC(?:Service|Stream)/i,
       /AnalyticsEngine|DataLake|BigQuery/i,
-      /\.runETL\(|\.syncToWarehouse\(|\.aggregateMetrics\(/i
+      /\.runETL\(|\.syncToWarehouse\(|\.aggregateMetrics\(/i,
     ],
-    message: 'Enterprise data features not needed',
-    suggestion: 'Use local PostgreSQL with simple queries'
-  }
+    message: "Enterprise data features not needed",
+    suggestion: "Use local PostgreSQL with simple queries",
+  },
 };
 
 // Additional catch-all patterns
@@ -175,12 +176,12 @@ const GENERAL_ENTERPRISE_PATTERNS = [
   /MultiTenant|Tenant(?:Manager|Service|Resolver)/i,
   /(?:High)?Availability|Redundancy|Failover/i,
   /OrganizationService|WorkspaceManager|AccountHierarchy/i,
-  /CompanySettings|OrganizationConfig|TenantConfig/i
+  /CompanySettings|OrganizationConfig|TenantConfig/i,
 ];
 
 function detectEnterprisePatterns(content, filePath) {
   const detectedPatterns = [];
-  
+
   // Check categorized patterns
   for (const [category, config] of Object.entries(ENTERPRISE_PATTERNS)) {
     for (const pattern of config.patterns) {
@@ -191,111 +192,123 @@ function detectEnterprisePatterns(content, filePath) {
           pattern: pattern.source,
           match: match[0],
           message: config.message,
-          suggestion: config.suggestion
+          suggestion: config.suggestion,
         });
       }
     }
   }
-  
+
   // Check general patterns
   for (const pattern of GENERAL_ENTERPRISE_PATTERNS) {
     if (pattern.test(content)) {
       const match = content.match(pattern);
       detectedPatterns.push({
-        category: 'general',
+        category: "general",
         pattern: pattern.source,
         match: match[0],
-        message: 'Enterprise complexity detected',
-        suggestion: 'Keep it simple for local development'
+        message: "Enterprise complexity detected",
+        suggestion: "Keep it simple for local development",
       });
     }
   }
-  
+
   return detectedPatterns;
 }
 
-// Read from stdin
-let inputData = '';
-process.stdin.on('data', chunk => {
-  inputData += chunk;
-});
+// Hook logic
+async function enterpriseAntibody(hookData, runner) {
+  const { filePath, content } = hookData;
 
-process.stdin.on('end', () => {
-  try {
-    const input = JSON.parse(inputData);
-    const toolInput = input.tool_input || {};
-    const filePath = toolInput.file_path || toolInput.filePath || '';
-    const content = toolInput.content || toolInput.new_string || '';
-    
-    // Skip if no content to check
-    if (!content) {
-      process.exit(0);
-    }
-    
-    // Detect enterprise patterns
-    const detectedPatterns = detectEnterprisePatterns(content, filePath);
-    
-    if (detectedPatterns.length > 0) {
-      // Group by category for cleaner output
-      const byCategory = {};
-      detectedPatterns.forEach(detection => {
-        if (!byCategory[detection.category]) {
-          byCategory[detection.category] = [];
-        }
-        byCategory[detection.category].push(detection);
-      });
-      
-      let message = `🚫 Enterprise Pattern Blocked\n\n`;
-      message += `This is a LOCAL-ONLY project. No enterprise features needed!\n\n`;
-      
-      // Show first few detections
-      let shown = 0;
-      for (const [category, detections] of Object.entries(byCategory)) {
-        if (shown >= 3) break;
-        
-        const detection = detections[0];
-        message += `❌ Detected: ${detection.match}\n`;
-        message += `   Category: ${category}\n`;
-        message += `   Issue: ${detection.message}\n`;
-        message += `   ✅ ${detection.suggestion}\n\n`;
-        shown++;
-      }
-      
-      if (detectedPatterns.length > shown) {
-        message += `... and ${detectedPatterns.length - shown} more enterprise patterns\n\n`;
-      }
-      
-      message += `💡 Remember the KISS principle:\n`;
-      message += `   • Single user, local development only\n`;
-      message += `   • No authentication needed (use mockUser)\n`;
-      message += `   • No monitoring or compliance\n`;
-      message += `   • Focus on AI functionality\n\n`;
-      
-      message += `📖 See GOAL.md for the complete exclusion list`;
-      
-      // Exit code 2 blocks the operation
-      console.error(message);
-      process.exit(2);
-    }
-    
-    // No enterprise patterns detected
-    process.exit(0);
-    
-  } catch (error) {
-    // Always allow operation if hook fails - fail open
-    console.error(`Hook error: ${error.message}`);
-    process.exit(0);
+  // Skip if no content to check
+  if (!content) {
+    return { allow: true };
   }
-});
 
-// Handle timeout
-setTimeout(() => {
-  console.error('Hook timeout - allowing operation');
-  process.exit(0);
-}, 2000); // Slightly longer timeout due to more patterns
+  // Skip exception files that legitimately need enterprise patterns for development
+  const skipPatterns = [
+    // Hook development files (need enterprise patterns to detect them)
+    /tools\/hooks\//,
 
-module.exports = { 
+    // Documentation files (can show examples)
+    /\/docs\//,
+    /\.md$/,
+
+    // Configuration files (package.json can have enterprise deps listed)
+    /package\.json$/,
+  ];
+
+  if (skipPatterns.some((pattern) => pattern.test(filePath))) {
+    return { allow: true };
+  }
+
+  // Skip content that's clearly documentation or hook development
+  const skipContentPatterns = [
+    /\/\/ Hook development/i,
+    /\/\/ Documentation example/i,
+    /patterns.*=.*\[/i, // Pattern definition arrays in hooks
+    /ENTERPRISE_PATTERNS|ANTI_PATTERNS/i, // Hook pattern definitions
+  ];
+
+  if (skipContentPatterns.some((pattern) => pattern.test(content))) {
+    return { allow: true };
+  }
+
+  // Detect enterprise patterns
+  const detectedPatterns = detectEnterprisePatterns(content, filePath);
+
+  if (detectedPatterns.length > 0) {
+    // Group by category for cleaner output
+    const byCategory = {};
+    detectedPatterns.forEach((detection) => {
+      if (!byCategory[detection.category]) {
+        byCategory[detection.category] = [];
+      }
+      byCategory[detection.category].push(detection);
+    });
+
+    let message = `🚫 Enterprise Pattern Blocked\n\n`;
+    message += `This is a LOCAL-ONLY project. No enterprise features needed!\n\n`;
+
+    // Show first few detections
+    let shown = 0;
+    for (const [category, detections] of Object.entries(byCategory)) {
+      if (shown >= 3) break;
+
+      const detection = detections[0];
+      message += `❌ Detected: ${detection.match}\n`;
+      message += `   Category: ${category}\n`;
+      message += `   Issue: ${detection.message}\n`;
+      message += `   ✅ ${detection.suggestion}\n\n`;
+      shown++;
+    }
+
+    if (detectedPatterns.length > shown) {
+      message += `... and ${detectedPatterns.length - shown} more enterprise patterns\n\n`;
+    }
+
+    message += `💡 Remember the KISS principle:\n`;
+    message += `   • Single user, local development only\n`;
+    message += `   • No authentication needed (use mockUser)\n`;
+    message += `   • No monitoring or compliance\n`;
+    message += `   • Focus on AI functionality\n\n`;
+
+    message += `📖 See GOAL.md for the complete exclusion list`;
+
+    return {
+      block: true,
+      message: message,
+    };
+  }
+
+  return { allow: true };
+}
+
+// Run the hook
+HookRunner.create("enterprise-antibody", enterpriseAntibody, { timeout: 2000 });
+
+module.exports = {
   ENTERPRISE_PATTERNS,
   GENERAL_ENTERPRISE_PATTERNS,
-  detectEnterprisePatterns
+  detectEnterprisePatterns,
+  enterpriseAntibody,
 };

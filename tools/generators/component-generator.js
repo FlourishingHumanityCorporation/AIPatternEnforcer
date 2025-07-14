@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-// Test
 // FINAL TEST: Should be blocked by meta-project-guardian with HOOK_DEVELOPMENT=false
 // FINAL TEST: Fixed Claude Code hook input format
 

@@ -3,11 +3,6 @@
 
 echo "🔍 Running pre-commit checks..."
 
-# Clean root directory first
-npm run clean:root
-
-# Claude Code hooks handle validation automatically - no additional checks needed
-
 # Run all enforcement checks
 npm run check:all
 

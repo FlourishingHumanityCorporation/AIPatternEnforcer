@@ -6,78 +6,107 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo disabled",
-            "timeout": 5
+            "command": "node tools/hooks/context-validator.js",
+            "timeout": 3,
+            "family": "validation",
+            "priority": "high",
+            "description": "Validates context efficiency and prevents pollution"
           },
           {
             "type": "command",
             "command": "node tools/hooks/prevent-improved-files.js",
-            "timeout": 2
+            "timeout": 1,
+            "family": "file_hygiene",
+            "priority": "critical",
+            "description": "Prevents duplicate file creation patterns"
           },
           {
             "type": "command",
-            "command": "node tools/hooks/claude-hook-adapter.js tools/hooks/context-validator.js",
-            "timeout": 5
+            "command": "node tools/hooks/scope-limiter.js",
+            "timeout": 4,
+            "family": "security",
+            "priority": "high",
+            "description": "Enforces project scope boundaries"
           },
           {
             "type": "command",
-            "command": "node tools/hooks/claude-hook-adapter.js tools/hooks/scope-limiter.js",
-            "timeout": 5
+            "command": "node tools/hooks/security-scan.js",
+            "timeout": 4,
+            "family": "security",
+            "priority": "high",
+            "description": "Scans for security vulnerabilities"
           },
           {
             "type": "command",
-            "command": "node tools/hooks/claude-hook-adapter.js tools/hooks/security-scan.js",
-            "timeout": 5
-          },
-          {
-            "type": "command",
-            "command": "node tools/hooks/claude-hook-adapter.js tools/hooks/test-first-enforcer.js",
-            "timeout": 5
+            "command": "node tools/hooks/test-location-enforcer.js",
+            "timeout": 3,
+            "family": "testing",
+            "priority": "medium",
+            "description": "Enforces proper test file placement"
           },
           {
             "type": "command",
             "command": "node tools/hooks/enterprise-antibody.js",
-            "timeout": 2
+            "timeout": 2,
+            "family": "pattern_enforcement",
+            "priority": "high",
+            "description": "Blocks enterprise feature patterns"
           },
           {
             "type": "command",
-            "command": "node tools/hooks/ai-integration-validator.js",
-            "timeout": 2
+            "command": "node tools/hooks/architecture-validator.js",
+            "timeout": 3,
+            "family": "architecture",
+            "priority": "high",
+            "description": "Validates architectural patterns and AI integration"
           },
           {
             "type": "command",
             "command": "node tools/hooks/mock-data-enforcer.js",
-            "timeout": 2
+            "timeout": 2,
+            "family": "pattern_enforcement",
+            "priority": "medium",
+            "description": "Enforces mock data usage patterns"
           },
           {
             "type": "command",
             "command": "node tools/hooks/localhost-enforcer.js",
-            "timeout": 2
+            "timeout": 2,
+            "family": "pattern_enforcement",
+            "priority": "medium",
+            "description": "Enforces local development patterns"
           },
           {
             "type": "command",
             "command": "node tools/hooks/vector-db-hygiene.js",
-            "timeout": 2
+            "timeout": 2,
+            "family": "data_hygiene",
+            "priority": "medium",
+            "description": "Maintains vector database hygiene"
           },
           {
             "type": "command",
-            "command": "node tools/hooks/token-economics-guardian.js",
-            "timeout": 2
+            "command": "node tools/hooks/performance-guardian.js",
+            "timeout": 3,
+            "family": "performance",
+            "priority": "high",
+            "description": "Comprehensive performance monitoring and optimization"
           },
           {
             "type": "command",
             "command": "node tools/hooks/streaming-pattern-enforcer.js",
-            "timeout": 2
+            "timeout": 2,
+            "family": "pattern_enforcement",
+            "priority": "medium",
+            "description": "Enforces proper streaming patterns"
           },
           {
             "type": "command",
-            "command": "node tools/hooks/code-bloat-detector.js",
-            "timeout": 2
-          },
-          {
-            "type": "command",
-            "command": "node tools/hooks/performance-budget-keeper.js",
-            "timeout": 2
+            "command": "node tools/hooks/docs-enforcer.js",
+            "timeout": 2,
+            "family": "documentation",
+            "priority": "medium",
+            "description": "Enforces documentation standards and organization"
           }
         ]
       },
@@ -87,12 +116,10 @@
           {
             "type": "command",
             "command": "node tools/hooks/block-root-mess.js",
-            "timeout": 2
-          },
-          {
-            "type": "command",
-            "command": "node tools/hooks/enforce-nextjs-structure.js",
-            "timeout": 2
+            "timeout": 2,
+            "family": "file_hygiene",
+            "priority": "critical",
+            "description": "Prevents root directory pollution"
           }
         ]
       }
@@ -104,32 +131,42 @@
           {
             "type": "command",
             "command": "node tools/hooks/fix-console-logs.js",
-            "timeout": 3
+            "timeout": 3,
+            "family": "code_cleanup",
+            "priority": "medium",
+            "description": "Fixes console.log statements"
           },
           {
             "type": "command",
             "command": "node tools/hooks/validate-prisma.js",
-            "timeout": 2
+            "timeout": 2,
+            "family": "validation",
+            "priority": "medium",
+            "description": "Validates Prisma schema changes"
           },
           {
             "type": "command",
-            "command": "node tools/hooks/claude-hook-adapter.js tools/hooks/api-validator.js",
-            "timeout": 5
-          },
-          {
-            "type": "command",
-            "command": "node tools/hooks/claude-hook-adapter.js tools/hooks/performance-checker.js",
-            "timeout": 5
+            "command": "node tools/hooks/api-validator.js",
+            "timeout": 4,
+            "family": "validation",
+            "priority": "high",
+            "description": "Validates API patterns and structure"
           },
           {
             "type": "command",
             "command": "node tools/hooks/template-integrity-validator.js",
-            "timeout": 2
+            "timeout": 2,
+            "family": "validation",
+            "priority": "medium",
+            "description": "Validates template integrity"
           },
           {
             "type": "command",
             "command": "node tools/hooks/import-janitor.js",
-            "timeout": 3
+            "timeout": 3,
+            "family": "code_cleanup",
+            "priority": "low",
+            "description": "Cleans up unused imports"
           }
         ]
       }

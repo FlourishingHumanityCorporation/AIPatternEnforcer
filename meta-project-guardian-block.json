@@ -1,10 +1,10 @@
 {
-  "timestamp": "2025-07-13T04:04:20.384Z",
-  "toolName": "MultiEdit",
-  "filePath": "/Users/paulrohde/CodeProjects/AIPatternEnforcer/.claude/settings.json",
+  "timestamp": "2025-07-14T06:04:02.899Z",
+  "toolName": "Write",
+  "filePath": "/Users/paulrohde/CodeProjects/AIPatternEnforcer/tools/hooks/template-pattern-matcher.js",
   "protection": {
     "protected": true,
-    "type": "infrastructure"
+    "type": "hooks"
   },
   "hookDev": "false",
   "blocking": true
