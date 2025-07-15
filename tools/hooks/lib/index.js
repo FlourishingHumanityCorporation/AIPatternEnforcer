@@ -5,4 +5,5 @@ module.exports = {
   PatternLibrary: require("./PatternLibrary"),
   ErrorFormatter: require("./ErrorFormatter"),
   PerformanceAnalyzer: require("./PerformanceAnalyzer"),
+  PathResolver: require("./PathResolver"),
 };

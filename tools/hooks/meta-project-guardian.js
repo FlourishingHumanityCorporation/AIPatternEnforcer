@@ -85,6 +85,11 @@ process.stdin.on("end", () => {
       process.exit(0);
     }
 
+    // Allow ALL protected file modifications in development mode
+    if (process.env.HOOK_DEVELOPMENT === "true") {
+      process.exit(0);
+    }
+
     // Check if this is a protected path
     if (isProtectedPath(filePath)) {
       console.error(
