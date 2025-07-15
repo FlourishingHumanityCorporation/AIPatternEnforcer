@@ -18,12 +18,8 @@
 
 const fs = require("fs");
 const path = require("path");
-const {
-  HookRunner,
-  FileAnalyzer,
-  PatternLibrary,
-  ErrorFormatter,
-} = require("./lib");
+const HookRunner = require("./lib/HookRunner");
+const { FileAnalyzer, PatternLibrary, ErrorFormatter } = require("./lib");
 
 // File extensions to validate (use FileAnalyzer instead)
 // const VALIDATABLE_EXTENSIONS = new Set(['.js', '.ts', '.jsx', '.tsx', '.mjs']);
@@ -282,9 +278,10 @@ async function apiValidator(input) {
   return { allow: true };
 }
 
-// Run the hook
-const runner = new HookRunner("api-validator", { timeout: 2000 });
-runner.run(apiValidator);
+// Create and run the hook
+HookRunner.create("api-validator", apiValidator, {
+  timeout: 2000,
+});
 
 module.exports = {
   validateImports,

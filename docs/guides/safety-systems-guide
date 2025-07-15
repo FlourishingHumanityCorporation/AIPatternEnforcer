@@ -1,0 +1,120 @@
+# 🛡️ Safety Systems Guide
+
+Simple protection for Claude terminal sessions that prevents catastrophic file deletions.
+
+## What It Does
+
+Automatically protects your work during Claude sessions:
+
+- **Auto-commits** every 2 hours
+- **Creates backups** every 30 minutes
+- **Detects bulk deletions** (5+ files) and responds immediately
+- **Runs silently** in background
+
+## Quick Start
+
+```bash
+npm install          # Auto-starts protection
+npm run protect:test # Verify it's working
+```
+
+## Components
+
+### Background Protector
+
+**File**: `scripts/safety/background-protector.js`
+**What**: Continuous protection daemon
+**Does**: Auto-commits, backups, deletion monitoring
+
+### Claude Hook
+
+**File**: `tools/hooks/auto-protection-guardian.js`
+**What**: Pre-operation backup creation
+**Does**: Quick backup before Write/Edit operations
+
+### Emergency Guard
+
+**File**: `scripts/safety/destructive-operation-guard.js`
+**What**: Manual protection for risky scripts
+**Usage**: `node scripts/safety/destructive-operation-guard.js <script>`
+
+## Status Check
+
+```bash
+# Is protector running?
+ps aux | grep background-protector
+
+# Check activity log
+tail .claude-session/protector.log
+
+# Run full test
+npm run protect:test
+```
+
+## Emergency Recovery
+
+### If Files Get Deleted
+
+1. **Check backups**: `.claude-session/continuous-backups/`
+2. **Check commits**: `git log --oneline -10`
+3. **Restore**: `git reset --hard <hash>` if needed
+
+### If Protection Stops
+
+```bash
+npm run protect:auto    # Restart
+npm run protect:test    # Verify
+```
+
+## Configuration
+
+Edit timing in `scripts/safety/background-protector.js`:
+
+```javascript
+this.commitInterval = 2 * 60 * 60 * 1000; // 2 hours
+this.backupInterval = 30 * 60 * 1000; // 30 minutes
+this.deletionThreshold = 5; // Files for alert
+```
+
+## How It Saved Us
+
+Previously, a documentation deduplication script deleted 239 files. This system now:
+
+- **Detects** bulk deletions in real-time
+- **Creates** emergency backups automatically
+- **Commits** changes to git immediately
+- **Alerts** user to the incident
+
+Example from logs:
+
+```
+[2025-07-14T23:12:17.792Z] [CRITICAL] BULK DELETION DETECTED: 5 files deleted
+[2025-07-14T23:12:17.918Z] [INFO] Silent backup created
+[2025-07-14T23:12:27.637Z] [INFO] Auto-commit completed successfully
+```
+
+## Testing
+
+The system includes comprehensive tests:
+
+```bash
+npm run protect:test
+```
+
+Tests check:
+
+- Background protector starts
+- Backups work
+- Auto-commits function
+- Hooks integrate properly
+- Emergency procedures available
+
+We also manually tested bulk deletion (6 files) which correctly triggered all protection systems.
+
+## Files Created
+
+- `.claude-session/protector.log` - Activity log
+- `.claude-session/continuous-backups/` - Backup storage
+- `.claude-session/protector.pid` - Process tracking
+
+The system is designed to be invisible during normal use but provide comprehensive protection when needed.

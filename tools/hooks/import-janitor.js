@@ -452,9 +452,10 @@ async function importJanitor(input) {
   return { allow: true };
 }
 
-// Run the hook
-const runner = new HookRunner("import-janitor", { timeout: 2000 });
-runner.run(importJanitor);
+// Create and run the hook
+HookRunner.create("import-janitor", importJanitor, {
+  timeout: 2000,
+});
 
 module.exports = {
   extractImports,

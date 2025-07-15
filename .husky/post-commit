@@ -1,0 +1,36 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Auto-push after commit
+# This hook automatically pushes commits to the remote repository
+
+echo "🚀 Auto-pushing to remote..."
+
+# Check if we have a remote configured
+if ! git remote | grep -q "origin"; then
+    echo "⚠️  No 'origin' remote found - skipping auto-push"
+    exit 0
+fi
+
+# Check if we're on a branch that tracks a remote
+current_branch=$(git branch --show-current)
+if [ -z "$current_branch" ]; then
+    echo "⚠️  Not on a branch - skipping auto-push"
+    exit 0
+fi
+
+# Check if the branch has an upstream
+if ! git rev-parse --abbrev-ref --symbolic-full-name @{u} >/dev/null 2>&1; then
+    echo "⚠️  Current branch '$current_branch' has no upstream - skipping auto-push"
+    echo "💡 Run: git push -u origin $current_branch"
+    exit 0
+fi
+
+# Attempt to push
+if git push; then
+    echo "✅ Successfully pushed to remote"
+else
+    echo "❌ Push failed - you may need to pull first or resolve conflicts"
+    echo "💡 Run: git pull --rebase && git push"
+    exit 1
+fi

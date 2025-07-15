@@ -1,11 +1,13 @@
 # 🚨 PROJECT AI INSTRUCTIONS 🚨
 
 ## GOAL
+
 We are working on AIPatternEnforcer which is a meta project that has the goal to create a reusable project structure
 that solves common friction points when developing software with AI tools like Cursor and Claude by default design. It
 should be copy and pastable and should be a starting point for any project.
 
 **🏠 TARGET USE CASE: LOCAL ONE-PERSON AI APPS ONLY**
+
 - This template is for LOCAL development of personal AI projects
 - NO enterprise features, authentication, user management, or multi-tenant systems
 - Think: AI dating assistant (writing messages, swiping, understanding user background), AI document processor with OCR, personal AI assistant with VLM capabilities
@@ -33,12 +35,13 @@ npm run onboard                # Setup + first component (<5 min)
 npm run g:c ComponentName      # Generate component
 npm test                       # Run tests
 npm run check:all             # Validate everything
-git add . && git commit       # Commit (auto-validated)
+git add . && git commit       # Commit (auto-validated + auto-pushed)
 ```
 
 ## 🛑 CRITICAL RULES (READ FIRST)
 
 ### NEVER DO THESE (WILL BREAK PROJECT)
+
 1. **NEVER create `*_improved.*`, `*_enhanced.*`, `*_v2.*`** - ALWAYS edit original files
 2. **NEVER create files in root directory** - Use subdirectories only
 3. **NEVER use `print()` or `console.log()` in production** - Use proper logging
@@ -48,6 +51,7 @@ git add . && git commit       # Commit (auto-validated)
 ### 🚫 COMPREHENSIVE ENTERPRISE FEATURE EXCLUSIONS
 
 **Authentication & User Management**
+
 - ❌ User sign-up/login systems (Clerk, Auth.js, Supabase Auth)
 - ❌ Role-based access control (RBAC)
 - ❌ User profiles and settings
@@ -57,6 +61,7 @@ git add . && git commit       # Commit (auto-validated)
 - ❌ API key management for external users
 
 **Infrastructure & DevOps**
+
 - ❌ CI/CD pipelines (GitHub Actions beyond basic linting)
 - ❌ Docker/Kubernetes configs
 - ❌ Multi-environment deployments (staging, production)
@@ -68,6 +73,7 @@ git add . && git commit       # Commit (auto-validated)
 - ❌ Graceful shutdown handlers
 
 **Monitoring & Observability**
+
 - ❌ Application Performance Monitoring (APM)
 - ❌ Distributed tracing (OpenTelemetry)
 - ❌ Log aggregation (DataDog, Splunk)
@@ -77,6 +83,7 @@ git add . && git commit       # Commit (auto-validated)
 - ❌ Real user monitoring (RUM)
 
 **Security & Compliance**
+
 - ❌ SOC2/HIPAA/GDPR compliance features
 - ❌ Audit logging
 - ❌ Data encryption at rest
@@ -87,6 +94,7 @@ git add . && git commit       # Commit (auto-validated)
 - ❌ Penetration testing tools
 
 **Team & Collaboration**
+
 - ❌ Code review workflows
 - ❌ Team documentation wikis
 - ❌ Shared development environments
@@ -96,6 +104,7 @@ git add . && git commit       # Commit (auto-validated)
 - ❌ Project management integrations
 
 **Business Features**
+
 - ❌ Payment processing (Stripe, PayPal)
 - ❌ Subscription management
 - ❌ Usage-based billing
@@ -107,6 +116,7 @@ git add . && git commit       # Commit (auto-validated)
 - ❌ Referral systems
 
 **API & Integration**
+
 - ❌ GraphQL layers
 - ❌ REST API versioning
 - ❌ API documentation (Swagger/OpenAPI)
@@ -117,6 +127,7 @@ git add . && git commit       # Commit (auto-validated)
 - ❌ Event-driven architectures
 
 **Data & Analytics**
+
 - ❌ Data warehousing
 - ❌ ETL pipelines
 - ❌ Business intelligence tools
@@ -128,6 +139,7 @@ git add . && git commit       # Commit (auto-validated)
 **ANYTHING THAT'S ABOUT TEAMS**
 
 ### ALWAYS DO THESE
+
 1. **ALWAYS use generators** - `npm run g:c ComponentName` for new components
 2. **ALWAYS write tests first** - No exceptions
 3. **ALWAYS run `npm run check:all` before commits**
@@ -135,32 +147,26 @@ git add . && git commit       # Commit (auto-validated)
 5. **ALWAYS use mock data** - No real user accounts, use mockUser from lib/auth.ts
 
 > 📖 **Need more details?** [Skip to full documentation](#-detailed-documentation) | [Quick
-Reference](docs/quick-reference.md)
+> Reference](docs/quick-reference.md)
 > 🆘 **Having issues?** [Common fixes](#-common-issues) | [QUICK-START.md](QUICK-START.md)
 
 ---
 
 # 📖 DETAILED DOCUMENTATION
 
-*The sections below provide comprehensive guidance. Use the commands above for immediate action.*
+_The sections below provide comprehensive guidance. Use the commands above for immediate action._
 
 ## Table of Contents
 
 **Quick Reference:**
+
 1. [Daily Commands](#daily-commands)
 2. [Key Files](#key-files)
 3. [Common Issues](#-common-issues)
 
-**Complete Rules:**
-4. [Root Directory Rules](#-root-directory-allowlist)
-5. [Testing Requirements](#-testing-requirements)
-6. [Documentation Standards](#-documentation-standards)
+**Complete Rules:** 4. [Root Directory Rules](#-root-directory-allowlist) 5. [Testing Requirements](#-testing-requirements) 6. [Documentation Standards](#-documentation-standards)
 
-**Advanced Usage:**
-7. [Generator Usage](#-generator-usage)
-8. [Debugging Methodology](#-debugging-methodology)
-9. [AI Assistant Integration](#-ai-assistant-integration)
-10. [Project Overview](#-project-overview)
+**Advanced Usage:** 7. [Generator Usage](#-generator-usage) 8. [Debugging Methodology](#-debugging-methodology) 9. [AI Assistant Integration](#-ai-assistant-integration) 10. [Project Overview](#-project-overview)
 
 ## 🎯 QUICK REFERENCE
 
@@ -205,13 +211,13 @@ npm run setup:verify-ai     # Verify AI setup is working
 
 # Enforcement (Modern Hook System)
 npm run check:all           # Check all enforcement rules (lint + type-check + test)
-npm run test                # Run tests  
+npm run test                # Run tests
 npm run lint                # Run ESLint
 npm run type-check          # TypeScript validation
 
 # Real-time enforcement via Claude Code hooks (automatic):
 # - Prevents _improved files during AI interactions
-# - Blocks root directory violations  
+# - Blocks root directory violations
 # - Auto-fixes console.log → logger
 # - Enforces Next.js structure
 # - Validates Prisma schemas
@@ -219,6 +225,7 @@ npm run type-check          # TypeScript validation
 ```
 
 ### Key Files
+
 - **Essential Rules**: `CLAUDE.md` (this file)
 - **Quick Reference**: `docs/quick-reference.md` - Commands & troubleshooting
 - **Workflow Integration**: `docs/guides/workflow-integration.md` - Complete system integration
@@ -267,15 +274,17 @@ npm run type-check          # TypeScript validation
 When you encounter or want to create files in the root directory, follow this checklist:
 
 #### 1. **STOP and IDENTIFY** - What type of file is this?
-   - [ ] Is it a meta-project configuration file? (package.json, tsconfig.json for tools)
-   - [ ] Is it a top-level documentation file? (README.md, CONTRIBUTING.md)
-   - [ ] Is it application code? (components/, app/, lib/, pages/)
-   - [ ] Is it a build artifact? (dist/, .next/, *.tsbuildinfo)
+
+- [ ] Is it a meta-project configuration file? (package.json, tsconfig.json for tools)
+- [ ] Is it a top-level documentation file? (README.md, CONTRIBUTING.md)
+- [ ] Is it application code? (components/, app/, lib/, pages/)
+- [ ] Is it a build artifact? (dist/, .next/, \*.tsbuildinfo)
 
 #### 2. **DECIDE** - Where does it belong?
 
 **✅ KEEP in Root** if it's:
-- **Meta-project Documentation**: 
+
+- **Meta-project Documentation**:
   - `README.md`, `LICENSE`, `CLAUDE.md`, `CONTRIBUTING.md`
   - `SETUP.md`, `QUICK-START.md`, `USER-JOURNEY.md`, `DOCS_INDEX.md`
 - **Meta-project Configuration**:
@@ -286,6 +295,7 @@ When you encounter or want to create files in the root directory, follow this ch
 - **CI/CD Files**: `.github/`, `.husky/`, `.vscode/settings.json`
 
 **🚫 MOVE from Root** if it's:
+
 - **Application Code**:
   - `app/`, `components/`, `lib/`, `pages/` → Move to `templates/[framework-name]/`
   - `src/` → Move to appropriate template or example
@@ -302,26 +312,29 @@ When you encounter or want to create files in the root directory, follow this ch
   - `*.tsbuildinfo` → Add to .gitignore and delete
 
 #### 3. **VERIFY** - Is this the right decision?
-   - [ ] Does this file serve the META-PROJECT or a specific template?
-   - [ ] Would this file make sense in every project created from this template?
-   - [ ] Is this file specific to a particular framework (React/Next.js/Vue)?
+
+- [ ] Does this file serve the META-PROJECT or a specific template?
+- [ ] Would this file make sense in every project created from this template?
+- [ ] Is this file specific to a particular framework (React/Next.js/Vue)?
 
 #### 4. **ACT** - Execute the decision
-   - If KEEPING: Ensure it's in the root allowlist in `tools/enforcement/root-file-enforcement.js`
-   - If MOVING: Use proper subdirectory structure
-   - If DELETING: Also add to `.gitignore` to prevent recreation
+
+- If KEEPING: Ensure it's in the root allowlist in `tools/enforcement/root-file-enforcement.js`
+- If MOVING: Use proper subdirectory structure
+- If DELETING: Also add to `.gitignore` to prevent recreation
 
 ### 🔍 Common Mistakes and Fixes
 
-| Found This | Do This | Why |
-|------------|---------|-----|
-| `app/` directory in root | Move to `templates/nextjs-app-router/app/` | App code belongs in templates |
-| `components/` in root | Move to `templates/[framework]/components/` | UI components are framework-specific |
-| `next.config.js` in root | Move to `templates/nextjs-app-router/` | Framework config belongs with framework |
-| `tsconfig.json` with app paths | Replace with tool-focused tsconfig | Root tsconfig is for meta-project tools |
-| Random `*.md` files | Move to `docs/[category]/` | Keep root clean, organize docs |
+| Found This                     | Do This                                     | Why                                     |
+| ------------------------------ | ------------------------------------------- | --------------------------------------- |
+| `app/` directory in root       | Move to `templates/nextjs-app-router/app/`  | App code belongs in templates           |
+| `components/` in root          | Move to `templates/[framework]/components/` | UI components are framework-specific    |
+| `next.config.js` in root       | Move to `templates/nextjs-app-router/`      | Framework config belongs with framework |
+| `tsconfig.json` with app paths | Replace with tool-focused tsconfig          | Root tsconfig is for meta-project tools |
+| Random `*.md` files            | Move to `docs/[category]/`                  | Keep root clean, organize docs          |
 
 ### 🛠️ Enforcement (Modern Hook System)
+
 - **Real-time prevention**: Claude Code hooks prevent violations automatically
 - **Manual checks**: `npm run check:all` for full validation
 - **Root directory**: Protected by block-root-mess.js hook
@@ -336,6 +349,7 @@ When you encounter or want to create files in the root directory, follow this ch
 friction.
 
 ### 🏠 LOCAL DEVELOPMENT FOCUS:
+
 - **Personal AI Projects**: AI dating assistants, document processors with OCR, VLM-powered assistants
 - **Single User**: No multi-tenancy, user management, or enterprise features
 - **Database**: PostgreSQL (Neon) + Prisma + pgvector for AI embeddings
@@ -344,6 +358,7 @@ friction.
 - **No Production Concerns**: Security, scaling, monitoring simplified for local use
 
 ### Core Features:
+
 - **AI Configurations**: Centralized in `ai/config/`
 - **Code Generators**: `npm run g:c ComponentName` creates complete components with tests
 - **Context Management**: `npm run context` optimizes AI context windows
@@ -351,6 +366,7 @@ friction.
 - **Progressive Documentation**: Role-based guidance for different user types
 
 ### File Organization (Next.js App Router):
+
 ```text
 project-root/
 ├── app/                   # Next.js App Router pages and layouts
@@ -390,6 +406,7 @@ npm run validate
 ## 🧪 TESTING REQUIREMENTS
 
 ### MANDATORY Before ANY Commit:
+
 ```bash
 npm test                   # All tests must pass
 npm run lint              # No linting errors
@@ -398,6 +415,7 @@ npm run check:all         # All enforcement checks (lint + type + test)
 ```
 
 ### Test Coverage:
+
 - **Minimum**: 80% overall coverage
 - **Critical paths**: 100% coverage required
 - **New features**: 90% coverage before merge
@@ -413,8 +431,9 @@ npm run check:all         # All enforcement checks (lint + type + test)
 AIPatternEnforcer uses **Claude Code hooks** for real-time prevention of AI mistakes during development:
 
 **Active Hooks** (see `.claude/settings.json`):
-- `prevent-improved-files.js` - Blocks creation of _improved, _v2, _enhanced files
-- `block-root-mess.js` - Prevents application files in root directory  
+
+- `prevent-improved-files.js` - Blocks creation of \_improved, \_v2, \_enhanced files
+- `block-root-mess.js` - Prevents application files in root directory
 - `fix-console-logs.js` - Auto-converts console.log to logger.info
 - `enforce-nextjs-structure.js` - Enforces proper Next.js App Router structure
 - `validate-prisma.js` - Validates Prisma schema changes
@@ -422,12 +441,14 @@ AIPatternEnforcer uses **Claude Code hooks** for real-time prevention of AI mist
 ### How It Works
 
 **During AI Interactions**:
+
 1. **PreToolUse hooks** prevent bad file operations before they happen
 2. **PostToolUse hooks** automatically fix common issues
 3. Friendly blocking messages guide toward correct approaches
 4. Zero friction for legitimate development
 
 **Example**:
+
 - **You try**: Create `component_improved.tsx`
 - **Hook blocks**: "❌ Don't create component_improved.tsx ✅ Edit the original file instead"
 - **You do**: Edit existing `component.tsx` → Works perfectly
@@ -444,12 +465,14 @@ All old enforcement tools have been removed or replaced with simple stubs. The s
 ## 📚 DOCUMENTATION STANDARDS
 
 ### Writing Rules:
+
 - ❌ NO: "This document describes...", "Implemented!", superlatives
 - ✅ YES: Professional, timeless, measured language
 - ✅ YES: Link to source files with line numbers
 - ✅ YES: Technical descriptions without overconfidence
 
 ### Template Requirements:
+
 - **ALWAYS use templates for new documentation** - `npm run doc:create`
 - **NEVER skip required template sections** - All headers must be present
 - **ALWAYS validate against templates** - `npm run doc:validate filename.md`
@@ -457,6 +480,7 @@ All old enforcement tools have been removed or replaced with simple stubs. The s
 - **Template guide**: [Template Usage](docs/guides/documentation/template-usage.md)
 
 ### Documentation Cleanup:
+
 **DELETE completion docs immediately** - Never create "COMPLETE.md", "FINAL.md", "SUMMARY.md"
 
 ---
@@ -466,12 +490,14 @@ All old enforcement tools have been removed or replaced with simple stubs. The s
 **ALWAYS use generators for new code.**
 
 ### Available Generators:
+
 ```bash
 npm run g:c ComponentName          # Interactive component generator
 npm run g:component ComponentName  # Basic component generator
 ```
 
 ### Generator Creates:
+
 - Component file with TypeScript
 - Test file with comprehensive tests
 - Stories file for Storybook
@@ -485,6 +511,7 @@ npm run g:component ComponentName  # Basic component generator
 ## 🐛 DEBUGGING METHODOLOGY
 
 ### Always Use Arrow-Chain RCA:
+
 1. **Symptom** - What user sees
 2. **Trace** - Follow data flow
 3. **Arrow chain** - Map transformations
@@ -493,6 +520,7 @@ npm run g:component ComponentName  # Basic component generator
 6. **Patch** - Implement at root cause
 
 ### Debug Context:
+
 ```bash
 npm run debug:snapshot     # Capture full debugging context
 ```
@@ -504,17 +532,20 @@ npm run debug:snapshot     # Capture full debugging context
 ## 🤖 AI ASSISTANT INTEGRATION
 
 ### Context Loading:
+
 ```bash
 npm run context           # Load optimized context for AI tools
 npm run context -- src/file.ts  # Context for specific file
 ```
 
 ### AI Tool Configuration:
+
 - **Cursor**: `.cursorrules` file ready to use
 - **Claude**: Context commands provide optimized prompts
 - **Copilot**: Configurations in `ai/config/`
 
 ### Working with AI:
+
 - **ALWAYS provide file paths** in requests
 - **ALWAYS paste current code** - don't rely on AI file reading
 - **ALWAYS include test requirements**
@@ -527,6 +558,7 @@ npm run context -- src/file.ts  # Context for specific file
 ## ⚠️ COMMON ISSUES
 
 ### Quick Fixes:
+
 ```bash
 # Module not found
 npm install
@@ -548,11 +580,13 @@ npm run validate
 ## 📖 NAVIGATION
 
 ### For Different Users:
+
 - **🟢 New Users**: [AI Assistant Setup](docs/guides/ai-development/ai-assistant-setup.md) → [Documentation Hub](docs/README.md)
 - **🟡 Existing Users**: Use commands above + [Generator demos](docs/guides/generators/)
 - **🔴 Expert Users**: [Documentation Index](./DOCS_INDEX.md) + [Architecture docs](docs/architecture/)
 
 ### For Specific Tasks:
+
 - **Setup Project**: [AI Assistant Setup](docs/guides/ai-development/ai-assistant-setup.md)
 - **Generate Code**: `npm run g:c ComponentName`
 - **Debug Issues**: `npm run debug:snapshot` + Arrow-Chain RCA
@@ -560,6 +594,7 @@ npm run validate
 - **Configure AI**: AI configurations in `ai/config/`
 
 ### For Complete Information:
+
 - **Full Methodology**: [Documentation Index](./DOCS_INDEX.md)
 - **Technical Architecture**: [Architecture Documentation](docs/architecture/)
 - **Frontend Rules**: [Documentation Index](./DOCS_INDEX.md) > Development Workflows
