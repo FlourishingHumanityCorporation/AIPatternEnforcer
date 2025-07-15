@@ -16,8 +16,8 @@
  * Returns: { status: 'ok' | 'blocked', message?: string }
  */
 
-const HookRunner = require("./lib/HookRunner");
-const { FileAnalyzer, PatternLibrary, ErrorFormatter } = require("./lib");
+const HookRunner = require("../lib/HookRunner");
+const { FileAnalyzer, PatternLibrary, ErrorFormatter } = require("../lib");
 
 // Use shared scope patterns from PatternLibrary (90% code reduction!)
 // All patterns are now centralized in PatternLibrary.SCOPE_CREEP_PATTERNS and PatternLibrary.GOOD_SCOPE_PATTERNS

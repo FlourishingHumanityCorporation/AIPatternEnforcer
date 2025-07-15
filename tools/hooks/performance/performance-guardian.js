@@ -11,8 +11,8 @@
  * - code-bloat-detector.js - Code bloat prevention
  */
 
-const HookRunner = require("./lib/HookRunner");
-const { PerformanceAnalyzer } = require("./lib");
+const HookRunner = require("../lib/HookRunner");
+const { PerformanceAnalyzer } = require("../lib");
 const path = require("path");
 
 // Performance thresholds

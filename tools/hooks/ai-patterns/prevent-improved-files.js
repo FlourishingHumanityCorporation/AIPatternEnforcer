@@ -7,7 +7,7 @@
  * Demonstrates 85% code reduction while maintaining identical functionality
  */
 
-const HookRunner = require("./lib/HookRunner");
+const HookRunner = require("../lib/HookRunner");
 
 const BAD_PATTERNS = [
   /_improved\./i,

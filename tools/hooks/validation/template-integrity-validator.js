@@ -22,7 +22,7 @@ const {
   FileAnalyzer,
   PatternLibrary,
   ErrorFormatter,
-} = require("./lib");
+} = require("../lib");
 
 // Template file patterns to validate
 const TEMPLATE_PATTERNS = [

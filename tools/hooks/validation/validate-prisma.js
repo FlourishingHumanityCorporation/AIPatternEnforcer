@@ -16,7 +16,7 @@ const {
   FileAnalyzer,
   PatternLibrary,
   ErrorFormatter,
-} = require("./lib");
+} = require("../lib");
 
 // Required sections in a Prisma schema
 const REQUIRED_SECTIONS = {

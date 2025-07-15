@@ -13,8 +13,8 @@
  * Returns: { status: 'ok' | 'blocked', message?: string }
  */
 
-const HookRunner = require("./lib/HookRunner");
-const { FileAnalyzer, PatternLibrary, ErrorFormatter } = require("./lib");
+const HookRunner = require("../lib/HookRunner");
+const { FileAnalyzer, PatternLibrary, ErrorFormatter } = require("../lib");
 
 // Use shared root directory patterns from PatternLibrary (95% code reduction!)
 // All patterns are now centralized in PatternLibrary.ALLOWED_ROOT_FILES and PatternLibrary.DIRECTORY_SUGGESTIONS

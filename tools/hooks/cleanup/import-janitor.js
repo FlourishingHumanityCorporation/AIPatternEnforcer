@@ -24,7 +24,7 @@ const {
   FileAnalyzer,
   PatternLibrary,
   ErrorFormatter,
-} = require("./lib");
+} = require("../lib");
 
 // File extensions to process (use FileAnalyzer instead)
 // const SUPPORTED_EXTENSIONS = ['.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs'];

@@ -395,7 +395,7 @@ echo '{"tool_name": "Edit", "tool_input": {"file_path": "/test.js", "old_string"
 
 ```bash
 # Run all hook tests
-npm test tools/hooks/__tests__/
+find tools/hooks -name "*.test.js" | grep -v jest | xargs -I{} node {}
 
 # Performance testing
 time echo '{"tool_name": "Write", "tool_input": {"file_path": "test.js", "content": "test"}}' | node tools/hooks/meta-project-guardian.js

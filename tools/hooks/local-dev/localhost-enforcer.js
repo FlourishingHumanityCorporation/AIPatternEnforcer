@@ -18,8 +18,8 @@
  * Returns: { status: 'ok' | 'blocked', message?: string }
  */
 
-const HookRunner = require("./lib/HookRunner");
-const { FileAnalyzer, PatternLibrary, ErrorFormatter } = require("./lib");
+const HookRunner = require("../lib/HookRunner");
+const { FileAnalyzer, PatternLibrary, ErrorFormatter } = require("../lib");
 
 // Use shared localhost patterns from PatternLibrary (95% code reduction!)
 // All patterns are now centralized in PatternLibrary.LOCAL_ONLY_PATTERNS and PatternLibrary.GOOD_LOCAL_PATTERNS

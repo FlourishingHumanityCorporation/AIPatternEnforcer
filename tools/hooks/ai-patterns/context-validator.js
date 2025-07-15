@@ -17,8 +17,8 @@
  */
 
 const fs = require("fs");
-const HookRunner = require("./lib/HookRunner");
-const { FileAnalyzer, PatternLibrary, ErrorFormatter } = require("./lib");
+const HookRunner = require("../lib/HookRunner");
+const { FileAnalyzer, PatternLibrary, ErrorFormatter } = require("../lib");
 
 // Scoring thresholds (strict to prevent bad operations)
 const OPERATION_THRESHOLDS = {

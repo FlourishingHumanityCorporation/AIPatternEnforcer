@@ -22,8 +22,8 @@
  * Returns: { status: 'ok' | 'blocked', message?: string }
  */
 
-const HookRunner = require("./lib/HookRunner");
-const { PatternLibrary } = require("./lib");
+const HookRunner = require("../lib/HookRunner");
+const { PatternLibrary } = require("../lib");
 
 // Use shared PatternLibrary for detection (95% code reduction)
 function detectEnterprisePatterns(content, filePath) {

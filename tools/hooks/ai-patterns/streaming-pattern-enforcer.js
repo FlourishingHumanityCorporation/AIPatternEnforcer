@@ -12,7 +12,7 @@ const {
   FileAnalyzer,
   PatternLibrary,
   ErrorFormatter,
-} = require("./lib");
+} = require("../lib");
 
 // Simple patterns for streaming operations
 const STREAMING_PATTERNS = [

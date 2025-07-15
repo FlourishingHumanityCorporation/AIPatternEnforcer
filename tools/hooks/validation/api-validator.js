@@ -18,8 +18,8 @@
 
 const fs = require("fs");
 const path = require("path");
-const HookRunner = require("./lib/HookRunner");
-const { FileAnalyzer, PatternLibrary, ErrorFormatter } = require("./lib");
+const HookRunner = require("../lib/HookRunner");
+const { FileAnalyzer, PatternLibrary, ErrorFormatter } = require("../lib");
 
 // File extensions to validate (use FileAnalyzer instead)
 // const VALIDATABLE_EXTENSIONS = new Set(['.js', '.ts', '.jsx', '.tsx', '.mjs']);

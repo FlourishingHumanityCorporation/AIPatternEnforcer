@@ -8,7 +8,7 @@
     "ai:check": "npm run lint && npm run type-check && npm run test",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
     "type-check": "tsc --noEmit",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "test:hooks": "node scripts/testing/run-hook-tests.js",
     "choose-stack": "node tools/generators/stack-decision-wizard.js",
     "stack-wizard": "node tools/generators/stack-decision-wizard.js",

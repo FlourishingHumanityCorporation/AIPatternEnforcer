@@ -23,7 +23,7 @@ const {
   FileAnalyzer,
   PatternLibrary,
   ErrorFormatter,
-} = require("./lib");
+} = require("../lib");
 
 // Standard embedding dimensions for different models
 const EMBEDDING_DIMENSIONS = {

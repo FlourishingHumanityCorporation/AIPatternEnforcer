@@ -9,7 +9,7 @@
  * - enforce-nextjs-structure.js - Next.js App Router structure
  */
 
-const HookRunner = require("./lib/HookRunner");
+const HookRunner = require("../lib/HookRunner");
 const path = require("path");
 
 // Next.js App Router structure patterns

@@ -14,8 +14,8 @@
  */
 
 const fs = require("fs");
-const HookRunner = require("./lib/HookRunner");
-const { FileAnalyzer, PatternLibrary } = require("./lib");
+const HookRunner = require("../lib/HookRunner");
+const { FileAnalyzer, PatternLibrary } = require("../lib");
 
 // Use shared console replacement patterns from PatternLibrary (80% code reduction!)
 // All patterns are now centralized in PatternLibrary.CONSOLE_REPLACEMENTS

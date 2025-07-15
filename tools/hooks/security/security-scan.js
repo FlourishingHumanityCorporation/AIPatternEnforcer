@@ -13,8 +13,8 @@
  */
 
 const fs = require("fs");
-const HookRunner = require("./lib/HookRunner");
-const { FileAnalyzer, PatternLibrary, ErrorFormatter } = require("./lib");
+const HookRunner = require("../lib/HookRunner");
+const { FileAnalyzer, PatternLibrary, ErrorFormatter } = require("../lib");
 
 // Enhanced security patterns with fix suggestions (using shared patterns as base)
 const SECURITY_FIXES = {

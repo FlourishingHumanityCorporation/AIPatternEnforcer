@@ -71,4 +71,7 @@ async function runTests() {
   process.exit(passed === results.length ? 0 : 1);
 }
 
-runTests().catch(console.error);
+// Run the original test runner for standalone execution
+if (require.main === module) {
+  runTests().catch(console.error);
+}

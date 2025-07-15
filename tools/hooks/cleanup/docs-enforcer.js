@@ -8,7 +8,7 @@
  * - docs-organization-enforcer.js - Documentation structure enforcement
  */
 
-const HookRunner = require("./lib/HookRunner");
+const HookRunner = require("../lib/HookRunner");
 const path = require("path");
 
 // Blocked completion document patterns (from CLAUDE.md rules)

@@ -23,7 +23,7 @@ const {
   FileAnalyzer,
   PatternLibrary,
   ErrorFormatter,
-} = require("./lib");
+} = require("../lib");
 
 // Suggested mock implementations
 const MOCK_SUGGESTIONS = {

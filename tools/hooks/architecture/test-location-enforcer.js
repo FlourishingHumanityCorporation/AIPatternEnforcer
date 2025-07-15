@@ -7,7 +7,7 @@
  * Ensures tests are co-located with source files for better maintainability.
  */
 
-const HookRunner = require("./lib/HookRunner");
+const HookRunner = require("../lib/HookRunner");
 const path = require("path");
 
 const TEST_PATTERNS = {
