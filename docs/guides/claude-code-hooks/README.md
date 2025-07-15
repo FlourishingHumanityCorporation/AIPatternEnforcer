@@ -1,9 +1,11 @@
 # Claude Code Hooks System Documentation
 
-**Last Updated**: 2025-07-14  
+**Last Updated**: 2025-07-15  
 **System Version**: 3.0 (Consolidated Architecture)  
-**Active Hooks**: 19 configured in `.claude/settings.json`  
+**Active Hooks**: 19 configured in `.claude/settings.json` (validated via emergency audit)  
 **Architecture**: Modular with shared utilities in `tools/hooks/lib/`
+
+**🚨 CRITICAL DOCUMENTATION UPDATE**: After emergency audit, confirmed 19 hooks actually exist in `.claude/settings.json`, correcting previous conflicting counts (21, 23, 24) found in other documentation.
 
 This documentation provides comprehensive guidance for understanding, configuring, and troubleshooting the Claude Code hooks system in AIPatternEnforcer.
 
@@ -40,7 +42,7 @@ This documentation provides comprehensive guidance for understanding, configurin
 
 ### 4. [Hook Reference](./04-hooks-reference.md)
 
-**Complete hook documentation** - Individual documentation for all 19 hooks:
+**Complete hook documentation** - Individual documentation for all 19 active hooks:
 
 - Detailed functionality and purpose
 - Configuration examples and parameters
@@ -123,7 +125,7 @@ The hook system underwent a major consolidation refactoring to improve maintaina
 
 ### Key Changes:
 
-- **Hook Count**: Reduced from 24 to 19 through intelligent consolidation
+- **Hook Count**: Currently 19 active hooks in production configuration
 - **Shared Utilities**: New `tools/hooks/lib/` directory with reusable components
 - **Consolidated Hooks**:
   - `architecture-validator.js`: Combines AI integration, architecture drift, and Next.js structure validation
@@ -319,4 +321,4 @@ echo '{"tool_name": "Write", "tool_input": {"file_path": "test.js", "content": "
 
 ---
 
-**Note**: This documentation represents the complete, expanded guide for the Claude Code hooks system in AIPatternEnforcer. With 8 comprehensive guides covering all aspects from basic usage to advanced development, this is the definitive resource for understanding and working with the 23-hook system.
+**Note**: This documentation represents the complete, expanded guide for the Claude Code hooks system in AIPatternEnforcer. With 8 comprehensive guides covering all aspects from basic usage to advanced development, this is the definitive resource for understanding and working with the 19-hook system.

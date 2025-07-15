@@ -17,6 +17,7 @@
  */
 
 const fs = require("fs");
+const path = require("path");
 const {
   HookRunner,
   FileAnalyzer,
@@ -190,12 +191,12 @@ function validateBuiltInAPIs(content) {
   // Common AI hallucinations
   const hallucinatedAPIs = [
     {
-      pattern: /\.useServerState\s*\(/g,
+      pattern: /\buseServerState\s*\(/g,
       message: "useServerState is not a real React hook",
       suggestion: "Use useState, useEffect, or a data fetching library",
     },
     {
-      pattern: /\.autoSave\s*\(/g,
+      pattern: /\bautoSave\s*\(/g,
       message: "autoSave is not a standard API",
       suggestion: "Implement auto-save functionality explicitly",
     },
@@ -236,7 +237,7 @@ async function apiValidator(input) {
   const fileInfo = FileAnalyzer.extractFileInfo(filePath);
 
   // Skip non-validatable files (use FileAnalyzer instead of hardcoded extensions)
-  if (!fileInfo.isCodeFile()) {
+  if (!FileAnalyzer.isCodeFile(filePath)) {
     return { allow: true };
   }
 
