@@ -1,1 +1,2 @@
 Testing auto-push functionality
+Testing automatic hooks
