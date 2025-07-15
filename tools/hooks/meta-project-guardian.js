@@ -14,6 +14,33 @@
 const path = require("path");
 const fs = require("fs");
 
+// Load environment variables from .env file
+function loadEnvFile() {
+  try {
+    const envPath = path.join(process.cwd(), ".env");
+    if (fs.existsSync(envPath)) {
+      const envContent = fs.readFileSync(envPath, "utf8");
+      const lines = envContent.split("\n");
+
+      for (const line of lines) {
+        const trimmedLine = line.trim();
+        if (trimmedLine && !trimmedLine.startsWith("#")) {
+          const [key, ...valueParts] = trimmedLine.split("=");
+          if (key && valueParts.length > 0) {
+            const value = valueParts.join("=").trim();
+            process.env[key.trim()] = value;
+          }
+        }
+      }
+    }
+  } catch (error) {
+    // Fail silently if .env file cannot be read
+  }
+}
+
+// Load environment variables
+loadEnvFile();
+
 // Critical infrastructure paths that must not be modified by AI
 const PROTECTED_PATHS = [
   "tools/generators/",
