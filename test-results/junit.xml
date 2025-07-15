@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="8" failures="7" errors="0" time="0.931">
+  <testsuite name="tests/unit/template-core.test.js" errors="0" failures="7" skipped="0" timestamp="2025-07-15T20:10:12" time="0.826" tests="8">
+    <testcase classname="AIPatternEnforcer Template Core Requirements" name="CLAUDE.md exists and contains critical rules" time="0.002">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: true
+Received: false
+    at Object.toBe (/Users/paulrohde/CodeProjects/AIPatternEnforcer/tests/unit/template-core.test.js:14:39)
+    at Promise.then.completed (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+    <testcase classname="AIPatternEnforcer Template Core Requirements" name="package.json has essential AI development dependencies" time="0">
+      <failure>Error: ENOENT: no such file or directory, open &apos;/Users/paulrohde/CodeProjects/AIPatternEnforcer/tests/package.json&apos;
+    at readFileSyncUtf8 (node:internal/fs/read/utf8:20:3)
+    at Object.readFileSync (node:fs:467:12)
+    at Object.readFileSync (/Users/paulrohde/CodeProjects/AIPatternEnforcer/tests/unit/template-core.test.js:24:31)
+    at Promise.then.completed (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+    <testcase classname="AIPatternEnforcer Template Core Requirements" name="essential npm scripts exist and are simple" time="0">
+      <failure>Error: ENOENT: no such file or directory, open &apos;/Users/paulrohde/CodeProjects/AIPatternEnforcer/tests/package.json&apos;
+    at readFileSyncUtf8 (node:internal/fs/read/utf8:20:3)
+    at Object.readFileSync (node:fs:467:12)
+    at Object.readFileSync (/Users/paulrohde/CodeProjects/AIPatternEnforcer/tests/unit/template-core.test.js:41:31)
+    at Promise.then.completed (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+    <testcase classname="AIPatternEnforcer Template Core Requirements" name="Claude Code hooks directory exists" time="0">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: true
+Received: false
+    at Object.toBe (/Users/paulrohde/CodeProjects/AIPatternEnforcer/tests/unit/template-core.test.js:56:38)
+    at Promise.then.completed (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+    <testcase classname="AIPatternEnforcer Template Core Requirements" name="templates directory exists for copy-paste functionality" time="0.001">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: true
+Received: false
+    at Object.toBe (/Users/paulrohde/CodeProjects/AIPatternEnforcer/tests/unit/template-core.test.js:66:42)
+    at Promise.then.completed (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+    <testcase classname="AIPatternEnforcer Template Core Requirements" name="tools/generators directory exists for AI development" time="0">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: true
+Received: false
+    at Object.toBe (/Users/paulrohde/CodeProjects/AIPatternEnforcer/tests/unit/template-core.test.js:71:43)
+    at Promise.then.completed (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+    <testcase classname="Template Simplicity (GOAL.md Compliance)" name="no complex enterprise directories exist" time="0.001">
+    </testcase>
+    <testcase classname="Template Simplicity (GOAL.md Compliance)" name="README focuses on local AI development" time="0">
+      <failure>Error: expect(received).not.toContain(expected) // indexOf
+
+Expected substring: not &quot;enterprise&quot;
+Received string:        &quot;# aipatternenforcer test suite
+
+## overview
+
+this directory contains the comprehensive test suite for aipatternenforcer, organized by test type and purpose.
+
+## test structure
+
+```
+tests/
+├── unit/              # unit tests for individual functions/modules
+├── integration/       # integration tests for system components
+├── hooks/            # claude code hook tests
+├── e2e/              # end-to-end tests (future)
+├── fixtures/         # test data and mock files
+├── helpers/          # shared test utilities
+└── setup/            # jest setup and configuration files
+```
+
+## running tests
+
+### all tests
+```bash
+npm test                    # run all tests
+npm test -- --watch        # run in watch mode
+npm test -- --coverage     # run with coverage report
+```
+
+### specific test types
+```bash
+npm run test:unit          # unit tests only
+npm run test:integration   # integration tests only
+npm run test:hooks         # hook tests only
+npm run test:components    # component tests only
+```
+
+### ci testing
+```bash
+npm run test:ci            # run tests in ci mode with coverage
+```
+
+### template validation
+```bash
+npm run test:template      # run all template validation tests
+./scripts/testing/test-ai-integration.sh    # ai integration tests
+./scripts/testing/test-user-experience.sh   # ux tests
+```
+
+## test utilities
+
+### mock factory (`helpers/mock-factory.js`)
+provides standardized mock data generation:
+- `createfilesystem()` - mock file system structure
+- `createhookinput()` - claude code hook inputs
+- `createpackagejson()` - mock package.json files
+- `createreactcomponent()` - mock react components
+- `createviolationcontent()` - content with various violations
+
+### test utils (`helpers/test-utils.js`)
+common testing utilities:
+- `createtempdir()` - temporary test directories
+- `runcommand()` - execute commands with output capture
+- `measuretime()` - performance measurement
+- `mockconsole()` - console mocking
+- `withenv()` - test with environment variables
+
+### custom assertions (`helpers/assertions.js`)
+project-specific jest matchers:
+- `tofollownamingconvention()` - check file naming
+- `tocontainenterprisepatterns()` - detect enterprise code
+- `tobeinallowedrootlocation()` - validate root files
+- `tobevalidhookresponse()` - check hook responses
+- `touseproperlogging()` - validate logging patterns
+
+## writing tests
+
+### unit test example
+```javascript
+// tests/unit/generator.test.js
+describe(&apos;component generator&apos;, () =&gt; {
+  test(&apos;should generate component with typescript&apos;, () =&gt; {
+    const options = mockfactory.creategeneratoroptions({
+      name: &apos;button&apos;,
+      typescript: true
+    });
+    
+    const result = generatecomponent(options);
+    
+    expect(result.files).tohavelength(3);
+    expect(result.files[0].path).tobe(&apos;button.tsx&apos;);
+  });
+});
+```
+
+### hook test example
+```javascript
+// tests/hooks/my-hook.test.js
+describe(&apos;my-hook&apos;, () =&gt; {
+  test(&apos;should block invalid patterns&apos;, async () =&gt; {
+    const input = claudecodemocks.createhookinput({
+      filepath: &apos;invalid_file.js&apos;
+    });
+    
+    const result = await testhookwithspawn(&apos;my-hook&apos;, input);
+    
+    expect(result).tobeblocked();
+  });
+});
+```
+
+### integration test example
+```javascript
+// tests/integration/workflow.test.js
+describe(&apos;complete workflow&apos;, () =&gt; {
+  test(&apos;should create component with all features&apos;, async () =&gt; {
+    const project = createtestproject(&apos;test-app&apos;);
+    
+    const output = runintestproject(project, 
+      &apos;npm run g:c mycomponent&apos;
+    );
+    
+    expect(output).tocontain(&apos;component created&apos;);
+    testutils.assertfileexists(
+      path.join(project, &apos;src/components/mycomponent.tsx&apos;)
+    );
+  });
+});
+```
+
+## coverage requirements
+
+- **global**: 80% minimum coverage
+- **hooks**: 90% minimum coverage (critical path)
+- **generators**: 75% minimum coverage
+
+view coverage report:
+```bash
+npm run test:coverage
+open coverage/index.html
+```
+
+## performance testing
+
+performance tests ensure hooks and generators execute efficiently:
+- simple hooks: &lt; 50ms
+- medium complexity: &lt; 100ms
+- complex validations: &lt; 200ms
+
+run performance tests:
+```bash
+npm test -- tests/integration/hook-performance.test.js
+```
+
+## ci/cd integration
+
+tests run automatically on:
+- push to main/develop branches
+- pull requests
+- manual workflow dispatch
+
+github actions workflow: `.github/workflows/test.yml`
+
+## debugging tests
+
+```bash
+# run specific test file
+npm test -- tests/unit/specific.test.js
+
+# run with debugging
+node --inspect-brk node_modules/.bin/jest tests/unit/specific.test.js
+
+# verbose output
+npm test -- --verbose
+
+# update snapshots
+npm test -- -u
+```
+
+## best practices
+
+1. **isolation**: each test should be independent
+2. **clarity**: test names should describe what they test
+3. **speed**: keep tests fast (&lt; 100ms per test)
+4. **coverage**: write tests for edge cases
+5. **mocking**: use provided mock utilities
+6. **cleanup**: always clean up test artifacts
+
+## troubleshooting
+
+### tests failing locally but not in ci
+- check node.js version matches ci (18.x or 20.x)
+- ensure clean install: `rm -rf node_modules &amp;&amp; npm ci`
+- check for timing issues in async tests
+
+### coverage not updating
+- clear jest cache: `npm test -- --clearcache`
+- check coverage configuration in `jest.config.js`
+
+### hook tests timing out
+- increase timeout in test: `jest.settimeout(10000)`
+- check for infinite loops in hook code
+- verify spawn process handling&quot;
+    at Object.toContain (/Users/paulrohde/CodeProjects/AIPatternEnforcer/tests/unit/template-core.test.js:99:27)
+    at Promise.then.completed (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/utils.js:231:10)
+    at _callCircusTest (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:316:40)
+    at _runTest (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:252:3)
+    at _runTestsForDescribeBlock (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:126:9)
+    at _runTestsForDescribeBlock (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:121:9)
+    at run (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/run.js:71:3)
+    at runAndTransformResultsToJestFormat (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+    at jestAdapter (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+    at runTestInternal (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-runner/build/runTest.js:367:16)
+    at runTest (/Users/paulrohde/CodeProjects/AIPatternEnforcer/node_modules/jest-runner/build/runTest.js:444:34)</failure>
+    </testcase>
+  </testsuite>
+</testsuites>
