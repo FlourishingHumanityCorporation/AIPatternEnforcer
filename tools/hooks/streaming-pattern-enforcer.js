@@ -63,8 +63,10 @@ async function streamingPatternEnforcer(input) {
 }
 
 // Run the hook
-const runner = new HookRunner("streaming-pattern-enforcer", { timeout: 2000 });
-runner.run(streamingPatternEnforcer);
+// Create and run the hook
+HookRunner.create("streaming-pattern-enforcer", streamingPatternEnforcer, {
+  timeout: 2000,
+});
 
 module.exports = {
   STREAMING_PATTERNS,

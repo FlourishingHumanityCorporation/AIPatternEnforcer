@@ -6,6 +6,14 @@
         "hooks": [
           {
             "type": "command",
+            "command": "node tools/hooks/meta-project-guardian.js",
+            "timeout": 2,
+            "family": "infrastructure_protection",
+            "priority": "critical",
+            "description": "Protects meta-project infrastructure from AI modifications"
+          },
+          {
+            "type": "command",
             "command": "node tools/hooks/context-validator.js",
             "timeout": 3,
             "family": "validation",

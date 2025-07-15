@@ -108,7 +108,9 @@ async function validatePrisma(input) {
 }
 
 // Run the hook
-const runner = new HookRunner("validate-prisma", { timeout: 1500 });
-runner.run(validatePrisma);
+// Create and run the hook
+HookRunner.create("validate-prisma", validatePrisma, {
+  timeout: 1500,
+});
 
 module.exports = { REQUIRED_SECTIONS, COMMON_ISSUES, validatePrisma };

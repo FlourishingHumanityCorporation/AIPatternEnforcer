@@ -4,4 +4,5 @@ module.exports = {
   FileAnalyzer: require("./FileAnalyzer"),
   PatternLibrary: require("./PatternLibrary"),
   ErrorFormatter: require("./ErrorFormatter"),
+  PerformanceAnalyzer: require("./PerformanceAnalyzer"),
 };

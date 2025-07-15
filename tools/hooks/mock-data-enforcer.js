@@ -54,7 +54,7 @@ export const mockApiResponse = (data, delay = 100) => {
 // Use shared PatternLibrary for detection (95% code reduction!)
 function detectRealAuthPatterns(content, filePath) {
   const detectedPatterns = [];
-  
+
   // Check auth patterns from shared library
   const authPatterns = PatternLibrary.ENTERPRISE_PATTERNS.auth;
   for (const pattern of authPatterns) {
@@ -68,8 +68,8 @@ function detectRealAuthPatterns(content, filePath) {
       });
     }
   }
-  
-  // Check production patterns from shared library  
+
+  // Check production patterns from shared library
   const productionPatterns = PatternLibrary.ENTERPRISE_PATTERNS.production;
   for (const pattern of productionPatterns) {
     const matches = content.match(pattern);
@@ -82,12 +82,14 @@ function detectRealAuthPatterns(content, filePath) {
       });
     }
   }
-  
+
   return detectedPatterns;
 }
 
 function checkForGoodPatterns(content) {
-  return PatternLibrary.GOOD_MOCK_PATTERNS.filter((pattern) => pattern.test(content));
+  return PatternLibrary.GOOD_MOCK_PATTERNS.filter((pattern) =>
+    pattern.test(content),
+  );
 }
 
 function shouldSkipFile(filePath) {
@@ -175,9 +177,10 @@ async function mockDataEnforcer(input) {
   return { allow: true };
 }
 
-// Run the hook
-const runner = new HookRunner("mock-data-enforcer", { timeout: 1500 });
-runner.run(mockDataEnforcer);
+// Create and run the hook
+HookRunner.create("mock-data-enforcer", mockDataEnforcer, {
+  timeout: 1500,
+});
 
 module.exports = {
   MOCK_SUGGESTIONS,

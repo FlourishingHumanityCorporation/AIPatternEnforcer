@@ -333,10 +333,10 @@ async function templateIntegrityValidator(input) {
 }
 
 // Run the hook
-const runner = new HookRunner("template-integrity-validator", {
+// Create and run the hook
+HookRunner.create("template-integrity-validator", templateIntegrityValidator, {
   timeout: 2000,
 });
-runner.run(templateIntegrityValidator);
 
 module.exports = {
   TEMPLATE_PATTERNS,

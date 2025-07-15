@@ -411,8 +411,10 @@ async function vectorDbHygiene(input) {
 }
 
 // Run the hook
-const runner = new HookRunner("vector-db-hygiene", { timeout: 2000 });
-runner.run(vectorDbHygiene);
+// Create and run the hook
+HookRunner.create("vector-db-hygiene", vectorDbHygiene, {
+  timeout: 2000,
+});
 
 module.exports = {
   EMBEDDING_DIMENSIONS,
