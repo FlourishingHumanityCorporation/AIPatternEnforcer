@@ -50,7 +50,9 @@ class HookEnvUtils {
    */
   static createBypassResult(hookName, verbose = false) {
     if (verbose) {
-      console.log(`=' Hook ${hookName} bypassed: ${this.getBypassReason()}`);
+      process.stderr.write(
+        `=' Hook ${hookName} bypassed: ${this.getBypassReason()}\n`,
+      );
     }
 
     return {
@@ -65,7 +67,7 @@ class HookEnvUtils {
    */
   static exitWithBypass(exitCode = 0) {
     if (process.env.HOOK_VERBOSE === "true") {
-      console.log(`=' Hook bypassed: ${this.getBypassReason()}`);
+      process.stderr.write(`=' Hook bypassed: ${this.getBypassReason()}\n`);
     }
     process.exit(exitCode);
   }
