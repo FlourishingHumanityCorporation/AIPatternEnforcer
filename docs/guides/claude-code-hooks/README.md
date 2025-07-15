@@ -1,15 +1,16 @@
-```markdown
+````markdown
 # AI Development Enforcement System
 
 **Last Updated**: 2025-07-14
 **System Type**: Custom validation scripts called via Claude Code hooks
-**Active Scripts**: 19 validation scripts in `tools/hooks/`
+**Active Scripts**: 20 validation scripts in `tools/hooks/`
 
 This comprehensive guide covers the **custom AI development enforcement system** implemented in AIPatternEnforcer. This system uses **legitimate Claude Code hooks** to call custom validation scripts that prevent common AI development friction by intercepting file operations and providing real-time feedback.
 
 ## ⚠️ Important Distinction
 
 This is **NOT** the official Claude Code hooks system. This is a **custom enforcement system** that:
+
 - Uses legitimate Claude Code hooks (configured in `.claude/settings.json`)
 - Calls custom validation scripts (`tools/hooks/*.js`)
 - Implements project-specific patterns and validations
@@ -20,17 +21,19 @@ This is **NOT** the official Claude Code hooks system. This is a **custom enforc
 ## 📚 Complete Documentation Guide
 
 ### Core Documentation
+
 - **[00-hooks-official-documentation.md](./00-hooks-official-documentation.md)** - Official Claude Code hooks documentation
 - **[01-hooks-overview.md](./01-hooks-overview.md)** - Custom enforcement system architecture
 - **[02-hooks-configuration.md](./02-hooks-configuration.md)** - Claude Code hooks + custom scripts setup
 - **[03-hooks-troubleshooting.md](./03-hooks-troubleshooting.md)** - Debug and resolve issues
-- **[04-hooks-reference.md](./04-hooks-reference.md)** - Complete reference for all 19 validation scripts
+- **[04-hooks-reference.md](./04-hooks-reference.md)** - Complete reference for all 20 validation scripts
 - **[05-hooks-development.md](./05-hooks-development.md)** - Developing custom validation scripts
 - **[06-hooks-examples.md](./06-hooks-examples.md)** - Real-world Claude Code hook configurations
 - **[07-hooks-testing.md](./07-hooks-testing.md)** - Testing validation scripts and hook configs
 - **[08-hooks-performance.md](./08-hooks-performance.md)** - Optimizing validation script performance
 
 ### Quick Start
+
 1. **New to system?** → Start with [00-hooks-official-documentation.md](./00-hooks-official-documentation.md) (official docs)
 2. **Custom system overview?** → Read [01-hooks-overview.md](./01-hooks-overview.md)
 3. **Setup needed?** → Follow [02-hooks-configuration.md](./02-hooks-configuration.md)
@@ -39,7 +42,7 @@ This is **NOT** the official Claude Code hooks system. This is a **custom enforc
 
 ## System Overview
 
-This custom enforcement system uses **official Claude Code hooks** to call **19 custom validation scripts** that prevent AI development friction.
+This custom enforcement system uses **official Claude Code hooks** to call **20 custom validation scripts** that prevent AI development friction.
 
 ### How It Works
 
@@ -51,15 +54,15 @@ This custom enforcement system uses **official Claude Code hooks** to call **19 
 
 ### Validation Script Categories
 
-| Category | Scripts | Purpose | Examples |
-|----------|---------|---------|----------|
-| **File Hygiene** | 2 | Prevent file pollution | `prevent-improved-files.js`, `block-root-mess.js` |
-| **Security** | 2 | Security validation | `security-scan.js`, `scope-limiter.js` |
-| **Context Quality** | 1 | AI request validation | `context-validator.js` |
-| **Architecture** | 1 | Pattern compliance | `architecture-validator.js` (consolidated) |
-| **Enforcement** | 6 | Development patterns | `enterprise-antibody.js`, `mock-data-enforcer.js` |
-| **Auto-Cleanup** | 5 | Post-processing | `fix-console-logs.js`, `import-janitor.js` |
-| **Other** | 2 | Specialized validation | `vector-db-hygiene.js`, `test-location-enforcer.js` |
+| Category            | Scripts | Purpose                | Examples                                            |
+| ------------------- | ------- | ---------------------- | --------------------------------------------------- |
+| **File Hygiene**    | 2       | Prevent file pollution | `prevent-improved-files.js`, `block-root-mess.js`   |
+| **Security**        | 2       | Security validation    | `security-scan.js`, `scope-limiter.js`              |
+| **Context Quality** | 1       | AI request validation  | `context-validator.js`                              |
+| **Architecture**    | 1       | Pattern compliance     | `architecture-validator.js` (consolidated)          |
+| **Enforcement**     | 6       | Development patterns   | `enterprise-antibody.js`, `mock-data-enforcer.js`   |
+| **Auto-Cleanup**    | 5       | Post-processing        | `fix-console-logs.js`, `import-janitor.js`          |
+| **Other**           | 2       | Specialized validation | `vector-db-hygiene.js`, `test-location-enforcer.js` |
 
 **Execution**: Each script runs when triggered by Claude Code hooks (<500ms total)
 
@@ -112,6 +115,7 @@ This system is implemented using **legitimate Claude Code hooks** that call cust
   }
 }
 ```
+````
 
 ### Script Input Format (Official Claude Code Schema)
 
@@ -150,6 +154,7 @@ The v3.0 system provides consistent, actionable error messages with clear guidan
 ## Quick Commands
 
 ### Testing Hooks
+
 ```bash
 # Test individual hook
 echo '{"tool_name": "Write", "tool_input": {"file_path": "test.js", "content": "test"}}' | node tools/hooks/prevent-improved-files.js
@@ -162,6 +167,7 @@ npm test tools/hooks/__tests__/performance/
 ```
 
 ### Debugging
+
 ```bash
 # Enable debug mode
 DEBUG=claude-hooks node tools/hooks/security-scan.js
@@ -173,12 +179,14 @@ cat .claude/settings.json | jq .
 ## Key Benefits
 
 ### For AI Development
+
 - **Prevents Common Mistakes**: Blocks duplicate files, enterprise complexity
 - **Maintains Code Quality**: Enforces tests, proper logging, security
 - **Optimizes AI Interactions**: Validates parameters, prevents low-quality edits
 - **Auto-Fixes Issues**: Cleans up imports, converts console.log, validates schemas
 
 ### Performance Characteristics
+
 - **Total execution**: <500ms for full hook chain (target: 380ms)
 - **Architecture**: Fail-open (operations proceed if hooks error)
 - **Family-based timeouts**: Optimized by hook category (1-4s)
@@ -196,18 +204,21 @@ cat .claude/settings.json | jq .
 
 ## 📖 Documentation Navigation
 
-| Topic | File | Purpose |
-|---|---|---|
-| **Overview** | [01-hooks-overview.md](./01-hooks-overview.md) | System architecture, categories, benefits |
-| **Setup** | [02-hooks-configuration.md](./02-hooks-configuration.md) | Configuration, family management, session handling |
-| **Troubleshooting** | [03-hooks-troubleshooting.md](./03-hooks-troubleshooting.md) | Common issues, debugging, solutions |
-| **Reference** | [04-hooks-reference.md](./04-hooks-reference.md) | Complete reference for all 19 hooks |
-| **Development** | [05-hooks-development.md](./05-hooks-development.md) | Creating custom hooks with HookRunner |
-| **Examples** | [06-hooks-examples.md](./06-hooks-examples.md) | Real-world usage scenarios |
-| **Testing** | [07-hooks-testing.md](./07-hooks-testing.md) | Testing methodology and procedures |
-| **Performance** | [08-hooks-performance.md](./08-hooks-performance.md) | Optimization and monitoring |
+| Topic               | File                                                         | Purpose                                            |
+| ------------------- | ------------------------------------------------------------ | -------------------------------------------------- |
+| **Overview**        | [01-hooks-overview.md](./01-hooks-overview.md)               | System architecture, categories, benefits          |
+| **Setup**           | [02-hooks-configuration.md](./02-hooks-configuration.md)     | Configuration, family management, session handling |
+| **Troubleshooting** | [03-hooks-troubleshooting.md](./03-hooks-troubleshooting.md) | Common issues, debugging, solutions                |
+| **Reference**       | [04-hooks-reference.md](./04-hooks-reference.md)             | Complete reference for all 20 hooks                |
+| **Development**     | [05-hooks-development.md](./05-hooks-development.md)         | Creating custom hooks with HookRunner              |
+| **Examples**        | [06-hooks-examples.md](./06-hooks-examples.md)               | Real-world usage scenarios                         |
+| **Testing**         | [07-hooks-testing.md](./07-hooks-testing.md)                 | Testing methodology and procedures                 |
+| **Performance**     | [08-hooks-performance.md](./08-hooks-performance.md)         | Optimization and monitoring                        |
 
 ---
 
 The Claude Code hooks system (v3.0) represents a sophisticated approach to preventing AI development friction through real-time, intelligent validation that maintains developer productivity while ensuring code quality and security.
+
+```
+
 ```

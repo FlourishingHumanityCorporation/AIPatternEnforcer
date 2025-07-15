@@ -84,11 +84,11 @@ navigate the documentation structure.
 
 ### Code Quality & Enforcement
 
-- `docs/guides/claude-code-hooks/README.md` - **Claude Code Hooks System** - Complete 23-hook system documentation
+- `docs/guides/claude-code-hooks/README.md` - **Claude Code Hooks System** - Complete 20-hook system documentation
 - `docs/guides/claude-code-hooks/01-hooks-overview.md` - System architecture and hook inventory
 - `docs/guides/claude-code-hooks/02-hooks-configuration.md` - Configuration and setup guide
 - `docs/guides/claude-code-hooks/03-hooks-troubleshooting.md` - Troubleshooting and debugging guide
-- `docs/guides/claude-code-hooks/04-hooks-reference.md` - Complete documentation for all 23 hooks
+- `docs/guides/claude-code-hooks/04-hooks-reference.md` - Complete documentation for all 20 hooks
 - `docs/guides/claude-code-hooks/05-hooks-development.md` - Creating custom hooks
 - `docs/guides/claude-code-hooks/06-hooks-examples.md` - Real-world usage examples
 - `docs/guides/claude-code-hooks/07-hooks-testing.md` - Testing and validation guide

@@ -7,6 +7,9 @@ const Handlebars = require("handlebars");
 const chalk = require("chalk");
 const inquirer = require("inquirer");
 
+// Simple logger for console output
+const logger = console;
+
 // Register Handlebars helpers
 Handlebars.registerHelper("kebabCase", (str) => {
   return str.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
@@ -27,8 +30,8 @@ const config = {
     javascript: ".jsx",
     test: ".test.tsx",
     story: ".stories.tsx",
-    style: ".module.css"
-  }
+    style: ".module.css",
+  },
 };
 
 // Template type definitions
@@ -36,63 +39,64 @@ const TEMPLATE_TYPES = {
   interactive: {
     name: "Interactive",
     description:
-    "Buttons, inputs, toggles - components that users interact with",
-    examples: "Button, TextField, Toggle, Select"
+      "Buttons, inputs, toggles - components that users interact with",
+    examples: "Button, TextField, Toggle, Select",
   },
   display: {
     name: "Display",
     description: "Cards, lists, badges - components that display information",
-    examples: "Card, Badge, Avatar, Chip"
+    examples: "Card, Badge, Avatar, Chip",
   },
   form: {
     name: "Form",
     description: "Form fields with built-in validation and error handling",
-    examples: "FormInput, FormSelect, FormTextarea, FormCheckbox"
+    examples: "FormInput, FormSelect, FormTextarea, FormCheckbox",
   },
   data: {
     name: "Data",
     description: "Tables, grids, charts - components that display data sets",
-    examples: "DataTable, DataGrid, Chart, List"
+    examples: "DataTable, DataGrid, Chart, List",
   },
   overlay: {
     name: "Overlay",
     description: "Modals, tooltips, popovers - components that overlay content",
-    examples: "Modal, Tooltip, Popover, Drawer"
-  }
+    examples: "Modal, Tooltip, Popover, Drawer",
+  },
 };
 
 // UI Pattern definitions (rich, complete examples)
 const UI_PATTERNS = {
   "login-form": {
     name: "Login Form",
-    description: "Complete login form with validation, error handling, and accessibility",
+    description:
+      "Complete login form with validation, error handling, and accessibility",
     category: "forms",
-    file: "login-form.tsx"
+    file: "login-form.tsx",
   },
   "multi-step-form": {
     name: "Multi-Step Form",
     description: "Wizard-style form with progress tracking and step validation",
     category: "forms",
-    file: "multi-step-form.tsx"
+    file: "multi-step-form.tsx",
   },
   "data-table": {
     name: "Data Table",
     description: "Feature-rich table with sorting, pagination, and search",
     category: "data-display",
-    file: "data-table.tsx"
+    file: "data-table.tsx",
   },
   "modal-dialog": {
     name: "Modal Dialog",
     description: "Accessible modal with focus trapping and escape handling",
     category: "overlays",
-    file: "modal-dialog.tsx"
+    file: "modal-dialog.tsx",
   },
   "loading-skeletons": {
     name: "Loading Skeletons",
     description: "Smooth loading states with multiple variants",
     category: "feedback",
-    file: "loading-skeletons.tsx"
-  }
+    file: "loading-skeletons.tsx",
+  },
 };
 
 // Load template content based on type
@@ -101,13 +105,16 @@ async function loadTemplate(templateType, fileName) {
     __dirname,
     "../../templates/component",
     templateType,
-    fileName
+    fileName,
   );
   try {
     return await fs.readFile(templatePath, "utf-8");
   } catch (error) {
     logger.error(
-      chalk.red(`❌ Template ${templatePath} not found. All templates must exist.`));
+      chalk.red(
+        `❌ Template ${templatePath} not found. All templates must exist.`,
+      ),
+    );
 
     throw error;
   }
@@ -124,14 +131,14 @@ async function loadUIPattern(patternKey) {
     __dirname,
     "../../ai/examples/ui-patterns",
     pattern.category,
-    pattern.file
+    pattern.file,
   );
 
   const cssPath = path.join(
     __dirname,
     "../../ai/examples/ui-patterns",
     pattern.category,
-    pattern.file.replace('.tsx', '.module.css')
+    pattern.file.replace(".tsx", ".module.css"),
   );
 
   try {
@@ -142,13 +149,16 @@ async function loadUIPattern(patternKey) {
       cssContent = await fs.readFile(cssPath, "utf-8");
     } catch {
       // CSS file optional for patterns
-      logger.warn(chalk.yellow(`⚠️ CSS file not found for pattern ${patternKey}`));
+      logger.warn(
+        chalk.yellow(`⚠️ CSS file not found for pattern ${patternKey}`),
+      );
     }
 
     return { component: componentContent, css: cssContent, pattern };
   } catch (error) {
     logger.error(
-      chalk.red(`❌ Pattern ${patternKey} not found at ${componentPath}`));
+      chalk.red(`❌ Pattern ${patternKey} not found at ${componentPath}`),
+    );
 
     throw error;
   }
@@ -167,30 +177,71 @@ async function getTemplates(componentName, templateType) {
 }
 
 // Adapt UI pattern to new component name
-function adaptPatternToComponent(patternContent, newComponentName, originalName) {
+function adaptPatternToComponent(
+  patternContent,
+  newComponentName,
+  originalName,
+) {
   // Replace all instances of the original component name with the new one
-  const originalPattern = originalName.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
-  const newPattern = newComponentName.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+  const originalPattern = originalName
+    .replace(/([a-z])([A-Z])/g, "$1-$2")
+    .toLowerCase();
+  const newPattern = newComponentName
+    .replace(/([a-z])([A-Z])/g, "$1-$2")
+    .toLowerCase();
 
   let adapted = patternContent
-  // Replace component names in imports and exports
-  .replace(new RegExp(`export const ${originalName}`, 'g'), `export const ${newComponentName}`).
-  replace(new RegExp(`${originalName}Props`, 'g'), `${newComponentName}Props`).
-  replace(new RegExp(`interface ${originalName}Props`, 'g'), `interface ${newComponentName}Props`).
-  replace(new RegExp(`${originalName}: React.FC`, 'g'), `${newComponentName}: React.FC`)
-  // Replace CSS module imports - USE CORRECT FILENAME FORMAT
-  .replace(new RegExp(`from "\\.\/${originalPattern}\\.module\\.css"`, 'g'), `from "./${newComponentName}.module.css"`).
-  replace(new RegExp(`from '\\.\/${originalPattern}\\.module\\.css'`, 'g'), `from './${newComponentName}.module.css'`)
-  // Replace component displayName
-  .replace(new RegExp(`${originalName}\\.displayName`, 'g'), `${newComponentName}.displayName`)
-  // Replace story titles and component references
-  .replace(new RegExp(`title: ".*/${originalName}"`, 'g'), `title: "Generated/${newComponentName}"`).
-  replace(new RegExp(`component: ${originalName}`, 'g'), `component: ${newComponentName}`).
-  replace(new RegExp(`import { ${originalName} }`, 'g'), `import { ${newComponentName} }`).
-  replace(new RegExp(`<${originalName}`, 'g'), `<${newComponentName}`).
-  replace(new RegExp(`</${originalName}>`, 'g'), `</${newComponentName}>`)
-  // Replace CSS class references
-  .replace(new RegExp(`data-testid="${originalPattern}"`, 'g'), `data-testid="${newPattern}"`);
+    // Replace component names in imports and exports
+    .replace(
+      new RegExp(`export const ${originalName}`, "g"),
+      `export const ${newComponentName}`,
+    )
+    .replace(
+      new RegExp(`${originalName}Props`, "g"),
+      `${newComponentName}Props`,
+    )
+    .replace(
+      new RegExp(`interface ${originalName}Props`, "g"),
+      `interface ${newComponentName}Props`,
+    )
+    .replace(
+      new RegExp(`${originalName}: React.FC`, "g"),
+      `${newComponentName}: React.FC`,
+    )
+    // Replace CSS module imports - USE CORRECT FILENAME FORMAT
+    .replace(
+      new RegExp(`from "\\.\/${originalPattern}\\.module\\.css"`, "g"),
+      `from "./${newComponentName}.module.css"`,
+    )
+    .replace(
+      new RegExp(`from '\\.\/${originalPattern}\\.module\\.css'`, "g"),
+      `from './${newComponentName}.module.css'`,
+    )
+    // Replace component displayName
+    .replace(
+      new RegExp(`${originalName}\\.displayName`, "g"),
+      `${newComponentName}.displayName`,
+    )
+    // Replace story titles and component references
+    .replace(
+      new RegExp(`title: ".*/${originalName}"`, "g"),
+      `title: "Generated/${newComponentName}"`,
+    )
+    .replace(
+      new RegExp(`component: ${originalName}`, "g"),
+      `component: ${newComponentName}`,
+    )
+    .replace(
+      new RegExp(`import { ${originalName} }`, "g"),
+      `import { ${newComponentName} }`,
+    )
+    .replace(new RegExp(`<${originalName}`, "g"), `<${newComponentName}`)
+    .replace(new RegExp(`</${originalName}>`, "g"), `</${newComponentName}>`)
+    // Replace CSS class references
+    .replace(
+      new RegExp(`data-testid="${originalPattern}"`, "g"),
+      `data-testid="${newPattern}"`,
+    );
 
   return adapted;
 }
@@ -198,17 +249,29 @@ function adaptPatternToComponent(patternContent, newComponentName, originalName)
 // Generate from UI pattern
 async function generateFromPattern(name, patternKey, options) {
   logger.info(
-    chalk.blue(`\n🎨 Generating component from pattern: ${UI_PATTERNS[patternKey].name}\n`));
-
+    chalk.blue(
+      `\n🎨 Generating component from pattern: ${UI_PATTERNS[patternKey].name}\n`,
+    ),
+  );
 
   const patternData = await loadUIPattern(patternKey);
-  const originalName = patternData.pattern.file.replace('.tsx', '').split('-').map((word) =>
-  word.charAt(0).toUpperCase() + word.slice(1)
-  ).join('');
+  const originalName = patternData.pattern.file
+    .replace(".tsx", "")
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join("");
 
   // Adapt pattern content to new component name
-  const adaptedComponent = adaptPatternToComponent(patternData.component, name, originalName);
-  const adaptedCss = adaptPatternToComponent(patternData.css, name, originalName);
+  const adaptedComponent = adaptPatternToComponent(
+    patternData.component,
+    name,
+    originalName,
+  );
+  const adaptedCss = adaptPatternToComponent(
+    patternData.css,
+    name,
+    originalName,
+  );
 
   // Generate basic test and story files for the pattern
   const basicTest = `import React from 'react';
@@ -256,7 +319,7 @@ export type { ${name}Props } from './${name}';`;
     test: basicTest,
     story: basicStory,
     styles: adaptedCss,
-    index: basicIndex
+    index: basicIndex,
   };
 }
 
@@ -269,9 +332,9 @@ async function ensureTemplateDirectories() {
     try {
       await fs.mkdir(dir, { recursive: true });
     } catch (error) {
-
       // Directory already exists, ignore
-    }}
+    }
+  }
 }
 
 // Generate component files
@@ -279,7 +342,8 @@ async function generateComponent(name, options) {
   // Validate component name
   if (!/^[A-Z][a-zA-Z0-9]*$/.test(name)) {
     logger.error(
-      chalk.red("❌ Component name must be in PascalCase (e.g., MyComponent)"));
+      chalk.red("❌ Component name must be in PascalCase (e.g., MyComponent)"),
+    );
 
     process.exit(1);
   }
@@ -291,7 +355,8 @@ async function generateComponent(name, options) {
     templates = await generateFromPattern(name, options.pattern, options);
   } else {
     logger.info(
-      chalk.blue(`\n🚀 Generating ${options.template} component: ${name}\n`));
+      chalk.blue(`\n🚀 Generating ${options.template} component: ${name}\n`),
+    );
 
     templates = await getTemplates(name, options.template);
   }
@@ -308,23 +373,23 @@ async function generateComponent(name, options) {
 
   // Files to generate
   const files = [
-  {
-    name: `${name}${config.fileExtensions.typescript}`,
-    template: templates.component
-  },
-  { name: `${name}${config.fileExtensions.test}`, template: templates.test },
-  {
-    name: `${name}${config.fileExtensions.style}`,
-    template: templates.styles
-  },
-  { name: "index.ts", template: templates.index }];
-
+    {
+      name: `${name}${config.fileExtensions.typescript}`,
+      template: templates.component,
+    },
+    { name: `${name}${config.fileExtensions.test}`, template: templates.test },
+    {
+      name: `${name}${config.fileExtensions.style}`,
+      template: templates.styles,
+    },
+    { name: "index.ts", template: templates.index },
+  ];
 
   // Add storybook file if requested
   if (!options.noStorybook) {
     files.push({
       name: `${name}${config.fileExtensions.story}`,
-      template: templates.story
+      template: templates.story,
     });
   }
 
@@ -351,7 +416,7 @@ async function generateComponent(name, options) {
       const compiledTemplate = Handlebars.compile(file.template);
       content = compiledTemplate({
         name,
-        templateType: options.template
+        templateType: options.template,
       });
     }
 
@@ -360,16 +425,17 @@ async function generateComponent(name, options) {
       logger.info(chalk.green(`✅ Created ${file.name}`));
     } catch (error) {
       logger.error(
-        chalk.red(`❌ Failed to create ${file.name}: ${error.message}`));
-
+        chalk.red(`❌ Failed to create ${file.name}: ${error.message}`),
+      );
     }
   }
 
   // Success message
   logger.info(
     chalk.green(
-      `\n✨ ${TEMPLATE_TYPES[options.template].name} component ${name} generated successfully!\n`
-    ));
+      `\n✨ ${TEMPLATE_TYPES[options.template].name} component ${name} generated successfully!\n`,
+    ),
+  );
 
   logger.info(chalk.cyan("📁 Files created:"));
   logger.info(chalk.gray(`   ${componentDir}/`));
@@ -380,8 +446,9 @@ async function generateComponent(name, options) {
   logger.info(chalk.cyan("\n🎯 Next steps:"));
   logger.info(
     chalk.gray(
-      `   1. Import component: import { ${name} } from '${path.relative(process.cwd(), componentDir)}';`
-    ));
+      `   1. Import component: import { ${name} } from '${path.relative(process.cwd(), componentDir)}';`,
+    ),
+  );
 
   logger.info(chalk.gray(`   2. Run tests: npm test ${name}`));
   if (!options.noStorybook) {
@@ -391,35 +458,39 @@ async function generateComponent(name, options) {
 
   const features = {
     interactive: [
-    "Loading states",
-    "Error handling",
-    "Disabled states",
-    "Keyboard navigation"],
+      "Loading states",
+      "Error handling",
+      "Disabled states",
+      "Keyboard navigation",
+    ],
 
     form: [
-    "Validation support",
-    "Error messages",
-    "Required field marking",
-    "Accessibility labels"],
+      "Validation support",
+      "Error messages",
+      "Required field marking",
+      "Accessibility labels",
+    ],
 
     data: [
-    "Loading states",
-    "Empty states",
-    "Error handling",
-    "Data prop support"],
+      "Loading states",
+      "Empty states",
+      "Error handling",
+      "Data prop support",
+    ],
 
     overlay: [
-    "Portal rendering",
-    "Escape key handling",
-    "Click outside support",
-    "Focus management"],
+      "Portal rendering",
+      "Escape key handling",
+      "Click outside support",
+      "Focus management",
+    ],
 
     display: [
-    "Responsive design",
-    "Dark mode support",
-    "Custom styling",
-    "Accessibility"]
-
+      "Responsive design",
+      "Dark mode support",
+      "Custom styling",
+      "Accessibility",
+    ],
   };
 
   features[options.template].forEach((feature) => {
@@ -430,23 +501,23 @@ async function generateComponent(name, options) {
 // Interactive template selection
 async function selectTemplate() {
   const { template } = await inquirer.prompt([
-  {
-    type: "list",
-    name: "template",
-    message: "Select component template type:",
-    choices: Object.entries(TEMPLATE_TYPES).map(([key, value]) => ({
-      name: `${value.name} - ${value.description}`,
-      value: key,
-      short: value.name
-    }))
-  }]
-  );
+    {
+      type: "list",
+      name: "template",
+      message: "Select component template type:",
+      choices: Object.entries(TEMPLATE_TYPES).map(([key, value]) => ({
+        name: `${value.name} - ${value.description}`,
+        value: key,
+        short: value.name,
+      })),
+    },
+  ]);
 
   logger.info(
     chalk.cyan(
-      `\n📝 Examples for ${TEMPLATE_TYPES[template].name} components: ${TEMPLATE_TYPES[template].examples}\n`
-    ));
-
+      `\n📝 Examples for ${TEMPLATE_TYPES[template].name} components: ${TEMPLATE_TYPES[template].examples}\n`,
+    ),
+  );
 
   return template;
 }
@@ -454,90 +525,96 @@ async function selectTemplate() {
 // Interactive pattern selection
 async function selectPattern() {
   const { pattern } = await inquirer.prompt([
-  {
-    type: "list",
-    name: "pattern",
-    message: "Select UI pattern to use as base:",
-    choices: Object.entries(UI_PATTERNS).map(([key, value]) => ({
-      name: `${value.name} - ${value.description}`,
-      value: key,
-      short: value.name
-    }))
-  }]
-  );
+    {
+      type: "list",
+      name: "pattern",
+      message: "Select UI pattern to use as base:",
+      choices: Object.entries(UI_PATTERNS).map(([key, value]) => ({
+        name: `${value.name} - ${value.description}`,
+        value: key,
+        short: value.name,
+      })),
+    },
+  ]);
 
   logger.info(
     chalk.cyan(
-      `\n🎨 Using ${UI_PATTERNS[pattern].name} pattern from ${UI_PATTERNS[pattern].category} category\n`
-    ));
-
+      `\n🎨 Using ${UI_PATTERNS[pattern].name} pattern from ${UI_PATTERNS[pattern].category} category\n`,
+    ),
+  );
 
   return pattern;
 }
 
 // CLI setup
-program.
-name("enhanced-component-generator").
-description(
-  "Generate React components with AI-optimized templates or UI patterns"
-).
-argument("<name>", "Component name in PascalCase").
-option("-t, --template <type>", "Component template type", "display").
-option("-p, --pattern <pattern>", "UI pattern to use as base").
-option("-i, --interactive", "Interactive template/pattern selection").
-option("-f, --force", "Overwrite existing files").
-option("--no-storybook", "Skip Storybook story generation").
-option("-d, --dir <dir>", "Output directory", config.outputDir).
-action(async (name, options) => {
-  // Ensure template directories exist
-  await ensureTemplateDirectories();
+program
+  .name("enhanced-component-generator")
+  .description(
+    "Generate React components with AI-optimized templates or UI patterns",
+  )
+  .argument("<name>", "Component name in PascalCase")
+  .option("-t, --template <type>", "Component template type", "display")
+  .option("-p, --pattern <pattern>", "UI pattern to use as base")
+  .option("-i, --interactive", "Interactive template/pattern selection")
+  .option("-f, --force", "Overwrite existing files")
+  .option("--no-storybook", "Skip Storybook story generation")
+  .option("-d, --dir <dir>", "Output directory", config.outputDir)
+  .action(async (name, options) => {
+    // Ensure template directories exist
+    await ensureTemplateDirectories();
 
-  if (options.dir) {
-    config.outputDir = options.dir;
-  }
-
-  // Handle interactive selection
-  if (options.interactive) {
-    const { choice } = await inquirer.prompt([
-    {
-      type: "list",
-      name: "choice",
-      message: "What would you like to generate?",
-      choices: [
-      { name: "Basic Template - Simple, scaffolded component", value: "template" },
-      { name: "UI Pattern - Rich, complete component from patterns", value: "pattern" }]
-
-    }]
-    );
-
-    if (choice === "template") {
-      options.template = await selectTemplate();
-    } else {
-      options.pattern = await selectPattern();
+    if (options.dir) {
+      config.outputDir = options.dir;
     }
-  }
 
-  // Validate options
-  if (options.pattern) {
-    if (!UI_PATTERNS[options.pattern]) {
-      logger.error(chalk.red(`❌ Invalid pattern: ${options.pattern}`));
-      logger.info(chalk.cyan("\nAvailable patterns:"));
-      Object.entries(UI_PATTERNS).forEach(([key, value]) => {
+    // Handle interactive selection
+    if (options.interactive) {
+      const { choice } = await inquirer.prompt([
+        {
+          type: "list",
+          name: "choice",
+          message: "What would you like to generate?",
+          choices: [
+            {
+              name: "Basic Template - Simple, scaffolded component",
+              value: "template",
+            },
+            {
+              name: "UI Pattern - Rich, complete component from patterns",
+              value: "pattern",
+            },
+          ],
+        },
+      ]);
+
+      if (choice === "template") {
+        options.template = await selectTemplate();
+      } else {
+        options.pattern = await selectPattern();
+      }
+    }
+
+    // Validate options
+    if (options.pattern) {
+      if (!UI_PATTERNS[options.pattern]) {
+        logger.error(chalk.red(`❌ Invalid pattern: ${options.pattern}`));
+        logger.info(chalk.cyan("\nAvailable patterns:"));
+        Object.entries(UI_PATTERNS).forEach(([key, value]) => {
+          logger.info(chalk.gray(`  - ${key}: ${value.description}`));
+        });
+        process.exit(1);
+      }
+    } else if (!TEMPLATE_TYPES[options.template]) {
+      logger.error(chalk.red(`❌ Invalid template type: ${options.template}`));
+      logger.info(chalk.cyan("\nAvailable templates:"));
+      Object.entries(TEMPLATE_TYPES).forEach(([key, value]) => {
         logger.info(chalk.gray(`  - ${key}: ${value.description}`));
       });
       process.exit(1);
     }
-  } else if (!TEMPLATE_TYPES[options.template]) {
-    logger.error(chalk.red(`❌ Invalid template type: ${options.template}`));
-    logger.info(chalk.cyan("\nAvailable templates:"));
-    Object.entries(TEMPLATE_TYPES).forEach(([key, value]) => {
-      logger.info(chalk.gray(`  - ${key}: ${value.description}`));
-    });
-    process.exit(1);
-  }
 
-  await generateComponent(name, options);
-});
+    await generateComponent(name, options);
+  });
 
 // Show help if no arguments
 if (!process.argv.slice(2).length) {
@@ -556,11 +633,19 @@ if (!process.argv.slice(2).length) {
 
   logger.info(chalk.cyan("\n💡 Usage Examples:"));
   logger.info(chalk.gray("  # Basic template"));
-  logger.info(chalk.gray("  enhanced-component-generator MyButton --template interactive"));
+  logger.info(
+    chalk.gray(
+      "  enhanced-component-generator MyButton --template interactive",
+    ),
+  );
   logger.info(chalk.gray("\n  # Rich UI pattern"));
-  logger.info(chalk.gray("  enhanced-component-generator UserLogin --pattern login-form"));
+  logger.info(
+    chalk.gray("  enhanced-component-generator UserLogin --pattern login-form"),
+  );
   logger.info(chalk.gray("\n  # Interactive selection"));
-  logger.info(chalk.gray("  enhanced-component-generator MyComponent --interactive"));
+  logger.info(
+    chalk.gray("  enhanced-component-generator MyComponent --interactive"),
+  );
   process.exit(0);
 }
 

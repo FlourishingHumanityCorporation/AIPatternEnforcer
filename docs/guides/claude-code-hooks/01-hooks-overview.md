@@ -2,7 +2,7 @@
 
 **Last Updated**: 2025-07-14
 **System Type**: Custom validation scripts called via Claude Code hooks
-**Active Scripts**: 19 validation scripts in `tools/hooks/`
+**Active Scripts**: 20 validation scripts in `tools/hooks/`
 
 ## What Is This System?
 
@@ -11,7 +11,7 @@ This is a **custom AI development enforcement system** that uses **official Clau
 ### Key Distinction
 
 - **Claude Code Hooks**: Official shell command execution system built into Claude Code
-- **This System**: Custom validation scripts (19 Node.js files) called BY Claude Code hooks
+- **This System**: Custom validation scripts (20 Node.js files) called BY Claude Code hooks
 - **Integration**: Official hooks → Custom scripts → Validation logic → Block/Allow decisions
 
 The scripts in `tools/hooks/` are **NOT** Claude Code hooks themselves - they are custom validation scripts that receive the official Claude Code hook input format and return standard exit codes.
@@ -35,14 +35,14 @@ AI Tool Request → Claude Code Hook Triggers → Custom Script Execution → Va
 
 ### Custom Script Architecture
 
-The 19 validation scripts implement a project-specific architecture:
+The 20 validation scripts implement a project-specific architecture:
 
 - **Input Processing**: Parse official Claude Code hook JSON input
 - **Validation Logic**: Implement specific rules (security, patterns, context)
 - **Response Format**: Return standard exit codes and stderr messages
 - **Shared Utilities**: Common libraries in `tools/hooks/lib/` for consistency
 
-### Validation Script Categories (19 Active)
+### Validation Script Categories (20 Active)
 
 | Category                | Count | Purpose                         | Hook Event  |
 | ----------------------- | ----- | ------------------------------- | ----------- |
@@ -454,18 +454,18 @@ This prevents malicious hook modifications from affecting your current session.
 ## Next Steps
 
 - **[Configuration Guide](./02-hooks-configuration.md)** - Setup and customization
-- **[Hook Reference](./04-hooks-reference.md)** - Complete documentation for all 19 hooks
+- **[Hook Reference](./04-hooks-reference.md)** - Complete documentation for all 20 hooks
 - **[Development Guide](./05-hooks-development.md)** - Creating custom hooks
 - **[Usage Examples](./06-hooks-examples.md)** - Real-world scenarios
 - **[Testing Guide](./07-hooks-testing.md)** - Testing procedures
 - **[Performance Guide](./08-hooks-performance.md)** - Performance optimization
 - **[Troubleshooting Guide](./03-hooks-troubleshooting.md)** - Debug and resolve issues
-- **[Official Documentation](./09-hooks-official-documentation.md)** - Complete reference from Anthropic
+- **[Official Documentation](./00-hooks-official-documentation.md)** - Complete reference from Anthropic
 - **[Main Documentation Index](./README.md)** - Complete hooks system documentation
 
 ## Additional Resources
 
-For the complete official Claude Code hooks reference, see the [Official Documentation](./09-hooks-official-documentation.md) which provides:
+For the complete official Claude Code hooks reference, see the [Official Documentation](./00-hooks-official-documentation.md) which provides:
 
 - Full coverage of all 6 hook events (including Notification, Stop, SubagentStop, PreCompact not covered in this overview)
 - Complete JSON input/output schemas with all field descriptions

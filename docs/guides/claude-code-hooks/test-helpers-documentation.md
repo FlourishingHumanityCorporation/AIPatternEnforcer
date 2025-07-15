@@ -467,4 +467,4 @@ These utilities form the foundation for the hook testing infrastructure, ensurin
 ---
 
 _For test examples, see [`tools/hooks/__tests__/`](../../../tools/hooks/__tests__/)_  
-_For testing guide, see [Hook Testing Guide](../testing/hook-testing-guide.md)_
+_For testing guide, see [07-hooks-testing.md](./07-hooks-testing.md)_

@@ -688,3 +688,112 @@ cp tools/hooks/__tests__/security-scan.test.js tools/hooks/__tests__/custom-hook
 ```
 
 Remember: Hooks should **fail open** - if a hook encounters an error, it should allow the operation to proceed rather than block development. This ensures that the hooks enhance the development experience without creating friction.
+
+## Advanced Scenarios
+
+### Scenario-Based Troubleshooting
+
+For detailed scenario-based troubleshooting including:
+
+- Hook blocking valid code patterns
+- Hook not running when expected
+- Hook timing out on large files
+- Inconsistent hook behavior across files
+- Unhelpful error messages
+
+See the scenario-based examples below.
+
+### Hook Chain Analysis
+
+Debug the entire hook chain execution:
+
+```bash
+# Enable comprehensive debugging
+export HOOK_DEBUG=true
+export HOOK_TIMING=true
+export HOOK_LOG_INPUT=true
+export HOOK_LOG_OUTPUT=true
+
+# Run operation and analyze logs
+```
+
+### Isolated Hook Testing
+
+Test a hook in isolation:
+
+```javascript
+const { runHook } = require("./tools/hooks/__tests__/test-helpers");
+
+// Test specific scenario
+const result = await runHook("my-hook.js", {
+  tool_input: {
+    file_path: "test.js",
+    content: "problematic content",
+  },
+});
+
+console.log("Exit code:", result.exitCode);
+console.log("Message:", result.stderr);
+```
+
+### Hook-Specific Issues
+
+**context-validator Issues**:
+
+- **Common problem**: Edit operations blocked for insufficient context
+- **Solution**: Include architectural references like `@lib/auth patterns`
+
+**prevent-improved-files Issues**:
+
+- **Common problem**: Can't create temporary files
+- **Solution**: Use different naming pattern (e.g., `component.backup.tsx` instead of `component_backup.tsx`)
+
+**security-scan Issues**:
+
+- **Common problem**: False positives on safe patterns
+- **Solution**: Use approved patterns like `DOMPurify.sanitize(html)` instead of direct innerHTML
+
+### Environment Variables Reference
+
+```bash
+# Testing and bypass
+export HOOKS_TESTING_MODE=true     # Bypass most hooks
+export HOOK_DEVELOPMENT=true        # Development mode
+
+# Debugging
+export HOOK_DEBUG=true              # Enable debug output
+export HOOK_TIMING=true             # Show execution times
+export HOOK_LOG_INPUT=true          # Log hook inputs
+export HOOK_LOG_OUTPUT=true         # Log hook outputs
+
+# Performance
+export HOOK_TIMEOUT_OVERRIDE=10     # Override all timeouts
+export HOOK_PERF_WARN=100          # Warn if hook takes >100ms
+```
+
+### Quick Troubleshooting Checklist
+
+1. **Hook not running?**
+   - [ ] Check .claude/settings.json configuration
+   - [ ] Verify correct stage (PreToolUse/PostToolUse)
+   - [ ] Restart Claude Code session
+
+2. **Hook blocking valid code?**
+   - [ ] Enable HOOK_DEBUG to see exact pattern
+   - [ ] Use HOOKS_TESTING_MODE to bypass temporarily
+   - [ ] Update hook pattern to be more specific
+
+3. **Performance issues?**
+   - [ ] Check file size and complexity
+   - [ ] Look for FileAnalyzer exemptions
+   - [ ] Profile hook with timing logs
+
+4. **Inconsistent behavior?**
+   - [ ] Compare exact inputs with HOOK_LOG_INPUT
+   - [ ] Check for environment variables
+   - [ ] Verify file type exemptions
+
+5. **Poor error messages?**
+   - [ ] Use ErrorFormatter.format()
+   - [ ] Include specific line/pattern info
+   - [ ] Always provide fix suggestions
