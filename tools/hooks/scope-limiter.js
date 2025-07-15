@@ -16,8 +16,8 @@
  * Returns: { status: 'ok' | 'blocked', message?: string }
  */
 
+const HookRunner = require("./lib/HookRunner");
 const {
-  HookRunner,
   FileAnalyzer,
   PatternLibrary,
   ErrorFormatter,
@@ -205,9 +205,10 @@ async function scopeLimiter(input) {
   return { allow: true };
 }
 
-// Run the hook
-const runner = new HookRunner("scope-limiter", { timeout: 2000 });
-runner.run(scopeLimiter);
+// Create and run the hook
+HookRunner.create("scope-limiter", scopeLimiter, {
+  timeout: 2000,
+});
 
 module.exports = {
   analyzeScope,

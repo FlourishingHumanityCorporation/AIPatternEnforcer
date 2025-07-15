@@ -94,6 +94,13 @@ class ErrorFormatter {
   }
 
   /**
+   * Format structure violations for file organization
+   */
+  static structure(problem, suggestion) {
+    return `🚫 Don't create ${problem}\n✅ Use ${suggestion} instead`;
+  }
+
+  /**
    * Format file operation context
    */
   static formatFileOperation(operation, filePath, content = "") {

@@ -13,14 +13,15 @@
  * Returns: { status: 'ok' | 'blocked', message?: string }
  */
 
-const { HookRunner, FileAnalyzer, PatternLibrary, ErrorFormatter } = require("./lib");
+const HookRunner = require("./lib/HookRunner");
+const { FileAnalyzer, PatternLibrary, ErrorFormatter } = require("./lib");
 
 // Use shared root directory patterns from PatternLibrary (95% code reduction!)
 // All patterns are now centralized in PatternLibrary.ALLOWED_ROOT_FILES and PatternLibrary.DIRECTORY_SUGGESTIONS
 
 // Hook logic
 async function blockRootMess(input) {
-  const { filePath } = input;
+  const filePath = input.filePath || input.file_path;
 
   // Allow operations without file paths
   if (!filePath) {
@@ -128,9 +129,10 @@ function getSuggestionByPattern(fileName) {
   return "appropriate subdirectory (see CLAUDE.md)";
 }
 
-// Run the hook
-const runner = new HookRunner("block-root-mess", { timeout: 1500 });
-runner.run(blockRootMess);
+// Create and run the hook
+HookRunner.create("block-root-mess", blockRootMess, {
+  timeout: 1500,
+});
 
 module.exports = {
   getSuggestionByPattern,

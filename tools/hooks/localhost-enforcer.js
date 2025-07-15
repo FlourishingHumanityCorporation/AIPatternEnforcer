@@ -18,8 +18,8 @@
  * Returns: { status: 'ok' | 'blocked', message?: string }
  */
 
+const HookRunner = require("./lib/HookRunner");
 const {
-  HookRunner,
   FileAnalyzer,
   PatternLibrary,
   ErrorFormatter,
@@ -112,7 +112,8 @@ ENABLE_DEBUG=true`,
 
 // Hook logic
 async function localhostEnforcer(input) {
-  const { filePath, content } = input;
+  const filePath = input.filePath || input.file_path;
+  const content = input.content;
 
   // Skip if no content
   if (!content) {
@@ -182,9 +183,10 @@ async function localhostEnforcer(input) {
   return { allow: true };
 }
 
-// Run the hook
-const runner = new HookRunner("localhost-enforcer", { timeout: 1500 });
-runner.run(localhostEnforcer);
+// Create and run the hook
+HookRunner.create("localhost-enforcer", localhostEnforcer, {
+  timeout: 1500,
+});
 
 module.exports = {
   detectRemoteConfigurations,

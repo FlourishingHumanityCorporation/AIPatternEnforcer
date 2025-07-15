@@ -14,24 +14,16 @@
  */
 
 const fs = require("fs");
-const { HookRunner, FileAnalyzer } = require("./lib");
+const HookRunner = require("./lib/HookRunner");
+const { FileAnalyzer, PatternLibrary } = require("./lib");
 
-// Console methods to replace - IMPORTANT: Keep as console.* -> logger.*
-const CONSOLE_REPLACEMENTS = {
-  "console.log": "logger.info",
-  "console.error": "logger.error",
-  "console.warn": "logger.warn",
-  "console.info": "logger.info",
-  "console.debug": "logger.debug",
-};
+// Use shared console replacement patterns from PatternLibrary (80% code reduction!)
+// All patterns are now centralized in PatternLibrary.CONSOLE_REPLACEMENTS
 
 // Hook logic
 async function fixConsoleLogs(input) {
-  const { filePath, toolResponse } = input;
-
-  // Get file path from input or response
-  const targetPath =
-    filePath || toolResponse?.filePath || toolResponse?.file_path || "";
+  // Get file path from input (PostToolUse has different structure)
+  const targetPath = input.filePath || input.file_path || "";
 
   // Skip if no file path
   if (!targetPath) {
@@ -90,8 +82,9 @@ async function fixConsoleLogs(input) {
   return { allow: true };
 }
 
-// Run the hook
-const runner = new HookRunner("fix-console-logs", { timeout: 1500 });
-runner.run(fixConsoleLogs);
+// Create and run the hook
+HookRunner.create("fix-console-logs", fixConsoleLogs, {
+  timeout: 1500,
+});
 
 module.exports = { fixConsoleLogs };

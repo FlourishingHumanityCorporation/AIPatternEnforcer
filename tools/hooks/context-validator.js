@@ -17,8 +17,8 @@
  */
 
 const fs = require("fs");
+const HookRunner = require("./lib/HookRunner");
 const {
-  HookRunner,
   FileAnalyzer,
   PatternLibrary,
   ErrorFormatter,
@@ -409,11 +409,15 @@ function getImprovementSuggestions(operationType, analysis, filePath) {
 
 // Hook logic
 async function contextValidator(input) {
-  const { raw } = input;
-
   // Extract actual tool parameters from the hook data structure
-  const params = raw.tool_input || {};
-  const operationType = raw.tool_name || "Write";
+  const params = input.tool_input || {
+    file_path: input.file_path,
+    old_string: input.old_string,
+    new_string: input.new_string,
+    content: input.content,
+    edits: input.edits
+  };
+  const operationType = input.tool_name || "Write";
 
   // If no meaningful parameters provided, fail open (allow operation)
   if (Object.keys(params).length === 0 || !params.file_path) {
@@ -482,9 +486,10 @@ async function contextValidator(input) {
   return { allow: true };
 }
 
-// Run the hook
-const runner = new HookRunner("context-validator", { timeout: 1500 });
-runner.run(contextValidator);
+// Create and run the hook
+HookRunner.create("context-validator", contextValidator, {
+  timeout: 1500,
+});
 
 module.exports = {
   analyzeParameterQuality,

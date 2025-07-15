@@ -13,8 +13,8 @@
  */
 
 const fs = require("fs");
+const HookRunner = require("./lib/HookRunner");
 const {
-  HookRunner,
   FileAnalyzer,
   PatternLibrary,
   ErrorFormatter,
@@ -98,7 +98,8 @@ function scanContent(content, fileName) {
 
 // Hook logic
 async function securityScan(input) {
-  const { filePath, content } = input;
+  const filePath = input.filePath || input.file_path;
+  const content = input.content;
 
   // Skip if no file path
   if (!filePath) {
@@ -106,15 +107,15 @@ async function securityScan(input) {
   }
 
   // Get content from input or read from file
-  let scanContent = content || "";
+  let contentToScan = content || "";
 
   // If no content provided, try to read from file
-  if (!scanContent && fs.existsSync(filePath)) {
-    scanContent = fs.readFileSync(filePath, "utf8");
+  if (!contentToScan && fs.existsSync(filePath)) {
+    contentToScan = fs.readFileSync(filePath, "utf8");
   }
 
   // Skip if no content available
-  if (!scanContent) {
+  if (!contentToScan) {
     return { allow: true };
   }
 
@@ -131,7 +132,7 @@ async function securityScan(input) {
   }
 
   // Scan for security vulnerabilities
-  const violations = scanContent(scanContent, fileInfo.fileName);
+  const violations = scanContent(contentToScan, fileInfo.fileName);
 
   if (violations.length > 0) {
     const message =
@@ -156,8 +157,9 @@ async function securityScan(input) {
   return { allow: true };
 }
 
-// Run the hook
-const runner = new HookRunner("security-scan", { timeout: 2000 });
-runner.run(securityScan);
+// Create and run the hook
+HookRunner.create("security-scan", securityScan, {
+  timeout: 2000,
+});
 
 module.exports = { SECURITY_FIXES, scanContent, securityScan };
