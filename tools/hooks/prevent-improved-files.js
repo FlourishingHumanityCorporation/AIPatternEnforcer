@@ -36,7 +36,8 @@ function preventImprovedFiles(hookData, runner) {
   }
 
   // Check for bad patterns using runner utility
-  if (runner.matchesPatterns(hookData.filePath, BAD_PATTERNS)) {
+  const filePath = hookData.filePath || hookData.file_path;
+  if (runner.matchesPatterns(filePath, BAD_PATTERNS)) {
     const message = runner.formatError(
       `Don't create ${hookData.fileName}`,
       "Edit the original file instead",

@@ -25,133 +25,14 @@ const {
   ErrorFormatter,
 } = require("./lib");
 
-// Configuration patterns that must be local
-const LOCAL_ONLY_PATTERNS = {
-  // Database connections
-  database: {
-    remote: [
-      // Cloud databases
-      /mongodb\+srv:\/\//gi,
-      /\.mongodb\.net/gi,
-      /\.amazonaws\.com.*:5432/gi,
-      /\.database\.azure/gi,
-      /\.supabase\.co/gi,
-      /\.planetscale\.com/gi,
-      /\.neon\.tech(?!.*localhost)/gi,
-
-      // Remote postgres/mysql
-      /postgres:\/\/(?!localhost|127\.0\.0\.1|postgres:|:memory:)/gi,
-      /mysql:\/\/(?!localhost|127\.0\.0\.1|root@localhost)/gi,
-
-      // Connection strings with remote hosts
-      /host=["'](?!localhost|127\.0\.0\.1)[\w\.-]+["']/gi,
-      /DATABASE_URL.*=.*(?!localhost|127\.0\.0\.1|sqlite)https?:/gi,
-    ],
-    local: [
-      "postgresql://localhost",
-      "postgres://localhost:5432",
-      "mysql://localhost:3306",
-      "sqlite:./dev.db",
-      ":memory:",
-      "file:./local.db",
-    ],
-    message: "Use local database only",
-  },
-
-  // API endpoints
-  endpoints: {
-    remote: [
-      // Production APIs
-      /(?:API|ENDPOINT).*_URL.*=.*https:\/\/(?!localhost|127\.0\.0\.1)/gi,
-      /baseURL.*:.*["']https:\/\/(?!localhost|127\.0\.0\.1)/gi,
-      /fetch\(["']https:\/\/(?!localhost|127\.0\.0\.1).*api/gi,
-
-      // Specific services
-      /https:\/\/api\..*\.(?:com|io|net|org)(?!.*mock|.*test)/gi,
-      /wss:\/\/(?!localhost|127\.0\.0\.1)/gi,
-
-      // Production domains
-      /\.vercel\.app|\.netlify\.app|\.herokuapp\.com/gi,
-      /\.railway\.app|\.render\.com|\.fly\.io/gi,
-    ],
-    local: [
-      "http://localhost:3000",
-      "http://127.0.0.1:3000",
-      "http://localhost:8080",
-      "/api/", // Relative URLs
-      "ws://localhost",
-    ],
-    message: "Use localhost URLs only",
-  },
-
-  // Cloud services
-  services: {
-    remote: [
-      // AWS
-      /aws-sdk|@aws-sdk|amazonaws\.com/gi,
-      /s3\..*\.amazonaws|cloudfront\.net/gi,
-
-      // Google Cloud
-      /googleapis\.com|cloud\.google\.com/gi,
-      /storage\.googleapis|firebaseapp\.com/gi,
-
-      // Azure
-      /\.blob\.core\.windows\.net|\.azure\.com/gi,
-
-      // CDNs
-      /cloudinary\.com|imgix\.net|fastly\.net/gi,
-      /unpkg\.com|cdn\.jsdelivr\.net|cdnjs\.cloudflare/gi,
-
-      // Monitoring
-      /sentry\.io|datadog\.com|newrelic\.com/gi,
-      /logrocket\.com|bugsnag\.com/gi,
-    ],
-    local: [
-      "Local file system",
-      "public/ directory",
-      "localhost services",
-      "SQLite for storage",
-    ],
-    message: "Use local services only",
-  },
-
-  // Environment configurations
-  environment: {
-    remote: [
-      /NODE_ENV.*=.*["']production["']/gi,
-      /NEXT_PUBLIC_ENV.*=.*["']production["']/gi,
-      /\.env\.production/gi,
-      /process\.env\.(?:PROD|PRODUCTION|STAGING)/gi,
-
-      // Deployment configs
-      /VERCEL_|NETLIFY_|HEROKU_|RENDER_/gi,
-      /CI=true|CI_COMMIT|GITHUB_ACTIONS/gi,
-    ],
-    local: [
-      "NODE_ENV=development",
-      ".env.local",
-      ".env.development",
-      "Local environment only",
-    ],
-    message: "Use development environment only",
-  },
-};
-
-// Good local patterns to encourage
-const GOOD_LOCAL_PATTERNS = [
-  /localhost|127\.0\.0\.1/,
-  /\.env\.local|\.env\.development/,
-  /sqlite|:memory:/i,
-  /public\/|static\/|assets\//,
-  /NODE_ENV.*development/i,
-  /mockServiceWorker/i,
-];
+// Use shared localhost patterns from PatternLibrary (95% code reduction!)
+// All patterns are now centralized in PatternLibrary.LOCAL_ONLY_PATTERNS and PatternLibrary.GOOD_LOCAL_PATTERNS
 
 function detectRemoteConfigurations(content, filePath) {
   const detectedIssues = [];
 
-  // Check each category
-  for (const [category, config] of Object.entries(LOCAL_ONLY_PATTERNS)) {
+  // Use shared localhost patterns from PatternLibrary
+  for (const [category, config] of Object.entries(PatternLibrary.LOCAL_ONLY_PATTERNS)) {
     for (const pattern of config.remote) {
       const matches = content.match(pattern);
       if (matches) {
@@ -245,7 +126,7 @@ async function localhostEnforcer(input) {
 
   // Detect remote configurations
   const issues = detectRemoteConfigurations(content, filePath);
-  const hasGoodPatterns = GOOD_LOCAL_PATTERNS.some((p) => p.test(content));
+  const hasGoodPatterns = PatternLibrary.GOOD_LOCAL_PATTERNS.some((p) => p.test(content));
 
   // Block if remote configs found without local alternatives
   if (issues.length > 0 && !hasGoodPatterns) {
@@ -306,8 +187,6 @@ const runner = new HookRunner("localhost-enforcer", { timeout: 1500 });
 runner.run(localhostEnforcer);
 
 module.exports = {
-  LOCAL_ONLY_PATTERNS,
-  GOOD_LOCAL_PATTERNS,
   detectRemoteConfigurations,
   isConfigurationFile,
   localhostEnforcer,

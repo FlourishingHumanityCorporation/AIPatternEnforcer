@@ -44,6 +44,14 @@ class FileAnalyzer {
         const parts = normalized.split(/[/\\]/);
         return parts.length <= 2; // Root or one level deep
       },
+
+      get pathParts() {
+        return normalized.split(/[/\\]/).filter(part => part.length > 0);
+      },
+
+      get nameWithoutExt() {
+        return parsed.name;
+      },
     };
   }
 
@@ -104,6 +112,15 @@ class FileAnalyzer {
     const docExtensions = [".md", ".txt", ".rst", ".adoc"];
     const ext = path.extname(filePath).toLowerCase();
     return docExtensions.includes(ext);
+  }
+
+  /**
+   * Check if file is a web file (HTML, CSS, etc.)
+   */
+  static isWebFile(filePath) {
+    const webExtensions = [".html", ".htm", ".css", ".scss", ".less", ".vue", ".svelte"];
+    const ext = path.extname(filePath).toLowerCase();
+    return webExtensions.includes(ext);
   }
 
   /**

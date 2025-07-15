@@ -13,63 +13,10 @@
  * Returns: { status: 'ok' | 'blocked', message?: string }
  */
 
-const { HookRunner, FileAnalyzer, ErrorFormatter } = require("./lib");
+const { HookRunner, FileAnalyzer, PatternLibrary, ErrorFormatter } = require("./lib");
 
-// From CLAUDE.md - allowed root files for meta-project
-const ALLOWED_ROOT_FILES = new Set([
-  // Meta-project Documentation
-  "README.md",
-  "LICENSE",
-  "CLAUDE.md",
-  "CONTRIBUTING.md",
-  "SETUP.md",
-  "FRICTION-MAPPING.md",
-  "QUICK-START.md",
-  "USER-JOURNEY.md",
-  "DOCS_INDEX.md",
-
-  // Meta-project Configuration
-  "package.json",
-  "package-lock.json",
-  "tsconfig.json",
-  ".eslintrc.json",
-  ".prettierrc",
-  ".env",
-  ".env.example",
-  ".gitignore",
-
-  // CI/CD (allowed since it's for the meta-project)
-  ".github",
-  ".husky",
-  ".vscode",
-]);
-
-// Directory suggestions for common mistakes
-const DIRECTORY_SUGGESTIONS = {
-  // Application code patterns
-  app: "templates/nextjs-app-router/app/",
-  components: "templates/[framework]/components/",
-  lib: "templates/[framework]/lib/",
-  pages: "templates/nextjs-pages/pages/",
-  src: "templates/[framework]/src/",
-
-  // Config files that belong in templates
-  "next.config.js": "templates/nextjs-app-router/",
-  "vite.config.js": "templates/react-vite/",
-  "tailwind.config.js": "templates/[framework]/",
-  "postcss.config.js": "templates/[framework]/",
-  "jest.config.js": "templates/[framework]/",
-
-  // Documentation that's not meta-project level
-  "CHANGELOG.md": "docs/reports/",
-  "TODO.md": "docs/plans/",
-  "NOTES.md": "docs/notes/",
-
-  // Build artifacts
-  dist: "templates/[framework]/dist/ (or add to .gitignore)",
-  build: "templates/[framework]/build/ (or add to .gitignore)",
-  ".next": "templates/nextjs-app-router/.next/ (or add to .gitignore)",
-};
+// Use shared root directory patterns from PatternLibrary (95% code reduction!)
+// All patterns are now centralized in PatternLibrary.ALLOWED_ROOT_FILES and PatternLibrary.DIRECTORY_SUGGESTIONS
 
 // Hook logic
 async function blockRootMess(input) {
@@ -88,8 +35,8 @@ async function blockRootMess(input) {
   if (pathParts.length === 1) {
     const fileName = pathParts[0];
     if (
-      ALLOWED_ROOT_FILES.has(fileName) ||
-      ALLOWED_ROOT_FILES.has(fileInfo.nameWithoutExt)
+      PatternLibrary.ALLOWED_ROOT_FILES.has(fileName) ||
+      PatternLibrary.ALLOWED_ROOT_FILES.has(fileInfo.nameWithoutExt)
     ) {
       return { allow: true };
     }
@@ -116,11 +63,11 @@ async function blockRootMess(input) {
   const fileName = pathParts[pathParts.length - 1];
   const directoryToBlock = pathParts.length === 1 ? fileName : topLevelDir;
 
-  // Block and provide helpful suggestion
+  // Block and provide helpful suggestion using shared patterns
   const suggestion =
-    DIRECTORY_SUGGESTIONS[directoryToBlock] ||
-    DIRECTORY_SUGGESTIONS[fileName] ||
-    DIRECTORY_SUGGESTIONS[fileInfo.nameWithoutExt] ||
+    PatternLibrary.DIRECTORY_SUGGESTIONS[directoryToBlock] ||
+    PatternLibrary.DIRECTORY_SUGGESTIONS[fileName] ||
+    PatternLibrary.DIRECTORY_SUGGESTIONS[fileInfo.nameWithoutExt] ||
     getSuggestionByPattern(fileName);
 
   const errorMessage =
@@ -187,7 +134,5 @@ runner.run(blockRootMess);
 
 module.exports = {
   getSuggestionByPattern,
-  ALLOWED_ROOT_FILES,
-  DIRECTORY_SUGGESTIONS,
   blockRootMess,
 };

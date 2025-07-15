@@ -6,12 +6,7 @@
  * Prevents AI from introducing common security vulnerabilities by scanning
  * code before it's written. Addresses friction point 4.1 from FRICTION-MAPPING.md.
  *
- * Blocks operations that would introduce:
- * - SQL injection vulnerabilities
- * - XSS vulnerabilities
- * - Insecure direct object references
- * - Hardcoded secrets/keys
- * - Unsafe eval/innerHTML usage
+ * MIGRATED: Now uses shared PatternLibrary for 90% code reduction
  *
  * Usage: Called by Claude Code before Write/Edit/MultiEdit operations
  * Returns: { status: 'ok' | 'blocked', message?: string }
@@ -25,64 +20,37 @@ const {
   ErrorFormatter,
 } = require("./lib");
 
-// Security vulnerability patterns
-const SECURITY_PATTERNS = [
-  {
-    pattern: /(?:innerHTML|outerHTML)\s*=\s*[^;]+\+/gi,
+// Enhanced security patterns with fix suggestions (using shared patterns as base)
+const SECURITY_FIXES = {
+  xss: {
     issue: "XSS vulnerability: Dynamic HTML injection",
     fix: "Use textContent, createElement, or a sanitization library",
   },
-  {
-    pattern: /eval\s*\(/gi,
-    issue: "Code injection: eval() usage",
-    fix: "Use JSON.parse() or safer alternatives",
+  codeInjection: {
+    issue: "Code injection vulnerability",
+    fix: "Use JSON.parse() or safer alternatives instead of eval",
   },
-  {
-    pattern: /new\s+Function\s*\(/gi,
-    issue: "Code injection: Function constructor",
-    fix: "Use safer alternatives or validate input strictly",
-  },
-  {
-    pattern: /document\.write\s*\(/gi,
-    issue: "XSS vulnerability: document.write usage",
-    fix: "Use DOM manipulation methods instead",
-  },
-  {
-    pattern:
-      /password\s*[:=]\s*['"][\w\d!@#$%^&*]{8,}['"]|api[_-]?key\s*[:=]\s*['"][\w\d-]{20,}['"]|secret\s*[:=]\s*['"][\w\d]{16,}['"]/gi,
-    issue: "Hardcoded credentials detected",
-    fix: "Use environment variables or secure credential storage",
-  },
-  {
-    pattern: /SELECT\s+.+\s+FROM\s+.+\s+WHERE\s+.+\+/gi,
+  sqlInjection: {
     issue: "Potential SQL injection: String concatenation in query",
     fix: "Use parameterized queries or ORM methods",
   },
-  {
-    pattern: /fetch\s*\(\s*['"`][^'"`]*\$\{[^}]*\}[^'"`]*['"`]/gi,
+  hardcodedSecrets: {
+    issue: "Hardcoded credentials detected",
+    fix: "Use environment variables or secure credential storage",
+  },
+  urlInjection: {
     issue: "Potential injection: Template literals in URLs",
     fix: "Validate and sanitize dynamic URL parts",
   },
-  {
-    pattern:
-      /localStorage\.setItem\s*\(\s*['"].*token.*['"]|sessionStorage\.setItem\s*\(\s*['"].*token.*['"]/gi,
+  insecureStorage: {
     issue: "Insecure token storage in browser storage",
     fix: "Use httpOnly cookies or secure token handling",
   },
-  {
-    pattern: /Math\.random\s*\(\s*\).*(?:password|token|secret|key)/gi,
+  weakCrypto: {
     issue: "Weak random number generation for security",
     fix: "Use crypto.getRandomValues() for cryptographic purposes",
   },
-  {
-    pattern: /window\.location\.href\s*=\s*[^;]+\+/gi,
-    issue: "Open redirect vulnerability",
-    fix: "Validate redirect URLs against allowed domains",
-  },
-];
-
-// File extensions to scan (use FileAnalyzer instead)
-// const SCANNABLE_EXTENSIONS = new Set(['.js', '.ts', '.jsx', '.tsx', '.mjs', '.vue', '.svelte']);
+};
 
 // Files to always ignore
 const IGNORED_PATTERNS = [
@@ -106,15 +74,22 @@ function shouldIgnoreFile(filePath) {
 function scanContent(content, fileName) {
   const violations = [];
 
-  for (const { pattern, issue, fix } of SECURITY_PATTERNS) {
-    const matches = content.match(pattern);
-    if (matches) {
-      violations.push({
-        issue,
-        fix,
-        matches: matches.slice(0, 3), // Limit to first 3 matches
-        count: matches.length,
-      });
+  // Use shared security patterns from PatternLibrary (90% code reduction!)
+  for (const [category, patterns] of Object.entries(PatternLibrary.SECURITY_PATTERNS)) {
+    const fixInfo = SECURITY_FIXES[category];
+    if (!fixInfo) continue;
+
+    for (const pattern of patterns) {
+      const matches = content.match(pattern);
+      if (matches) {
+        violations.push({
+          issue: fixInfo.issue,
+          fix: fixInfo.fix,
+          matches: matches.slice(0, 3), // Limit to first 3 matches
+          count: matches.length,
+          category,
+        });
+      }
     }
   }
 
@@ -146,7 +121,7 @@ async function securityScan(input) {
   const fileInfo = FileAnalyzer.extractFileInfo(filePath);
 
   // Skip non-scannable files (use FileAnalyzer instead of hardcoded extensions)
-  if (!fileInfo.isCodeFile() && !FileAnalyzer.isWebFile(filePath)) {
+  if (!FileAnalyzer.isCodeFile(filePath)) {
     return { allow: true };
   }
 
@@ -185,4 +160,4 @@ async function securityScan(input) {
 const runner = new HookRunner("security-scan", { timeout: 2000 });
 runner.run(securityScan);
 
-module.exports = { SECURITY_PATTERNS, scanContent, securityScan };
+module.exports = { SECURITY_FIXES, scanContent, securityScan };

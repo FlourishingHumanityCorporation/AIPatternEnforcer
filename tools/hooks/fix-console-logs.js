@@ -66,8 +66,8 @@ async function fixConsoleLogs(input) {
   const originalContent = content;
   let changesCount = 0;
 
-  // Apply console.* replacements
-  for (const [oldPattern, newPattern] of Object.entries(CONSOLE_REPLACEMENTS)) {
+  // Apply console.* replacements using shared patterns
+  for (const [oldPattern, newPattern] of Object.entries(PatternLibrary.CONSOLE_REPLACEMENTS)) {
     const regex = new RegExp(`\\b${oldPattern.replace(".", "\\.")}\\b`, "g");
     const matches = content.match(regex);
     if (matches) {
@@ -94,4 +94,4 @@ async function fixConsoleLogs(input) {
 const runner = new HookRunner("fix-console-logs", { timeout: 1500 });
 runner.run(fixConsoleLogs);
 
-module.exports = { CONSOLE_REPLACEMENTS, fixConsoleLogs };
+module.exports = { fixConsoleLogs };

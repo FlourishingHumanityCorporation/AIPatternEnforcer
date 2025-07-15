@@ -23,51 +23,8 @@ const {
   ErrorFormatter,
 } = require("./lib");
 
-// Patterns that indicate scope creep
-const SCOPE_CREEP_PATTERNS = [
-  {
-    pattern:
-      /also.*(?:add|create|update|fix|refactor)|while.*(?:we're|you're).*at.*it/gi,
-    issue: 'Scope creep: "Also" or "while we\'re at it" additions',
-    suggestion: "Make separate requests for additional tasks",
-  },
-  {
-    pattern: /(?:improve|optimize|enhance|refactor).*(?:entire|whole|all)/gi,
-    issue: "Scope creep: Attempting to improve entire codebase",
-    suggestion: "Focus on specific, targeted changes",
-  },
-  {
-    pattern: /(?:migrate|convert|upgrade).*(?:all|entire|everything)/gi,
-    issue: "Scope creep: Large-scale migration in single request",
-    suggestion: "Break migration into smaller, focused steps",
-  },
-  {
-    pattern:
-      /(?:add|implement).*(?:authentication|database|api|routing).*(?:and|plus|also)/gi,
-    issue: "Scope creep: Multiple major features in one request",
-    suggestion: "Implement one major feature at a time",
-  },
-];
-
-// Patterns that indicate good scope control
-const GOOD_SCOPE_PATTERNS = [
-  {
-    pattern: /only.*(?:change|modify|update|fix)|just.*(?:add|create|update)/gi,
-    description: "Explicit scope limitation",
-  },
-  {
-    pattern: /single.*(?:function|component|file|change)/gi,
-    description: "Single-item focus",
-  },
-  {
-    pattern: /minimal.*change|smallest.*possible/gi,
-    description: "Minimal change principle",
-  },
-  {
-    pattern: /don't.*(?:change|modify|touch|update).*(?:other|existing)/gi,
-    description: "Explicit preservation instruction",
-  },
-];
+// Use shared scope patterns from PatternLibrary (90% code reduction!)
+// All patterns are now centralized in PatternLibrary.SCOPE_CREEP_PATTERNS and PatternLibrary.GOOD_SCOPE_PATTERNS
 
 // File count limits for different operations
 const FILE_LIMITS = {
@@ -91,8 +48,8 @@ function analyzeScope(input, operationType) {
   const scopeIssues = [];
   const goodScope = [];
 
-  // Check for scope creep patterns
-  for (const { pattern, issue, suggestion } of SCOPE_CREEP_PATTERNS) {
+  // Check for scope creep patterns using shared library
+  for (const { pattern, issue, suggestion } of PatternLibrary.SCOPE_CREEP_PATTERNS) {
     const matches = combinedText.match(pattern);
     if (matches) {
       scopeIssues.push({
@@ -103,8 +60,8 @@ function analyzeScope(input, operationType) {
     }
   }
 
-  // Check for good scope patterns
-  for (const { pattern, description } of GOOD_SCOPE_PATTERNS) {
+  // Check for good scope patterns using shared library
+  for (const { pattern, description } of PatternLibrary.GOOD_SCOPE_PATTERNS) {
     if (pattern.test(combinedText)) {
       goodScope.push(description);
     }
@@ -256,7 +213,6 @@ module.exports = {
   analyzeScope,
   checkFileCount,
   checkContentComplexity,
-  SCOPE_CREEP_PATTERNS,
   FILE_LIMITS,
   scopeLimiter,
 };

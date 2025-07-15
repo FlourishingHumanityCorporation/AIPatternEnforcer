@@ -40,11 +40,11 @@ class HookRunner {
       // Handle response
       if (result.block) {
         process.stderr.write(result.message || "Operation blocked by hook");
-        process.exit(1);
+        process.exit(2); // Exit 2 for Claude Code hook blocking
       } else if (result.allow !== false) {
         process.exit(0);
       } else {
-        process.exit(1);
+        process.exit(2); // Exit 2 for Claude Code hook blocking
       }
     } catch (error) {
       if (this.verbose) {
@@ -96,8 +96,15 @@ class HookRunner {
   enhanceHookData(data) {
     const path = require("path");
 
-    const enhanced = {
+    // Flatten tool_input fields to root level for easier access
+    const toolInput = data.tool_input || {};
+    const flattened = {
       ...data,
+      ...toolInput, // This flattens file_path, content, etc. to root level
+    };
+
+    const enhanced = {
+      ...flattened,
 
       // Helper methods
       hasFilePath() {

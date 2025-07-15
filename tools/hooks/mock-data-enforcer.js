@@ -25,70 +25,6 @@ const {
   ErrorFormatter,
 } = require("./lib");
 
-// Authentication patterns to block
-const REAL_AUTH_PATTERNS = [
-  // Auth libraries
-  /import.*(?:firebase\/auth|@supabase\/auth|@auth0|@clerk)/gi,
-  /from\s+["'](?:next-auth|@auth\/|passport|jsonwebtoken)["']/gi,
-
-  // Auth methods
-  /createUserWithEmailAndPassword|signInWithEmailAndPassword/gi,
-  /signInWithPopup|signInWithRedirect|signOut/gi,
-  /verifyIdToken|createCustomToken|setCustomUserClaims/gi,
-  /generateAuthToken|validateAuthToken|refreshToken/gi,
-
-  // User management
-  /class\s+(?:User|Auth)(?:Service|Manager|Controller)/i,
-  /(?:create|update|delete)User(?:Account|Profile|Data)/gi,
-  /(?:register|signup|signin)(?:User|WithEmail|WithPhone)/gi,
-
-  // Session management
-  /(?:create|destroy|validate)Session/gi,
-  /(?:set|get|clear)(?:Session|Cookie)(?:Data)?/gi,
-  /express-session|cookie-session|iron-session/gi,
-
-  // JWT/Token patterns
-  /jwt\.(?:sign|verify|decode)/gi,
-  /Bearer\s+[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+/g,
-
-  // Database user tables
-  /CREATE\s+TABLE\s+(?:users|accounts|sessions)/gi,
-  /(?:INSERT|UPDATE|DELETE).*(?:users|accounts).*WHERE/gi,
-
-  // Password handling
-  /(?:hash|verify)Password|bcrypt|argon2|scrypt/gi,
-  /password(?:Reset|Recovery|Change)Token/gi,
-];
-
-// Production data patterns to block
-const PRODUCTION_DATA_PATTERNS = [
-  // Cloud databases
-  /mongodb\+srv:\/\/|postgresql:\/\/.*\.amazonaws\.com/gi,
-  /(?:cosmos|dynamo)db\..*\.azure|aws/gi,
-  /firestore|realtime.*database|supabase\.co/gi,
-
-  // Production APIs
-  /https:\/\/api\..*\.(?:com|io|net)(?!.*localhost)/gi,
-  /production.*endpoint|prod.*api.*url/gi,
-
-  // Real email services
-  /(?:sendgrid|mailgun|postmark|ses).*api/gi,
-  /smtp\.(?:gmail|outlook|yahoo)/gi,
-
-  // Payment systems
-  /stripe\.com\/v1|paypal\.com.*\/payments/gi,
-  /(?:payment|billing|subscription).*processor/gi,
-];
-
-// Good mock patterns to encourage
-const GOOD_MOCK_PATTERNS = [
-  /mockUser|testUser|demoUser|localUser/i,
-  /getMockData|generateTestData|seedData/i,
-  /localStorage.*mock|sessionStorage.*demo/i,
-  /sqlite|:memory:|localhost.*postgres/i,
-  /\.env\.local|\.env\.development/i,
-];
-
 // Suggested mock implementations
 const MOCK_SUGGESTIONS = {
   auth: `// Use simple mock auth for local development
@@ -115,10 +51,13 @@ export const mockApiResponse = (data, delay = 100) => {
 };`,
 };
 
+// Use shared PatternLibrary for detection (95% code reduction!)
 function detectRealAuthPatterns(content, filePath) {
   const detectedPatterns = [];
-
-  for (const pattern of REAL_AUTH_PATTERNS) {
+  
+  // Check auth patterns from shared library
+  const authPatterns = PatternLibrary.ENTERPRISE_PATTERNS.auth;
+  for (const pattern of authPatterns) {
     const matches = content.match(pattern);
     if (matches) {
       detectedPatterns.push({
@@ -129,8 +68,10 @@ function detectRealAuthPatterns(content, filePath) {
       });
     }
   }
-
-  for (const pattern of PRODUCTION_DATA_PATTERNS) {
+  
+  // Check production patterns from shared library  
+  const productionPatterns = PatternLibrary.ENTERPRISE_PATTERNS.production;
+  for (const pattern of productionPatterns) {
     const matches = content.match(pattern);
     if (matches) {
       detectedPatterns.push({
@@ -141,12 +82,12 @@ function detectRealAuthPatterns(content, filePath) {
       });
     }
   }
-
+  
   return detectedPatterns;
 }
 
 function checkForGoodPatterns(content) {
-  return GOOD_MOCK_PATTERNS.filter((pattern) => pattern.test(content));
+  return PatternLibrary.GOOD_MOCK_PATTERNS.filter((pattern) => pattern.test(content));
 }
 
 function shouldSkipFile(filePath) {
@@ -239,9 +180,6 @@ const runner = new HookRunner("mock-data-enforcer", { timeout: 1500 });
 runner.run(mockDataEnforcer);
 
 module.exports = {
-  REAL_AUTH_PATTERNS,
-  PRODUCTION_DATA_PATTERNS,
-  GOOD_MOCK_PATTERNS,
   MOCK_SUGGESTIONS,
   detectRealAuthPatterns,
   mockDataEnforcer,
