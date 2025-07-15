@@ -5,11 +5,45 @@
  * Handles stdin/stdout communication and common hook patterns
  */
 
+const HookEnvUtils = require("./hook-env-utils");
+
 class HookRunner {
   constructor(name, options = {}) {
     this.name = name;
     this.timeout = options.timeout || 5000;
     this.verbose = options.verbose || false;
+
+    // Load environment variables from .env file
+    this.loadEnvFile();
+  }
+
+  /**
+   * Load environment variables from .env file
+   */
+  loadEnvFile() {
+    const fs = require("fs");
+    const path = require("path");
+
+    try {
+      const envPath = path.join(process.cwd(), ".env");
+      if (fs.existsSync(envPath)) {
+        const envContent = fs.readFileSync(envPath, "utf8");
+        const lines = envContent.split("\n");
+
+        for (const line of lines) {
+          const trimmedLine = line.trim();
+          if (trimmedLine && !trimmedLine.startsWith("#")) {
+            const [key, ...valueParts] = trimmedLine.split("=");
+            if (key && valueParts.length > 0) {
+              const value = valueParts.join("=").trim();
+              process.env[key.trim()] = value;
+            }
+          }
+        }
+      }
+    } catch (error) {
+      // Fail silently if .env file cannot be read
+    }
   }
 
   /**
@@ -18,6 +52,16 @@ class HookRunner {
    */
   async run(hookFunction) {
     try {
+      // Early exit for testing/development mode
+      if (HookEnvUtils.shouldBypassHooks()) {
+        if (process.env.HOOK_VERBOSE === "true") {
+          process.stderr.write(
+            `🔧 Hook ${this.name} bypassed: ${HookEnvUtils.getBypassReason()}\n`,
+          );
+        }
+        process.exit(0);
+      }
+
       // Read input from stdin
       const input = await this.readStdin();
       let parsedInput;
