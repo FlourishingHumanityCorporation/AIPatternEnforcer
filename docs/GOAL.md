@@ -2,7 +2,7 @@ NEVER CHANGE THIS DOCUMENT
 
 AIPatternEnforcer is a meta project.
 
-The goal is to create a codebase that prevents and solves common friction points described in @FrictionMapping when developing software with AI tools like Cursor and Claude Code (terminal) as a design default.
+The goal is to create a codebase that prevents and solves common friction points described in @FRICTION-MAPPING.md when developing software with AI tools like Cursor and Claude Code (terminal) as a design default.
 
 I should be able to copy this project and get started with new vibe AI coding project and AI will be automatically corrected when it does bad coding pattern. Assume the coder is super lazy and can't detect when AI is doing bad coding pattern and always ends up with a bloated mess of a coding project (like this one, lol).
 
@@ -15,7 +15,6 @@ UI: Tailwind CSS + shadcn/ui + Radix UI
 State: Zustand + TanStack Query
 Backend: Next.js API Routes + Serverless Functions
 Database: PostgreSQL (Neon) + Prisma + pgvector
-
 
 No-Need Enterprise Features for AIPatternEnforcer
 Features to EXCLUDE from the template:
@@ -106,7 +105,5 @@ Data & Analytics
 ❌ Change data capture (CDC)
 
 ANYTHING THAT'S ABOUT TEAMS
-
-
 
 All implementations should be robust and functional while leveraging the KISS principle. The plans should be aligned yet not overly simple in a way that causes issues later for me.

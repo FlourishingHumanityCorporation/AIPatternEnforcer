@@ -12,6 +12,10 @@ class HookRunner {
     this.name = name;
     this.timeout = options.timeout || 5000;
     this.verbose = options.verbose || false;
+    this.priority = options.priority || "medium";
+    this.family = options.family || "unknown";
+    this.executionId = options.executionId || null;
+    this.parentExecutor = options.parentExecutor || null;
 
     // Load environment variables from .env file
     this.loadEnvFile();
@@ -51,6 +55,8 @@ class HookRunner {
    * Reads JSON from stdin, calls hook function, writes result to stdout
    */
   async run(hookFunction) {
+    const startTime = Date.now();
+
     try {
       // Early exit for testing/development mode
       if (HookEnvUtils.shouldBypassHooks()) {
@@ -81,6 +87,21 @@ class HookRunner {
         this.timeoutPromise(),
       ]);
 
+      // Add execution metadata
+      const executionData = {
+        ...result,
+        executionTime: Date.now() - startTime,
+        hookName: this.name,
+        priority: this.priority,
+        family: this.family,
+        executionId: this.executionId,
+      };
+
+      // Notify parent executor if present
+      if (this.parentExecutor && this.parentExecutor.onHookComplete) {
+        this.parentExecutor.onHookComplete(executionData);
+      }
+
       // Handle response
       if (result.block) {
         process.stderr.write(result.message || "Operation blocked by hook");
@@ -91,6 +112,20 @@ class HookRunner {
         process.exit(2); // Exit 2 for Claude Code hook blocking
       }
     } catch (error) {
+      const executionTime = Date.now() - startTime;
+
+      // Notify parent executor of error
+      if (this.parentExecutor && this.parentExecutor.onHookError) {
+        this.parentExecutor.onHookError({
+          hookName: this.name,
+          priority: this.priority,
+          family: this.family,
+          executionId: this.executionId,
+          error: error.message,
+          executionTime,
+        });
+      }
+
       if (this.verbose) {
         process.stderr.write(`Hook ${this.name} error: ${error.message}\n`);
       }
@@ -191,6 +226,88 @@ class HookRunner {
     });
 
     return message.trim();
+  }
+
+  /**
+   * Check if hook should run based on priority and context
+   */
+  shouldRun(context = {}) {
+    // Skip background hooks under time pressure
+    if (context.timeConstraint && this.priority === "background") {
+      return false;
+    }
+
+    // Skip low priority hooks if many hooks are queued
+    if (context.queueSize > 10 && this.priority === "low") {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Get hook metadata for parallel execution
+   */
+  getMetadata() {
+    return {
+      name: this.name,
+      priority: this.priority,
+      family: this.family,
+      timeout: this.timeout,
+      executionId: this.executionId,
+    };
+  }
+
+  /**
+   * Create a hook runner for parallel execution
+   */
+  static createForParallel(name, hookFunction, options = {}) {
+    const runner = new HookRunner(name, options);
+
+    // Return a promise that resolves with execution data
+    return async (input) => {
+      const startTime = Date.now();
+
+      try {
+        // Check if hook should run
+        if (!runner.shouldRun(options.context)) {
+          return {
+            skipped: true,
+            reason: "Priority/context filtering",
+            hookName: name,
+            priority: runner.priority,
+            family: runner.family,
+            executionTime: 0,
+          };
+        }
+
+        // Execute hook function
+        const result = await Promise.race([
+          hookFunction(input, runner),
+          runner.timeoutPromise(),
+        ]);
+
+        return {
+          ...result,
+          executionTime: Date.now() - startTime,
+          hookName: name,
+          priority: runner.priority,
+          family: runner.family,
+          executionId: runner.executionId,
+        };
+      } catch (error) {
+        return {
+          error: error.message,
+          blocked: false,
+          failed: true,
+          executionTime: Date.now() - startTime,
+          hookName: name,
+          priority: runner.priority,
+          family: runner.family,
+          executionId: runner.executionId,
+        };
+      }
+    };
   }
 
   /**

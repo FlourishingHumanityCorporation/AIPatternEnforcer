@@ -25,11 +25,15 @@ should be copy and pastable and should be a starting point for any project.
 
 **Essential rules for AI assistants working on AIPatternEnforcer.**
 
+Ultrathink = think really hard and deep
+
 ## ⚡ IMMEDIATE ACTION COMMANDS
 
 ```bash
 # First time? Start here:
 npm run onboard                # Setup + first component (<5 min)
+export HOOK_DEVELOPMENT=false # Turn on hooks (disable development mode)
+export HOOK_TESTING=false     # Turn on hooks (disable testing mode)
 
 # Daily workflow:
 npm run g:c ComponentName      # Generate component
@@ -222,6 +226,10 @@ npm run type-check          # TypeScript validation
 # - Enforces Next.js structure
 # - Validates Prisma schemas
 # See .claude/settings.json for active hooks
+#
+# NOTE: To turn on hooks, set environment variables:
+# export HOOK_DEVELOPMENT=false # Turn on hooks (disable development mode)
+# export HOOK_TESTING=false     # Turn on hooks (disable testing mode)
 ```
 
 ### Key Files
@@ -429,6 +437,11 @@ npm run check:all         # All enforcement checks (lint + type + test)
 ### Real-Time Prevention via Claude Code Hooks
 
 AIPatternEnforcer uses **Claude Code hooks** for real-time prevention of AI mistakes during development:
+
+**🔧 Hook Activation**: Set environment variables to turn on hooks:
+
+- `HOOK_DEVELOPMENT=false` - Turn on hooks (disable development mode)
+- `HOOK_TESTING=false` - Turn on hooks (disable testing mode)
 
 **Active Hooks** (see `.claude/settings.json`):
 

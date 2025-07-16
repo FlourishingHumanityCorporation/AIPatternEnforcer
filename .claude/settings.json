@@ -6,115 +6,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node tools/hooks/project-boundaries/meta-project-guardian.js",
-            "timeout": 2,
-            "family": "infrastructure_protection",
-            "priority": "critical",
-            "description": "Protects meta-project infrastructure from AI modifications"
-          },
-          {
-            "type": "command",
-            "command": "node tools/hooks/ai-patterns/context-validator.js",
-            "timeout": 3,
-            "family": "validation",
-            "priority": "high",
-            "description": "Validates context efficiency and prevents pollution"
-          },
-          {
-            "type": "command",
-            "command": "node tools/hooks/ai-patterns/prevent-improved-files.js",
-            "timeout": 1,
-            "family": "file_hygiene",
-            "priority": "critical",
-            "description": "Prevents duplicate file creation patterns"
-          },
-          {
-            "type": "command",
-            "command": "node tools/hooks/security/scope-limiter.js",
-            "timeout": 4,
-            "family": "security",
-            "priority": "high",
-            "description": "Enforces project scope boundaries"
-          },
-          {
-            "type": "command",
-            "command": "node tools/hooks/security/security-scan.js",
-            "timeout": 4,
-            "family": "security",
-            "priority": "high",
-            "description": "Scans for security vulnerabilities"
-          },
-          {
-            "type": "command",
-            "command": "node tools/hooks/architecture/test-location-enforcer.js",
-            "timeout": 3,
-            "family": "testing",
-            "priority": "medium",
-            "description": "Enforces proper test file placement"
-          },
-          {
-            "type": "command",
-            "command": "node tools/hooks/project-boundaries/enterprise-antibody.js",
-            "timeout": 2,
-            "family": "pattern_enforcement",
-            "priority": "high",
-            "description": "Blocks enterprise feature patterns"
-          },
-          {
-            "type": "command",
-            "command": "node tools/hooks/architecture/architecture-validator.js",
-            "timeout": 3,
-            "family": "architecture",
-            "priority": "high",
-            "description": "Validates architectural patterns and AI integration"
-          },
-          {
-            "type": "command",
-            "command": "node tools/hooks/local-dev/mock-data-enforcer.js",
-            "timeout": 2,
-            "family": "pattern_enforcement",
-            "priority": "medium",
-            "description": "Enforces mock data usage patterns"
-          },
-          {
-            "type": "command",
-            "command": "node tools/hooks/local-dev/localhost-enforcer.js",
-            "timeout": 2,
-            "family": "pattern_enforcement",
-            "priority": "medium",
-            "description": "Enforces local development patterns"
-          },
-          {
-            "type": "command",
-            "command": "node tools/hooks/performance/vector-db-hygiene.js",
-            "timeout": 2,
-            "family": "data_hygiene",
-            "priority": "medium",
-            "description": "Maintains vector database hygiene"
-          },
-          {
-            "type": "command",
-            "command": "node tools/hooks/performance/performance-guardian.js",
-            "timeout": 3,
-            "family": "performance",
-            "priority": "high",
-            "description": "Comprehensive performance monitoring and optimization"
-          },
-          {
-            "type": "command",
-            "command": "node tools/hooks/ai-patterns/streaming-pattern-enforcer.js",
-            "timeout": 2,
-            "family": "pattern_enforcement",
-            "priority": "medium",
-            "description": "Enforces proper streaming patterns"
-          },
-          {
-            "type": "command",
-            "command": "node tools/hooks/cleanup/docs-enforcer.js",
-            "timeout": 2,
-            "family": "documentation",
-            "priority": "medium",
-            "description": "Enforces documentation standards and organization"
+            "command": "node tools/hooks/pre-tool-use-parallel.js",
+            "timeout": 5,
+            "description": "Parallel execution of all PreToolUse hooks for Write|Edit|MultiEdit operations"
           }
         ]
       },
@@ -123,11 +17,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node tools/hooks/project-boundaries/block-root-mess.js",
-            "timeout": 2,
-            "family": "file_hygiene",
-            "priority": "critical",
-            "description": "Prevents root directory pollution"
+            "command": "node tools/hooks/pre-tool-use-write-parallel.js",
+            "timeout": 3,
+            "description": "Parallel execution of Write-only PreToolUse hooks"
           }
         ]
       }
@@ -138,43 +30,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node tools/hooks/cleanup/fix-console-logs.js",
-            "timeout": 3,
-            "family": "code_cleanup",
-            "priority": "medium",
-            "description": "Fixes console.log statements"
-          },
-          {
-            "type": "command",
-            "command": "node tools/hooks/validation/validate-prisma.js",
-            "timeout": 2,
-            "family": "validation",
-            "priority": "medium",
-            "description": "Validates Prisma schema changes"
-          },
-          {
-            "type": "command",
-            "command": "node tools/hooks/validation/api-validator.js",
-            "timeout": 4,
-            "family": "validation",
-            "priority": "high",
-            "description": "Validates API patterns and structure"
-          },
-          {
-            "type": "command",
-            "command": "node tools/hooks/validation/template-integrity-validator.js",
-            "timeout": 2,
-            "family": "validation",
-            "priority": "medium",
-            "description": "Validates template integrity"
-          },
-          {
-            "type": "command",
-            "command": "node tools/hooks/cleanup/import-janitor.js",
-            "timeout": 3,
-            "family": "code_cleanup",
-            "priority": "low",
-            "description": "Cleans up unused imports"
+            "command": "node tools/hooks/post-tool-use-parallel.js",
+            "timeout": 5,
+            "description": "Parallel execution of all PostToolUse hooks for Write|Edit|MultiEdit operations"
           }
         ]
       }
