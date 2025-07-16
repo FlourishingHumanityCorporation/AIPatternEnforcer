@@ -5,7 +5,9 @@
 **System Type**: Custom validation scripts called via Claude Code hooks
 **Active Scripts**: 20 validation scripts in `tools/hooks/`
 
-This comprehensive guide covers the **custom AI development enforcement system** implemented in AIPatternEnforcer. This system uses **legitimate Claude Code hooks** to call custom validation scripts that prevent common AI development friction by intercepting file operations and providing real-time feedback.
+This guide covers the **custom AI development enforcement system** implemented in AIPatternEnforcer. This system uses **legitimate Claude Code hooks** to call custom validation scripts that provide **limited file-level pattern enforcement** (addresses ~31% of AI development friction) by intercepting file operations and providing real-time feedback.
+
+**⚠️ Important**: This system only addresses file organization patterns. It cannot prevent AI model limitations, workflow friction, or interaction issues.
 
 ## ⚠️ Important Distinction
 
@@ -42,7 +44,7 @@ This is **NOT** the official Claude Code hooks system. This is a **custom enforc
 
 ## System Overview
 
-This custom enforcement system uses **official Claude Code hooks** to call **20 custom validation scripts** that prevent AI development friction.
+This custom enforcement system uses **official Claude Code hooks** to call **20 custom validation scripts** that provide **limited file-level pattern enforcement** for a subset of AI development friction.
 
 ### How It Works
 
@@ -217,7 +219,7 @@ cat .claude/settings.json | jq .
 
 ---
 
-The Claude Code hooks system (v3.0) represents a sophisticated approach to preventing AI development friction through real-time, intelligent validation that maintains developer productivity while ensuring code quality and security.
+The Claude Code hooks system (v3.0) provides limited file-level pattern enforcement through real-time validation. While useful for file organization and basic patterns, it addresses only ~31% of AI development friction and cannot prevent model limitations, workflow issues, or interaction problems.
 
 ```
 

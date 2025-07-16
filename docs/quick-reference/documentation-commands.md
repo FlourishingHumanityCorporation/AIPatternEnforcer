@@ -138,6 +138,14 @@ Before committing documentation:
 
 ## Hook Integration
 
+**🔧 Production Mode Activation:**
+
+```bash
+# Enable real-time enforcement (update .env)
+HOOK_DEVELOPMENT=false
+HOOK_TESTING=false
+```
+
 The system automatically:
 
 - ✅ Blocks creation of inadequate documentation
@@ -154,6 +162,23 @@ For detailed validation information:
 export HOOK_VERBOSE=true
 npm run validate:docs
 ```
+
+---
+
+## Custom Hook Development
+
+For advanced documentation enforcement patterns:
+
+```bash
+# Create custom validation hooks
+# See comprehensive development guide:
+```
+
+**📚 Resources:**
+
+- **Hook Development**: [05-hooks-development.md](../guides/claude-code-hooks/05-hooks-development.md)
+- **Hook Testing**: [07-hooks-testing.md](../guides/claude-code-hooks/07-hooks-testing.md)
+- **Hook Configuration**: [02-hooks-configuration.md](../guides/claude-code-hooks/02-hooks-configuration.md)
 
 ---
 

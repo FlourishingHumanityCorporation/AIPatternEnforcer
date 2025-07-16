@@ -17,6 +17,9 @@ class HookRunner {
     this.executionId = options.executionId || null;
     this.parentExecutor = options.parentExecutor || null;
 
+    // Derive hook command from current process argv
+    this.hookCommand = process.argv[1] || "";
+
     // Load environment variables from .env file
     this.loadEnvFile();
   }
@@ -29,8 +32,31 @@ class HookRunner {
     const path = require("path");
 
     try {
-      const envPath = path.join(process.cwd(), ".env");
-      if (fs.existsSync(envPath)) {
+      // Find project root by looking for .env file up the directory tree
+      let currentDir = path.dirname(this.hookCommand);
+      let envPath = null;
+
+      // Walk up directories to find .env file (max 10 levels to prevent infinite loop)
+      for (let i = 0; i < 10; i++) {
+        const testPath = path.join(currentDir, ".env");
+        if (fs.existsSync(testPath)) {
+          envPath = testPath;
+          break;
+        }
+        const parentDir = path.dirname(currentDir);
+        if (parentDir === currentDir) break; // Reached filesystem root
+        currentDir = parentDir;
+      }
+
+      // Fallback to process.cwd() if not found via hook path
+      if (!envPath) {
+        const fallbackPath = path.join(process.cwd(), ".env");
+        if (fs.existsSync(fallbackPath)) {
+          envPath = fallbackPath;
+        }
+      }
+
+      if (envPath) {
         const envContent = fs.readFileSync(envPath, "utf8");
         const lines = envContent.split("\n");
 
@@ -44,6 +70,9 @@ class HookRunner {
             }
           }
         }
+
+        // Store which .env file was loaded for debugging
+        this.envFilePath = envPath;
       }
     } catch (error) {
       // Fail silently if .env file cannot be read
@@ -58,11 +87,11 @@ class HookRunner {
     const startTime = Date.now();
 
     try {
-      // Early exit for testing/development mode
-      if (HookEnvUtils.shouldBypassHooks()) {
+      // Early exit for testing/development mode or folder-specific bypass
+      if (HookEnvUtils.shouldBypassHook(this.hookCommand)) {
         if (process.env.HOOK_VERBOSE === "true") {
           process.stderr.write(
-            `🔧 Hook ${this.name} bypassed: ${HookEnvUtils.getBypassReason()}\n`,
+            `🔧 Hook ${this.name} bypassed: ${HookEnvUtils.getHookBypassReason(this.hookCommand)}\n`,
           );
         }
         process.exit(0);
@@ -226,6 +255,25 @@ class HookRunner {
     });
 
     return message.trim();
+  }
+
+  /**
+   * Helper method to create a block result
+   */
+  block(message) {
+    return {
+      block: true,
+      message: message,
+    };
+  }
+
+  /**
+   * Helper method to create an allow result
+   */
+  allow() {
+    return {
+      allow: true,
+    };
   }
 
   /**

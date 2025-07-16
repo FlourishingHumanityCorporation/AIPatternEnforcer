@@ -5,49 +5,50 @@
 ## Table of Contents
 
 1. [Integrated Development Workflow](#integrated-development-workflow)
-  2. [Daily Development Cycle](#daily-development-cycle)
+2. [Daily Development Cycle](#daily-development-cycle)
 3. [Tool Integration Architecture](#tool-integration-architecture)
-  4. [AI Context Flow](#ai-context-flow)
-  5. [Data Flow Between Tools](#data-flow-between-tools)
+4. [AI Context Flow](#ai-context-flow)
+5. [Data Flow Between Tools](#data-flow-between-tools)
 6. [Tool-Specific Integration](#tool-specific-integration)
-  7. [Cursor Integration](#cursor-integration)
-  8. [Claude Code Integration](#claude-code-integration)
-  9. [GitHub Copilot Integration](#github-copilot-integration)
+7. [Cursor Integration](#cursor-integration)
+8. [Claude Code Integration](#claude-code-integration)
+9. [GitHub Copilot Integration](#github-copilot-integration)
 10. [Enforcement Integration](#enforcement-integration)
-  11. [Real-Time Validation](#real-time-validation)
-  12. [Enforcement Levels for Different Workflows](#enforcement-levels-for-different-workflows)
-  13. [Auto-Fix Integration](#auto-fix-integration)
+11. [Real-Time Validation](#real-time-validation)
+12. [Enforcement Levels for Different Workflows](#enforcement-levels-for-different-workflows)
+13. [Auto-Fix Integration](#auto-fix-integration)
 14. [Generator Integration](#generator-integration)
-  15. [Context-Aware Generation](#context-aware-generation)
-  16. [Template Customization Integration](#template-customization-integration)
-  17. [Validation Integration](#validation-integration)
+15. [Context-Aware Generation](#context-aware-generation)
+16. [Template Customization Integration](#template-customization-integration)
+17. [Validation Integration](#validation-integration)
 18. [Context Optimization Integration](#context-optimization-integration)
-  19. [Intelligent Context Loading](#intelligent-context-loading)
-  20. [Context Feedback Loop](#context-feedback-loop)
-  21. [Context Persistence](#context-persistence)
+19. [Intelligent Context Loading](#intelligent-context-loading)
+20. [Context Feedback Loop](#context-feedback-loop)
+21. [Context Persistence](#context-persistence)
 22. [Debugging Workflow Integration](#debugging-workflow-integration)
-  23. [Systematic Debug Process](#systematic-debug-process)
-  24. [Debug Context Enhancement](#debug-context-enhancement)
+23. [Systematic Debug Process](#systematic-debug-process)
+24. [Debug Context Enhancement](#debug-context-enhancement)
 25. [Team Workflow Integration](#team-workflow-integration)
-  26. [Individual Developer Setup](#individual-developer-setup)
-  27. [Team Coordination](#team-coordination)
+26. [Individual Developer Setup](#individual-developer-setup)
+27. [Team Coordination](#team-coordination)
 28. [CI/CD Integration](#cicd-integration)
-  29. [Automated Validation Pipeline](#automated-validation-pipeline)
-  30. [Integration with External Tools](#integration-with-external-tools)
+29. [Automated Validation Pipeline](#automated-validation-pipeline)
+30. [Integration with External Tools](#integration-with-external-tools)
 31. [Advanced Integration Patterns](#advanced-integration-patterns)
-  32. [Custom Workflow Scripts](#custom-workflow-scripts)
-  33. [Integration Monitoring](#integration-monitoring)
-  34. [Customization for Different Development Styles](#customization-for-different-development-styles)
+32. [Custom Workflow Scripts](#custom-workflow-scripts)
+33. [Integration Monitoring](#integration-monitoring)
+34. [Customization for Different Development Styles](#customization-for-different-development-styles)
 35. [Troubleshooting Integration Issues](#troubleshooting-integration-issues)
-  36. [Common Integration Problems](#common-integration-problems)
-  37. [Integration Health Check](#integration-health-check)
+36. [Common Integration Problems](#common-integration-problems)
+37. [Integration Health Check](#integration-health-check)
 38. [Performance Optimization](#performance-optimization)
-  39. [Integration Performance Metrics](#integration-performance-metrics)
-  40. [Optimization Strategies](#optimization-strategies)
+39. [Integration Performance Metrics](#integration-performance-metrics)
+40. [Optimization Strategies](#optimization-strategies)
 
 ## Integrated Development Workflow
 
 ### Daily Development Cycle
+
 ```bash
 # 1. Context Setup (once per session)
 npm run context                    # Load AI context
@@ -68,6 +69,7 @@ npm run context -- src/path/     # Focused context reload
 ## Tool Integration Architecture
 
 ### AI Context Flow
+
 ```text
 CLAUDE.md → .cursorrules → AI Tools → Generated Code → Enforcement → Validation
     ↑                                                        ↓
@@ -75,14 +77,16 @@ CLAUDE.md → .cursorrules → AI Tools → Generated Code → Enforcement → V
 ```
 
 ### Data Flow Between Tools
+
 1. **Context Loading**: `npm run context` → AI tools receive project patterns
-2. **Code Generation**: AI tools → Generated files following patterns  
+2. **Code Generation**: AI tools → Generated files following patterns
 3. **Enforcement**: Git hooks → Real-time validation → Auto-fix where possible
 4. **Debugging**: Issues → `npm run debug:snapshot` → Enhanced context → AI tools
 
 ## Tool-Specific Integration
 
 ### Cursor Integration
+
 ```bash
 # Setup
 cp ai/config/.cursorrules .cursorrules
@@ -96,11 +100,12 @@ cp ai/config/.cursorrules .cursorrules
 ```
 
 ### Claude Code Integration
+
 ```bash
 # Setup
 # Claude Code automatically reads CLAUDE.md
 
-# Workflow Integration  
+# Workflow Integration
 npm run context                   # Optimizes context for Claude
 # 1. Claude receives project context automatically
 # 2. Generate code with awareness of project structure
@@ -109,6 +114,7 @@ npm run context                   # Optimizes context for Claude
 ```
 
 ### GitHub Copilot Integration
+
 ```bash
 # Setup
 cp ai/config/.copilot .copilot
@@ -123,6 +129,7 @@ cp ai/config/.copilot .copilot
 ## Enforcement Integration
 
 ### Real-Time Validation
+
 ```bash
 # Pre-commit hooks (automatic)
 npm run check:all                 # Runs before every commit
@@ -135,6 +142,7 @@ npm run type-check               # TypeScript validation
 ```
 
 ### Modern Enforcement (Claude Code Hooks)
+
 ```bash
 # Real-time prevention (automatic during AI interactions)
 # - Prevents _improved files from being created
@@ -150,6 +158,7 @@ npm run lint                      # ESLint with auto-fix
 ```
 
 ### Hook-Based Auto-Fix
+
 ```bash
 # Real-time fixes (automatic via Claude Code)
 # - console.log → logger.info (fix-console-logs.js)
@@ -159,11 +168,15 @@ npm run lint                      # ESLint with auto-fix
 # Template-based prevention
 npm run doc:create                # Start with proper documentation templates
 npm run g:c ComponentName         # Generate components with proper structure
+
+# Custom hook development (advanced workflows)
+# See: docs/guides/claude-code-hooks/05-hooks-development.md
 ```
 
 ## Generator Integration
 
 ### Context-Aware Generation
+
 ```bash
 # Standard generation
 npm run g:c ComponentName
@@ -174,6 +187,7 @@ npm run g:c SimilarButton                    # Generate with Button context
 ```
 
 ### Template Customization Integration
+
 ```bash
 # View available templates
 ls templates/component/
@@ -187,6 +201,7 @@ cp templates/component/ templates/custom-component/
 ```
 
 ### Validation Integration
+
 ```bash
 # Generate → Test → Validate workflow
 npm run g:c NewComponent && npm test && npm run check:all
@@ -197,6 +212,7 @@ npm run generate-and-validate ComponentName  # Custom script combining all
 ## Context Optimization Integration
 
 ### Intelligent Context Loading
+
 ```bash
 # General context (daily startup)
 npm run context
@@ -208,6 +224,7 @@ npm run context -- --security-focused       # Security-aware context
 ```
 
 ### Context Feedback Loop
+
 ```bash
 # 1. Generate code with current context
 npm run g:c TestComponent
@@ -219,17 +236,19 @@ npm run g:c TestComponent                   # Regenerate with better context
 ```
 
 ### Context Persistence
+
 ```bash
 # Save successful context configurations
 npm run context -- --export successful-context.md
 
-# Restore proven context configurations  
+# Restore proven context configurations
 npm run context -- --import successful-context.md
 ```
 
 ## Debugging Workflow Integration
 
 ### Systematic Debug Process
+
 ```bash
 # 1. Capture comprehensive state
 npm run debug:snapshot
@@ -246,6 +265,7 @@ npm run validate                             # Comprehensive validation
 ```
 
 ### Debug Context Enhancement
+
 ```bash
 # Enhanced debug context for specific scenarios
 npm run debug:snapshot -- --include-logs    # Include log analysis
@@ -256,6 +276,7 @@ npm run debug:snapshot -- --security        # Security-focused debug
 ## Team Workflow Integration
 
 ### Individual Developer Setup
+
 ```bash
 # Personal configuration
 npm run enforcement:config set-personal-level STANDARD
@@ -267,6 +288,7 @@ npm run setup:verify-ai                     # Verify personal setup
 ```
 
 ### Team Coordination
+
 ```bash
 # Team lead configuration
 npm run enforcement:config set-team-level STRICT
@@ -280,6 +302,7 @@ npm run sync:team-config                    # Sync with team enforcement
 ## CI/CD Integration
 
 ### Automated Validation Pipeline
+
 ```yaml
 # .github/workflows/validation.yml
 - name: Validate Code Quality
@@ -290,11 +313,12 @@ npm run sync:team-config                    # Sync with team enforcement
 ```
 
 ### Integration with External Tools
+
 ```bash
 # SonarQube integration
 npm run sonar:prepare                       # Prepare for SonarQube scan
 
-# Security scanning integration  
+# Security scanning integration
 npm run security:scan                       # Integrate with security tools
 
 # Performance monitoring
@@ -303,7 +327,39 @@ npm run performance:analyze                 # Performance regression detection
 
 ## Advanced Integration Patterns
 
+### Custom Hook Development Integration
+
+For workflows requiring specialized validation patterns:
+
+```bash
+# Hook development workflow
+npm test -- tools/hooks/__tests__/        # Test existing hooks
+HOOK_VERBOSE=true npm run check:all       # Debug hook execution
+
+# Create custom validation hooks
+# See: docs/guides/claude-code-hooks/05-hooks-development.md
+
+# Environment-based hook control
+HOOK_DEVELOPMENT=false                    # Enable production hooks
+HOOK_AI_PATTERNS=false                    # Disable specific categories
+HOOK_VERBOSE=true                         # Debug hook execution
+```
+
+**Custom Hook Integration Examples:**
+
+- **Project-specific validation**: Domain-specific pattern enforcement
+- **Team workflow enforcement**: Custom coding standards and practices
+- **Advanced security scanning**: Extended vulnerability detection
+- **Performance monitoring**: Custom performance thresholds and alerts
+
+**📚 Hook Development Resources:**
+
+- [Hook Development Guide](claude-code-hooks/05-hooks-development.md) - Complete development methodology
+- [Hook Testing Guide](claude-code-hooks/07-hooks-testing.md) - Testing custom hooks
+- [Hook Configuration Guide](claude-code-hooks/02-hooks-configuration.md) - Environment and priority setup
+
 ### Custom Workflow Scripts
+
 ```javascript
 // package.json custom scripts
 {
@@ -317,6 +373,7 @@ npm run performance:analyze                 # Performance regression detection
 ```
 
 ### Integration Monitoring
+
 ```bash
 # Monitor integration health
 npm run integration:health                  # Check all tool connections
@@ -327,6 +384,7 @@ npm run integration:metrics                 # Analyze integration effectiveness
 ### Customization for Different Development Styles
 
 **Test-Driven Development Integration:**
+
 ```bash
 # TDD workflow
 npm run test:watch                          # Start test watcher
@@ -335,8 +393,9 @@ npm run validate:tdd                        # TDD-specific validation
 ```
 
 **Behavior-Driven Development Integration:**
+
 ```bash
-# BDD workflow  
+# BDD workflow
 npm run g:feature UserStory --bdd           # Generate BDD structure
 npm run test:bdd                            # Run BDD tests
 npm run validate:bdd                        # BDD-specific validation
@@ -359,6 +418,7 @@ npm run validate:bdd                        # BDD-specific validation
 **Solution**: `npm run debug:snapshot:full && review-context-patterns`
 
 ### Integration Health Check
+
 ```bash
 # Comprehensive integration validation
 npm run integration:validate                # Test all integrations
@@ -369,12 +429,14 @@ npm run integration:reset                   # Reset to default integration
 ## Performance Optimization
 
 ### Integration Performance Metrics
+
 - Context loading: <2 seconds
-- Enforcement validation: <5 seconds  
+- Enforcement validation: <5 seconds
 - Generator execution: <10 seconds
 - Debug snapshot: <15 seconds
 
 ### Optimization Strategies
+
 ```bash
 # Reduce context overhead
 npm run context:minimal                     # Minimal context for performance
@@ -391,6 +453,7 @@ npm run validate:parallel                   # Run validations in parallel
 ### Tool-Specific Issues
 
 #### Cursor Problems
+
 ```bash
 # Cursor not following project patterns
 cp ai/config/.cursorrules .cursorrules
@@ -407,7 +470,8 @@ cp ai/config/.cursorrules .cursorrules
 # 3. Provide example code in requests
 ```
 
-#### Claude Code Problems  
+#### Claude Code Problems
+
 ```bash
 # Claude losing context
 npm run context                    # Reload project context
@@ -424,6 +488,7 @@ npm run debug:snapshot             # Capture specific state
 ```
 
 #### GitHub Copilot Problems
+
 ```bash
 # Copilot suggestions not relevant
 # 1. Write more descriptive comments
@@ -443,6 +508,7 @@ npm run check:all                  # Validate with enforcement
 ### Integration Conflicts
 
 #### Multiple AI Tools Interfering
+
 ```bash
 # Configure tool priorities
 # Edit VS Code settings:
@@ -458,6 +524,7 @@ npm run check:all                  # Validate with enforcement
 ```
 
 #### Performance Degradation
+
 ```bash
 # Monitor performance
 npm run monitor:integration-performance
@@ -476,6 +543,7 @@ npm run enforcement:config set-level BASIC
 ### Workflow Recovery
 
 #### After Integration Failure
+
 ```bash
 # Reset to known good state
 git status                         # Check for uncommitted changes
@@ -487,6 +555,7 @@ npm run validate:complete
 ```
 
 #### Emergency Workflow
+
 ```bash
 # When AI tools are unavailable
 # 1. Use manual development workflow

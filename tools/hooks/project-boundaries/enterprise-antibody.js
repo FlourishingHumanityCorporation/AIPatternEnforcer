@@ -25,7 +25,7 @@
 const HookRunner = require("../lib/HookRunner");
 const { PatternLibrary } = require("../lib");
 
-// Use shared PatternLibrary for detection (95% code reduction)
+// Use shared PatternLibrary for pattern detection
 function detectEnterprisePatterns(content, filePath) {
   return PatternLibrary.findEnterprisePatterns(content, filePath);
 }

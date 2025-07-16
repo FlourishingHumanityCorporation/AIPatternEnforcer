@@ -201,8 +201,23 @@ class ParallelHookExecutor {
 
       for (const hookGroup of config.hooks[this.hookType]) {
         if (hookGroup.matcher && this.matchesToolMatcher(hookGroup.matcher)) {
-          matchingHooks.push(...hookGroup.hooks);
+          // Filter hooks based on folder-specific environment variables
+          const enabledHooks = hookGroup.hooks.filter((hook) => {
+            return !HookEnvUtils.shouldBypassHook(hook.command);
+          });
+          matchingHooks.push(...enabledHooks);
         }
+      }
+
+      if (
+        this.verbose &&
+        matchingHooks.length < this.getTotalHooksCount(config)
+      ) {
+        const totalCount = this.getTotalHooksCount(config);
+        const filteredCount = totalCount - matchingHooks.length;
+        process.stderr.write(
+          `🔧 Filtered out ${filteredCount} hooks due to folder-specific environment variables\n`,
+        );
       }
 
       return matchingHooks;
@@ -225,6 +240,19 @@ class ParallelHookExecutor {
     const currentTools = this.toolMatcher.split("|").map((t) => t.trim());
 
     return hookTools.some((tool) => currentTools.includes(tool));
+  }
+
+  /**
+   * Get total number of hooks that would match without folder filtering
+   */
+  getTotalHooksCount(config) {
+    let totalCount = 0;
+    for (const hookGroup of config.hooks[this.hookType]) {
+      if (hookGroup.matcher && this.matchesToolMatcher(hookGroup.matcher)) {
+        totalCount += hookGroup.hooks.length;
+      }
+    }
+    return totalCount;
   }
 
   /**

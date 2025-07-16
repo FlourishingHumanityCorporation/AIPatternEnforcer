@@ -84,7 +84,9 @@ navigate the documentation structure.
 
 ### Code Quality & Enforcement
 
-- `docs/guides/claude-code-hooks/README.md` - **Claude Code Hooks System** - Complete 20-hook system documentation
+- `docs/systems/COMPREHENSIVE-HOOKS-OVERVIEW.md` - **Master Hook Reference** - Complete inventory of all 29 implemented hooks for expansion planning
+- `docs/systems/hook-system-limitations.md` - **Hook System Reality Check** - Honest 31% vs 95% coverage analysis and what developers actually need
+- `docs/guides/claude-code-hooks/README.md` - **Claude Code Hooks System** - File-level pattern enforcement documentation
 - `docs/guides/claude-code-hooks/01-hooks-overview.md` - System architecture and hook inventory
 - `docs/guides/claude-code-hooks/02-hooks-configuration.md` - Configuration and setup guide
 - `docs/guides/claude-code-hooks/03-hooks-troubleshooting.md` - Troubleshooting and debugging guide

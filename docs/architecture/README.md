@@ -9,11 +9,11 @@ Technical architecture decisions and design patterns for ProjectTemplate.
 ## Table of Contents
 
 1. [Categories](#categories)
-  2. [📐 Architecture Decisions](#-architecture-decisions)
-  3. [🎨 Design Patterns](#-design-patterns)
+2. [📐 Architecture Decisions](#-architecture-decisions)
+3. [🎨 Design Patterns](#-design-patterns)
 4. [Quick Reference](#quick-reference)
-  5. [By Component](#by-component)
-  6. [By Use Case](#by-use-case)
+5. [By Component](#by-component)
+6. [By Use Case](#by-use-case)
 7. [Pattern Relationships](#pattern-relationships)
 8. [Contributing](#contributing)
 9. [See Also](#see-also)
@@ -42,16 +42,25 @@ Proven design patterns for common scenarios:
 ### By Component
 
 **Backend Development:**
+
 - [API Design Standards](patterns/api-design-standards.md)
 - [Data Modeling Guide](patterns/data-modeling-guide.md)
 - [Error Handling](patterns/error-handling.md)
 
 **Frontend Development:**
+
 - [Data Fetching](patterns/data-fetching.md)
 - [State Management](patterns/state-management.md)
 - [Error Handling](patterns/error-handling.md)
 
+**Development Tools & Enforcement:**
+
+- [Hook System Architecture](../guides/claude-code-hooks/05-hooks-development.md) - Real-time validation patterns
+- [Parallel Execution System](../guides/claude-code-hooks/05-hooks-development.md#parallel-execution-system) - Performance architecture
+- [Hook Categories & Patterns](../guides/claude-code-hooks/05-hooks-development.md#hook-categories--patterns) - Enforcement taxonomy
+
 **Full Stack:**
+
 - [Core Principles](decisions/000-core-principles.md)
 - All patterns apply across the stack
 
@@ -72,6 +81,12 @@ Proven design patterns for common scenarios:
 **"I need to fetch data efficiently"**
 → See [Data Fetching](patterns/data-fetching.md)
 
+**"I need to create custom validation patterns"**
+→ Read [Hook Development Guide](../guides/claude-code-hooks/05-hooks-development.md)
+
+**"I need to implement real-time code enforcement"**
+→ Check [Hook System Architecture](../guides/claude-code-hooks/05-hooks-development.md#parallel-execution-system)
+
 ## Pattern Relationships
 
 ```text
@@ -83,6 +98,11 @@ API Design Standards
 State Management
     ├── Data Fetching (cache management)
     └── Error Handling (error state)
+
+Hook System Architecture
+    ├── Error Handling (validation errors)
+    ├── API Design Standards (API validation)
+    └── Core Principles (enforcement patterns)
 
 Core Principles
     └── Influences all patterns
@@ -99,6 +119,7 @@ When adding new patterns or decisions:
 
 ## See Also
 
+- [Hook Development Guide](../guides/claude-code-hooks/05-hooks-development.md) - Real-time validation architecture
 - [Comprehensive Testing Guide](../guides/testing/comprehensive-testing-guide.md) - Testing these patterns
 - [Security Optimal Practices](../guides/security/security-optimal-practices.md) - Security considerations
 - [Performance Optimization](../guides/performance/optimization-playbook.md) - Performance patterns

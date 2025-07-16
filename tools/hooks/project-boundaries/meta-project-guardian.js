@@ -13,6 +13,7 @@
 
 const path = require("path");
 const fs = require("fs");
+const HookEnvUtils = require("../lib/hook-env-utils");
 
 // Load environment variables from .env file
 function loadEnvFile() {
@@ -68,25 +69,22 @@ process.stdin.on("data", (chunk) => {
 
 process.stdin.on("end", () => {
   try {
+    // Check for global or folder-specific bypass first
+    if (HookEnvUtils.shouldBypassHook(process.argv[1])) {
+      if (process.env.HOOK_VERBOSE === "true") {
+        process.stderr.write(
+          `🔧 Meta-project guardian bypassed: ${HookEnvUtils.getHookBypassReason(process.argv[1])}\n`,
+        );
+      }
+      process.exit(0);
+    }
+
     const input = JSON.parse(inputData);
     const toolInput = input.tool_input || {};
     const filePath = toolInput.file_path || toolInput.filePath || "";
 
     // Allow operations without file paths
     if (!filePath) {
-      process.exit(0);
-    }
-
-    // Allow hook development if environment variable is set
-    if (
-      filePath.includes("tools/hooks/") &&
-      process.env.HOOK_DEVELOPMENT === "true"
-    ) {
-      process.exit(0);
-    }
-
-    // Allow ALL protected file modifications in development mode
-    if (process.env.HOOK_DEVELOPMENT === "true") {
       process.exit(0);
     }
 

@@ -1,16 +1,43 @@
 module.exports = {
-  testEnvironment: "node",
-  testMatch: [
-    // Focus on core functionality - disable component tests for now
-    // Component tests are handled by individual templates with their own Jest config
-    "**/tools/generators/**/*.test.js",
-    "**/scripts/**/*.test.js",
+  projects: [
+    // Node.js tests for tools and scripts
+    {
+      displayName: "node",
+      testEnvironment: "node",
+      testMatch: [
+        "<rootDir>/tools/generators/**/*.test.js",
+        "<rootDir>/tools/hooks/**/*.test.js",
+        "<rootDir>/scripts/**/*.test.js",
+      ],
+      setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+    },
+    // React component tests (using working Next.js config)
+    {
+      displayName: "react",
+      testEnvironment: "jsdom",
+      testMatch: [
+        "<rootDir>/components/**/*.test.tsx",
+        "<rootDir>/components/**/*.test.ts",
+      ],
+      setupFilesAfterEnv: [
+        "<rootDir>/jest.setup.js",
+        "@testing-library/jest-dom",
+      ],
+      moduleNameMapper: {
+        "\\.(css|less|scss|sass)$": "identity-obj-proxy",
+      },
+      transform: {
+        "^.+\\.(js|jsx|ts|tsx)$": ["babel-jest", { presets: ["next/babel"] }],
+      },
+      moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
+    },
   ],
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
   collectCoverageFrom: [
     "tools/generators/**/*.js",
+    "tools/hooks/lib/**/*.js",
     "scripts/**/*.js",
-    "!**/*.test.js",
+    "components/**/*.{ts,tsx}",
+    "!**/*.test.{js,ts,tsx}",
     "!**/node_modules/**",
   ],
   coverageDirectory: "coverage",

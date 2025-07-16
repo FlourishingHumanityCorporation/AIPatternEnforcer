@@ -32,13 +32,19 @@ Ultrathink = think really hard and deep
 ```bash
 # First time? Start here:
 npm run onboard                # Setup + first component (<5 min)
-export HOOK_DEVELOPMENT=false # Turn on hooks (disable development mode)
-export HOOK_TESTING=false     # Turn on hooks (disable testing mode)
+
+# 🚨 CRITICAL: Turn on hook protection (edit .env file):
+# HOOK_DEVELOPMENT=false # Turn on hooks (disable development mode)
+# HOOK_TESTING=false     # Turn on hooks (disable testing mode)
+
+# Verify hooks are working:
+npm run debug:hooks env        # Check hook status
+# Try creating "test_improved.js" - should be blocked!
 
 # Daily workflow:
 npm run g:c ComponentName      # Generate component
 npm test                       # Run tests
-npm run check:all             # Validate everything
+npm run check:all             # AUTOMATIC protection validation + lint + type + test
 git add . && git commit       # Commit (auto-validated + auto-pushed)
 ```
 
@@ -205,6 +211,26 @@ npm run setup:guided          # Interactive setup wizard (detailed)
 npm run debug:snapshot       # Capture debug context
 npm run context             # Load AI context
 
+# Hook Protection System - AUTOMATIC VALIDATION
+# ✅ AUTOMATIC: npm run check:all validates hook protection automatically
+# ✅ AUTOMATIC: Blocks workflow if protection is disabled
+# ✅ AUTOMATIC: No manual intervention needed for normal operation
+
+# 🛡️ AUTOMATIC PROTECTION VALIDATION:
+# npm run check:all now includes runtime protection validation
+# It automatically checks that hooks are actually working, not just configured
+# Perfect for "super lazy" coders - no manual debugging required!
+
+# 🆘 EMERGENCY DEBUGGING (only if automatic validation fails):
+npm run debug:hooks:monitor:enhanced  # Real-time monitoring (manual)
+npm run debug:hooks:chain             # Hook chain analysis (manual)
+npm run debug:hooks:shell             # Interactive debugging (manual)
+
+# 🚨 FOR "SUPER LAZY" CODERS:
+# Just run: npm run check:all
+# It will automatically validate everything and tell you if something is wrong
+# No need to remember debug commands - automation handles it!
+
 # Template Validation
 npm run validate            # Comprehensive validation
 npm run test:template       # Run all validation tests
@@ -213,11 +239,16 @@ npm run test:template       # Run all validation tests
 npm run check:progress      # Check learning path progress
 npm run setup:verify-ai     # Verify AI setup is working
 
-# Enforcement (Modern Hook System)
-npm run check:all           # Check all enforcement rules (lint + type-check + test)
+# Enforcement (Modern Hook System) - AUTOMATED
+npm run check:all           # AUTOMATIC runtime protection validation + lint + type + test
 npm run test                # Run tests
 npm run lint                # Run ESLint
 npm run type-check          # TypeScript validation
+
+# 🚨 AUTOMATIC PROTECTION VALIDATION:
+# npm run check:all now AUTOMATICALLY validates that hooks are working
+# It checks environment, configuration, and actual protection
+# Blocks workflow if protection is disabled - no manual intervention needed!
 
 # Real-time enforcement via Claude Code hooks (automatic):
 # - Prevents _improved files during AI interactions
@@ -227,9 +258,38 @@ npm run type-check          # TypeScript validation
 # - Validates Prisma schemas
 # See .claude/settings.json for active hooks
 #
-# NOTE: To turn on hooks, set environment variables:
-# export HOOK_DEVELOPMENT=false # Turn on hooks (disable development mode)
-# export HOOK_TESTING=false     # Turn on hooks (disable testing mode)
+# 🚨 SUPER LAZY CODER ALERT: HOOK SETUP REQUIRED
+# Hooks are OFF by default! You must turn them on or they won't protect you:
+#
+# STEP 1: Edit .env file and set:
+# HOOK_DEVELOPMENT=false # Turn on hooks (disable development mode)
+# HOOK_TESTING=false     # Turn on hooks (disable testing mode)
+#
+# STEP 2: Verify hooks are working:
+# npm run debug:hooks env  # Check if hooks are enabled
+#
+# STEP 3: Test that protection is working:
+# Try creating a file named "test_improved.js" - it should be blocked!
+#
+# 🔧 HOOK TROUBLESHOOTING FOR LAZY CODERS:
+# • Hooks not blocking bad patterns? → Check .env file: HOOK_DEVELOPMENT=false
+# • Getting "undefined" in debug output? → Run: npm run debug:hooks env
+# • Hooks running but not working? → Run: npm run debug:hooks diagnose
+# • Want to see hooks in action? → Run: npm run debug:hooks:monitor:enhanced
+#
+# Granular folder-level control (advanced - most users don't need this):
+# export HOOK_AI_PATTERNS=true        # Controls ai-patterns/ hooks
+# export HOOK_ARCHITECTURE=true       # Controls architecture/ hooks
+# export HOOK_CLEANUP=true            # Controls cleanup/ hooks
+# export HOOK_CONTEXT=true            # Controls context/ hooks
+# export HOOK_IDE=true                # Controls ide/ hooks
+# export HOOK_LOCAL_DEV=true          # Controls local-dev/ hooks
+# export HOOK_PERFORMANCE=true        # Controls performance/ hooks
+# export HOOK_PROMPT=true             # Controls prompt/ hooks
+# export HOOK_PROJECT_BOUNDARIES=true # Controls project-boundaries/ hooks
+# export HOOK_SECURITY=true           # Controls security/ hooks
+# export HOOK_VALIDATION=true         # Controls validation/ hooks
+# export HOOK_WORKFLOW=true           # Controls workflow/ hooks
 ```
 
 ### Key Files
@@ -432,46 +492,191 @@ npm run check:all         # All enforcement checks (lint + type + test)
 
 ---
 
-## 🛡️ MODERN ENFORCEMENT SYSTEM
+## 🛡️ PRIMARY AI PROTECTION SYSTEM
 
-### Real-Time Prevention via Claude Code Hooks
+### Claude Code Hooks: Primary AI Development Protection
 
-AIPatternEnforcer uses **Claude Code hooks** for real-time prevention of AI mistakes during development:
+AIPatternEnforcer uses **Claude Code hooks** as the **preferred solution for AI development issues**:
 
-**🔧 Hook Activation**: Set environment variables to turn on hooks:
+**🎯 Hooks are the Primary Defense**: Real-time prevention of AI anti-patterns during development with comprehensive coverage across 8 categories and 21 specialized hooks.
+
+**🔧 Hook Configuration**: All hook settings are configured in `.env` file:
+
+**Global Controls** (override all folder controls):
 
 - `HOOK_DEVELOPMENT=false` - Turn on hooks (disable development mode)
 - `HOOK_TESTING=false` - Turn on hooks (disable testing mode)
 
-**Active Hooks** (see `.claude/settings.json`):
+**🎛️ Granular Folder Control** (only applies when global controls are `false`):
+
+- `HOOK_AI_PATTERNS=true/false` - AI pattern enforcement (prevent-improved-files, context validation)
+- `HOOK_ARCHITECTURE=true/false` - Architecture validation (test placement, structure validation)
+- `HOOK_CLEANUP=true/false` - Code cleanup (console.log fixes, import cleanup)
+- `HOOK_CONTEXT=true/false` - Context management (completeness, drift detection, CLAUDE.md injection)
+- `HOOK_IDE=true/false` - IDE integration (config checker, shortcut protection, workspace cleanup)
+- `HOOK_LOCAL_DEV=true/false` - Local development patterns (mock data, localhost enforcement)
+- `HOOK_PERFORMANCE=true/false` - Performance monitoring (vector DB hygiene, performance guardian)
+- `HOOK_PROMPT=true/false` - Prompt intelligence (quality checking, improvement suggestions)
+- `HOOK_PROJECT_BOUNDARIES=true/false` - Project structure protection (root mess blocker, enterprise antibody)
+- `HOOK_SECURITY=true/false` - Security scanning (scope limiting, security scan)
+- `HOOK_VALIDATION=true/false` - Template and API validation (Prisma validation, template integrity)
+- `HOOK_WORKFLOW=true/false` - Workflow enforcement (plan-first, test-first, PR scope)
+
+**Debug Control**:
+
+- `HOOK_VERBOSE=true/false` - Enable verbose hook output for debugging
+
+**📋 Control Priority**: Global controls override folder controls:
+
+1. `HOOK_DEVELOPMENT=true` → All hooks bypassed
+2. `HOOK_TESTING=true` → All hooks bypassed
+3. `HOOK_[FOLDER]=false` → Only that folder's hooks bypassed
+4. Default → All hooks run
+
+**💡 Common Usage Examples** (modify `.env` file):
+
+```bash
+# Development: Only critical protection hooks
+HOOK_DEVELOPMENT=false
+HOOK_PROJECT_BOUNDARIES=true  # Keep structure protection
+HOOK_SECURITY=true           # Keep security scanning
+HOOK_AI_PATTERNS=false       # Disable pattern enforcement
+HOOK_CLEANUP=false           # Disable auto-cleanup
+HOOK_PERFORMANCE=false       # Disable performance monitoring
+
+# Production: Everything except performance monitoring
+HOOK_DEVELOPMENT=false
+HOOK_PERFORMANCE=false       # Disable performance hooks
+# All others remain true
+
+# Testing: Only essential infrastructure protection
+HOOK_TESTING=false
+HOOK_PROJECT_BOUNDARIES=true
+HOOK_SECURITY=true
+HOOK_AI_PATTERNS=false
+HOOK_ARCHITECTURE=false
+HOOK_CLEANUP=false
+HOOK_CONTEXT=false
+HOOK_IDE=false
+HOOK_LOCAL_DEV=false
+HOOK_PERFORMANCE=false
+HOOK_PROMPT=false
+HOOK_VALIDATION=false
+HOOK_WORKFLOW=false
+```
+
+**Key Active Hooks** (see `.claude/settings.json` for complete list):
 
 - `prevent-improved-files.js` - Blocks creation of \_improved, \_v2, \_enhanced files
 - `block-root-mess.js` - Prevents application files in root directory
-- `fix-console-logs.js` - Auto-converts console.log to logger.info
-- `enforce-nextjs-structure.js` - Enforces proper Next.js App Router structure
-- `validate-prisma.js` - Validates Prisma schema changes
+- `security-scan.js` - Basic security pattern detection
+- `fix-console-logs.js` - Auto-converts console.log to logger.info (PostToolUse)
 
-### How It Works
+### Comprehensive Hook Protection Coverage
 
-**During AI Interactions**:
+**✅ Hooks PROVIDE comprehensive protection for**:
 
-1. **PreToolUse hooks** prevent bad file operations before they happen
-2. **PostToolUse hooks** automatically fix common issues
-3. Friendly blocking messages guide toward correct approaches
-4. Zero friction for legitimate development
+- **File naming anti-patterns** (\_improved, \_v2, \_enhanced files)
+- **Project structure enforcement** (root directory protection, proper organization)
+- **Security scanning** (vulnerability detection, scope limiting)
+- **Code quality** (console.log cleanup, import optimization)
+- **Architecture validation** (test placement, API structure)
+- **AI pattern enforcement** (context efficiency, streaming patterns)
+- **Performance monitoring** (vector DB hygiene, optimization tracking)
+- **Template integrity** (documentation compliance, validation)
+
+**🔧 Additional Support Tools** (complement hooks):
+
+- Context management (CLAUDE.md files, .cursorrules)
+- Documentation templates and validation
+- Code generators and project structure
 
 **Example**:
 
 - **You try**: Create `component_improved.tsx`
 - **Hook blocks**: "❌ Don't create component_improved.tsx ✅ Edit the original file instead"
-- **You do**: Edit existing `component.tsx` → Works perfectly
+- **You do**: Edit existing `component.tsx` → Works for file naming only
 
-### Legacy System Removed
+### Performance and Reliability Concerns
 
-**Before**: 39 complex enforcement tools, 241,858 violations/day
-**After**: 9 simple hooks, violations eliminated, zero friction
+**Performance Impact**:
 
-All old enforcement tools have been removed or replaced with simple stubs. The system now operates on **prevention over correction**.
+- 21 hooks run on every file operation (100-500ms latency)
+- May be skipped under load due to timeouts (1-4 seconds)
+
+**Reliability Issues**:
+
+- Complete system bypass via `HOOK_DEVELOPMENT=true`
+- False sense of security - hooks don't address root causes
+- Maintenance overhead as AI patterns evolve
+
+### Integrated AI Development Solution
+
+**Hooks provide the foundation** for AI development protection, complemented by:
+
+1. **Real-time Hook Protection**: Primary defense against AI anti-patterns (21 hooks across 8 categories)
+2. **Context Management**: CLAUDE.md files, .cursorrules for persistent context
+3. **Structured Workflows**: Plan-first development, systematic code review
+4. **Template System**: Code generators and documentation enforcement
+5. **IDE Integration**: Optimized AI tool configuration and project structure
+
+**Hooks are the preferred first-line defense for AI development issues.**
+
+### 🔧 Hook Development & Customization
+
+For project-specific validation requirements, create custom hooks:
+
+**Hook Development Guide**: [docs/guides/claude-code-hooks/05-hooks-development.md](docs/guides/claude-code-hooks/05-hooks-development.md)
+
+**Key Development Features:**
+
+- **85% code reduction** through HookRunner base class and shared utilities
+- **Parallel execution system** with automatic fallback mechanisms
+- **Comprehensive testing framework** with custom Jest matchers
+- **9 specialized categories** for organized hook development
+- **Production deployment** patterns and performance optimization
+
+### 🧪 Testing Hook Functionality
+
+**Core Testing Commands** for verifying hook folder controls:
+
+**🚨 CRITICAL ERROR TO AVOID**: Never use command-line environment variables when testing hooks.
+
+**❌ WRONG WAY** (This doesn't work):
+
+```bash
+# This is WRONG - hooks ignore command-line environment variables
+HOOK_DEVELOPMENT=false node tools/hooks/ai-patterns/prevent-improved-files.js
+HOOK_AI_PATTERNS=true echo '{"tool_input": {"file_path": "test.js"}}' | node tools/hooks/ai-patterns/prevent-improved-files.js
+```
+
+**✅ CORRECT WAY** (Always modify .env file):
+
+```bash
+# Test 1: Verify folder-specific bypass (AI Patterns disabled)
+# Edit .env: Set HOOK_DEVELOPMENT=false, HOOK_AI_PATTERNS=false
+echo '{"tool_input": {"file_path": "test_improved.js"}}' | node tools/hooks/ai-patterns/prevent-improved-files.js
+# Expected: No output (hook bypassed)
+
+# Test 2: Verify hook execution (AI Patterns enabled)
+# Edit .env: Set HOOK_DEVELOPMENT=false, HOOK_AI_PATTERNS=true
+echo '{"tool_input": {"file_path": "test_improved.js"}}' | node tools/hooks/ai-patterns/prevent-improved-files.js
+# Expected: Error message blocking _improved file
+
+# Test 3: Verify parallel executor with folder filtering
+# Edit .env: Set HOOK_DEVELOPMENT=false, HOOK_AI_PATTERNS=false
+HOOK_VERBOSE=true echo '{"tool_input": {"file_path": "templates/test_improved.js"}}' | node tools/hooks/pre-tool-use-parallel.js
+# Expected: Filtered hook count message, no AI pattern enforcement
+
+# Test 4: Verify global override
+# Edit .env: Set HOOK_DEVELOPMENT=true (any folder settings)
+echo '{"tool_input": {"file_path": "test_improved.js"}}' | node tools/hooks/ai-patterns/prevent-improved-files.js
+# Expected: No output (global bypass active)
+```
+
+**Why this matters**: HookRunner loads environment variables from the .env file, not from command-line variables. Using command-line variables leads to incorrect test results and false assumptions about hook behavior.
+
+**Quick Verification**: Run `npm test -- tools/hooks/__tests__/folder-control.test.js` for comprehensive automated testing.
 
 ---
 

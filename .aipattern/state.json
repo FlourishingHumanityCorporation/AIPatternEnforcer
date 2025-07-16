@@ -1,0 +1,128 @@
+{
+  "contextScore": 98,
+  "lastContextUpdate": 1752649027497,
+  "recentFiles": [],
+  "sessionStart": 1752649027497,
+  "messageCount": 4,
+  "changedFiles": [
+    {
+      "path": "/Users/paulrohde/CodeProjects/AIPatternEnforcer/PLAN.md",
+      "timestamp": 1752649070744
+    },
+    {
+      "path": "/Users/paulrohde/CodeProjects/AIPatternEnforcer/.env",
+      "timestamp": 1752649064219
+    },
+    {
+      "path": "/Users/paulrohde/CodeProjects/AIPatternEnforcer/.env",
+      "timestamp": 1752649064164
+    },
+    {
+      "path": "/Users/paulrohde/CodeProjects/AIPatternEnforcer/PLAN.md",
+      "timestamp": 1752649060538
+    },
+    {
+      "path": "/Users/paulrohde/CodeProjects/AIPatternEnforcer/PLAN.md",
+      "timestamp": 1752649060514
+    },
+    {
+      "path": "/Users/paulrohde/CodeProjects/AIPatternEnforcer/scripts/validation/runtime-protection-validator.js",
+      "timestamp": 1752649027511
+    }
+  ],
+  "operationHistory": [
+    {
+      "timestamp": 1752647600588,
+      "tool": "Edit",
+      "fileType": "env",
+      "isDestructive": false
+    },
+    {
+      "timestamp": 1752647615122,
+      "tool": "Edit",
+      "fileType": "env",
+      "isDestructive": false
+    },
+    {
+      "timestamp": 1752647635692,
+      "tool": "Edit",
+      "fileType": "js",
+      "isDestructive": false
+    },
+    {
+      "timestamp": 1752647642652,
+      "tool": "Edit",
+      "fileType": "js",
+      "isDestructive": false
+    },
+    {
+      "timestamp": 1752647652925,
+      "tool": "Edit",
+      "fileType": "js",
+      "isDestructive": false
+    },
+    {
+      "timestamp": 1752647684338,
+      "tool": "Edit",
+      "fileType": "js",
+      "isDestructive": false
+    },
+    {
+      "timestamp": 1752647690365,
+      "tool": "Edit",
+      "fileType": "md",
+      "isDestructive": false
+    },
+    {
+      "timestamp": 1752647693807,
+      "tool": "Edit",
+      "fileType": "js",
+      "isDestructive": false
+    },
+    {
+      "timestamp": 1752647702500,
+      "tool": "Edit",
+      "fileType": "js",
+      "isDestructive": false
+    },
+    {
+      "timestamp": 1752649027498,
+      "tool": "Write",
+      "fileType": "js",
+      "isDestructive": false
+    },
+    {
+      "timestamp": 1752649060515,
+      "tool": "Write",
+      "fileType": "md",
+      "isDestructive": false
+    },
+    {
+      "timestamp": 1752649060522,
+      "tool": "Write",
+      "fileType": "md",
+      "isDestructive": false
+    },
+    {
+      "timestamp": 1752649064168,
+      "tool": "Edit",
+      "fileType": "env",
+      "isDestructive": false
+    },
+    {
+      "timestamp": 1752649070759,
+      "tool": "Write",
+      "fileType": "md",
+      "isDestructive": false
+    },
+    {
+      "timestamp": 1752649070761,
+      "tool": "Write",
+      "fileType": "md",
+      "isDestructive": false
+    }
+  ],
+  "lastContextCheck": 1752649070624,
+  "lastConfigCheck": 1752649064273,
+  "lastCleanup": 1752649064285
+}

@@ -2,6 +2,29 @@
 
 A taxonomic system for organizing Claude Code hooks that enforce development patterns and prevent common AI development mistakes.
 
+## ⚠️ Honest Assessment: Scope and Limitations
+
+**What hooks DO**: File-level pattern enforcement (31% of AI development friction)
+**What hooks DON'T**: Address fundamental AI model limitations, UI friction, workflow issues (69% of friction)
+
+### Key Limitations
+
+1. **Reactive Nature**: Hooks catch problems AFTER AI generates code, not during interaction
+2. **Narrow Scope**: Only address file organization patterns, not AI behavior or workflow friction
+3. **Performance Impact**: 21 hooks on every file operation creates measurable latency
+4. **Environmental Fragility**: Can be completely disabled via environment variables
+5. **False Security**: May create illusion of comprehensive protection
+
+### What You Still Need Beyond Hooks
+
+- **Context management strategies** (CLAUDE.md, .cursorrules)
+- **Human-in-the-loop workflows** (plan-first, test-driven development)
+- **Manual code review practices** (especially for AI-generated code)
+- **IDE configuration optimization** (AI tool settings, keybindings)
+- **Prompt engineering skills** (to prevent issues at generation time)
+
+Hooks are **one tool among many**, not a complete solution to AI development friction.
+
 ## 📋 MECE Hook Taxonomy
 
 The hooks are organized into **7 mutually exclusive, collectively exhaustive categories**:
@@ -11,7 +34,9 @@ The hooks are organized into **7 mutually exclusive, collectively exhaustive cat
 **Purpose**: Prevent AI-specific development anti-patterns  
 **Criteria**: Hooks that address AI tool behavior and patterns
 
-- `prevent-improved-files.js` - Blocks creation of \_improved, \_v2, \_enhanced files
+- `prevent-improved-files.js` - Blocks creation of \_improved, \_v2, \_enhanced files (original proven patterns)
+- Removed: `prevent-dev-artifacts.js` - Based on contaminated test data (not real AI patterns)
+- Removed: `prevent-component-naming-mistakes.js` - Based on contaminated test data (not real AI patterns)
 - `context-validator.js` - Validates context efficiency and prevents pollution
 - `streaming-pattern-enforcer.js` - Enforces proper streaming patterns
 
@@ -178,6 +203,16 @@ tools/hooks/
 
 ## 🔧 Adding New Hooks
 
+**📚 Comprehensive Development Guide**: [docs/guides/claude-code-hooks/05-hooks-development.md](../../docs/guides/claude-code-hooks/05-hooks-development.md)
+
+The guide above provides complete documentation for hook development including:
+
+- HookRunner base class usage (85% code reduction)
+- Shared utilities library integration
+- Parallel execution system
+- Testing framework with custom Jest matchers
+- Production deployment patterns
+
 ### 1. Determine Category
 
 Use this decision tree to categorize new hooks:
@@ -264,20 +299,74 @@ Hooks are grouped by family in configuration:
 3. **Priority**: Critical → High → Medium → Low
 4. **Timeout**: Each hook has configurable timeout (1-4 seconds)
 
+## 🔍 Hook Debugging System
+
+**Comprehensive debugging capabilities for the hook system with enhanced error formatting and real-time monitoring.**
+
+### Quick Debug Commands
+
+```bash
+# Run system diagnostics
+npm run debug:hooks diagnose
+
+# Test specific hook
+npm run debug:hooks test prevent-improved-files
+
+# Real-time monitoring
+npm run debug:hooks:monitor:enhanced
+
+# Interactive debugging shell
+npm run debug:hooks:shell
+
+# Hook chain analysis
+npm run debug:hooks:chain
+```
+
+### Environment Controls
+
+```bash
+# Enable/disable hooks globally
+HOOK_DEVELOPMENT=false  # Enable hooks
+HOOK_TESTING=false      # Enable in test mode
+HOOK_VERBOSE=true       # Enable verbose output
+
+# Category-specific controls
+HOOK_AI_PATTERNS=true   # Enable AI pattern hooks
+HOOK_SECURITY=true      # Enable security hooks
+```
+
+**📚 Complete Guide**: [Hook Debugging System Guide](../../docs/guides/claude-code-hooks/hook-debugging-guide.md)
+
 ## 📖 Documentation
 
 - **Category READMEs**: Each category has detailed documentation
 - **Hook Comments**: Individual hooks have inline documentation
 - **Configuration**: See `.claude/settings.json` for active hooks
 - **Testing**: See `__tests__/` directories for test examples
+- **Debugging**: See debugging guide for comprehensive troubleshooting
 
-## 🏆 Benefits
+## ⚖️ Benefits and Trade-offs
+
+### ✅ What Hooks Do Well
 
 - **MECE Organization**: Clear, non-overlapping categories
 - **Shared Libraries**: 85% code reduction through `HookRunner`
-- **Real-time Prevention**: Stops problems before they occur
-- **Zero Friction**: Legitimate development flows unimpeded
-- **Comprehensive Coverage**: All major development patterns covered
+- **File Pattern Prevention**: Catches common file naming anti-patterns
+- **Basic Structure Enforcement**: Maintains project organization
+
+### ⚠️ Performance Considerations
+
+- **21 hooks per file operation**: Adds 100-500ms latency depending on system
+- **Timeout risks**: Hooks may be skipped under load (1-4 second timeouts)
+- **Memory usage**: Parallel execution spawns multiple Node.js processes
+- **Environment dependency**: `HOOK_DEVELOPMENT=true` completely disables protection
+
+### 🚫 What Hooks Cannot Fix
+
+- **AI model limitations**: Context decay, hallucinations, knowledge gaps
+- **Workflow friction**: Prompt engineering, UI issues, cognitive load
+- **Team collaboration**: Code review overload, communication problems
+- **Development environment**: IDE performance, configuration issues
 
 ---
 

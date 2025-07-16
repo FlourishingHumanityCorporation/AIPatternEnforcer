@@ -10,6 +10,7 @@
 const HookRunner = require("../lib/HookRunner");
 
 const BAD_PATTERNS = [
+  // Core patterns that prevent AI from creating versioned files
   /_improved\./i,
   /_enhanced\./i,
   /_v2\./i,
@@ -38,12 +39,32 @@ function preventImprovedFiles(hookData, runner) {
   // Check for bad patterns using runner utility
   const filePath = hookData.filePath || hookData.file_path;
   if (runner.matchesPatterns(filePath, BAD_PATTERNS)) {
-    const message = runner.formatError(
-      `Don't create ${hookData.fileName}`,
-      "Edit the original file instead",
-      "Use Edit or MultiEdit tool on existing file",
-      "Prevent duplicate files and maintain clean code",
+    const ErrorFormatter = require("../lib/ErrorFormatter");
+
+    // Find which pattern was matched for better context
+    const matchedPattern = BAD_PATTERNS.find((pattern) =>
+      pattern.test(filePath),
     );
+    const patternName = matchedPattern ? matchedPattern.source : "unknown";
+
+    const message = ErrorFormatter.formatComprehensiveError({
+      title: "AI File Naming Anti-Pattern Detected",
+      details: [
+        `File name contains prohibited pattern: ${hookData.fileName}`,
+        "AI tools should edit original files, not create versioned copies",
+        "This pattern leads to code duplication and maintenance issues",
+      ],
+      hookName: "prevent-improved-files",
+      filePath: filePath,
+      pattern: patternName,
+      errorType: "improved-file",
+      executionTime: Date.now() - (runner.startTime || Date.now()),
+      suggestions: [
+        "Use the Edit tool to modify the existing file",
+        "Use the MultiEdit tool for multiple changes to the same file",
+        'Create meaningful branch names like "feature/new-component" instead of file suffixes',
+      ],
+    });
 
     return {
       block: true,

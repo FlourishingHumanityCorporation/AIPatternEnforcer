@@ -31,6 +31,7 @@ const DOC_STRUCTURE = {
   api: /^docs\/api\//,
   reports: /^docs\/reports\//,
   plans: /^docs\/plans\//,
+  components: /^components\/[A-Z][a-zA-Z0-9]*\/(README|API)\.md$/,
   root: /^(README|CONTRIBUTING|LICENSE|CHANGELOG|SETUP|QUICK-START)\.md$/i,
 };
 
@@ -143,6 +144,42 @@ const TEMPLATE_REQUIREMENTS = {
       "Risk Management",
     ],
     templatePath: "templates/documentation/plan/PLAN-TEMPLATE.md",
+  },
+  component: {
+    requiredSections: [
+      "overview",
+      "usage",
+      "props",
+      "examples",
+      "styling",
+      "testing",
+    ],
+    requiredHeaders: [
+      "Overview",
+      "Usage",
+      "Props",
+      "Examples",
+      "Styling",
+      "Testing",
+    ],
+    templatePath: "templates/documentation/component/COMPONENT-README.md",
+  },
+  "component-api": {
+    requiredSections: [
+      "component interface",
+      "props documentation",
+      "event handlers",
+      "css classes",
+      "typescript support",
+    ],
+    requiredHeaders: [
+      "Component Interface",
+      "Props Documentation",
+      "Event Handlers",
+      "CSS Classes",
+      "TypeScript Support",
+    ],
+    templatePath: "templates/documentation/component/COMPONENT-API.md",
   },
 };
 
@@ -352,6 +389,15 @@ function enforceTemplateCompliance(content, filePath, runner) {
  * Determine document type from filename and path
  */
 function determineDocumentType(fileName, filePath) {
+  // Component documentation detection (components/ComponentName/README.md or API.md)
+  const componentMatch = filePath.match(
+    /^components\/[A-Z][a-zA-Z0-9]*\/(README|API)\.md$/,
+  );
+  if (componentMatch) {
+    const docType = componentMatch[1].toLowerCase();
+    return docType === "api" ? "component-api" : "component";
+  }
+
   // Direct filename matches
   if (fileName.includes("readme")) return "readme";
   if (fileName.includes("guide")) return "guide";

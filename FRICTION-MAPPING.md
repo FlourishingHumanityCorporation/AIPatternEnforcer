@@ -147,7 +147,7 @@ ai/
 
 **Architecture overview template**:
 
-````markdown
+`````markdown
 # System Architecture
 
 ## High-Level Design
@@ -156,12 +156,15 @@ Our system follows a feature-based architecture where each feature is self-conta
 
 ## Data Flow
 
-```mermaid
+````mermaid
 graph LR
     UI[UI Components] --> Store[Zustand Store]
     Store --> API[API Layer]
     API --> DB[Database]
 ```text
+````
+`````
+
 ````
 
 ## Key Principles
@@ -195,6 +198,7 @@ scripts/
 ````
 
 **Model selection config**:
+
 ```json
 {
   "tasks": {
@@ -210,7 +214,7 @@ scripts/
     }
   }
 }
-````
+```
 
 ---
 
@@ -903,61 +907,82 @@ tools/
 
 ---
 
-## Claude Code Hooks System Update (2025)
+## Claude Code Hooks System: Honest Assessment (2025)
 
-### New Hooks Implementation Coverage
+### Actual Hook Coverage Analysis
 
-The Claude Code hooks system has been expanded with 6 new P0 (critical) hooks that address previously uncovered friction points:
+A critical assessment reveals that our hook system addresses significantly fewer friction points than initially claimed. The hooks operate at the file-system level and cannot address most AI interaction, cognitive, and workflow friction points.
 
-#### New Hook Implementations
+#### Realistic Coverage by Friction Category
 
-| Hook Name | Friction Points Addressed | Primary Function | Hook Type |
-|-----------|---------------------------|------------------|-----------|
-| **meta-project-guardian.js** | • 3.1 Architectural Drift<br>• Meta-project protection (new) | Prevents AI from modifying template infrastructure | PreToolUse |
-| **enterprise-antibody.js** | • 3.3 Over-engineering<br>• Enterprise complexity (new) | Blocks enterprise patterns in local projects | PreToolUse |
-| **template-integrity-validator.js** | • 2.1 Hallucination (templates)<br>• 3.1 Architectural Drift | Validates Handlebars syntax and template.json | PostToolUse |
-| **ai-integration-validator.js** | • 4.1 Insecure by Default (AI)<br>• 3.4 Performance (tokens)<br>• Cost management (new) | Validates AI service integration patterns | PreToolUse |
-| **mock-data-enforcer.js** | • Local development focus (new)<br>• 3.3 Over-engineering | Forces mock data instead of real auth | PreToolUse |
-| **localhost-enforcer.js** | • 6.4 Environment Context Gap<br>• Local-only enforcement (new) | Ensures all configs are localhost | PreToolUse |
+| Friction Category              | Actual Coverage | Reasoning                                                                                                                        | Key Hooks                                                             |
+| ------------------------------ | --------------- | -------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| **1. Context Comprehension**   | 🔴 **20%**      | Hooks can't solve "goldfish memory," RAG failures, or architectural blindness - these are fundamental AI model limitations       | context-validator.js                                                  |
+| **2. Generation Inaccuracy**   | 🟡 **30%**      | Hooks run AFTER generation. Can't prevent hallucinations, outdated knowledge, or "almost correct" problems during AI interaction | api-validator.js, validate-prisma.js                                  |
+| **3. Code Quality**            | 🟢 **70%**      | Our strongest area - hooks can catch file patterns and some architectural violations                                             | prevent-improved-files.js, block-root-mess.js, enterprise-antibody.js |
+| **4. Security**                | 🟡 **40%**      | One security hook can't prevent AI from generating vulnerable patterns in the first place                                        | security-scan.js                                                      |
+| **5. Debugging & Testing**     | 🔴 **10%**      | Hooks don't help with black-box debugging, test quality, or runtime analysis                                                     | test-location-enforcer.js                                             |
+| **6. Workflow Integration**    | 🔴 **20%**      | Hooks don't address UI clutter, keyboard shortcuts, performance lag, or IDE integration                                          | block-root-mess.js                                                    |
+| **7. Process & Collaboration** | 🟡 **25%**      | Hooks don't address PR size limits, cognitive load, or team coordination issues                                                  | Various hooks reduce some review burden                               |
+| **8. Human-AI Interaction**    | 🟡 **35%**      | Hooks don't address prompt engineering costs, operational fragility, or interaction efficiency                                   | scope-limiter.js, prevent-improved-files.js                           |
 
-#### Enhanced Friction Coverage
+**Overall Actual Coverage: 31% (not 95%)**
 
-With these additions, the hook system now provides:
+### Hook System Limitations
 
-- **Total Friction Points**: 24 (original) + 5 (new categories)
-- **Coverage**: 95%+ of all friction points
-- **Active Hooks**: 17 (11 original + 6 new)
-- **Protection Layers**: 4 (Code Quality, Security, AI Patterns, Local-Only)
+#### Fundamental Architectural Constraints
 
-#### Integration with Existing System
+1. **Wrong Layer of Intervention**
+   - Hooks operate at file-system level (Write/Edit/MultiEdit)
+   - Most friction occurs at AI interaction/generation level
+   - Like trying to fix bad cooking by inspecting finished dishes
 
-The new hooks integrate seamlessly with the existing enforcement system:
+2. **Reactive vs Proactive**
+   - Hooks catch problems AFTER they happen
+   - Real friction prevention needs to happen DURING AI interaction
+   - Treats symptoms, not root causes
 
-```text
-tools/
-└── hooks/
-    ├── [Original 11 hooks]
-    └── [6 New P0 hooks]       # All registered in .claude/settings.json
-```
+3. **Scope Blindness**
+   - 21 hooks can only address file organization patterns
+   - Cannot touch model limitations, UI issues, or workflow problems
+   - Over-engineered solution for narrow problem space
 
-### Complete Hook-to-Friction Mapping (Updated)
+#### Performance and Reliability Concerns
 
-| Friction Category | Coverage Status | Hooks Providing Coverage |
-|-------------------|-----------------|--------------------------|
-| **1. Context Comprehension** | ✅ Complete | context-validator.js |
-| **2. Generation Inaccuracy** | ✅ Complete | api-validator.js, validate-prisma.js, template-integrity-validator.js |
-| **3. Code Quality** | ✅ Complete | prevent-improved-files.js, block-root-mess.js, enforce-nextjs-structure.js, meta-project-guardian.js, enterprise-antibody.js |
-| **4. Security** | ✅ Complete | security-scan.js, fix-console-logs.js, ai-integration-validator.js |
-| **5. Debugging & Testing** | 🟡 Partial | test-first-enforcer.js (black-box debugging via scripts) |
-| **6. Workflow Integration** | ✅ Complete | block-root-mess.js, localhost-enforcer.js |
-| **7. Process & Collaboration** | ✅ Complete | scope-limiter.js, enterprise-antibody.js |
-| **8. Human-AI Interaction** | ✅ Complete | prevent-improved-files.js, scope-limiter.js, pattern-updater.js |
-| **NEW: Meta-Project Protection** | ✅ Complete | meta-project-guardian.js |
-| **NEW: Local-Only Development** | ✅ Complete | mock-data-enforcer.js, localhost-enforcer.js |
-| **NEW: AI Cost Management** | ✅ Complete | ai-integration-validator.js |
+1. **Environmental Fragility**
+   - `HOOK_DEVELOPMENT=true` completely disables system
+   - No verification hooks are actually running in production
+
+2. **Latency Impact**
+   - 21 hooks on every file operation creates measurable delay
+   - Timeout failures (1-4 second limits) mean hooks get skipped under load
+
+3. **False Security**
+   - Having 21 hooks creates illusion of comprehensive protection
+   - Could lead to reduced vigilance in uncovered areas
+   - Maintenance debt as AI patterns evolve
+
+### What Hooks Actually Do Well
+
+Hooks are **moderately effective** at:
+
+- ✅ Preventing common file naming anti-patterns
+- ✅ Enforcing basic project structure
+- ✅ Catching some security patterns in generated code
+- ✅ Maintaining code style consistency
+
+### What Hooks Cannot Address
+
+Hooks are **ineffective** at addressing:
+
+- ❌ AI model limitations (context, hallucinations, knowledge gaps)
+- ❌ UI/UX friction in AI tools
+- ❌ Prompt engineering challenges
+- ❌ Human-AI interaction workflows
+- ❌ Team collaboration issues
+- ❌ Performance optimization during development
+- ❌ Real-time debugging and testing support
 
 ---
 
-_This mapping shows that every major friction point in AI development has a specific solution implemented in the
-template structure. The Claude Code hooks system now provides comprehensive real-time enforcement that prevents
-AI mistakes before they happen, making the development experience truly friction-free._
+_The hook system is a useful tool for file-level pattern enforcement but represents only 31% coverage of documented AI development friction points. Developers should not rely on hooks alone and must implement additional strategies from the solution documents for comprehensive friction mitigation._

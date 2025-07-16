@@ -1,35 +1,35 @@
-# AIPatternEnforcer: AI-Powered Development Acceleration
+# AIPatternEnforcer: Copy-Paste Template for Local AI Apps
 
-**Stop writing boilerplate. Start building features.**
+**Build personal AI apps without enterprise complexity.**
 
-Generate complete components, APIs, and features with comprehensive tests in seconds. Built for developers using AI
-tools like Cursor, Claude, and Copilot.
+A simple, copy-pastable template for local one-person AI projects. Built for super lazy developers who want AI tools (Cursor, Claude) to work perfectly without configuration.
 
 ```bash
-npm run g:c UserProfile    # Complete React component with tests + stories
-npm run g:api users        # REST API with validation + documentation
-npm run g:feature auth     # Feature module with hooks + state management
+# Copy template and start building immediately
+git clone [this-repo] my-ai-app
+npm run onboard              # 5-minute setup + validation
+npm run g:c AIChat           # Generate AI components instantly
 
-# Each saves 15-45 minutes of manual coding
+# Perfect for: AI dating assistants, document processors, personal VLM apps
 ```
 
 > **⚡ Quick Start:** `npm run onboard` - Complete setup + first component in <5 minutes
 > **📖 Experienced Developer?** [Quick Reference](docs/quick-reference.md) - Commands & troubleshooting |
-[CLAUDE.md](CLAUDE.md) - Implementation rules
+> [CLAUDE.md](CLAUDE.md) - Implementation rules
 > **🚀 New to AIPatternEnforcer?** [QUICK-START.md](QUICK-START.md) - Detailed orientation | **🎮 Try generators:** `npm
 run demo:generators`
 
 ## Table of Contents
 
-1. [⚡ 2-Minute Setup](#-2-minute-setup)
+1. [⚡ 5-Minute Setup](#-5-minute-setup)
 2. [🔧 Code Generators](#-code-generators)
-3. [🎮 Interactive Demo](#-interactive-demo)
+3. [🎮 Component Generation Demo](#-component-generation-demo)
 4. [📦 What's Included](#-whats-included)
 5. [🚀 Advanced Setup](#-advanced-setup)
 6. [🤖 AI Tool Integration](#-ai-tool-integration)
 7. [📚 Full Documentation](#-full-documentation)
 
-## ⚡ 2-Minute Setup
+## ⚡ 5-Minute Setup
 
 ```bash
 # 1. Clone and install
@@ -53,10 +53,13 @@ npm run g:c MyButton  # Generate first component
 optimal practices built-in.**
 
 ### 🎨 Component Generator
+
 ```bash
 npm run g:c UserProfile
 ```
+
 **Creates in 30 seconds what takes 15-20 minutes manually:**
+
 - ✅ TypeScript React component with props interface
 - ✅ Comprehensive Jest + Testing Library tests
 - ✅ Storybook stories with interactive controls
@@ -64,57 +67,48 @@ npm run g:c UserProfile
 - ✅ Accessibility attributes and ARIA labels
 - ✅ JSDoc documentation
 
-### 🌐 API Generator
-```bash
-npm run g:api users
-```
-**Builds complete REST endpoints with validation:**
-- ✅ Express/FastAPI route handlers
-- ✅ Request/response validation schemas
-- ✅ OpenAPI/Swagger documentation
-- ✅ Error handling middleware
-- ✅ Database integration patterns
-- ✅ Integration and unit tests
+### 🔧 Additional Generators
 
-### 🏗️ Feature Generator
 ```bash
-npm run g:feature UserDashboard
+npm run g:api users        # API generator (in development)
+npm run g:feature Dashboard # Feature generator (in development)
 ```
-**Scaffolds entire feature modules:**
-- ✅ Component directory structure
-- ✅ Custom React hooks
-- ✅ State management integration
-- ✅ Service layer with API calls
-- ✅ TypeScript definitions
-- ✅ Complete test coverage
+
+**Component generator is production-ready. Additional generators are being refined.**
+
+Current focus: Perfect component generation with full TypeScript, testing, and accessibility support.
 
 ### 🪝 Hook Generator
-```bash
-npm run g:hook useUserData
-```
-**Custom React hooks with patterns:**
-- ✅ TypeScript hook with proper typing
-- ✅ React Testing Library hook tests
-- ✅ Error handling and loading states
-- ✅ Memoization and performance optimization
-- ✅ JSDoc with usage examples
-
-## 🎮 Interactive Demo
-
-**Try before you commit.** Explore what each generator creates:
 
 ```bash
-npm run demo:generators
+npm run g:hook useUserData  # (in development)
 ```
 
-**Interactive showcase featuring:**
-- 📋 Complete generator overview with time savings
-- 🔍 Deep dive into each generator's capabilities
-- 📄 Code previews and file structure examples
-- 📊 Productivity impact analysis (save 4-8 hours per week!)
-- 🎯 Live demo mode (optional file creation)
+**Custom React hooks with patterns (coming soon):**
 
-Complete for understanding how generators boost your productivity before adding them to your project.
+- 🔄 TypeScript hook with proper typing
+- 🔄 React Testing Library hook tests
+- 🔄 Error handling and loading states
+- 🔄 Memoization and performance optimization
+- 🔄 JSDoc with usage examples
+
+## 🎮 Component Generation Demo
+
+**Working generator demonstration:**
+
+```bash
+npm run g:c TestComponent  # Creates complete component with tests
+```
+
+**What gets created:**
+
+- TypeScript React component with props interface
+- Comprehensive Jest + Testing Library tests
+- CSS modules with responsive design
+- Accessibility attributes and ARIA labels
+- Index file for clean exports
+
+**Demo mode coming soon** - Interactive showcase of all generators once development is complete.
 
 ## 📦 What's Included
 
@@ -128,10 +122,10 @@ Complete for understanding how generators boost your productivity before adding 
 ### 🔧 Code Generation Tools
 
 ```bash
-npm run g:component Button    # Generate component with tests
-npm run g:api users          # Generate REST API with validation
-npm run g:feature auth       # Generate complete feature module
-npm run g:hook useUser       # Generate custom React hook
+npm run g:c Button           # Generate component with tests (✅ working)
+npm run g:api users          # Generate REST API (🔄 in development)
+npm run g:feature auth       # Generate feature module (🔄 in development)
+npm run g:hook useUser       # Generate custom hook (🔄 in development)
 ```
 
 ### 🤖 AI Tool Configurations
@@ -155,13 +149,16 @@ npm run g:hook useUser       # Generate custom React hook
 - **Stack Wizard** - Interactive technology selection
 - **Testing Suite** - Automated quality checks
 
-### 🚨 Automated Enforcement (NEW)
+### 🚨 Limited AI Pattern Prevention (Zero Config)
 
-- **File Naming Protection** - Prevents `_improved`, `_v2`, `_final` files automatically
-- **Import Validation** - Enforces proper import patterns and catches console.log usage
-- **Documentation Standards** - Checks for banned phrases and maintains quality
-- **Git Hooks** - Pre-commit checks prevent rule violations from entering codebase
-- **VS Code Extension** - Real-time validation and smart context loading
+- **File Pattern Hooks** - Blocks AI from creating `_improved`, `_v2`, `_final` files automatically
+- **Basic Static Prevention** - Simple hooks that catch common file organization mistakes:
+  - `prevent-improved-files.js` - Blocks \_improved, \_v2, \_enhanced files
+  - `block-root-mess.js` - Prevents app files in root directory
+  - Removed: prevent-dev-artifacts.js - Based on contaminated test data
+  - Removed: prevent-component-naming-mistakes.js - Based on contaminated test data
+- **Limited Scope** - Only addresses file patterns (~31% of AI development friction)
+- **Still Need**: Context management, manual code review, prompt engineering skills
 
 ### 📖 Documentation Templates
 
@@ -170,16 +167,31 @@ npm run g:hook useUser       # Generate custom React hook
 - Security optimal practices
 - Performance optimization guides
 
-## 🎯 Core Value: Solving Real AI Development Friction
+## 🏠 TARGET: Local Personal AI Apps Only
 
-This methodology kit addresses actual problems developers face:
+**Perfect for building:**
 
-1. **Context Window Decay** → Persistent rules and context management
-2. **Inconsistent Code Generation** → Standardized generators and patterns
-3. **Poor AI Suggestions** → Curated prompts and explicit examples
-4. **Debugging AI Code** → Systematic RCA methodology
-5. **Security Vulnerabilities** → Built-in validation patterns
-6. **Test Coverage Gaps** → Test-first development enforcement
+- 🤖 AI dating assistants (writing messages, understanding user background)
+- 📄 AI document processors with OCR and VLM capabilities
+- 🎯 Personal AI assistants with vision and language models
+- 🔍 AI-powered search and analysis tools for personal use
+
+**NOT for:**
+
+- ❌ Enterprise apps, multi-user systems, authentication
+- ❌ Production deployment, scaling, monitoring
+- ❌ Team collaboration, complex CI/CD pipelines
+- ❌ Anything beyond local one-person development
+
+## 🎯 Core Value: Zero-Config AI Development
+
+This template solves friction for super lazy developers:
+
+1. **AI Tool Mistakes** → Static prevention hooks block bad patterns automatically
+2. **Copy-Paste Complexity** → Template works in 5 minutes, no configuration needed
+3. **Context Loss** → Built-in context management and rule persistence
+4. **Mock Data Hassle** → Simple mockUser auth, no real authentication needed
+5. **Local Development** → PostgreSQL + Prisma + Next.js, optimized for AI integration
 
 ## 🚀 How to Use This Kit
 
@@ -392,7 +404,6 @@ The context loader intelligently combines:
 - **Team leads** - Standardize AI-assisted development practices
 - **Solo developers** - Level up your AI development workflow
 - **Anyone frustrated** - With inconsistent AI suggestions and context loss
-
 
 ## License
 

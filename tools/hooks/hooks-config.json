@@ -11,6 +11,7 @@
             "family": "infrastructure_protection",
             "priority": "critical",
             "blockingBehavior": "hard-block",
+            "folder": "project-boundaries",
             "description": "Protects meta-project infrastructure from AI modifications"
           },
           {
@@ -20,7 +21,8 @@
             "family": "validation",
             "priority": "high",
             "blockingBehavior": "soft-block",
-            "description": "Validates context efficiency and prevents pollution"
+            "description": "Validates context efficiency and prevents pollution",
+            "folder": "ai-patterns"
           },
           {
             "type": "command",
@@ -29,7 +31,8 @@
             "family": "file_hygiene",
             "priority": "critical",
             "blockingBehavior": "hard-block",
-            "description": "Prevents duplicate file creation patterns"
+            "description": "Prevents duplicate file creation patterns",
+            "folder": "ai-patterns"
           },
           {
             "type": "command",
@@ -38,7 +41,8 @@
             "family": "security",
             "priority": "high",
             "blockingBehavior": "soft-block",
-            "description": "Enforces project scope boundaries"
+            "description": "Enforces project scope boundaries",
+            "folder": "security"
           },
           {
             "type": "command",
@@ -47,7 +51,8 @@
             "family": "security",
             "priority": "high",
             "blockingBehavior": "soft-block",
-            "description": "Scans for security vulnerabilities"
+            "description": "Scans for security vulnerabilities",
+            "folder": "security"
           },
           {
             "type": "command",
@@ -56,7 +61,8 @@
             "family": "testing",
             "priority": "medium",
             "blockingBehavior": "warning",
-            "description": "Enforces proper test file placement"
+            "description": "Enforces proper test file placement",
+            "folder": "architecture"
           },
           {
             "type": "command",
@@ -65,7 +71,8 @@
             "family": "pattern_enforcement",
             "priority": "high",
             "blockingBehavior": "warning",
-            "description": "Blocks enterprise feature patterns"
+            "description": "Blocks enterprise feature patterns",
+            "folder": "project-boundaries"
           },
           {
             "type": "command",
@@ -74,7 +81,8 @@
             "family": "architecture",
             "priority": "high",
             "blockingBehavior": "soft-block",
-            "description": "Validates architectural patterns and AI integration"
+            "description": "Validates architectural patterns and AI integration",
+            "folder": "architecture"
           },
           {
             "type": "command",
@@ -83,7 +91,8 @@
             "family": "pattern_enforcement",
             "priority": "medium",
             "blockingBehavior": "warning",
-            "description": "Enforces mock data usage patterns"
+            "description": "Enforces mock data usage patterns",
+            "folder": "local-dev"
           },
           {
             "type": "command",
@@ -92,7 +101,8 @@
             "family": "pattern_enforcement",
             "priority": "medium",
             "blockingBehavior": "warning",
-            "description": "Enforces local development patterns"
+            "description": "Enforces local development patterns",
+            "folder": "local-dev"
           },
           {
             "type": "command",
@@ -101,7 +111,8 @@
             "family": "data_hygiene",
             "priority": "medium",
             "blockingBehavior": "warning",
-            "description": "Maintains vector database hygiene"
+            "description": "Maintains vector database hygiene",
+            "folder": "performance"
           },
           {
             "type": "command",
@@ -110,7 +121,8 @@
             "family": "performance",
             "priority": "high",
             "blockingBehavior": "warning",
-            "description": "Comprehensive performance monitoring and optimization"
+            "description": "Comprehensive performance monitoring and optimization",
+            "folder": "performance"
           },
           {
             "type": "command",
@@ -119,7 +131,8 @@
             "family": "pattern_enforcement",
             "priority": "medium",
             "blockingBehavior": "warning",
-            "description": "Enforces proper streaming patterns"
+            "description": "Enforces proper streaming patterns",
+            "folder": "ai-patterns"
           },
           {
             "type": "command",
@@ -127,8 +140,189 @@
             "timeout": 2,
             "family": "documentation",
             "priority": "medium",
+            "blockingBehavior": "soft-block",
+            "description": "Enforces documentation standards and organization",
+            "folder": "cleanup"
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/validation/doc-template-enforcer.js",
+            "timeout": 3,
+            "family": "documentation",
+            "priority": "medium",
+            "blockingBehavior": "soft-block",
+            "description": "Enforces documentation template compliance and quality",
+            "folder": "validation"
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/context/context-completeness-enforcer.js",
+            "timeout": 1,
+            "family": "context",
+            "priority": "critical",
+            "blockingBehavior": "hard-block",
+            "description": "Ensures sufficient context for AI operations",
+            "folder": "context"
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/context/context-drift-detector.js",
+            "timeout": 1,
+            "family": "context",
+            "priority": "high",
+            "blockingBehavior": "soft-block",
+            "description": "Detects and blocks operations with stale context",
+            "folder": "context"
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/context/claude-md-injector.js",
+            "timeout": 1,
+            "family": "context",
+            "priority": "medium",
             "blockingBehavior": "none",
-            "description": "Enforces documentation standards and organization"
+            "description": "Auto-injects relevant CLAUDE.md sections",
+            "folder": "context"
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/context/context-reminder.js",
+            "timeout": 1,
+            "family": "context",
+            "priority": "low",
+            "blockingBehavior": "none",
+            "description": "Reminds users to refresh context when idle",
+            "folder": "context"
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/workflow/plan-first-enforcer.js",
+            "timeout": 1,
+            "family": "workflow",
+            "priority": "high",
+            "blockingBehavior": "soft-block",
+            "description": "Enforces plan-first development for new features",
+            "folder": "workflow"
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/workflow/test-first-enforcer.js",
+            "timeout": 1,
+            "family": "workflow",
+            "priority": "high",
+            "blockingBehavior": "soft-block",
+            "description": "Ensures test files exist before implementation",
+            "folder": "workflow"
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/workflow/pr-scope-guardian.js",
+            "timeout": 1,
+            "family": "workflow",
+            "priority": "medium",
+            "blockingBehavior": "warning",
+            "description": "Prevents oversized pull requests",
+            "folder": "workflow"
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/workflow/architecture-checker.js",
+            "timeout": 1,
+            "family": "workflow",
+            "priority": "high",
+            "blockingBehavior": "hard-block",
+            "description": "Enforces proper file organization",
+            "folder": "workflow"
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/workflow/session-cleanup.js",
+            "timeout": 2,
+            "family": "workflow",
+            "priority": "low",
+            "blockingBehavior": "none",
+            "description": "Cleans up workspace periodically",
+            "folder": "workflow"
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/ide/ide-config-checker.js",
+            "timeout": 2,
+            "family": "ide",
+            "priority": "low",
+            "blockingBehavior": "none",
+            "description": "Ensures AI tool configurations exist",
+            "folder": "ide"
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/ide/shortcut-protector.js",
+            "timeout": 1,
+            "family": "ide",
+            "priority": "high",
+            "blockingBehavior": "hard-block",
+            "description": "Prevents overriding critical shortcuts",
+            "folder": "ide"
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/ide/workspace-cleaner.js",
+            "timeout": 1,
+            "family": "ide",
+            "priority": "medium",
+            "blockingBehavior": "hard-block",
+            "description": "Blocks creation of junk files",
+            "folder": "ide"
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/ide/performance-guardian.js",
+            "timeout": 1,
+            "family": "ide",
+            "priority": "medium",
+            "blockingBehavior": "soft-block",
+            "description": "Detects performance anti-patterns in code",
+            "folder": "ide"
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/prompt/prompt-quality-checker.js",
+            "timeout": 1,
+            "family": "prompt",
+            "priority": "medium",
+            "blockingBehavior": "soft-block",
+            "description": "Detects and blocks vague prompts",
+            "folder": "prompt"
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/prompt/few-shot-injector.js",
+            "timeout": 1,
+            "family": "prompt",
+            "priority": "low",
+            "blockingBehavior": "none",
+            "description": "Auto-adds examples for better AI output",
+            "folder": "prompt"
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/prompt/prompt-improver.js",
+            "timeout": 1,
+            "family": "prompt",
+            "priority": "medium",
+            "blockingBehavior": "soft-block",
+            "description": "Suggests improvements for vague requests",
+            "folder": "prompt"
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/prompt/operation-validator.js",
+            "timeout": 1,
+            "family": "prompt",
+            "priority": "high",
+            "blockingBehavior": "hard-block",
+            "description": "Validates operations and prevents destructive actions",
+            "folder": "prompt"
           }
         ]
       },
@@ -142,7 +336,28 @@
             "family": "file_hygiene",
             "priority": "critical",
             "blockingBehavior": "hard-block",
-            "description": "Prevents root directory pollution"
+            "description": "Prevents root directory pollution",
+            "folder": "project-boundaries"
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/workflow/test-first-enforcer.js",
+            "timeout": 1,
+            "family": "workflow",
+            "priority": "high",
+            "blockingBehavior": "soft-block",
+            "description": "Ensures test files exist before implementation",
+            "folder": "workflow"
+          },
+          {
+            "type": "command",
+            "command": "node tools/hooks/ide/workspace-cleaner.js",
+            "timeout": 1,
+            "family": "ide",
+            "priority": "medium",
+            "blockingBehavior": "hard-block",
+            "description": "Blocks creation of junk files",
+            "folder": "ide"
           }
         ]
       }
@@ -158,7 +373,8 @@
             "family": "code_cleanup",
             "priority": "low",
             "blockingBehavior": "none",
-            "description": "Fixes console.log statements"
+            "description": "Fixes console.log statements",
+            "folder": "cleanup"
           },
           {
             "type": "command",
@@ -167,7 +383,8 @@
             "family": "validation",
             "priority": "medium",
             "blockingBehavior": "warning",
-            "description": "Validates Prisma schema changes"
+            "description": "Validates Prisma schema changes",
+            "folder": "validation"
           },
           {
             "type": "command",
@@ -176,7 +393,8 @@
             "family": "validation",
             "priority": "high",
             "blockingBehavior": "soft-block",
-            "description": "Validates API patterns and structure"
+            "description": "Validates API patterns and structure",
+            "folder": "validation"
           },
           {
             "type": "command",
@@ -185,7 +403,8 @@
             "family": "validation",
             "priority": "medium",
             "blockingBehavior": "warning",
-            "description": "Validates template integrity"
+            "description": "Validates template integrity",
+            "folder": "validation"
           },
           {
             "type": "command",
@@ -194,7 +413,8 @@
             "family": "code_cleanup",
             "priority": "low",
             "blockingBehavior": "none",
-            "description": "Cleans up unused imports"
+            "description": "Cleans up unused imports",
+            "folder": "cleanup"
           }
         ]
       }

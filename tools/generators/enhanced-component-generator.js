@@ -24,6 +24,10 @@ Handlebars.registerHelper("eq", (a, b) => a === b);
 // Component generator configuration
 const config = {
   templatesDir: path.join(__dirname, "../../templates/component"),
+  docTemplatesDir: path.join(
+    __dirname,
+    "../../templates/documentation/component",
+  ),
   outputDir: process.env.COMPONENTS_DIR || "components",
   fileExtensions: {
     typescript: ".tsx",
@@ -31,6 +35,7 @@ const config = {
     test: ".test.tsx",
     story: ".stories.tsx",
     style: ".module.css",
+    readme: ".md",
   },
 };
 
@@ -120,6 +125,19 @@ async function loadTemplate(templateType, fileName) {
   }
 }
 
+// Load documentation template content
+async function loadDocumentationTemplate(fileName) {
+  const templatePath = path.join(config.docTemplatesDir, fileName);
+  try {
+    return await fs.readFile(templatePath, "utf-8");
+  } catch (error) {
+    logger.error(
+      chalk.red(`❌ Documentation template ${templatePath} not found.`),
+    );
+    throw error;
+  }
+}
+
 // Load UI pattern content
 async function loadUIPattern(patternKey) {
   const pattern = UI_PATTERNS[patternKey];
@@ -174,6 +192,183 @@ async function getTemplates(componentName, templateType) {
   const index = await loadTemplate(templateType, "index.ts.hbs");
 
   return { component, test, story, styles, index };
+}
+
+// Get documentation templates
+async function getDocumentationTemplates() {
+  try {
+    const readme = await loadDocumentationTemplate("COMPONENT-README.md");
+    const api = await loadDocumentationTemplate("COMPONENT-API.md");
+    return { readme, api };
+  } catch (error) {
+    logger.warn(
+      chalk.yellow(
+        "⚠️ Documentation templates not found, skipping documentation generation",
+      ),
+    );
+    return null;
+  }
+}
+
+// Generate documentation context based on component type and name
+function generateDocumentationContext(name, templateType) {
+  const kebabName = name.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
+  const templateInfo = TEMPLATE_TYPES[templateType];
+
+  return {
+    COMPONENT_NAME: name,
+    COMPONENT_KEBAB_NAME: kebabName,
+    COMPONENT_TYPE: templateInfo.name,
+    COMPONENT_DESCRIPTION: `${templateInfo.description} component`,
+    COMPONENT_CATEGORY: templateType,
+    COMPONENT_VERSION: "1.0.0",
+    API_VERSION: "1.0.0",
+    DATE: new Date().toISOString().split("T")[0],
+
+    // Basic prop examples - these would be extracted from component template in a more advanced implementation
+    BASIC_USAGE_EXAMPLE: "Basic content",
+    ADVANCED_USAGE_EXAMPLE: "Advanced content with props",
+    PROP_EXAMPLE_1: "variant",
+    PROP_VALUE_1: '"primary"',
+    PROP_EXAMPLE_2: "size",
+    PROP_VALUE_2: '"medium"',
+
+    // Custom prop placeholders - to be replaced by user
+    CUSTOM_PROP_1: "variant",
+    CUSTOM_PROP_1_TYPE: "string",
+    CUSTOM_PROP_1_DEFAULT: '"default"',
+    CUSTOM_PROP_1_REQUIRED: "No",
+    CUSTOM_PROP_1_DESCRIPTION: "Visual variant of the component",
+
+    CUSTOM_PROP_2: "size",
+    CUSTOM_PROP_2_TYPE: "string",
+    CUSTOM_PROP_2_DEFAULT: '"medium"',
+    CUSTOM_PROP_2_REQUIRED: "No",
+    CUSTOM_PROP_2_DESCRIPTION: "Size of the component",
+
+    CUSTOM_PROP_3: "disabled",
+    CUSTOM_PROP_3_TYPE: "boolean",
+    CUSTOM_PROP_3_DEFAULT: "false",
+    CUSTOM_PROP_3_REQUIRED: "No",
+    CUSTOM_PROP_3_DESCRIPTION: "Whether the component is disabled",
+
+    // Example states
+    EXAMPLE_STATE_1: "Loading State",
+    EXAMPLE_PROP_1: "loading",
+    EXAMPLE_VALUE_1: "true",
+    EXAMPLE_STATE_1_CONTENT: "Loading...",
+
+    EXAMPLE_STATE_2: "Error State",
+    EXAMPLE_PROP_2: "error",
+    EXAMPLE_VALUE_2: "true",
+    EXAMPLE_PROP_3: "message",
+    EXAMPLE_VALUE_3: '"Something went wrong"',
+    EXAMPLE_STATE_2_CONTENT: "Error content",
+
+    // Styling
+    STYLE_CLASS_1: "primary",
+    STYLE_CLASS_1_DESCRIPTION: "Primary styling variant",
+    STYLE_CLASS_2: "secondary",
+    STYLE_CLASS_2_DESCRIPTION: "Secondary styling variant",
+
+    // CSS Variables
+    CSS_VAR_1: "color",
+    CSS_VAR_1_DEFAULT: "#000000",
+    CSS_VAR_1_DESCRIPTION: "Primary text color",
+    CSS_VAR_1_VALUES: "Any valid CSS color",
+
+    CSS_VAR_2: "background",
+    CSS_VAR_2_DEFAULT: "#ffffff",
+    CSS_VAR_2_DESCRIPTION: "Background color",
+    CSS_VAR_2_VALUES: "Any valid CSS color",
+
+    CSS_VAR_3: "border-radius",
+    CSS_VAR_3_DEFAULT: "4px",
+    CSS_VAR_3_DESCRIPTION: "Border radius",
+
+    // Keyboard navigation
+    KEY_1: "Enter",
+    KEY_1_ACTION: "Activate component",
+    KEY_2: "Escape",
+    KEY_2_ACTION: "Close/cancel action",
+
+    // Stories
+    STORY_1: "With Props",
+    STORY_2: "Error State",
+
+    // Dependencies - based on template
+    DESIGN_SYSTEM_NAME: "Project",
+    COMPONENT_VARIANTS: "primary, secondary, error",
+
+    // Event handlers
+    EVENT_HANDLER_1: "onClick",
+    EVENT_HANDLER_1_TYPE: "(event: React.MouseEvent) => void",
+    EVENT_HANDLER_1_DESCRIPTION: "Handles click events",
+    EVENT_PARAM_1: "event",
+    EVENT_PARAM_1_TYPE: "React.MouseEvent",
+    EVENT_PARAM_1_DESCRIPTION: "The click event",
+    EVENT_PARAM_2: "value",
+    EVENT_PARAM_2_TYPE: "string",
+    EVENT_PARAM_2_DESCRIPTION: "The component value",
+
+    EVENT_HANDLER_2: "onChange",
+    EVENT_HANDLER_2_TYPE: "(value: string) => void",
+    EVENT_HANDLER_2_DESCRIPTION: "Handles value changes",
+
+    // CSS classes
+    CSS_CLASS_1: "content",
+    CSS_CLASS_1_DESCRIPTION: "Content area styling",
+    CSS_CLASS_2: "actions",
+    CSS_CLASS_2_DESCRIPTION: "Action buttons area",
+
+    // Conditional classes
+    CONDITION_1: "error === true",
+    CONDITIONAL_CLASS_1: "error",
+    CONDITIONAL_CLASS_1_DESCRIPTION: "Applied when component has error state",
+
+    CONDITION_2: "loading === true",
+    CONDITIONAL_CLASS_2: "loading",
+    CONDITIONAL_CLASS_2_DESCRIPTION: "Applied when component is loading",
+
+    // Methods (for ref API)
+    METHOD_1: "focus",
+    METHOD_1_PARAMS: "",
+    METHOD_1_RETURN: "void",
+    METHOD_1_ARGS: "",
+
+    METHOD_2: "reset",
+    METHOD_2_PARAMS: "",
+    METHOD_2_RETURN: "void",
+
+    // Error scenarios
+    ERROR_SCENARIO_1: "Invalid props",
+    ERROR_SCENARIO_1_DESCRIPTION:
+      "Handles cases where invalid props are passed",
+    ERROR_SCENARIO_2: "Network errors",
+    ERROR_SCENARIO_2_DESCRIPTION: "Handles network-related errors gracefully",
+
+    // Browser features
+    BROWSER_FEATURES_USED: "CSS Grid, CSS Custom Properties, ES2020",
+
+    // Migration info
+    PREVIOUS_VERSION: "0.9.0",
+    CURRENT_VERSION: "1.0.0",
+    BREAKING_CHANGE_1: "oldProp",
+    BREAKING_CHANGE_1_NEW: "newProp",
+    BREAKING_CHANGE_2: "deprecatedMethod",
+    OLD_PROP: "oldProp",
+    NEW_PROP: "newProp",
+    OLD_EVENT: "onOldEvent",
+    NEW_EVENT: "onNewEvent",
+    OLD_CLASS: "old-class",
+    NEW_CLASS: "new-class",
+
+    // Related components
+    RELATED_COMPONENT_1: "Button",
+    RELATED_COMPONENT_1_DESCRIPTION: "Basic button component",
+    RELATED_COMPONENT_2: "Input",
+    RELATED_COMPONENT_2_DESCRIPTION: "Form input component",
+  };
 }
 
 // Adapt UI pattern to new component name
@@ -349,6 +544,15 @@ async function generateComponent(name, options) {
   }
 
   let templates;
+  let documentationTemplates = null;
+
+  // Load documentation templates if requested
+  if (options.withDocs || options.fullDocs) {
+    documentationTemplates = await getDocumentationTemplates();
+    if (documentationTemplates) {
+      logger.info(chalk.blue("📖 Documentation generation enabled"));
+    }
+  }
 
   // Generate from pattern or template
   if (options.pattern) {
@@ -376,13 +580,23 @@ async function generateComponent(name, options) {
     {
       name: `${name}${config.fileExtensions.typescript}`,
       template: templates.component,
+      type: "component",
     },
-    { name: `${name}${config.fileExtensions.test}`, template: templates.test },
+    {
+      name: `${name}${config.fileExtensions.test}`,
+      template: templates.test,
+      type: "component",
+    },
     {
       name: `${name}${config.fileExtensions.style}`,
       template: templates.styles,
+      type: "component",
     },
-    { name: "index.ts", template: templates.index },
+    {
+      name: "index.ts",
+      template: templates.index,
+      type: "component",
+    },
   ];
 
   // Add storybook file if requested
@@ -390,7 +604,25 @@ async function generateComponent(name, options) {
     files.push({
       name: `${name}${config.fileExtensions.story}`,
       template: templates.story,
+      type: "component",
     });
+  }
+
+  // Add documentation files if requested
+  if ((options.withDocs || options.fullDocs) && documentationTemplates) {
+    files.push({
+      name: "README.md",
+      template: documentationTemplates.readme,
+      type: "documentation",
+    });
+
+    if (options.fullDocs) {
+      files.push({
+        name: "API.md",
+        template: documentationTemplates.api,
+        type: "documentation",
+      });
+    }
   }
 
   // Generate each file
@@ -409,10 +641,18 @@ async function generateComponent(name, options) {
     let content;
 
     // For patterns, content is already adapted - don't use Handlebars
-    if (options.pattern) {
+    if (options.pattern && file.type === "component") {
       content = file.template;
+    } else if (file.type === "documentation") {
+      // For documentation templates, use documentation context
+      const docContext = generateDocumentationContext(
+        name,
+        options.template || "display",
+      );
+      const compiledTemplate = Handlebars.compile(file.template);
+      content = compiledTemplate(docContext);
     } else {
-      // For templates, use Handlebars compilation
+      // For component templates, use component context
       const compiledTemplate = Handlebars.compile(file.template);
       content = compiledTemplate({
         name,
@@ -431,16 +671,27 @@ async function generateComponent(name, options) {
   }
 
   // Success message
+  const componentType = options.template
+    ? TEMPLATE_TYPES[options.template].name
+    : "Pattern-based";
+  const docsStatus =
+    options.withDocs || options.fullDocs
+      ? options.fullDocs
+        ? " with full documentation"
+        : " with documentation"
+      : "";
+
   logger.info(
     chalk.green(
-      `\n✨ ${TEMPLATE_TYPES[options.template].name} component ${name} generated successfully!\n`,
+      `\n✨ ${componentType} component ${name} generated successfully${docsStatus}!\n`,
     ),
   );
 
   logger.info(chalk.cyan("📁 Files created:"));
   logger.info(chalk.gray(`   ${componentDir}/`));
   files.forEach((file) => {
-    logger.info(chalk.gray(`   ├── ${file.name}`));
+    const icon = file.type === "documentation" ? "📖" : "⚛️";
+    logger.info(chalk.gray(`   ├── ${icon} ${file.name}`));
   });
 
   logger.info(chalk.cyan("\n🎯 Next steps:"));
@@ -454,7 +705,23 @@ async function generateComponent(name, options) {
   if (!options.noStorybook) {
     logger.info(chalk.gray(`   3. View in Storybook: npm run storybook`));
   }
-  logger.info(chalk.gray(`\n💡 This ${options.template} component includes:`));
+  if (options.withDocs || options.fullDocs) {
+    logger.info(
+      chalk.gray(
+        `   4. Review documentation: ${path.relative(process.cwd(), componentDir)}/README.md`,
+      ),
+    );
+    if (options.fullDocs) {
+      logger.info(
+        chalk.gray(
+          `   5. Check API reference: ${path.relative(process.cwd(), componentDir)}/API.md`,
+        ),
+      );
+    }
+  }
+
+  const templateType = options.template || "pattern";
+  logger.info(chalk.gray(`\n💡 This ${templateType} component includes:`));
 
   const features = {
     interactive: [
@@ -493,9 +760,23 @@ async function generateComponent(name, options) {
     ],
   };
 
-  features[options.template].forEach((feature) => {
+  const templateFeatures = features[options.template] || features.display;
+  templateFeatures.forEach((feature) => {
     logger.info(chalk.gray(`   • ${feature}`));
   });
+
+  if (options.withDocs || options.fullDocs) {
+    logger.info(chalk.gray(`\n📖 Documentation includes:`));
+    logger.info(chalk.gray(`   • Component usage guide`));
+    logger.info(chalk.gray(`   • Props documentation`));
+    logger.info(chalk.gray(`   • Styling information`));
+    logger.info(chalk.gray(`   • Testing examples`));
+    if (options.fullDocs) {
+      logger.info(chalk.gray(`   • Detailed API reference`));
+      logger.info(chalk.gray(`   • TypeScript interfaces`));
+      logger.info(chalk.gray(`   • Performance guidance`));
+    }
+  }
 }
 
 // Interactive template selection
@@ -558,6 +839,11 @@ program
   .option("-i, --interactive", "Interactive template/pattern selection")
   .option("-f, --force", "Overwrite existing files")
   .option("--no-storybook", "Skip Storybook story generation")
+  .option("--with-docs", "Generate component documentation (README.md)")
+  .option(
+    "--full-docs",
+    "Generate full documentation suite (README.md + API.md)",
+  )
   .option("-d, --dir <dir>", "Output directory", config.outputDir)
   .action(async (name, options) => {
     // Ensure template directories exist
@@ -591,6 +877,36 @@ program
         options.template = await selectTemplate();
       } else {
         options.pattern = await selectPattern();
+      }
+
+      // Ask about documentation generation
+      const { docChoice } = await inquirer.prompt([
+        {
+          type: "list",
+          name: "docChoice",
+          message: "Include documentation?",
+          choices: [
+            {
+              name: "No documentation",
+              value: "none",
+            },
+            {
+              name: "Basic documentation (README.md)",
+              value: "basic",
+            },
+            {
+              name: "Full documentation suite (README.md + API.md)",
+              value: "full",
+            },
+          ],
+        },
+      ]);
+
+      if (docChoice === "basic") {
+        options.withDocs = true;
+      } else if (docChoice === "full") {
+        options.withDocs = true;
+        options.fullDocs = true;
       }
     }
 
