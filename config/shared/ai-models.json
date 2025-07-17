@@ -1,0 +1,242 @@
+{
+  "description": "Unified AI model configuration for all templates and projects",
+  "version": "1.0.0",
+  "
+  
+  "providers": {
+    "openai": {
+      "apiUrl": "https://api.openai.com/v1",
+      "models": {
+        "gpt-4-turbo": {
+          "maxTokens": 4096,
+          "costPer1kInput": 0.01,
+          "costPer1kOutput": 0.03,
+          "contextWindow": 128000,
+          "capabilities": ["chat", "vision", "function-calling"]
+        },
+        "gpt-4": {
+          "maxTokens": 4096,
+          "costPer1kInput": 0.03,
+          "costPer1kOutput": 0.06,
+          "contextWindow": 8192,
+          "capabilities": ["chat", "function-calling"]
+        },
+        "gpt-3.5-turbo": {
+          "maxTokens": 4096,
+          "costPer1kInput": 0.0005,
+          "costPer1kOutput": 0.0015,
+          "contextWindow": 16385,
+          "capabilities": ["chat", "function-calling"]
+        },
+        "gpt-4-vision-preview": {
+          "maxTokens": 1000,
+          "costPer1kInput": 0.01,
+          "costPer1kOutput": 0.03,
+          "contextWindow": 8192,
+          "capabilities": ["vision", "chat"]
+        }
+      }
+    },
+    "anthropic": {
+      "apiUrl": "https://api.anthropic.com",
+      "models": {
+        "claude-3-opus": {
+          "maxTokens": 4096,
+          "costPer1kInput": 0.015,
+          "costPer1kOutput": 0.075,
+          "contextWindow": 200000,
+          "capabilities": ["chat", "analysis", "coding"]
+        },
+        "claude-3-sonnet": {
+          "maxTokens": 4096,
+          "costPer1kInput": 0.003,
+          "costPer1kOutput": 0.015,
+          "contextWindow": 200000,
+          "capabilities": ["chat", "analysis", "coding"]
+        },
+        "claude-3-haiku": {
+          "maxTokens": 4096,
+          "costPer1kInput": 0.00025,
+          "costPer1kOutput": 0.00125,
+          "contextWindow": 200000,
+          "capabilities": ["chat", "fast-response"]
+        }
+      }
+    },
+    "ollama": {
+      "apiUrl": "http://localhost:11434",
+      "timeout": 30000,
+      "retry": 3,
+      "models": {
+        "llama3:8b": {
+          "maxTokens": 2048,
+          "costPer1kInput": 0,
+          "costPer1kOutput": 0,
+          "contextWindow": 8192,
+          "capabilities": ["chat", "coding", "analysis"],
+          "hardware": {
+            "minRam": "8GB",
+            "recommendedGpuLayers": 35
+          }
+        },
+        "codellama:13b": {
+          "maxTokens": 2048,
+          "costPer1kInput": 0,
+          "costPer1kOutput": 0,
+          "contextWindow": 16384,
+          "capabilities": ["coding", "completion"],
+          "hardware": {
+            "minRam": "16GB",
+            "recommendedGpuLayers": 40
+          }
+        },
+        "mixtral:8x7b": {
+          "maxTokens": 2048,
+          "costPer1kInput": 0,
+          "costPer1kOutput": 0,
+          "contextWindow": 32768,
+          "capabilities": ["chat", "coding", "analysis"],
+          "hardware": {
+            "minRam": "32GB",
+            "recommendedGpuLayers": 35
+          }
+        },
+        "llava": {
+          "maxTokens": 1000,
+          "costPer1kInput": 0,
+          "costPer1kOutput": 0,
+          "contextWindow": 4096,
+          "capabilities": ["vision", "chat"],
+          "hardware": {
+            "minRam": "16GB",
+            "recommendedGpuLayers": 25
+          }
+        },
+        "nomic-embed-text": {
+          "maxTokens": 0,
+          "costPer1kInput": 0,
+          "costPer1kOutput": 0,
+          "contextWindow": 8192,
+          "capabilities": ["embeddings"],
+          "outputDimensions": 768
+        }
+      }
+    }
+  },
+
+  "tasks": {
+    "simple_refactor": {
+      "description": "Basic code refactoring, variable renaming, formatting",
+      "preferredModels": ["claude-3-haiku", "gpt-3.5-turbo", "llama3:8b"],
+      "temperature": 0.2,
+      "maxTokens": 2000,
+      "systemPrompt": "You are refactoring code. Make minimal changes. Preserve all functionality."
+    },
+    "bug_fix": {
+      "description": "Debugging and fixing specific issues",
+      "preferredModels": ["claude-3-sonnet", "gpt-4", "mixtral:8x7b"],
+      "temperature": 0.3,
+      "maxTokens": 3000,
+      "systemPrompt": "You are debugging. Focus on the root cause. Provide minimal fix."
+    },
+    "feature_implementation": {
+      "description": "Implementing new features",
+      "preferredModels": ["claude-3-opus", "gpt-4-turbo", "codellama:13b"],
+      "temperature": 0.4,
+      "maxTokens": 4000,
+      "systemPrompt": "You are implementing a new feature. Follow existing patterns. Write tests."
+    },
+    "code_review": {
+      "description": "Reviewing code for issues and improvements",
+      "preferredModels": ["claude-3-sonnet", "gpt-4", "mixtral:8x7b"],
+      "temperature": 0.3,
+      "maxTokens": 3000,
+      "systemPrompt": "You are reviewing code. Look for bugs, security issues, and style violations."
+    },
+    "test_generation": {
+      "description": "Creating comprehensive test suites",
+      "preferredModels": ["claude-3-sonnet", "gpt-4", "codellama:13b"],
+      "temperature": 0.2,
+      "maxTokens": 3000,
+      "systemPrompt": "You are writing tests. Cover edge cases. Follow AAA pattern. Use existing test utilities."
+    },
+    "documentation": {
+      "description": "Writing or updating documentation",
+      "preferredModels": ["claude-3-haiku", "gpt-3.5-turbo", "llama3:8b"],
+      "temperature": 0.4,
+      "maxTokens": 2000,
+      "systemPrompt": "You are writing documentation. Be clear and concise. Include examples."
+    },
+    "vision_analysis": {
+      "description": "Analyzing and describing images",
+      "preferredModels": ["gpt-4-vision-preview", "llava"],
+      "temperature": 0.4,
+      "maxTokens": 1000,
+      "systemPrompt": "Analyze the image and provide a detailed description."
+    },
+    "document_processing": {
+      "description": "OCR and document text extraction",
+      "preferredModels": ["claude-3-sonnet", "gpt-4", "llama3:8b"],
+      "temperature": 0.2,
+      "maxTokens": 2000,
+      "systemPrompt": "Process the extracted text and provide structured output."
+    },
+    "embeddings": {
+      "description": "Generate text embeddings for vector search",
+      "preferredModels": ["text-embedding-3-small", "nomic-embed-text"],
+      "temperature": 0,
+      "maxTokens": 0
+    }
+  },
+
+  "fallbackStrategy": {
+    "enabled": true,
+    "preferLocal": true,
+    "strategy": "cascade",
+    "order": [
+      "ollama",
+      "anthropic", 
+      "openai"
+    ],
+    "retryAttempts": 2,
+    "timeoutMs": 30000
+  },
+
+  "performance": {
+    "cacheResponses": true,
+    "cacheTtlMinutes": 60,
+    "streamResponses": true,
+    "batchRequests": false,
+    "parallelRequests": 3
+  },
+
+  "hardware": {
+    "preferGpu": true,
+    "defaultGpuLayers": 35,
+    "defaultThreadCount": 8,
+    "defaultBatchSize": 512
+  },
+
+  "contextManagement": {
+    "alwaysInclude": [
+      ".cursorrules",
+      "tsconfig.json", 
+      "package.json"
+    ],
+    "neverInclude": [
+      "node_modules/**",
+      "dist/**",
+      "coverage/**",
+      "*.log",
+      ".git/**"
+    ],
+    "maxFileSize": 50000,
+    "preferredFileOrder": [
+      "interfaces",
+      "types", 
+      "implementation",
+      "tests",
+      "documentation"
+    ]
+  }
+}

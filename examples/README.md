@@ -1,34 +1,52 @@
-# Example Projects
+# Examples Directory
 
-This directory contains complete example implementations using the project template.
+**Purpose**: Read-only reference implementations and patterns for AI development
 
-## Table of Contents
+## What's Here
 
-1. [Available Examples](#available-examples)
-  2. [1. Next.js + PostgreSQL (`nextjs-postgres/`)](#1-nextjs-postgresql-nextjs-postgres)
-  3. [2. Vite + Fastify (`vite-fastify/`)](#2-vite-fastify-vite-fastify)
-4. [How to Use](#how-to-use)
-  5. [Quick Start](#quick-start)
-6. [Adding New Examples](#adding-new-examples)
-7. [Example Requirements](#example-requirements)
+- **Code Examples**: Demonstrating specific AI integration patterns
+- **Anti-Patterns**: Examples of what NOT to do (for educational purposes)
+- **Implementation References**: Showing best practices for common scenarios
+- **Pattern Libraries**: Reusable code snippets and utilities
+
+## Directory Structure
+
+```
+examples/
+├── ai-nextjs-reference/     # Complete Next.js AI integration examples
+├── react-vite/             # React + Vite AI patterns
+├── good-patterns/           # Best practices demonstrations
+│   ├── authentication/     # Auth patterns for AI apps
+│   ├── data-fetching/      # AI data fetching patterns
+│   ├── error-handling/     # AI error handling strategies
+│   └── state-management/   # State management for AI features
+├── anti-patterns/          # What to avoid (educational)
+│   ├── claude-code-specific/ # Claude Code anti-patterns
+│   ├── maintenance/        # Hard-to-maintain code examples
+│   ├── performance/        # Performance mistakes
+│   └── security/           # Security vulnerabilities
+└── ui-patterns/            # UI component patterns
+    ├── data-display/       # Data visualization components
+    ├── feedback/           # Loading and feedback UI
+    ├── forms/              # AI-enhanced form patterns
+    └── overlays/           # Modal and overlay patterns
+```
 
 ## Available Examples
 
-### 1. Next.js + PostgreSQL (`nextjs-postgres/`)
-A full-stack web application with:
-- Next.js 14 with App Router
-- PostgreSQL database with Prisma ORM
-- TypeScript strict mode
-- Authentication with NextAuth
-- API routes following REST patterns
+### 1. ai-nextjs-reference/
+Complete AI integration patterns:
+- OpenAI and Anthropic API integration
+- Streaming chat interfaces
+- Vector embeddings and search
+- Vision analysis with GPT-4V
 
-### 2. Vite + Fastify (`vite-fastify/`)
-A modern SPA with separate API:
-- Vite for lightning-fast frontend builds
-- React with TypeScript
-- Fastify backend API
-- JWT authentication
-- OpenAPI documentation
+### 2. react-vite/
+Frontend AI patterns:
+- React components for AI features
+- State management for AI responses
+- Real-time streaming interfaces
+- Error handling and loading states
 
 ## How to Use
 

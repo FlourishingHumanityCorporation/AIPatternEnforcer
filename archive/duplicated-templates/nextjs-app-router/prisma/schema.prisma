@@ -1,0 +1,185 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Document storage and processing (local single-user)
+model Document {
+  id            String    @id @default(cuid())
+  filename      String
+  originalName  String
+  mimeType      String
+  size          Int
+  url           String
+  
+  // Processing status
+  status        ProcessingStatus @default(PENDING)
+  uploadedAt    DateTime  @default(now())
+  processedAt   DateTime?
+  error         String?
+  
+  // Extracted data
+  extractedText String?   @db.Text
+  summary       String?   @db.Text
+  metadata      Json?
+  entities      Json?     // Named entities, dates, etc.
+  
+  // AI embeddings for similarity search
+  embedding     Float[]
+  
+  // Relations
+  extractions   Extraction[]
+  chunks        DocumentChunk[]
+  
+  @@index([status])
+  @@index([uploadedAt])
+}
+
+// Document chunks for large files
+model DocumentChunk {
+  id            String    @id @default(cuid())
+  documentId    String
+  document      Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  
+  chunkIndex    Int
+  text          String    @db.Text
+  embedding     Float[]
+  
+  @@unique([documentId, chunkIndex])
+}
+
+// Specific data extractions
+model Extraction {
+  id            String    @id @default(cuid())
+  documentId    String
+  document      Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  
+  type          ExtractionType
+  confidence    Float
+  data          Json
+  boundingBox   Json?     // For vision extractions
+  page          Int?      // For PDFs
+  
+  createdAt     DateTime  @default(now())
+  
+  @@index([documentId, type])
+}
+
+// Chat conversations (local single-user)
+model Chat {
+  id            String    @id @default(cuid())
+  title         String
+  model         String
+  provider      AIProvider
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  messages      Message[]
+  
+  @@index([createdAt])
+}
+
+// Chat messages
+model Message {
+  id            String    @id @default(cuid())
+  chatId        String
+  chat          Chat      @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  
+  role          MessageRole
+  content       String    @db.Text
+  
+  // File attachments
+  attachments   Json?
+  
+  // AI metadata
+  model         String?
+  tokens        Int?
+  
+  createdAt     DateTime  @default(now())
+  
+  @@index([chatId])
+}
+
+// AI API responses for caching and analytics (local single-user)
+model AIResponse {
+  id            String    @id @default(cuid())
+  
+  // Request
+  prompt        String    @db.Text
+  promptHash    String    // For caching
+  systemPrompt  String?   @db.Text
+  parameters    Json?
+  
+  // Response
+  response      String    @db.Text
+  model         String
+  provider      AIProvider
+  
+  // Metrics
+  promptTokens  Int
+  responseTokens Int
+  totalTokens   Int
+  cost          Float?
+  latencyMs     Int
+  cached        Boolean   @default(false)
+  
+  createdAt     DateTime  @default(now())
+  
+  @@unique([promptHash, model])
+  @@index([createdAt])
+}
+
+// Usage tracking (local single-user)
+model Usage {
+  id            String    @id @default(cuid())
+  feature       String
+  model         String
+  provider      AIProvider
+  
+  tokens        Int
+  cost          Float
+  
+  timestamp     DateTime  @default(now())
+  
+  @@index([timestamp])
+  @@index([feature])
+}
+
+// Enums
+enum ProcessingStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum ExtractionType {
+  TEXT
+  TABLE
+  FORM_FIELD
+  IMAGE
+  SIGNATURE
+  BARCODE
+  QR_CODE
+}
+
+enum AIProvider {
+  LOCAL
+  OPENAI
+  ANTHROPIC
+  REPLICATE
+  HUGGINGFACE
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+  FUNCTION
+}
