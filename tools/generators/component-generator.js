@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// FINAL TEST: Should be blocked by meta-project-guardian with HOOK_DEVELOPMENT=false
+// FINAL TEST: Should be blocked by meta-project-guardian with HOOKS_DISABLED=false
 // FINAL TEST: Fixed Claude Code hook input format
 
 const fs = require("fs").promises;
@@ -222,8 +222,70 @@ export const Empty: Story = {
 export type { {{name}}Props } from './{{name}}';`,
 };
 
+// Detect if we're in meta-project or user project
+async function detectProjectType() {
+  const cwd = process.cwd();
+
+  // Check for indicators of meta-project
+  const hasStarters = await fs
+    .access(path.join(cwd, "starters"))
+    .then(() => true)
+    .catch(() => false);
+  const hasToolsHooks = await fs
+    .access(path.join(cwd, "tools/hooks"))
+    .then(() => true)
+    .catch(() => false);
+  const hasMetaDir = await fs
+    .access(path.join(cwd, "meta"))
+    .then(() => true)
+    .catch(() => false);
+
+  // Check for indicators of user project (app directory)
+  const hasAppDir = await fs
+    .access(path.join(cwd, "app"))
+    .then(() => true)
+    .catch(() => false);
+  const hasNextConfig = await fs
+    .access(path.join(cwd, "next.config.js"))
+    .then(() => true)
+    .catch(() => false);
+
+  const isMetaProject = (hasStarters || hasMetaDir) && hasToolsHooks;
+  const isUserProject = hasAppDir || hasNextConfig;
+
+  return { isMetaProject, isUserProject, cwd };
+}
+
 // Generate component files
 async function generateComponent(name, options) {
+  // Check project type first
+  const { isMetaProject, isUserProject, cwd } = await detectProjectType();
+
+  if (isMetaProject && !isUserProject) {
+    logger.error(
+      chalk.red("\n⚠️  You are in the AIPatternEnforcer meta-project!\n"),
+    );
+    logger.info(
+      chalk.yellow(
+        "This is the tool that creates starter projects, not a place to build your app.\n",
+      ),
+    );
+    logger.info(chalk.cyan("To generate components, you have two options:\n"));
+    logger.info(chalk.white("Option 1: Create a new project (recommended)"));
+    logger.info(chalk.gray("  npx create-ai-app my-project"));
+    logger.info(chalk.gray("  cd my-project"));
+    logger.info(chalk.gray(`  npm run g:c ${name}\n`));
+    logger.info(chalk.white("Option 2: Work in a starter template"));
+    logger.info(chalk.gray("  cd starters/minimal-ai-app"));
+    logger.info(chalk.gray(`  npm run g:c ${name}\n`));
+    logger.info(
+      chalk.yellow(
+        "💡 Tip: The starters directory contains ready-to-use templates!\n",
+      ),
+    );
+    process.exit(1);
+  }
+
   logger.info(chalk.blue(`\n🚀 Generating component: ${name}\n`));
 
   // Validate component name

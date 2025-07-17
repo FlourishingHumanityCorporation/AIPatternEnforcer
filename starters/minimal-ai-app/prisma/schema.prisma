@@ -1,0 +1,61 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Example model for AI chat conversations
+model Conversation {
+  id        String    @id @default(cuid())
+  title     String?
+  userId    String    @default("mock-user") // For local development
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  messages  Message[]
+  
+  @@index([userId])
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  role           String       // 'user' or 'assistant'
+  content        String       @db.Text
+  createdAt      DateTime     @default(now())
+  
+  @@index([conversationId])
+}
+
+// Example model for document processing
+model Document {
+  id          String   @id @default(cuid())
+  userId      String   @default("mock-user")
+  filename    String
+  mimeType    String
+  size        Int
+  content     String?  @db.Text
+  processed   Boolean  @default(false)
+  processingError String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([userId])
+}
+
+// Example model for vector embeddings (if using pgvector)
+model Embedding {
+  id        String   @id @default(cuid())
+  content   String   @db.Text
+  embedding Float[]  // Requires pgvector extension
+  metadata  Json?
+  createdAt DateTime @default(now())
+  
+  @@index([embedding])
+}

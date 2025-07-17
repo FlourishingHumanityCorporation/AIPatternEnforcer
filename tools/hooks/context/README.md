@@ -58,7 +58,7 @@ Context hooks respect the `HOOK_CONTEXT` environment variable:
 
 - `HOOK_CONTEXT=true` - Context hooks enabled (default)
 - `HOOK_CONTEXT=false` - Context hooks bypassed
-- Global controls (`HOOK_DEVELOPMENT`, `HOOK_TESTING`) override folder controls
+- Global control (`HOOKS_DISABLED`) overrides folder controls
 
 ## Performance Targets
 

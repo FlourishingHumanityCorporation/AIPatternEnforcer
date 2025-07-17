@@ -30,8 +30,7 @@ describe("context-completeness-enforcer", () => {
 
   beforeEach(() => {
     // Reset environment
-    delete process.env.HOOK_DEVELOPMENT;
-    delete process.env.HOOK_TESTING;
+    delete process.env.HOOKS_DISABLED;
     delete process.env.HOOK_CONTEXT;
   });
 
@@ -89,7 +88,7 @@ describe("context-completeness-enforcer", () => {
   });
 
   it("should respect bypass environment variables", () => {
-    process.env.HOOK_DEVELOPMENT = "true";
+    process.env.HOOKS_DISABLED = "true";
 
     const input = {
       tool_name: "Write",

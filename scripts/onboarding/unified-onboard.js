@@ -17,6 +17,11 @@ class UnifiedOnboardingWizard {
     this.steps = [
       { name: "Dependencies", command: "npm install", essential: true },
       { name: "Git hooks", command: "npm run setup:hooks", essential: true },
+      {
+        name: "Hook protection",
+        command: "npm run fix:hooks",
+        essential: true,
+      },
       { name: "AI context", command: "npm run context", essential: false },
       {
         name: "Enforcement",

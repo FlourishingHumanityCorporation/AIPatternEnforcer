@@ -1,0 +1,42 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/prevent-improved-files.js",
+            "timeout": 3,
+            "description": "Prevent AI from creating _improved, _enhanced, _v2 files"
+          },
+          {
+            "type": "command",
+            "command": "node .claude/hooks/block-root-mess.js",
+            "timeout": 3,
+            "description": "Prevent application files in root directory"
+          },
+          {
+            "type": "command",
+            "command": "node .claude/hooks/security-scan.js",
+            "timeout": 3,
+            "description": "Basic security pattern detection"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/fix-console-logs.js",
+            "timeout": 3,
+            "description": "Auto-fix console.log to proper logging"
+          }
+        ]
+      }
+    ]
+  }
+}

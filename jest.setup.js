@@ -12,4 +12,5 @@ global.console = {
 
 // Set test environment variables
 process.env.NODE_ENV = "test";
-process.env.HOOK_DEVELOPMENT = "true";
+// Note: Hook tests will override these settings as needed
+process.env.HOOKS_DISABLED = process.env.HOOKS_DISABLED || "true";

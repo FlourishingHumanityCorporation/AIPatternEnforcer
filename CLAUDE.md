@@ -34,11 +34,10 @@ Ultrathink = think really hard and deep
 npm run onboard                # Setup + first component (<5 min)
 
 # 🚨 CRITICAL: Turn on hook protection (edit .env file):
-# HOOK_DEVELOPMENT=false # Turn on hooks (disable development mode)
-# HOOK_TESTING=false     # Turn on hooks (disable testing mode)
+# HOOKS_DISABLED=false # Turn on hooks (enable protection)
 
 # Verify hooks are working:
-npm run debug:hooks env        # Check hook status
+npm run debug:hooks:validate   # Check hook status
 # Try creating "test_improved.js" - should be blocked!
 
 # Daily workflow:
@@ -222,9 +221,9 @@ npm run context             # Load AI context
 # Perfect for "super lazy" coders - no manual debugging required!
 
 # 🆘 EMERGENCY DEBUGGING (only if automatic validation fails):
-npm run debug:hooks:monitor:enhanced  # Real-time monitoring (manual)
-npm run debug:hooks:chain             # Hook chain analysis (manual)
-npm run debug:hooks:shell             # Interactive debugging (manual)
+npm run debug:hooks:monitor   # Real-time monitoring (manual)
+npm run debug:hooks:validate  # Quick validation check
+npm run debug:hooks:emergency # Emergency diagnostics only
 
 # 🚨 FOR "SUPER LAZY" CODERS:
 # Just run: npm run check:all
@@ -262,20 +261,19 @@ npm run type-check          # TypeScript validation
 # Hooks are OFF by default! You must turn them on or they won't protect you:
 #
 # STEP 1: Edit .env file and set:
-# HOOK_DEVELOPMENT=false # Turn on hooks (disable development mode)
-# HOOK_TESTING=false     # Turn on hooks (disable testing mode)
+# HOOKS_DISABLED=false # Turn on hooks (enable protection)
 #
 # STEP 2: Verify hooks are working:
-# npm run debug:hooks env  # Check if hooks are enabled
+# npm run debug:hooks:validate  # Check if hooks are enabled
 #
 # STEP 3: Test that protection is working:
 # Try creating a file named "test_improved.js" - it should be blocked!
 #
 # 🔧 HOOK TROUBLESHOOTING FOR LAZY CODERS:
-# • Hooks not blocking bad patterns? → Check .env file: HOOK_DEVELOPMENT=false
-# • Getting "undefined" in debug output? → Run: npm run debug:hooks env
-# • Hooks running but not working? → Run: npm run debug:hooks diagnose
-# • Want to see hooks in action? → Run: npm run debug:hooks:monitor:enhanced
+# • Hooks not blocking bad patterns? → Check .env file: HOOKS_DISABLED=false
+# • Getting "undefined" in debug output? → Run: npm run debug:hooks:validate
+# • Hooks running but not working? → Run: npm run debug:hooks:emergency
+# • Want to see hooks in action? → Run: npm run debug:hooks:monitor
 #
 # Granular folder-level control (advanced - most users don't need this):
 # export HOOK_AI_PATTERNS=true        # Controls ai-patterns/ hooks
@@ -502,10 +500,9 @@ AIPatternEnforcer uses **Claude Code hooks** as the **preferred solution for AI 
 
 **🔧 Hook Configuration**: All hook settings are configured in `.env` file:
 
-**Global Controls** (override all folder controls):
+**Global Control** (override all folder controls):
 
-- `HOOK_DEVELOPMENT=false` - Turn on hooks (disable development mode)
-- `HOOK_TESTING=false` - Turn on hooks (disable testing mode)
+- `HOOKS_DISABLED=false` - Turn on hooks (enable protection)
 
 **🎛️ Granular Folder Control** (only applies when global controls are `false`):
 
@@ -526,31 +523,29 @@ AIPatternEnforcer uses **Claude Code hooks** as the **preferred solution for AI 
 
 - `HOOK_VERBOSE=true/false` - Enable verbose hook output for debugging
 
-**📋 Control Priority**: Global controls override folder controls:
+**📋 Control Priority**: Global control overrides folder controls:
 
-1. `HOOK_DEVELOPMENT=true` → All hooks bypassed
-2. `HOOK_TESTING=true` → All hooks bypassed
-3. `HOOK_[FOLDER]=false` → Only that folder's hooks bypassed
-4. Default → All hooks run
+1. `HOOKS_DISABLED=true` → All hooks bypassed
+2. `HOOK_[FOLDER]=false` → Only that folder's hooks bypassed
+3. Default → All hooks run
 
 **💡 Common Usage Examples** (modify `.env` file):
 
 ```bash
 # Development: Only critical protection hooks
-HOOK_DEVELOPMENT=false
+HOOKS_DISABLED=false
 HOOK_PROJECT_BOUNDARIES=true  # Keep structure protection
 HOOK_SECURITY=true           # Keep security scanning
 HOOK_AI_PATTERNS=false       # Disable pattern enforcement
 HOOK_CLEANUP=false           # Disable auto-cleanup
 HOOK_PERFORMANCE=false       # Disable performance monitoring
 
-# Production: Everything except performance monitoring
-HOOK_DEVELOPMENT=false
-HOOK_PERFORMANCE=false       # Disable performance hooks
-# All others remain true
+# Production: All hooks enabled
+HOOKS_DISABLED=false
+# All folder controls remain at default (true)
 
 # Testing: Only essential infrastructure protection
-HOOK_TESTING=false
+HOOKS_DISABLED=false
 HOOK_PROJECT_BOUNDARIES=true
 HOOK_SECURITY=true
 HOOK_AI_PATTERNS=false
@@ -606,7 +601,7 @@ HOOK_WORKFLOW=false
 
 **Reliability Issues**:
 
-- Complete system bypass via `HOOK_DEVELOPMENT=true`
+- Complete system bypass via `HOOKS_DISABLED=true`
 - False sense of security - hooks don't address root causes
 - Maintenance overhead as AI patterns evolve
 
@@ -646,7 +641,7 @@ For project-specific validation requirements, create custom hooks:
 
 ```bash
 # This is WRONG - hooks ignore command-line environment variables
-HOOK_DEVELOPMENT=false node tools/hooks/ai-patterns/prevent-improved-files.js
+HOOKS_DISABLED=false node tools/hooks/ai-patterns/prevent-improved-files.js
 HOOK_AI_PATTERNS=true echo '{"tool_input": {"file_path": "test.js"}}' | node tools/hooks/ai-patterns/prevent-improved-files.js
 ```
 
@@ -654,22 +649,22 @@ HOOK_AI_PATTERNS=true echo '{"tool_input": {"file_path": "test.js"}}' | node too
 
 ```bash
 # Test 1: Verify folder-specific bypass (AI Patterns disabled)
-# Edit .env: Set HOOK_DEVELOPMENT=false, HOOK_AI_PATTERNS=false
+# Edit .env: Set HOOKS_DISABLED=false, HOOK_AI_PATTERNS=false
 echo '{"tool_input": {"file_path": "test_improved.js"}}' | node tools/hooks/ai-patterns/prevent-improved-files.js
 # Expected: No output (hook bypassed)
 
 # Test 2: Verify hook execution (AI Patterns enabled)
-# Edit .env: Set HOOK_DEVELOPMENT=false, HOOK_AI_PATTERNS=true
+# Edit .env: Set HOOKS_DISABLED=false, HOOK_AI_PATTERNS=true
 echo '{"tool_input": {"file_path": "test_improved.js"}}' | node tools/hooks/ai-patterns/prevent-improved-files.js
 # Expected: Error message blocking _improved file
 
 # Test 3: Verify parallel executor with folder filtering
-# Edit .env: Set HOOK_DEVELOPMENT=false, HOOK_AI_PATTERNS=false
+# Edit .env: Set HOOKS_DISABLED=false, HOOK_AI_PATTERNS=false
 HOOK_VERBOSE=true echo '{"tool_input": {"file_path": "templates/test_improved.js"}}' | node tools/hooks/pre-tool-use-parallel.js
 # Expected: Filtered hook count message, no AI pattern enforcement
 
 # Test 4: Verify global override
-# Edit .env: Set HOOK_DEVELOPMENT=true (any folder settings)
+# Edit .env: Set HOOKS_DISABLED=true (any folder settings)
 echo '{"tool_input": {"file_path": "test_improved.js"}}' | node tools/hooks/ai-patterns/prevent-improved-files.js
 # Expected: No output (global bypass active)
 ```

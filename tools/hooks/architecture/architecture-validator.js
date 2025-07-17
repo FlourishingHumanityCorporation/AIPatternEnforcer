@@ -19,6 +19,15 @@ const NEXTJS_PATTERNS = {
   components: /^components\//,
   lib: /^lib\//,
   api: /^(app\/api|pages\/api)\//,
+  appRouterSpecific: {
+    layout: /^app\/.*layout\.(js|ts|jsx|tsx)$/,
+    page: /^app\/.*page\.(js|ts|jsx|tsx)$/,
+    loading: /^app\/.*loading\.(js|ts|jsx|tsx)$/,
+    error: /^app\/.*error\.(js|ts|jsx|tsx)$/,
+    notFound: /^app\/.*not-found\.(js|ts|jsx|tsx)$/,
+    route: /^app\/.*route\.(js|ts)$/,
+    middleware: /^middleware\.(js|ts)$/,
+  },
 };
 
 // AI integration patterns
@@ -27,6 +36,17 @@ const AI_PATTERNS = {
   anthropic: /anthropic|claude/i,
   streaming: /stream|chunk|delta/i,
   embedding: /embed|vector|similarity/i,
+};
+
+// Tech stack patterns
+const TECH_STACK_PATTERNS = {
+  tailwind: /className|class\s*=/,
+  shadcn: /@\/components\/ui|shadcn/i,
+  zustand: /zustand|useStore/i,
+  tanstack: /tanstack|useQuery|useMutation/i,
+  prisma: /prisma|PrismaClient/i,
+  neon: /neon\.tech|DATABASE_URL/i,
+  pgvector: /pgvector|vector\(|embedding/i,
 };
 
 // Architecture anti-patterns
@@ -42,6 +62,29 @@ const ANTI_PATTERNS = {
   componentInPages: {
     pattern: /pages\/.*component/i,
     description: "Components should be in components/ directory",
+  },
+  // Next.js App Router specific patterns
+  wrongFileNaming: {
+    pattern:
+      /^app\/.*\/(page|layout|loading|error|not-found)\.(js|ts|jsx|tsx)$/,
+    description: "App Router files must use specific naming conventions",
+  },
+  clientComponentInServer: {
+    pattern: /^app\/.*\/(layout|page)\.(js|ts|jsx|tsx)$/,
+    description: "Server components should not have client-side patterns",
+  },
+  // Tech stack integration patterns
+  mixedStyling: {
+    pattern: /className.*styled\.|styled\..*className/i,
+    description: "Don't mix Tailwind with styled-components",
+  },
+  duplicateStateManagement: {
+    pattern: /(zustand|useStore).*(useState|useReducer|redux)/i,
+    description: "Don't mix Zustand with other state management",
+  },
+  wrongQueryLocation: {
+    pattern: /^components\/.*\/(useQuery|useMutation)/i,
+    description: "Move query hooks to hooks/ directory",
   },
 };
 
@@ -73,7 +116,17 @@ function validateArchitecture(hookData, runner) {
     return aiValidation;
   }
 
-  // 3. Validate general architecture patterns
+  // 3. Validate tech stack integration patterns
+  const techStackValidation = validateTechStackIntegration(
+    content,
+    filePath,
+    runner,
+  );
+  if (techStackValidation.block) {
+    return techStackValidation;
+  }
+
+  // 4. Validate general architecture patterns
   const architectureValidation = validateGeneralArchitecture(
     filePath,
     content,
@@ -172,6 +225,91 @@ function validateAiIntegration(content, filePath, runner) {
       console.warn(
         `⚠️  Streaming AI operations should include cleanup in finally block`,
       );
+    }
+  }
+
+  return { allow: true };
+}
+
+/**
+ * Validate tech stack integration patterns
+ */
+function validateTechStackIntegration(content, filePath, runner) {
+  if (!content) return { allow: true };
+
+  // Check for mixed styling approaches
+  if (ANTI_PATTERNS.mixedStyling.pattern.test(content)) {
+    const message = runner.formatError(
+      `Don't mix Tailwind with styled-components`,
+      `❌ Found both Tailwind classes and styled-components`,
+      `✅ Choose one: Use Tailwind utility classes OR styled-components`,
+      `Mixing approaches creates inconsistent styling patterns`,
+    );
+    return { block: true, message };
+  }
+
+  // Check for duplicate state management
+  if (ANTI_PATTERNS.duplicateStateManagement.pattern.test(content)) {
+    const message = runner.formatError(
+      `Don't mix Zustand with other state management`,
+      `❌ Found Zustand alongside useState/useReducer/Redux`,
+      `✅ Use Zustand for global state, local state sparingly`,
+      `Multiple state management approaches create confusion`,
+    );
+    return { block: true, message };
+  }
+
+  // Check for App Router specific patterns
+  if (filePath.startsWith("app/")) {
+    // Check for client components in server context
+    if (
+      NEXTJS_PATTERNS.appRouterSpecific.layout.test(filePath) ||
+      NEXTJS_PATTERNS.appRouterSpecific.page.test(filePath)
+    ) {
+      // Check for client-side hooks in server components
+      if (content.includes("useState") || content.includes("useEffect")) {
+        if (!content.includes('"use client"')) {
+          const message = runner.formatError(
+            `Server components cannot use client-side hooks`,
+            `❌ Found useState/useEffect without "use client"`,
+            `✅ Add "use client" directive or move to client component`,
+            `Server components run on the server, client hooks won't work`,
+          );
+          return { block: true, message };
+        }
+      }
+    }
+
+    // Check for proper API route structure
+    if (NEXTJS_PATTERNS.appRouterSpecific.route.test(filePath)) {
+      if (
+        !content.includes("export") ||
+        !content.match(
+          /export\s+(async\s+)?function\s+(GET|POST|PUT|DELETE|PATCH)/,
+        )
+      ) {
+        const message = runner.formatError(
+          `API routes must export named HTTP method functions`,
+          `❌ Missing exported GET, POST, PUT, DELETE, or PATCH functions`,
+          `✅ Export: export async function GET(request) { ... }`,
+          `App Router API routes use named exports for HTTP methods`,
+        );
+        return { block: true, message };
+      }
+    }
+  }
+
+  // Check for proper database integration
+  if (TECH_STACK_PATTERNS.prisma.test(content)) {
+    // Ensure Prisma is used in proper context
+    if (filePath.includes("components/") && content.includes("PrismaClient")) {
+      const message = runner.formatError(
+        `Don't use PrismaClient directly in components`,
+        `❌ PrismaClient instantiation found in component`,
+        `✅ Use Prisma in API routes or server actions`,
+        `Components should fetch data through API endpoints`,
+      );
+      return { block: true, message };
     }
   }
 

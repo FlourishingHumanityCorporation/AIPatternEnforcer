@@ -950,7 +950,7 @@ A critical assessment reveals that our hook system addresses significantly fewer
 #### Performance and Reliability Concerns
 
 1. **Environmental Fragility**
-   - `HOOK_DEVELOPMENT=true` completely disables system
+   - `HOOKS_DISABLED=true` completely disables system
    - No verification hooks are actually running in production
 
 2. **Latency Impact**
