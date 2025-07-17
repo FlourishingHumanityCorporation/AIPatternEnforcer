@@ -12,8 +12,7 @@ Production testing of the documentation template enforcement system completed su
 
 **Environment Variables Tested**:
 
-- `HOOK_DEVELOPMENT=false` (production mode)
-- `HOOK_TESTING=false` (production mode)
+- `HOOKS_DISABLED=false` (production mode)
 
 **Hooks Tested**:
 

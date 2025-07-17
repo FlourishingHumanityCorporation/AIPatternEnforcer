@@ -1794,8 +1794,7 @@ npm test tools/hooks/engine/__tests__/parallel-executor.test.js
 
 ```bash
 # Global controls (override all folder controls)
-export HOOK_DEVELOPMENT=false  # Enable all hooks
-export HOOK_TESTING=false      # Enable all hooks
+export HOOKS_DISABLED=false  # Enable all hooks
 
 # Folder-specific controls (only apply when global controls are false)
 export HOOK_AI_PATTERNS=true/false       # ai-patterns/ hooks
@@ -1817,7 +1816,7 @@ export HOOK_VERBOSE=true  # Enable detailed debug logging
 
 ### Control Priority
 
-1. **Global Override**: `HOOK_DEVELOPMENT=true` or `HOOK_TESTING=true` bypasses all hooks
+1. **Global Override**: `HOOKS_DISABLED=true` bypasses all hooks
 2. **Folder Control**: `HOOK_[FOLDER]=false` bypasses only that folder's hooks
 3. **Default**: All hooks run when controls are false/unset
 

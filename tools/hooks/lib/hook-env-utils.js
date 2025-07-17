@@ -9,6 +9,41 @@
 
 class HookEnvUtils {
   /**
+   * Ensure environment variables are loaded from .env file
+   */
+  static ensureEnvLoaded() {
+    if (this._envLoaded) return;
+    
+    const fs = require("fs");
+    const path = require("path");
+    
+    try {
+      const envPath = path.join(process.cwd(), ".env");
+      if (fs.existsSync(envPath)) {
+        const envContent = fs.readFileSync(envPath, "utf8");
+        const lines = envContent.split("\n");
+        
+        for (const line of lines) {
+          const trimmedLine = line.trim();
+          if (trimmedLine && !trimmedLine.startsWith("#")) {
+            const [key, ...valueParts] = trimmedLine.split("=");
+            if (key && valueParts.length > 0) {
+              const value = valueParts.join("=").trim();
+              // Only set if not already set
+              if (!process.env[key.trim()]) {
+                process.env[key.trim()] = value;
+              }
+            }
+          }
+        }
+      }
+      this._envLoaded = true;
+    } catch (error) {
+      // Fail silently if .env file cannot be read
+    }
+  }
+
+  /**
    * Folder name to environment variable mapping
    */
   static FOLDER_ENV_MAP = {
@@ -17,48 +52,40 @@ class HookEnvUtils {
     cleanup: "HOOK_CLEANUP",
     context: "HOOK_CONTEXT",
     ide: "HOOK_IDE",
+    ui: "HOOK_UI",
+    state: "HOOK_STATE",
+    ai: "HOOK_AI",
+    database: "HOOK_DATABASE",
+    engine: "HOOK_ENGINE",
+    learning: "HOOK_LEARNING",
     "local-dev": "HOOK_LOCAL_DEV",
+    logs: "HOOK_LOGS",
     performance: "HOOK_PERFORMANCE",
     prompt: "HOOK_PROMPT",
     "project-boundaries": "HOOK_PROJECT_BOUNDARIES",
     security: "HOOK_SECURITY",
+    tools: "HOOK_TOOLS",
+    "ui-framework": "HOOK_UI_FRAMEWORK",
     validation: "HOOK_VALIDATION",
     workflow: "HOOK_WORKFLOW",
   };
 
   /**
-   * Check if hooks should be bypassed due to testing/development mode
+   * Check if hooks should be bypassed globally
    */
   static shouldBypassHooks() {
-    return (
-      process.env.HOOKS_TESTING_MODE === "true" ||
-      process.env.HOOK_DEVELOPMENT === "true"
-    );
+    this.ensureEnvLoaded();
+    return process.env.HOOKS_DISABLED === "true";
   }
 
-  /**
-   * Check if we're specifically in testing mode
-   */
-  static isTestingMode() {
-    return process.env.HOOKS_TESTING_MODE === "true";
-  }
-
-  /**
-   * Check if we're specifically in development mode
-   */
-  static isDevelopmentMode() {
-    return process.env.HOOK_DEVELOPMENT === "true";
-  }
 
   /**
    * Get bypass reason for logging/debugging
    */
   static getBypassReason() {
-    if (this.isTestingMode()) {
-      return "HOOKS_TESTING_MODE=true";
-    }
-    if (this.isDevelopmentMode()) {
-      return "HOOK_DEVELOPMENT=true";
+    this.ensureEnvLoaded();
+    if (process.env.HOOKS_DISABLED === "true") {
+      return "HOOKS_DISABLED=true";
     }
     return "unknown";
   }
@@ -94,6 +121,7 @@ class HookEnvUtils {
    * Check if a specific hook folder should be bypassed
    */
   static shouldBypassHookFolder(folderName) {
+    this.ensureEnvLoaded();
     // Global controls take precedence
     if (this.shouldBypassHooks()) {
       return true;
@@ -150,6 +178,7 @@ class HookEnvUtils {
    * Get environment variable status for debugging
    */
   static getEnvStatus() {
+    this.ensureEnvLoaded();
     const folderStatus = {};
     Object.entries(this.FOLDER_ENV_MAP).forEach(([folder, envVar]) => {
       folderStatus[folder] = {
@@ -160,12 +189,9 @@ class HookEnvUtils {
     });
 
     return {
-      HOOKS_TESTING_MODE: process.env.HOOKS_TESTING_MODE,
-      HOOK_DEVELOPMENT: process.env.HOOK_DEVELOPMENT,
+      HOOKS_DISABLED: process.env.HOOKS_DISABLED,
       HOOK_VERBOSE: process.env.HOOK_VERBOSE,
       shouldBypass: this.shouldBypassHooks(),
-      isTestingMode: this.isTestingMode(),
-      isDevelopmentMode: this.isDevelopmentMode(),
       folderStatus: folderStatus,
     };
   }
@@ -174,11 +200,8 @@ class HookEnvUtils {
    * Get bypass reason for a specific hook command
    */
   static getHookBypassReason(hookCommand) {
-    if (this.isTestingMode()) {
-      return "HOOKS_TESTING_MODE=true";
-    }
-    if (this.isDevelopmentMode()) {
-      return "HOOK_DEVELOPMENT=true";
+    if (this.shouldBypassHooks()) {
+      return "HOOKS_DISABLED=true";
     }
 
     const folderName = this.extractFolderFromHookCommand(hookCommand);

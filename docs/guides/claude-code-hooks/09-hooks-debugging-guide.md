@@ -89,8 +89,7 @@ The debugging system respects the same environment controls as the hooks:
 
 ```bash
 # .env file configuration
-HOOK_DEVELOPMENT=false  # Enable hooks for debugging
-HOOK_TESTING=false      # Enable hooks in test mode
+HOOKS_DISABLED=false  # Enable hooks for debugging
 HOOK_VERBOSE=true       # Enable verbose hook output
 ```
 
@@ -98,8 +97,7 @@ HOOK_VERBOSE=true       # Enable verbose hook output
 
 | Variable           | Purpose                    | Values                                 |
 | ------------------ | -------------------------- | -------------------------------------- |
-| `HOOK_DEVELOPMENT` | Global development control | `true` (disable all), `false` (enable) |
-| `HOOK_TESTING`     | Global testing control     | `true` (disable all), `false` (enable) |
+| `HOOKS_DISABLED` | Global hook control | `true` (disable all), `false` (enable) |
 | `HOOK_VERBOSE`     | Verbose output             | `true` (detailed), `false` (minimal)   |
 | `HOOK_[CATEGORY]`  | Category-specific control  | `true` (enable), `false` (disable)     |
 
@@ -580,10 +578,10 @@ npm run debug:hooks:chain:stats
 ```bash
 # Check if hooks are disabled
 npm run debug:hooks env
-# Look for HOOK_DEVELOPMENT=true
+# Look for HOOKS_DISABLED=true
 
 # Enable hooks
-# Edit .env: HOOK_DEVELOPMENT=false
+# Edit .env: HOOKS_DISABLED=false
 ```
 
 #### No Debug Output
@@ -806,7 +804,7 @@ const hookDebugger = new UnifiedHookDebugger(); // ✅ Works correctly
 
 ```javascript
 // Problem: Environment variables showing as "undefined"
-console.log(process.env.HOOK_DEVELOPMENT); // undefined
+console.log(process.env.HOOKS_DISABLED); // undefined
 
 // Solution: Custom .env file loading
 loadEnvFile() {

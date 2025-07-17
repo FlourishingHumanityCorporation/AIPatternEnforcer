@@ -148,10 +148,10 @@ When developing or testing hooks themselves:
 
 ```bash
 # Set environment variable
-export HOOK_DEVELOPMENT=true
+export HOOKS_DISABLED=true
 
 # Or in .env
-HOOK_DEVELOPMENT=true
+HOOKS_DISABLED=true
 ```
 
 This bypasses:

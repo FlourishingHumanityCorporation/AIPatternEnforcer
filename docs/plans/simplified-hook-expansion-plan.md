@@ -573,7 +573,7 @@ Simple environment-based control:
 
 ```bash
 # .env file
-HOOK_DEVELOPMENT=false    # Enable hooks
+HOOKS_DISABLED=false    # Enable hooks
 HOOK_CONTEXT=true        # Enable context category
 HOOK_WORKFLOW=true       # Enable workflow category
 HOOK_IDE=true           # Enable IDE category
@@ -626,7 +626,7 @@ debug("Score:", score, "Threshold:", threshold);
 
 ### Common Issues
 
-1. **Hooks not running**: Check `HOOK_DEVELOPMENT=false` in .env
+1. **Hooks not running**: Check `HOOKS_DISABLED=false` in .env
 2. **Performance issues**: Use `HOOK_VERBOSE=true` to see timing
 3. **State not persisting**: Check `.aipattern/` directory permissions
 

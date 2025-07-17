@@ -81,7 +81,7 @@ npm run enforcement:config set-level FULL       # Pre-commit blocking
 | Tests failing          | `npm run validate`                                          |
 | Context too large      | Add patterns to `.aiignore`                                 |
 | Generator not working  | `npm run setup:hooks`                                       |
-| Hooks not executing    | Check `.env`: `HOOK_DEVELOPMENT=false`                      |
+| Hooks not executing    | Check `.env`: `HOOKS_DISABLED=false`                      |
 | Hook development setup | See `docs/guides/claude-code-hooks/05-hooks-development.md` |
 | Enforcement blocking   | `npm run enforcement:config set-level BASIC`                |
 | Port in use            | `lsof -ti:3000 \| xargs kill -9`                            |
@@ -97,7 +97,7 @@ npm run enforcement:config set-level FULL       # Pre-commit blocking
 | Enforcement Config    | `.enforcement-config.json`                              |
 | Hook Development      | `docs/guides/claude-code-hooks/05-hooks-development.md` |
 | Hook Configuration    | `tools/hooks/hooks-config.json`                         |
-| Hook Environment      | `.env` (HOOK_DEVELOPMENT, HOOK_TESTING, etc.)           |
+| Hook Environment      | `.env` (HOOKS_DISABLED, HOOK_[CATEGORY], etc.)           |
 | Context Control       | `.aiignore`                                             |
 
 ## Common Patterns

@@ -142,8 +142,7 @@ Before committing documentation:
 
 ```bash
 # Enable real-time enforcement (update .env)
-HOOK_DEVELOPMENT=false
-HOOK_TESTING=false
+HOOKS_DISABLED=false
 ```
 
 The system automatically:

@@ -758,7 +758,7 @@ console.log("Message:", result.stderr);
 ```bash
 # Testing and bypass
 export HOOKS_TESTING_MODE=true     # Bypass most hooks
-export HOOK_DEVELOPMENT=true        # Development mode
+export HOOKS_DISABLED=true        # Disable hooks mode
 
 # Debugging
 export HOOK_DEBUG=true              # Enable debug output

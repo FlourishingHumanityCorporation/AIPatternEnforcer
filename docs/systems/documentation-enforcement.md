@@ -74,15 +74,13 @@ The system integrates with Claude Code through parallel hook execution:
 To enable real-time documentation enforcement, configure environment variables:
 
 ```bash
-export HOOK_DEVELOPMENT=false  # Disable development mode
-export HOOK_TESTING=false      # Disable testing mode
+export HOOKS_DISABLED=false  # Enable hooks
 ```
 
 Or update `.env` file:
 
 ```
-HOOK_DEVELOPMENT=false
-HOOK_TESTING=false
+HOOKS_DISABLED=false
 ```
 
 **Active Enforcement Rules:**

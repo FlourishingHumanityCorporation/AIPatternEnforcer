@@ -281,8 +281,7 @@ Claude Code Event → Parallel Executor → Individual Hooks → Response
 
 ```bash
 # Global controls (override all)
-HOOK_DEVELOPMENT=false  # Enable hooks
-HOOK_TESTING=false     # Enable hooks
+HOOKS_DISABLED=false  # Enable hooks
 
 # Folder-specific controls
 HOOK_AI_PATTERNS=true/false

@@ -27,25 +27,22 @@ describe("Folder-Level Hook Control", () => {
   });
 
   describe("Global Controls", () => {
-    test("HOOK_DEVELOPMENT=true bypasses all hooks", () => {
-      process.env.HOOK_DEVELOPMENT = "true";
+    test("HOOKS_DISABLED=true bypasses all hooks", () => {
+      process.env.HOOKS_DISABLED = "true";
 
       expect(HookEnvUtils.shouldBypassHooks()).toBe(true);
       expect(HookEnvUtils.shouldBypassHookFolder("ai-patterns")).toBe(true);
       expect(HookEnvUtils.shouldBypassHookFolder("security")).toBe(true);
     });
 
-    test("HOOK_TESTING=true bypasses all hooks", () => {
-      process.env.HOOKS_TESTING_MODE = "true";
+    test("HOOKS_DISABLED=false enables hooks", () => {
+      process.env.HOOKS_DISABLED = "false";
 
-      expect(HookEnvUtils.shouldBypassHooks()).toBe(true);
-      expect(HookEnvUtils.shouldBypassHookFolder("ai-patterns")).toBe(true);
-      expect(HookEnvUtils.shouldBypassHookFolder("security")).toBe(true);
+      expect(HookEnvUtils.shouldBypassHooks()).toBe(false);
     });
 
-    test("No global bypass when both are false", () => {
-      process.env.HOOK_DEVELOPMENT = "false";
-      process.env.HOOKS_TESTING_MODE = "false";
+    test("No global bypass when HOOKS_DISABLED is false", () => {
+      process.env.HOOKS_DISABLED = "false";
 
       expect(HookEnvUtils.shouldBypassHooks()).toBe(false);
     });
@@ -54,8 +51,8 @@ describe("Folder-Level Hook Control", () => {
   describe("Folder-Specific Controls", () => {
     beforeEach(() => {
       // Ensure global controls are disabled
-      process.env.HOOK_DEVELOPMENT = "false";
-      process.env.HOOKS_TESTING_MODE = "false";
+      process.env.HOOKS_DISABLED = "false";
+      process.env.HOOKS_DISABLED = "false";
     });
 
     test("HOOK_AI_PATTERNS=false bypasses only ai-patterns folder", () => {
@@ -130,8 +127,8 @@ describe("Folder-Level Hook Control", () => {
     });
 
     test("shouldBypassHook uses folder extraction", () => {
-      process.env.HOOK_DEVELOPMENT = "false";
-      process.env.HOOKS_TESTING_MODE = "false";
+      process.env.HOOKS_DISABLED = "false";
+      process.env.HOOKS_DISABLED = "false";
       process.env.HOOK_AI_PATTERNS = "false";
 
       const aiPatternsCommand =
@@ -145,7 +142,7 @@ describe("Folder-Level Hook Control", () => {
 
   describe("Priority and Override Behavior", () => {
     test("Global development mode overrides folder controls", () => {
-      process.env.HOOK_DEVELOPMENT = "true";
+      process.env.HOOKS_DISABLED = "true";
       process.env.HOOK_AI_PATTERNS = "true"; // Try to enable
       process.env.HOOK_SECURITY = "true"; // Try to enable
 
@@ -154,7 +151,7 @@ describe("Folder-Level Hook Control", () => {
     });
 
     test("Global testing mode overrides folder controls", () => {
-      process.env.HOOKS_TESTING_MODE = "true";
+      process.env.HOOKS_DISABLED = "true";
       process.env.HOOK_AI_PATTERNS = "true"; // Try to enable
       process.env.HOOK_SECURITY = "true"; // Try to enable
 
@@ -165,8 +162,8 @@ describe("Folder-Level Hook Control", () => {
 
   describe("Environment Status Reporting", () => {
     test("getEnvStatus includes folder status", () => {
-      process.env.HOOK_DEVELOPMENT = "false";
-      process.env.HOOKS_TESTING_MODE = "false";
+      process.env.HOOKS_DISABLED = "false";
+      process.env.HOOKS_DISABLED = "false";
       process.env.HOOK_AI_PATTERNS = "false";
       process.env.HOOK_SECURITY = "true";
 
@@ -180,8 +177,8 @@ describe("Folder-Level Hook Control", () => {
     });
 
     test("getHookBypassReason returns correct reason for folder bypass", () => {
-      process.env.HOOK_DEVELOPMENT = "false";
-      process.env.HOOKS_TESTING_MODE = "false";
+      process.env.HOOKS_DISABLED = "false";
+      process.env.HOOKS_DISABLED = "false";
       process.env.HOOK_AI_PATTERNS = "false";
 
       const command = "node tools/hooks/ai-patterns/prevent-improved-files.js";
@@ -195,13 +192,26 @@ describe("Folder-Level Hook Control", () => {
     test("FOLDER_ENV_MAP contains all expected folders", () => {
       const expectedFolders = [
         "ai-patterns",
-        "architecture",
+        "architecture", 
         "cleanup",
+        "context",
+        "ide",
+        "ui",
+        "state",
+        "ai",
+        "database",
+        "engine",
+        "learning",
         "local-dev",
+        "logs",
         "performance",
+        "prompt",
         "project-boundaries",
         "security",
+        "tools",
+        "ui-framework",
         "validation",
+        "workflow",
       ];
 
       expectedFolders.forEach((folder) => {
@@ -215,6 +225,11 @@ describe("Folder-Level Hook Control", () => {
         { folder: "ai-patterns", envVar: "HOOK_AI_PATTERNS" },
         { folder: "project-boundaries", envVar: "HOOK_PROJECT_BOUNDARIES" },
         { folder: "local-dev", envVar: "HOOK_LOCAL_DEV" },
+        { folder: "ui-framework", envVar: "HOOK_UI_FRAMEWORK" },
+        { folder: "state", envVar: "HOOK_STATE" },
+        { folder: "ai", envVar: "HOOK_AI" },
+        { folder: "database", envVar: "HOOK_DATABASE" },
+        { folder: "engine", envVar: "HOOK_ENGINE" },
       ];
 
       testCases.forEach(({ folder, envVar }) => {

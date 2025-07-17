@@ -91,8 +91,7 @@ The hook system uses a sophisticated environment-based configuration system for 
 
 ```bash
 # .env file configuration
-HOOK_DEVELOPMENT=false    # Turn on hooks (disable development mode)
-HOOK_TESTING=false       # Turn on hooks (disable testing mode)
+HOOKS_DISABLED=false    # Turn on hooks (enable protection)
 HOOK_VERBOSE=true        # Enable detailed execution logging
 ```
 
@@ -115,8 +114,7 @@ HOOK_VALIDATION=true/false        # Template & API validation
 ### Control Priority
 
 ```
-1. HOOK_DEVELOPMENT=true → All hooks bypassed
-2. HOOK_TESTING=true → All hooks bypassed
+1. HOOKS_DISABLED=true → All hooks bypassed
 3. HOOK_[CATEGORY]=false → Only that category bypassed
 4. Default → All hooks run
 ```
@@ -125,18 +123,18 @@ HOOK_VALIDATION=true/false        # Template & API validation
 
 ```bash
 # Development: Only critical protection
-HOOK_DEVELOPMENT=false
+HOOKS_DISABLED=false
 HOOK_PROJECT_BOUNDARIES=true  # Keep structure protection
 HOOK_SECURITY=true           # Keep security scanning
 HOOK_AI_PATTERNS=false       # Disable pattern enforcement
 HOOK_CLEANUP=false           # Disable auto-cleanup
 
 # Production: Full enforcement except performance monitoring
-HOOK_DEVELOPMENT=false
+HOOKS_DISABLED=false
 HOOK_PERFORMANCE=false       # Disable performance hooks
 
 # Testing: Minimal interference
-HOOK_TESTING=false
+HOOKS_DISABLED=false
 HOOK_PROJECT_BOUNDARIES=true
 HOOK_SECURITY=true
 # All others disabled
@@ -1207,7 +1205,7 @@ jobs:
 # .env configuration for debugging
 HOOK_VERBOSE=true          # Detailed execution logs
 HOOK_DEBUG=true           # Low-level debug output
-HOOK_DEVELOPMENT=false     # Ensure hooks are active
+HOOKS_DISABLED=false     # Ensure hooks are active
 HOOK_PERFORMANCE_LOG=true # Performance tracking
 ```
 
@@ -1243,12 +1241,12 @@ echo '{"tool_input": {"file_path": "test_improved.js"}}' | node tools/hooks/ai-p
 # Expected: Error message if hooks are active, no output if bypassed
 
 # Check environment status
-node -e "console.log('HOOK_DEVELOPMENT:', process.env.HOOK_DEVELOPMENT)"
+node -e "console.log('HOOKS_DISABLED:', process.env.HOOKS_DISABLED)"
 node -e "console.log('HOOK_AI_PATTERNS:', process.env.HOOK_AI_PATTERNS)"
 
 # Solution checklist:
 # 1. Check .env file exists and has correct values
-# 2. Verify HOOK_DEVELOPMENT=false (not true)
+# 2. Verify HOOKS_DISABLED=false (not true)
 # 3. Check specific category settings (HOOK_AI_PATTERNS=true)
 # 4. Restart Claude Code session to reload environment
 ```
@@ -1528,8 +1526,8 @@ class HookMigrationTool {
 
 ```bash
 # 1. Enable production mode
-HOOK_DEVELOPMENT=false
-HOOK_TESTING=false
+HOOKS_DISABLED=false
+HOOKS_DISABLED=false
 NODE_ENV=production
 
 # 2. Optimize hook configuration for production

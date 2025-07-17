@@ -195,10 +195,58 @@ tools/hooks/
 │   ├── fix-console-logs.js
 │   ├── import-janitor.js
 │   └── docs-enforcer.js
-└── local-dev/                   # Local development
+├── context/                     # Context management
+│   ├── README.md
+│   ├── context-completeness-enforcer.js
+│   ├── context-drift-detector.js
+│   └── claude-md-injector.js
+├── ide/                         # IDE integration
+│   ├── README.md
+│   ├── ide-config-checker.js
+│   ├── performance-guardian.js
+│   └── shortcut-protector.js
+├── ui/                          # UI framework validation
+│   ├── README.md
+│   └── tailwind-pattern-enforcer.js
+├── state/                       # State management
+│   ├── README.md
+│   ├── zustand-pattern-enforcer.js
+│   └── tanstack-query-validator.js
+├── ai/                          # AI integration
+│   ├── README.md
+│   └── ai-integration-validator.js
+├── database/                    # Database patterns
+│   ├── README.md
+│   └── prisma-pattern-enforcer.js
+├── engine/                      # Hook processing engine
+│   ├── README.md
+│   └── hook-engine-validator.js
+├── learning/                    # Adaptive learning
+│   ├── README.md
+│   └── learning-system-validator.js
+├── local-dev/                   # Local development
+│   ├── README.md
+│   ├── localhost-enforcer.js
+│   └── mock-data-enforcer.js
+├── logs/                        # Logging and monitoring
+│   ├── README.md
+│   └── log-pattern-enforcer.js
+├── prompt/                      # Prompt intelligence
+│   ├── README.md
+│   ├── prompt-quality-checker.js
+│   ├── prompt-improver.js
+│   └── few-shot-injector.js
+├── tools/                       # Development tools
+│   ├── README.md
+│   └── tool-integration-validator.js
+├── ui-framework/                # UI framework specific
+│   ├── README.md
+│   └── framework-validator.js
+└── workflow/                    # Workflow enforcement
     ├── README.md
-    ├── localhost-enforcer.js
-    └── mock-data-enforcer.js
+    ├── plan-first-enforcer.js
+    ├── test-first-enforcer.js
+    └── pr-scope-guardian.js
 ```
 
 ## 🔧 Adding New Hooks
@@ -326,13 +374,31 @@ npm run debug:hooks:chain
 
 ```bash
 # Enable/disable hooks globally
-HOOK_DEVELOPMENT=false  # Enable hooks
-HOOK_TESTING=false      # Enable in test mode
-HOOK_VERBOSE=true       # Enable verbose output
+HOOKS_DISABLED=false  # Enable hooks (false=enabled, true=disabled)
+HOOK_VERBOSE=true     # Enable verbose output
 
 # Category-specific controls
 HOOK_AI_PATTERNS=true   # Enable AI pattern hooks
+HOOK_ARCHITECTURE=true  # Enable architecture hooks
+HOOK_CLEANUP=true       # Enable cleanup hooks
+HOOK_CONTEXT=true       # Enable context hooks
+HOOK_IDE=true           # Enable IDE hooks
+HOOK_UI=true            # Enable UI hooks
+HOOK_STATE=true         # Enable state hooks
+HOOK_AI=true            # Enable AI hooks
+HOOK_DATABASE=true      # Enable database hooks
+HOOK_ENGINE=true        # Enable engine hooks
+HOOK_LEARNING=true      # Enable learning hooks
+HOOK_LOCAL_DEV=true     # Enable local-dev hooks
+HOOK_LOGS=true          # Enable logs hooks
+HOOK_PERFORMANCE=true   # Enable performance hooks
+HOOK_PROMPT=true        # Enable prompt hooks
+HOOK_PROJECT_BOUNDARIES=true  # Enable project-boundaries hooks
 HOOK_SECURITY=true      # Enable security hooks
+HOOK_TOOLS=true         # Enable tools hooks
+HOOK_UI_FRAMEWORK=true  # Enable ui-framework hooks
+HOOK_VALIDATION=true    # Enable validation hooks
+HOOK_WORKFLOW=true      # Enable workflow hooks
 ```
 
 **📚 Complete Guide**: [Hook Debugging System Guide](../../docs/guides/claude-code-hooks/hook-debugging-guide.md)
@@ -359,7 +425,7 @@ HOOK_SECURITY=true      # Enable security hooks
 - **21 hooks per file operation**: Adds 100-500ms latency depending on system
 - **Timeout risks**: Hooks may be skipped under load (1-4 second timeouts)
 - **Memory usage**: Parallel execution spawns multiple Node.js processes
-- **Environment dependency**: `HOOK_DEVELOPMENT=true` completely disables protection
+- **Environment dependency**: `HOOKS_DISABLED=true` completely disables protection
 
 ### 🚫 What Hooks Cannot Fix
 

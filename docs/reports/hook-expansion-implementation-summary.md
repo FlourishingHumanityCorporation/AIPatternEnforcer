@@ -108,8 +108,7 @@ tools/hooks/prompt/
 
 ```bash
 # Enable all hooks
-export HOOK_DEVELOPMENT=false
-export HOOK_TESTING=false
+export HOOKS_DISABLED=false
 
 # Test specific categories
 export HOOK_CONTEXT=true

@@ -340,7 +340,7 @@ HOOK_VERBOSE=true npm run check:all       # Debug hook execution
 # See: docs/guides/claude-code-hooks/05-hooks-development.md
 
 # Environment-based hook control
-HOOK_DEVELOPMENT=false                    # Enable production hooks
+HOOKS_DISABLED=false                    # Enable production hooks
 HOOK_AI_PATTERNS=false                    # Disable specific categories
 HOOK_VERBOSE=true                         # Debug hook execution
 ```

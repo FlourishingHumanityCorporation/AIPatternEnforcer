@@ -131,7 +131,7 @@ module.exports = { runHook, setEnvForTesting, clearTestEnv, testWithEnv };
 ```javascript
 // This DOES NOT work - hooks ignore command-line environment variables
 process.env.HOOK_AI_PATTERNS = 'false';
-HOOK_DEVELOPMENT=false node tools/hooks/ai-patterns/prevent-improved-files.js
+HOOKS_DISABLED=false node tools/hooks/ai-patterns/prevent-improved-files.js
 ```
 
 **✅ CORRECT WAY** (Always modify .env file):
@@ -143,7 +143,7 @@ const { setEnvForTesting, clearTestEnv } = require("./test-utils");
 beforeEach(() => {
   // Set environment variables in .env file
   setEnvForTesting({
-    HOOK_DEVELOPMENT: "false",
+    HOOKS_DISABLED: "false",
     HOOK_AI_PATTERNS: "true",
     HOOK_SECURITY: "true",
   });
@@ -213,7 +213,7 @@ describe("security/security-scan.js", () => {
   it("should respect HOOK_SECURITY environment variable", async () => {
     // CRITICAL: Must modify .env file, not process.env
     setEnvForTesting({
-      HOOK_DEVELOPMENT: "false",
+      HOOKS_DISABLED: "false",
       HOOK_SECURITY: "false",
     });
 
@@ -457,10 +457,10 @@ describe("Folder-Based Hook Control", () => {
     clearTestEnv();
   });
 
-  it("should bypass all hooks when HOOK_DEVELOPMENT=true", async () => {
+  it("should bypass all hooks when HOOKS_DISABLED=true", async () => {
     // CRITICAL: Must modify .env file, not process.env
     setEnvForTesting({
-      HOOK_DEVELOPMENT: "true",
+      HOOKS_DISABLED: "true",
     });
 
     const input = {
@@ -478,7 +478,7 @@ describe("Folder-Based Hook Control", () => {
   it("should respect category-specific controls", async () => {
     // CRITICAL: Must modify .env file, not process.env
     setEnvForTesting({
-      HOOK_DEVELOPMENT: "false",
+      HOOKS_DISABLED: "false",
       HOOK_AI_PATTERNS: "false", // Disable AI patterns
       HOOK_SECURITY: "true", // Keep security enabled
     });
@@ -515,7 +515,7 @@ describe("Folder-Based Hook Control", () => {
 
     for (const category of categories) {
       // CRITICAL: Must modify .env file for each test
-      const envVars = { HOOK_DEVELOPMENT: "false" };
+      const envVars = { HOOKS_DISABLED: "false" };
       for (const cat of categories) {
         envVars[`HOOK_${cat}`] = cat === category ? "true" : "false";
       }
@@ -709,21 +709,21 @@ When testing hooks manually, you MUST modify the .env file:
 
 ```bash
 # ❌ WRONG - This doesn't work
-HOOK_DEVELOPMENT=false node tools/hooks/ai-patterns/prevent-improved-files.js
+HOOKS_DISABLED=false node tools/hooks/ai-patterns/prevent-improved-files.js
 
 # ✅ CORRECT - Edit .env file first
-echo "HOOK_DEVELOPMENT=false" > .env
+echo "HOOKS_DISABLED=false" > .env
 echo "HOOK_AI_PATTERNS=true" >> .env
 echo '{"tool_input": {"file_path": "test_improved.js"}}' | node tools/hooks/ai-patterns/prevent-improved-files.js
 
 # ✅ CORRECT - Test with category disabled
-echo "HOOK_DEVELOPMENT=false" > .env
+echo "HOOKS_DISABLED=false" > .env
 echo "HOOK_AI_PATTERNS=false" >> .env
 echo '{"tool_input": {"file_path": "test_improved.js"}}' | node tools/hooks/ai-patterns/prevent-improved-files.js
 # Expected: No output (hook bypassed)
 
 # ✅ CORRECT - Test parallel executor
-echo "HOOK_DEVELOPMENT=false" > .env
+echo "HOOKS_DISABLED=false" > .env
 echo "HOOK_AI_PATTERNS=true" >> .env
 echo '{"tool_input": {"file_path": "test_improved.js"}}' | node tools/hooks/pre-tool-use-parallel.js
 # Expected: Error message blocking _improved file
@@ -746,8 +746,7 @@ The project's .env file currently has:
 
 ```bash
 # Global controls (currently DISABLED - all hooks bypassed)
-HOOK_DEVELOPMENT=true
-HOOK_TESTING=true
+HOOKS_DISABLED=true
 
 # Folder controls (currently enabled but overridden by global controls)
 HOOK_AI_PATTERNS=true
@@ -760,13 +759,11 @@ HOOK_PROJECT_BOUNDARIES=true
 
 ```bash
 # Edit .env file to enable hooks
-HOOK_DEVELOPMENT=false  # Turn on hooks
-HOOK_TESTING=false      # Turn on hooks
+HOOKS_DISABLED=false  # Turn on hooks
 ```
 
 **Control Priority:**
 
-1. `HOOK_DEVELOPMENT=true` → All hooks bypassed (current state)
-2. `HOOK_TESTING=true` → All hooks bypassed (current state)
+1. `HOOKS_DISABLED=true` → All hooks bypassed (current state)
 3. `HOOK_[CATEGORY]=false` → Only that category bypassed
 4. Default → All hooks run

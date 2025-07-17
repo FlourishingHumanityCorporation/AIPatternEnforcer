@@ -309,8 +309,7 @@ class UnifiedHookDebugger {
     console.log("🌍 Hook Environment Configuration:\n");
 
     const envVars = [
-      "HOOK_DEVELOPMENT",
-      "HOOK_TESTING",
+      "HOOKS_DISABLED",
       "HOOK_VERBOSE",
       "HOOK_AI_PATTERNS",
       "HOOK_ARCHITECTURE",
@@ -350,7 +349,7 @@ class UnifiedHookDebugger {
 
     console.log("\n💡 To modify environment:");
     console.log("   Edit .env file in project root");
-    console.log("   Set HOOK_DEVELOPMENT=true to disable all hooks");
+    console.log("   Set HOOKS_DISABLED=true to disable all hooks");
     console.log("   Set specific HOOK_[CATEGORY]=false to disable category");
   }
 
